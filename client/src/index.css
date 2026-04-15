@@ -1,0 +1,537 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Animated Grid Background */
+@keyframes panGrid {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 40px;
+  }
+}
+
+/* CRT Scanlines Animation */
+@keyframes scanlines {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 4px;
+  }
+}
+
+/* Floating Pixel Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Blink Animation */
+@keyframes blink {
+  0%, 49%, 100% {
+    opacity: 1;
+  }
+  50%, 99% {
+    opacity: 0.3;
+  }
+}
+
+/* Glitch Effect - CRT-style text distortion */
+@keyframes glitch-1 {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+    transform: translate(-2px, -2px);
+    opacity: 0.8;
+  }
+  50% {
+    clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+    transform: translate(2px, 2px);
+    opacity: 0.8;
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes glitch-2 {
+  0% {
+    clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+    transform: translate(2px, 2px);
+    opacity: 0.8;
+  }
+  50% {
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+    transform: translate(-2px, -2px);
+    opacity: 0.8;
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+}
+
+/* Section Transition - Fade in from bottom */
+@keyframes sectionFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animated Border Pulse */
+@keyframes borderPulse {
+  0%, 100% {
+    box-shadow: 4px 4px 0px 0px #F59E0B, 0 0 10px rgba(245, 158, 11, 0);
+  }
+  50% {
+    box-shadow: 4px 4px 0px 0px #F59E0B, 0 0 20px rgba(245, 158, 11, 0.6);
+  }
+}
+
+@keyframes borderPulseBlue {
+  0%, 100% {
+    box-shadow: 4px 4px 0px 0px #3B82F6, 0 0 10px rgba(59, 130, 246, 0);
+  }
+  50% {
+    box-shadow: 4px 4px 0px 0px #3B82F6, 0 0 20px rgba(59, 130, 246, 0.6);
+  }
+}
+
+/* Marquee scroll animations */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* Screen Tear VHS Effect */
+@keyframes screenTear {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(100vw);
+    opacity: 0;
+  }
+}
+
+/* Emil Kowalski custom easing curves */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  /* Hardware Engineer 8-Bit Palette */
+  --primary: #F59E0B;
+  --primary-foreground: #FAFAFA;
+  --sidebar-primary: #F59E0B;
+  --sidebar-primary-foreground: #FAFAFA;
+  --chart-1: #3B82F6;
+  --chart-2: #F59E0B;
+  --chart-3: #3B82F6;
+  --chart-4: #F59E0B;
+  --chart-5: #3B82F6;
+  --radius: 0;
+  --background: #000000;
+  --foreground: #FAFAFA;
+  --card: #18181B;
+  --card-foreground: #FAFAFA;
+  --popover: #18181B;
+  --popover-foreground: #FAFAFA;
+  --secondary: #3B82F6;
+  --secondary-foreground: #FAFAFA;
+  --muted: #3B82F6;
+  --muted-foreground: #FAFAFA;
+  --accent: #F59E0B;
+  --accent-foreground: #000000;
+  --destructive: #EF4444;
+  --destructive-foreground: #FAFAFA;
+  --border: #F59E0B;
+  --input: #18181B;
+  --ring: #F59E0B;
+  --sidebar: #18181B;
+  --sidebar-foreground: #FAFAFA;
+  --sidebar-accent: #F59E0B;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #F59E0B;
+  --sidebar-ring: #F59E0B;
+}
+
+.dark {
+  /* Hardware Engineer 8-Bit Palette (Dark Mode) */
+  --primary: #F59E0B;
+  --primary-foreground: #FAFAFA;
+  --sidebar-primary: #F59E0B;
+  --sidebar-primary-foreground: #FAFAFA;
+  --background: #000000;
+  --foreground: #FAFAFA;
+  --card: #18181B;
+  --card-foreground: #FAFAFA;
+  --popover: #18181B;
+  --popover-foreground: #FAFAFA;
+  --secondary: #3B82F6;
+  --secondary-foreground: #FAFAFA;
+  --muted: #3B82F6;
+  --muted-foreground: #FAFAFA;
+  --accent: #F59E0B;
+  --accent-foreground: #000000;
+  --destructive: #EF4444;
+  --destructive-foreground: #FAFAFA;
+  --border: #F59E0B;
+  --input: #18181B;
+  --ring: #F59E0B;
+  --chart-1: #3B82F6;
+  --chart-2: #F59E0B;
+  --chart-3: #3B82F6;
+  --chart-4: #F59E0B;
+  --chart-5: #3B82F6;
+  --sidebar: #18181B;
+  --sidebar-foreground: #FAFAFA;
+  --sidebar-accent: #F59E0B;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #F59E0B;
+  --sidebar-ring: #F59E0B;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="4" height="4" fill="%23F59E0B"/><rect x="6" y="2" width="4" height="4" fill="%23F59E0B"/><rect x="2" y="6" width="4" height="4" fill="%23F59E0B"/><rect x="6" y="6" width="4" height="4" fill="%23F59E0B"/><rect x="10" y="10" width="4" height="4" fill="%23F59E0B"/><rect x="14" y="10" width="4" height="4" fill="%23F59E0B"/><rect x="10" y="14" width="4" height="4" fill="%23F59E0B"/><rect x="14" y="14" width="4" height="4" fill="%23F59E0B"/></svg>') 2 2, auto;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Courier Prime', monospace;
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  /* Grid Background Layer */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      linear-gradient(0deg, transparent 24%, rgba(245, 158, 11, 0.05) 25%, rgba(245, 158, 11, 0.05) 26%, transparent 27%, transparent 74%, rgba(245, 158, 11, 0.05) 75%, rgba(245, 158, 11, 0.05) 76%, transparent 77%, transparent),
+      linear-gradient(90deg, transparent 24%, rgba(245, 158, 11, 0.05) 25%, rgba(245, 158, 11, 0.05) 26%, transparent 27%, transparent 74%, rgba(245, 158, 11, 0.05) 75%, rgba(245, 158, 11, 0.05) 76%, transparent 77%, transparent);
+    background-size: 40px 40px;
+    background-position: 0 0;
+    animation: panGrid 20s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* CRT Scanlines Layer */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.08) 2px,
+      rgba(0, 0, 0, 0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+  
+  /* Vignette Overlay */
+  html::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+    pointer-events: none;
+    z-index: 3;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Press Start 2P', cursive;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="4" height="4" fill="%233B82F6"/><rect x="6" y="2" width="4" height="4" fill="%233B82F6"/><rect x="2" y="6" width="4" height="4" fill="%233B82F6"/><rect x="6" y="6" width="4" height="4" fill="%233B82F6"/><rect x="10" y="10" width="4" height="4" fill="%233B82F6"/><rect x="14" y="10" width="4" height="4" fill="%233B82F6"/><rect x="10" y="14" width="4" height="4" fill="%233B82F6"/><rect x="14" y="14" width="4" height="4" fill="%233B82F6"/></svg>') 2 2, auto;
+  }
+}
+
+@layer components {
+  /* 8-Bit Hardware Engineer Custom Utilities */
+  
+  /* Hard shadow effect - 4px offset solid color */
+  .shadow-8bit {
+    box-shadow: 4px 4px 0px 0px #F59E0B;
+  }
+  
+  .shadow-8bit-blue {
+    box-shadow: 4px 4px 0px 0px #3B82F6;
+  }
+  
+  .shadow-8bit-dark {
+    box-shadow: 4px 4px 0px 0px #18181B;
+  }
+  
+  /* Sharp borders - 2px solid */
+  .border-8bit {
+    border: 2px solid #F59E0B;
+  }
+  
+  .border-8bit-blue {
+    border: 2px solid #3B82F6;
+  }
+  
+  .border-8bit-thick {
+    border: 4px solid #F59E0B;
+  }
+  
+  /* Pixel-art heading font */
+  .font-pixel {
+    font-family: 'Press Start 2P', cursive;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+  }
+  
+  /* Glitch Effect - CRT-style text distortion on hover */
+  .glitch {
+    position: relative;
+    display: inline-block;
+  }
+
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+
+  .glitch::before {
+    color: #ff00ff;
+    z-index: -1;
+  }
+
+  .glitch::after {
+    color: #00ffff;
+    z-index: -2;
+  }
+
+  .glitch:hover::before {
+    animation: glitch-1 0.3s infinite;
+    opacity: 0.8;
+  }
+
+  .glitch:hover::after {
+    animation: glitch-2 0.3s infinite;
+    opacity: 0.8;
+  }
+
+  /* Section Transition Animation */
+  .section-transition {
+    animation: sectionFadeIn 0.6s ease-out;
+  }
+
+  /* Animated Border Pulse on Hover */
+  .border-8bit-pulse:hover {
+    animation: borderPulse 1.5s ease-in-out infinite;
+  }
+
+  .border-8bit-blue-pulse:hover {
+    animation: borderPulseBlue 1.5s ease-in-out infinite;
+  }
+  
+  /* Focus-visible: amber ring for keyboard nav, invisible for mouse/touch */
+  :focus-visible {
+    outline: 2px solid #F59E0B;
+    outline-offset: 3px;
+  }
+
+  /* Gate marquee tag hover behind pointer device check */
+  .skill-tag {
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .skill-tag-amber:hover {
+      background-color: #F59E0B;
+      color: #000;
+    }
+    .skill-tag-blue:hover {
+      background-color: #3B82F6;
+      color: #000;
+    }
+  }
+
+  /* Marquee utilities */
+  .animate-marquee {
+    animation: marquee 28s linear infinite;
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .animate-marquee-reverse {
+    animation: marquee-reverse 28s linear infinite;
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .animate-marquee:hover,
+  .animate-marquee-reverse:hover {
+    animation-play-state: paused;
+  }
+
+  /* Monospace body font — line-height 1.7 for light text on dark backgrounds (impeccable) */
+  .font-mono-8bit {
+    font-family: 'Courier Prime', monospace;
+    letter-spacing: 0.02em;
+    line-height: 1.75;
+  }
+
+  /* Body text line-length cap (~65ch) for readability */
+  .prose-8bit {
+    max-width: 65ch;
+  }
+  
+  /* Hover effect for buttons - color shift */
+  .hover-8bit:hover {
+    background-color: #F59E0B;
+    color: #000000;
+  }
+  
+  .hover-8bit-blue:hover {
+    background-color: #3B82F6;
+    color: #FAFAFA;
+  }
+  
+  /* Container utility */
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: 1280px;
+    }
+  }
+}
+
+/* Root positioning for background layers */
+#root {
+  position: relative;
+  z-index: 4;
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

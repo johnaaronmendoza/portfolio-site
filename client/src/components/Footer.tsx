@@ -7,6 +7,7 @@
  */
 
 import { motion } from 'framer-motion';
+import { PixelGitHub, PixelLinkedIn, PixelEmail } from '@/components/PixelIcons';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -31,11 +32,12 @@ export default function Footer() {
           </p>
           <motion.a
             href="mailto:johnaaronmb@gmail.com"
-            className="inline-block border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
+            className="inline-flex items-center gap-3 border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B', transition: { duration: 0.1 } }}
             animate={{ boxShadow: ['4px 4px 0px 0px #F59E0B', '4px 4px 0px 0px #F59E0B, 0 0 16px rgba(245,158,11,0.5)', '4px 4px 0px 0px #F59E0B'] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           >
+            <PixelEmail size={20} />
             SEND MESSAGE →
           </motion.a>
         </div>
@@ -49,22 +51,26 @@ export default function Footer() {
             © {currentYear} John Aaron Mendoza Branzuela
           </p>
 
-          <div className="flex gap-8">
+          <div className="flex gap-5 items-center">
             <a
               href="https://github.com/johnaaronmendoza"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono-8bit text-sm text-blue-400 hover:text-blue-300 transition-colors"
+              className="inline-flex items-center gap-2 font-mono-8bit text-sm text-zinc-400 hover:text-white transition-colors"
+              title="GitHub"
             >
-              GitHub
+              <PixelGitHub size={28} />
+              <span>GitHub</span>
             </a>
             <a
               href="https://www.linkedin.com/in/john-branzuela/"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono-8bit text-sm text-blue-400 hover:text-blue-300 transition-colors"
+              className="inline-flex items-center gap-2 font-mono-8bit text-sm text-zinc-400 hover:text-white transition-colors"
+              title="LinkedIn"
             >
-              LinkedIn
+              <PixelLinkedIn size={28} />
+              <span>LinkedIn</span>
             </a>
           </div>
         </div>

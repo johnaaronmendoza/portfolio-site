@@ -2,6 +2,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import Particles from './Particles';
 import { unlockAchievement } from '@/hooks/useAchievements';
+import { play } from '@/hooks/useSound';
+import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 
@@ -146,24 +148,28 @@ export default function Hero() {
             href="https://github.com/johnaaronmendoza"
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => unlockAchievement('NETWORKER')}
-            className="border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm sm:text-base cursor-pointer"
+            onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
+            onMouseEnter={() => play('blip')}
+            className="border-8bit shadow-8bit px-5 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm sm:text-base cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black inline-flex items-center gap-2.5"
             whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B' }}
             whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B', scale: 0.97 }}
             transition={{ duration: 0.1 }}
           >
+            <PixelGitHub size={22} />
             GitHub
           </motion.a>
           <motion.a
             href="https://www.linkedin.com/in/john-branzuela/"
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => unlockAchievement('NETWORKER')}
-            className="border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm sm:text-base cursor-pointer"
+            onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
+            onMouseEnter={() => play('blip')}
+            className="border-8bit-blue shadow-8bit-blue px-5 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm sm:text-base cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black inline-flex items-center gap-2.5"
             whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6' }}
             whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6', scale: 0.97 }}
             transition={{ duration: 0.1 }}
           >
+            <PixelLinkedIn size={22} />
             LinkedIn
           </motion.a>
         </motion.div>

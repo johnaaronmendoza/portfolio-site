@@ -18,6 +18,10 @@ import MascotChatWidget from "./components/MascotChatWidget";
 import ScrollProgress from "./components/ScrollProgress";
 import KonamiOverlay from "./components/KonamiOverlay";
 import CRTToggle from "./components/CRTToggle";
+import SecretTerminal from "./components/SecretTerminal";
+import PixelCursor from "./components/PixelCursor";
+import SoundToggle from "./components/SoundToggle";
+import DitherTransition from "./components/DitherTransition";
 
 function Router() {
   return (
@@ -48,8 +52,12 @@ function App() {
           <CommandPalette />
           <ScreenTear />
           <Toaster />
+          <PixelCursor />
+          <DitherTransition />
           <KonamiOverlay />
           <CRTToggle />
+          <SoundToggle />
+          <SecretTerminal />
           <Router />
           <MascotChatWidget />
         </TooltipProvider>

@@ -326,9 +326,11 @@ export default function MascotChatWidget() {
                   type="text"
                   value={input}
                   onChange={e => setInput(e.target.value)}
+                  onInput={e => setInput((e.target as HTMLInputElement).value)}
                   placeholder="Type query..."
                   className="flex-1 bg-black text-white font-mono text-xs outline-none"
                   disabled={isTyping}
+                  data-chat-input
                 />
               </div>
               <button

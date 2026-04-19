@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation } from 'wouter';
 
 interface Command {
   id: string;
@@ -17,13 +18,31 @@ interface Command {
   category: 'navigation' | 'chat' | 'action';
 }
 
+// Trigger React-controlled input via native value setter
+function triggerChatQuery(query: string) {
+  const chatButton = document.querySelector('button[data-chat-toggle]') as HTMLButtonElement;
+  if (chatButton) chatButton.click();
+  setTimeout(() => {
+    const input = document.querySelector('input[data-chat-input]') as HTMLInputElement;
+    if (!input) return;
+    const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+    nativeSetter?.call(input, query);
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    setTimeout(() => {
+      const form = document.querySelector('form[data-chat-form]') as HTMLFormElement;
+      if (form) form.dispatchEvent(new Event('submit', { bubbles: true }));
+    }, 50);
+  }, 350);
+}
+
 export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [, setLocation] = useLocation();
 
   const commands: Command[] = [
-    // Navigation
+    // Navigation — sections
     {
       id: 'nav-hero',
       label: 'Go to Hero',
@@ -74,11 +93,54 @@ export default function CommandPalette() {
       },
       category: 'navigation',
     },
+    // Navigation — project pages
+    {
+      id: 'proj-silverlink',
+      label: 'Project: SilverLink SG',
+      description: 'Cloud-native gRPC microservices platform',
+      action: () => { setLocation('/projects/silverlink'); setIsOpen(false); },
+      category: 'navigation',
+    },
+    {
+      id: 'proj-scs',
+      label: 'Project: SCS Awareness Platform',
+      description: 'Visual novel engine for cancer outreach booths',
+      action: () => { setLocation('/projects/scs'); setIsOpen(false); },
+      category: 'navigation',
+    },
+    {
+      id: 'proj-firesafety',
+      label: 'Project: Fire Safety Drill Companion',
+      description: 'Android AR + ML + Dijkstra pathfinding app',
+      action: () => { setLocation('/projects/firesafety'); setIsOpen(false); },
+      category: 'navigation',
+    },
+    {
+      id: 'proj-uwb',
+      label: 'Project: UWB Indoor Localization',
+      description: 'SVM-RBF ML pipeline — 89.61% accuracy',
+      action: () => { setLocation('/projects/uwb'); setIsOpen(false); },
+      category: 'navigation',
+    },
+    {
+      id: 'proj-uat',
+      label: 'Project: UAT Testing Dashboard',
+      description: 'Full-stack defect tracker with real-time analytics',
+      action: () => { setLocation('/projects/uat'); setIsOpen(false); },
+      category: 'navigation',
+    },
+    {
+      id: 'proj-ai-finance',
+      label: 'Project: AI Finance Insights Engine',
+      description: 'ETL pipeline + NLP engine + Power BI Star Schema',
+      action: () => { setLocation('/projects/ai-finance'); setIsOpen(false); },
+      category: 'navigation',
+    },
     // Chat Actions
     {
       id: 'chat-open',
       label: 'Open Chat',
-      description: 'Open the AI chat widget',
+      description: 'Open the chat widget',
       action: () => {
         const chatButton = document.querySelector('button[data-chat-toggle]') as HTMLButtonElement;
         if (chatButton) chatButton.click();
@@ -89,36 +151,30 @@ export default function CommandPalette() {
     {
       id: 'chat-experience',
       label: 'Ask About Experience',
-      description: 'Query bot about Sembcorp experience',
+      description: 'Chat: Sembcorp internship details',
       action: () => {
-        const chatButton = document.querySelector('button[data-chat-toggle]') as HTMLButtonElement;
-        if (chatButton) chatButton.click();
-        setTimeout(() => {
-          const input = document.querySelector('input[placeholder="Type query..."]') as HTMLInputElement;
-          if (input) {
-            input.value = 'Tell me about Sembcorp';
-            input.form?.dispatchEvent(new Event('submit', { bubbles: true }));
-          }
-        }, 300);
         setIsOpen(false);
+        triggerChatQuery('Tell me about your Sembcorp experience');
       },
       category: 'chat',
     },
     {
       id: 'chat-projects',
       label: 'Ask About Projects',
-      description: 'Query bot about projects',
+      description: 'Chat: overview of all projects',
       action: () => {
-        const chatButton = document.querySelector('button[data-chat-toggle]') as HTMLButtonElement;
-        if (chatButton) chatButton.click();
-        setTimeout(() => {
-          const input = document.querySelector('input[placeholder="Type query..."]') as HTMLInputElement;
-          if (input) {
-            input.value = 'What are your projects';
-            input.form?.dispatchEvent(new Event('submit', { bubbles: true }));
-          }
-        }, 300);
         setIsOpen(false);
+        triggerChatQuery('What are your projects');
+      },
+      category: 'chat',
+    },
+    {
+      id: 'chat-skills',
+      label: 'Ask About Skills',
+      description: 'Chat: tech stack and tools',
+      action: () => {
+        setIsOpen(false);
+        triggerChatQuery('What are your skills');
       },
       category: 'chat',
     },

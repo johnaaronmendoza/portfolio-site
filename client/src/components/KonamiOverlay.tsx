@@ -2,11 +2,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useCallback } from 'react';
 import { useKonami } from '@/hooks/useKonami';
 import { unlockAchievement } from '@/hooks/useAchievements';
+import { play } from '@/hooks/useSound';
 
 export default function KonamiOverlay() {
   const [visible, setVisible] = useState(false);
 
   const trigger = useCallback(() => {
+    play('powerUp');          // 7-note ascending sweep for the Konami reveal
     unlockAchievement('CHEAT_CODE');
     setVisible(true);
     setTimeout(() => setVisible(false), 1800);

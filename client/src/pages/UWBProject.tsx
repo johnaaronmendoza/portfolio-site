@@ -3,6 +3,7 @@ import FramerReveal from '@/components/FramerReveal';
 import { useLocation } from 'wouter';
 import { useEffect } from 'react';
 import { trackProjectVisit } from '@/hooks/useAchievements';
+import { play } from '@/hooks/useSound';
 import confusionImg from '@assets/da_p40_img1.png';
 import decisionBoundaryImg from '@assets/da_p39_img2.png';
 import dtAccuracyImg from '@assets/da_p35_img1.png';
@@ -16,16 +17,16 @@ export default function UWBProject() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Sticky back nav */}
-      <div className="sticky top-0 z-30 bg-black border-b-2 border-amber-400 px-4 sm:px-8 py-3 flex items-center gap-4">
+      <div className="sticky top-0 z-30 bg-black border-b-2 border-amber-400 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
         <motion.button
-          onClick={() => setLocation('/')}
+          onClick={() => { play('back'); setLocation('/'); }}
           className="font-pixel text-xs text-amber-400 hover:text-white transition-colors"
           whileHover={{ x: -4 }}
           whileTap={{ x: -4, scale: 0.95, transition: { duration: 0.1 } }}
         >
           ← BACK
         </motion.button>
-        <span className="font-pixel text-xs text-gray-600">/ UWB_INDOOR_LOCALIZATION</span>
+        <span className="font-pixel text-xs text-zinc-500 truncate">/ UWB_INDOOR_LOCALIZATION</span>
       </div>
 
       {/* Hero */}
@@ -236,7 +237,7 @@ export default function UWBProject() {
               <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[ VIEW_MORE_PROJECTS ]</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button
-                  onClick={() => setLocation('/')}
+                  onClick={() => { play('back'); setLocation('/'); }}
                   className="border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
                   whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B' }}
                   whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B', scale: 0.97 }}

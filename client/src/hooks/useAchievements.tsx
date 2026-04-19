@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import React from 'react';
 import { toast } from 'sonner';
+import { play } from './useSound';
 
 // ── Achievement definitions ───────────────────────────────────────────────
 const ACHIEVEMENTS: Record<string, { title: string; desc: string; icon: string }> = {
@@ -36,6 +37,7 @@ function saveVisited(list: string[]) {
 function showToast(id: string) {
   const ach = ACHIEVEMENTS[id];
   if (!ach) return;
+  play('achievement');
   toast.custom(
     () => (
       <div style={{

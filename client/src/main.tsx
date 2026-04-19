@@ -1,5 +1,13 @@
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
-createRoot(document.getElementById("root")!).render(<App />);
+const root = document.getElementById("root")!;
+
+// If react-snap pre-rendered HTML is present, hydrate it.
+// Otherwise (dev / first deploy) do a normal client render.
+if (root.hasChildNodes()) {
+  hydrateRoot(root, <App />);
+} else {
+  createRoot(root).render(<App />);
+}

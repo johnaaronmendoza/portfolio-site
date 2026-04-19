@@ -8,18 +8,57 @@
     <title>John Aaron Mendoza Branzuela | Computing Science Portfolio</title>
     <meta name="description" content="Computing Science student at SIT × University of Glasgow. Projects in cloud-native microservices, Android AR/ML, data analytics pipelines, and full-stack web development." />
     <meta name="author" content="John Aaron Mendoza Branzuela" />
-    <meta name="keywords" content="John Aaron Branzuela, Computing Science, SIT, University of Glasgow, software portfolio, React, gRPC, Kotlin, machine learning, business analyst" />
+    <meta name="keywords" content="John Aaron Branzuela, Computing Science, SIT, University of Glasgow, software portfolio, React, gRPC, Kotlin, machine learning, business analyst, Singapore" />
+    <link rel="canonical" href="https://portfolio-site-lh1v.vercel.app/" />
 
     <!-- Open Graph / social sharing -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="John Aaron Branzuela" />
     <meta property="og:title" content="John Aaron Mendoza Branzuela | Computing Science Portfolio" />
-    <meta property="og:description" content="Computing Science student at SIT × University of Glasgow. Cloud-native systems, Android AR/ML, data pipelines, full-stack web." />
-    <meta property="og:url" content="https://portfolio-site-lh1v.vercel.app" />
+    <meta property="og:description" content="Computing Science student at SIT × University of Glasgow. Cloud-native microservices, Android AR/ML, data analytics pipelines, full-stack web." />
+    <meta property="og:url" content="https://portfolio-site-lh1v.vercel.app/" />
+    <meta property="og:image" content="https://portfolio-site-lh1v.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="800" />
+    <meta property="og:image:height" content="800" />
+    <meta property="og:image:alt" content="John Aaron Mendoza Branzuela — Computing Science Portfolio" />
+    <meta property="og:locale" content="en_SG" />
 
-    <!-- Twitter card -->
-    <meta name="twitter:card" content="summary" />
+    <!-- Twitter / X card -->
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="John Aaron Mendoza Branzuela | Portfolio" />
-    <meta name="twitter:description" content="Computing Science student at SIT × University of Glasgow. Cloud-native systems, Android AR/ML, data pipelines, full-stack web." />
+    <meta name="twitter:description" content="Computing Science student at SIT × University of Glasgow. Cloud-native microservices, Android AR/ML, data pipelines, full-stack web." />
+    <meta name="twitter:image" content="https://portfolio-site-lh1v.vercel.app/og-image.png" />
+    <meta name="twitter:image:alt" content="John Aaron Mendoza Branzuela — Computing Science Portfolio" />
+
+    <!-- JSON-LD structured data — helps Google Knowledge Panel and rich results -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "John Aaron Mendoza Branzuela",
+      "url": "https://portfolio-site-lh1v.vercel.app/",
+      "image": "https://portfolio-site-lh1v.vercel.app/og-image.png",
+      "sameAs": [
+        "https://github.com/johnaaronmendoza",
+        "https://www.linkedin.com/in/john-branzuela/"
+      ],
+      "jobTitle": "Computing Science Student",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Singapore Institute of Technology × University of Glasgow"
+      },
+      "alumniOf": {
+        "@type": "Organization",
+        "name": "Ngee Ann Polytechnic"
+      },
+      "knowsAbout": ["React", "TypeScript", "Python", "Kotlin", "Docker", "gRPC", "Machine Learning", "Business Analysis"],
+      "email": "johnaaronmb@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "SG"
+      }
+    }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,7 +66,7 @@
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root" suppresshydrationwarning="true"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script
       defer

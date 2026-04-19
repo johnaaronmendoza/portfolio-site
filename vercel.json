@@ -3,5 +3,19 @@
   "framework": null,
   "buildCommand": "npm run build:vercel",
   "outputDirectory": "dist/public",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "headers": [
+    {
+      "source": "/og-image.png",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [{ "key": "Content-Type", "value": "application/xml" }]
+    },
+    {
+      "source": "/robots.txt",
+      "headers": [{ "key": "Content-Type", "value": "text/plain" }]
+    }
+  ],
+  "rewrites": [{ "source": "/((?!og-image|sitemap|robots).*)", "destination": "/index.html" }]
 }

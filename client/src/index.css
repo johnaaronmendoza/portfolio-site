@@ -375,6 +375,10 @@
   .shadow-8bit-dark {
     box-shadow: 4px 4px 0px 0px #18181B;
   }
+
+  .shadow-8bit-green {
+    box-shadow: 4px 4px 0px 0px #22C55E;
+  }
   
   /* Sharp borders - 2px solid */
   .border-8bit {
@@ -385,6 +389,10 @@
     border: 2px solid #3B82F6;
   }
   
+  .border-8bit-green {
+    border: 2px solid #22C55E;
+  }
+
   .border-8bit-thick {
     border: 4px solid #F59E0B;
   }

@@ -178,9 +178,9 @@ export default function Hero() {
             download="John_Aaron_Branzuela_Resume.pdf"
             onClick={() => play('click')}
             onMouseEnter={() => play('blip')}
-            className="border-2 border-zinc-600 px-5 py-3 font-mono-8bit font-bold text-zinc-300 hover:border-amber-400 hover:text-amber-400 transition-colors text-sm sm:text-base cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black inline-flex items-center gap-2"
-            whileHover={{ y: 4 }}
-            whileTap={{ scale: 0.97 }}
+            className="border-8bit-green shadow-8bit-green px-5 py-3 font-mono-8bit font-bold text-white bg-green-500 hover:bg-green-400 transition-colors text-sm sm:text-base cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black inline-flex items-center gap-2"
+            whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #22C55E' }}
+            whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #22C55E', scale: 0.97 }}
             transition={{ duration: 0.1 }}
           >
             ↓ RESUME

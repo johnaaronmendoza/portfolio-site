@@ -8,10 +8,11 @@ import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 
 const ROLES = [
-  'COMPUTING SCIENCE STUDENT',
-  'ASPIRING BUSINESS ANALYST',
-  'PROBLEM SOLVER',
-  'BUILDER',
+  'FULL-STACK DEVELOPER',
+  'DATA & ML ENGINEER',
+  'ANDROID · ARCORE · TFLITE',
+  'UAT & SYSTEMS ANALYST',
+  'CLOUD · GRPC · KUBERNETES',
 ];
 
 const PIXELS = [
@@ -171,6 +172,18 @@ export default function Hero() {
           >
             <PixelLinkedIn size={22} />
             LinkedIn
+          </motion.a>
+          <motion.a
+            href="/resume.pdf"
+            download="John_Aaron_Branzuela_Resume.pdf"
+            onClick={() => play('click')}
+            onMouseEnter={() => play('blip')}
+            className="border-2 border-zinc-600 px-5 py-3 font-mono-8bit font-bold text-zinc-300 hover:border-amber-400 hover:text-amber-400 transition-colors text-sm sm:text-base cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black inline-flex items-center gap-2"
+            whileHover={{ y: 4 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.1 }}
+          >
+            ↓ RESUME
           </motion.a>
         </motion.div>
       </div>

@@ -15,7 +15,11 @@ import analyticsImg from '@assets/firesafety_p30_img3.png';
 
 export default function FireSafetyProject() {
   const [, setLocation] = useLocation();
-  useEffect(() => { trackProjectVisit('firesafety'); }, []);
+  useEffect(() => {
+    trackProjectVisit('firesafety');
+    document.title = 'Fire Safety Drill Companion — John Aaron Branzuela';
+    return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
+  }, []);
 
   const stats = [
     { label: "KOTLIN SOURCE", value: "10,984 lines" },
@@ -58,6 +62,12 @@ export default function FireSafetyProject() {
               {["Kotlin", "Jetpack Compose", "MVVM", "Hilt DI", "ARCore", "TFLite", "Room DB", "Firebase FCM", "Dijkstra", "Weinberg PDR"].map(t => (
                 <span key={t} className="font-mono text-xs text-blue-400 border border-blue-400 px-2 py-1">{t}</span>
               ))}
+            </div>
+            <div className="flex gap-3 mt-6">
+              <a href="https://github.com/johnaaronmendoza" target="_blank" rel="noopener noreferrer"
+                className="font-pixel text-[10px] text-zinc-400 border border-zinc-700 px-3 py-2 hover:border-amber-400 hover:text-amber-400 transition-colors inline-flex items-center gap-2">
+                ↗ SOURCE CODE
+              </a>
             </div>
           </FramerReveal>
 

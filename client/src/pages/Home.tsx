@@ -45,9 +45,9 @@ export default function Home() {
       </div>
       <PixelDivider variant="wave" />
       </main>
-      <div id="footer" className="section-transition">
+      <footer id="footer" className="section-transition">
         <Footer />
-      </div>
+      </footer>
     </div>
   );
 }

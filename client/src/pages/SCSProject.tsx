@@ -13,7 +13,11 @@ import adminMgmtImg from '@assets/scs_p74_img1.png';
 
 export default function SCSProject() {
   const [, setLocation] = useLocation();
-  useEffect(() => { trackProjectVisit('scs'); }, []);
+  useEffect(() => {
+    trackProjectVisit('scs');
+    document.title = 'SCS Awareness Platform — John Aaron Branzuela';
+    return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -48,6 +52,12 @@ export default function SCSProject() {
                   {["React 19", "TypeScript", "Vite", "TailwindCSS", "Supabase", "PostgreSQL", "Vercel", "Agile Scrum"].map(t => (
                     <span key={t} className="font-mono text-xs text-blue-400 border border-blue-400 px-2 py-1">{t}</span>
                   ))}
+                </div>
+                <div className="flex gap-3">
+                  <a href="https://github.com/johnaaronmendoza" target="_blank" rel="noopener noreferrer"
+                    className="font-pixel text-[10px] text-zinc-400 border border-zinc-700 px-3 py-2 hover:border-amber-400 hover:text-amber-400 transition-colors inline-flex items-center gap-2">
+                    ↗ SOURCE CODE
+                  </a>
                 </div>
                 <div className="grid grid-cols-2 gap-4 pt-2">
                   <div className="border-2 border-amber-400 bg-zinc-900 p-4">

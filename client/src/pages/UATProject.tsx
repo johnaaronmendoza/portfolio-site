@@ -7,7 +7,11 @@ import { play } from '@/hooks/useSound';
 
 export default function UATProject() {
   const [, setLocation] = useLocation();
-  useEffect(() => { trackProjectVisit('uat'); }, []);
+  useEffect(() => {
+    trackProjectVisit('uat');
+    document.title = 'UAT Testing Dashboard — John Aaron Branzuela';
+    return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -40,6 +44,12 @@ export default function UATProject() {
               {["React 18", "Vite", "Tailwind CSS", "Node.js", "Express", "SQLite", "Recharts", "REST API"].map(t => (
                 <span key={t} className="font-mono text-xs text-blue-400 border border-blue-400 px-2 py-1">{t}</span>
               ))}
+            </div>
+            <div className="flex gap-3 mt-6">
+              <a href="https://github.com/johnaaronmendoza" target="_blank" rel="noopener noreferrer"
+                className="font-pixel text-[10px] text-zinc-400 border border-zinc-700 px-3 py-2 hover:border-amber-400 hover:text-amber-400 transition-colors inline-flex items-center gap-2">
+                ↗ SOURCE CODE
+              </a>
             </div>
           </FramerReveal>
 

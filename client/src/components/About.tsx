@@ -10,7 +10,7 @@
 
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
-import profileImg from '@assets/john_profile.png';
+import profileImg from '@assets/john_profile.jpg';
 
 export default function About() {
   return (
@@ -34,21 +34,18 @@ export default function About() {
                     className="w-full h-full"
                   />
                 </div>
-                <p className="font-pixel text-[9px] text-amber-400 text-center mt-3">[JOHN_AARON]</p>
               </div>
 
               {/* Bio Text */}
-              <div className="space-y-6 prose-8bit">
-                <p className="font-mono-8bit text-sm sm:text-base text-white">
-                  My path into tech started on-site, not behind a desk. During my internship at Sembcorp, I coordinated with contractors across a 50MWp solar PV deployment, managing vendor timelines, translating technical requirements between teams, and conducting UAT to validate systems before handoff. That experience taught me something that stuck: the gap between what a business needs and what gets built is where things go wrong.
+              <div className="space-y-5 prose-8bit">
+                <p className="font-mono-8bit text-sm sm:text-base text-white leading-relaxed">
+                  My path into tech started on-site, not behind a desk. At Sembcorp I coordinated UAT across a 50MWp solar deployment — translating requirements between engineers and stakeholders before handoff. That gap between what a business needs and what gets built is where things go wrong, and it's what I focus on.
                 </p>
-
-                <p className="font-mono-8bit text-sm sm:text-base text-white">
-                  It's what drew me to Computing Science, and it shapes how I approach every project. Whether I'm mapping user flows for an NGO awareness platform, analysing data to surface insights, or defining acceptance criteria, I'm always thinking about the problem before the solution. I'm comfortable speaking to both stakeholders and developers, and I find the most value in being the bridge between the two.
+                <p className="font-mono-8bit text-sm sm:text-base text-white leading-relaxed">
+                  Since then I've shipped cloud-native microservices with gRPC and Kubernetes, built an AR fire evacuation app for Android with on-device ML, designed an AI-powered ETL pipeline for financial market data, and led UAT for a hospital appointment system — all while completing my Computing Science degree at SIT × University of Glasgow.
                 </p>
-
-                <p className="font-mono-8bit text-sm sm:text-base text-gray-400">
-                  Currently studying at SIT × University of Glasgow. I also contributed to the early idea behind GreenLoopFarms, a hydroponic urban farm that went on to win a SGD $10k grant and partner with restaurants, NIE, and NUS.
+                <p className="font-mono-8bit text-sm sm:text-base text-gray-400 leading-relaxed">
+                  I'm comfortable speaking to both engineers and stakeholders, and I do my best work at the boundary between the two.
                 </p>
               </div>
             </div>

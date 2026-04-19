@@ -12,7 +12,11 @@ import rocImg from '@assets/da_p41_img1.png';
 
 export default function UWBProject() {
   const [, setLocation] = useLocation();
-  useEffect(() => { trackProjectVisit('uwb'); }, []);
+  useEffect(() => {
+    trackProjectVisit('uwb');
+    document.title = 'UWB Indoor Localization — John Aaron Branzuela';
+    return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -46,6 +50,12 @@ export default function UWBProject() {
                 <span key={t} className="font-mono text-xs text-blue-400 border border-blue-400 px-2 py-1">{t}</span>
               ))}
             </div>
+            <div className="flex gap-3 mt-6">
+              <a href="https://github.com/johnaaronmendoza" target="_blank" rel="noopener noreferrer"
+                className="font-pixel text-[10px] text-zinc-400 border border-zinc-700 px-3 py-2 hover:border-amber-400 hover:text-amber-400 transition-colors inline-flex items-center gap-2">
+                ↗ SOURCE CODE
+              </a>
+            </div>
           </FramerReveal>
 
           <FramerReveal>
@@ -63,7 +73,7 @@ export default function UWBProject() {
                 <p className="font-mono-8bit text-xs">41,996 UWB samples</p>
               </div>
               <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                <p className="font-pixel text-xs text-amber-400 mb-1">[ BEST ACCURACY ]</p>
+                <p className="font-pixel text-xs text-amber-400 mb-1">[BEST ACCURACY]</p>
                 <p className="font-mono-8bit text-xs">89.61% (SVM-RBF)</p>
               </div>
             </div>

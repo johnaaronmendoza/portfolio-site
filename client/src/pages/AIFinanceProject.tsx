@@ -7,7 +7,11 @@ import { play } from '@/hooks/useSound';
 
 export default function AIFinanceProject() {
   const [, setLocation] = useLocation();
-  useEffect(() => { trackProjectVisit('ai-finance'); }, []);
+  useEffect(() => {
+    trackProjectVisit('ai-finance');
+    document.title = 'AI Finance Insights Engine — John Aaron Branzuela';
+    return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -42,6 +46,12 @@ export default function AIFinanceProject() {
                 <span key={t} className="font-mono text-xs text-blue-400 border border-blue-400 px-2 py-1">{t}</span>
               ))}
             </div>
+            <div className="flex gap-3 mt-6">
+              <a href="https://github.com/johnaaronmendoza" target="_blank" rel="noopener noreferrer"
+                className="font-pixel text-[10px] text-zinc-400 border border-zinc-700 px-3 py-2 hover:border-amber-400 hover:text-amber-400 transition-colors inline-flex items-center gap-2">
+                ↗ SOURCE CODE
+              </a>
+            </div>
           </FramerReveal>
 
           <FramerReveal>
@@ -49,8 +59,8 @@ export default function AIFinanceProject() {
               {[
                 { label: "[TYPE]", value: "ETL + AI Pipeline" },
                 { label: "[DOMAIN]", value: "Shipping & Logistics" },
-                { label: "[ DATA SOURCES ]", value: "5 Market Feeds" },
-                { label: "[ TEST COVERAGE ]", value: "100% (Pytest)" },
+                { label: "[DATA SOURCES]", value: "5 Market Feeds" },
+                { label: "[TEST COVERAGE]", value: "100% (Pytest)" },
               ].map(({ label, value }) => (
                 <div key={label} className="border-2 border-amber-400 bg-zinc-900 p-4">
                   <p className="font-pixel text-xs text-amber-400 mb-1">{label}</p>

@@ -12,7 +12,11 @@ import onboardingImg from '@assets/silverlink_p14_img0.png';
 
 export default function SilverLinkProject() {
   const [, setLocation] = useLocation();
-  useEffect(() => { trackProjectVisit('silverlink'); }, []);
+  useEffect(() => {
+    trackProjectVisit('silverlink');
+    document.title = 'SilverLink SG — John Aaron Branzuela';
+    return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -37,13 +41,18 @@ export default function SilverLinkProject() {
               [SILVERLINK_SG]
             </h1>
             <p className="font-mono-8bit text-base sm:text-lg text-gray-300 max-w-3xl mt-4 leading-relaxed">
-              Cloud-native intergenerational platform connecting seniors and youth through
-              skill-sharing, micro-volunteering, and live community events.
+              Cloud-native platform bridging seniors and youth through skill-sharing and live events — backed by 4 gRPC microservices, WebRTC livestreaming, and Kubernetes autoscaling that scales to demand without manual intervention.
             </p>
             <div className="flex flex-wrap gap-3 mt-6">
               {["React", "Next.js", "Node.js", "gRPC", "Docker", "Kubernetes", "PostgreSQL", "Neon", "Cloudflare", "Keycloak", "Prisma ORM", "WebRTC"].map(t => (
                 <span key={t} className="font-mono text-xs text-blue-400 border border-blue-400 px-2 py-1">{t}</span>
               ))}
+            </div>
+            <div className="flex gap-3 mt-6">
+              <a href="https://github.com/johnaaronmendoza" target="_blank" rel="noopener noreferrer"
+                className="font-pixel text-[10px] text-zinc-400 border border-zinc-700 px-3 py-2 hover:border-amber-400 hover:text-amber-400 transition-colors inline-flex items-center gap-2">
+                ↗ SOURCE CODE
+              </a>
             </div>
           </FramerReveal>
 

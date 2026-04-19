@@ -10,6 +10,9 @@ import silverLinkImg    from '@assets/silverlink_p19_img0.png';
 import scsImg           from '@assets/scs_p65_img0.png';
 import fireSafetyImg    from '@assets/firesafety_p29_img2.png';
 import uwbImg           from '@assets/da_p40_img1.png';
+import greenloopImg     from '@assets/greenloop_hero.jpg';
+import uatImg           from '@assets/uat_dashboard.jpg';
+import aiFinanceImg     from '@assets/aifinance_dashboard.jpg';
 
 // ── Secondary images to preload on hover (detail-page screenshots) ─────────
 import silverLink2      from '@assets/silverlink_p21_img0.png';
@@ -20,6 +23,7 @@ import fireSafety2      from '@assets/firesafety_p29_img1.png';
 import fireSafety3      from '@assets/firesafety_p29_img3.png';
 import uwb2             from '@assets/da_p39_img2.png';
 import uwb3             from '@assets/da_p35_img1.png';
+import greenloop2       from '@assets/greenloop_tour.jpg';
 
 const FILTER_TAGS = ['React', 'Python', 'Kotlin', 'Docker', 'TypeScript', 'gRPC', 'ML/AI'];
 
@@ -81,7 +85,7 @@ const PROJECTS: Project[] = [
     name: "UAT Testing Dashboard",
     description:
       "Full-stack defect tracker and UAT management tool for a Hospital Appointment System. Real-time severity charts, test case to defect linking, CSV export, and role-based access for PM, QA Lead, Tester, and Developer.",
-    image: null,
+    image: uatImg,
     tags: ["React 18", "Node.js", "Express", "SQLite", "Recharts"],
     link: "/projects/uat",
     preloadImages: [],
@@ -91,7 +95,7 @@ const PROJECTS: Project[] = [
     name: "AI Finance Insights Engine",
     description:
       "Automated ETL pipeline ingesting Brent crude, USD/SGD FX, logistics stocks, and geopolitical news. AI NLP engine classifies 9 sectors, scores sentiment, and flags supply chain risks. Power BI ready Star Schema output.",
-    image: null,
+    image: aiFinanceImg,
     tags: ["Python", "Pandas", "SQLite", "ETL", "NLP", "Power BI"],
     link: "/projects/ai-finance",
     preloadImages: [],
@@ -101,11 +105,11 @@ const PROJECTS: Project[] = [
     name: "GreenLoopFarms",
     description:
       "Singapore hydroponic urban farm growing pesticide-free vegetables and microgreens. Contributed to the initial idea. Won SGD $10,000 NYP JumpStart Grant. Partners: FURA (World's 50 Best), NIE, NUS.",
-    image: null,
+    image: greenloopImg,
     tags: ["NYP JumpStart", "SGD $10k Grant", "Urban Farming"],
     link: "external",
     externalUrl: "https://greenloopfarms.com/",
-    preloadImages: [],
+    preloadImages: [greenloop2],
   },
 ];
 
@@ -173,42 +177,13 @@ function ProjectCard({
           />
         ) : (
           <div
-            className="w-full h-full flex flex-col items-center justify-center gap-3 p-4 relative overflow-hidden"
+            className="w-full h-full flex items-center justify-center relative overflow-hidden"
             style={{
               backgroundImage:
                 'repeating-linear-gradient(0deg,transparent,transparent 18px,rgba(245,158,11,0.06) 18px,rgba(245,158,11,0.06) 19px),' +
                 'repeating-linear-gradient(90deg,transparent,transparent 18px,rgba(245,158,11,0.06) 18px,rgba(245,158,11,0.06) 19px)',
             }}
-          >
-            {project.name === "UAT Testing Dashboard" && (
-              <>
-                <span className="text-4xl">🧪</span>
-                <span className="font-pixel text-[10px] text-amber-400 text-center leading-relaxed">UAT<br />DASHBOARD</span>
-                <div className="flex gap-1 mt-1">
-                  {([['bg-red-500', 3], ['bg-orange-400', 5], ['bg-yellow-400', 4], ['bg-blue-400', 2]] as [string, number][]).map(([col, w], i) => (
-                    <div key={i} className={`h-1.5 rounded-none ${col} opacity-70`} style={{ width: `${w * 5}px` }} />
-                  ))}
-                </div>
-              </>
-            )}
-            {project.name === "AI Finance Insights Engine" && (
-              <>
-                <div className="flex items-end gap-1 h-8">
-                  {[4, 7, 5, 9, 6, 8, 5].map((h, i) => (
-                    <div key={i} className={`w-2 ${i % 2 === 0 ? 'bg-amber-400' : 'bg-blue-400'} opacity-70`} style={{ height: `${h * 4}px` }} />
-                  ))}
-                </div>
-                <span className="font-pixel text-[10px] text-amber-400 text-center leading-relaxed">AI_FINANCE<br />INSIGHTS</span>
-              </>
-            )}
-            {project.name === "GreenLoopFarms" && (
-              <>
-                <span className="text-4xl">🌱</span>
-                <span className="font-pixel text-[10px] text-amber-400 text-center leading-relaxed">GREENLOOP<br />FARMS</span>
-                <span className="font-pixel text-[8px] text-blue-400 opacity-70">SGD $10K GRANT</span>
-              </>
-            )}
-          </div>
+          />
         )}
         {isComingSoon && (
           <div className="absolute inset-0 flex items-end justify-end p-3">

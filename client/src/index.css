@@ -379,6 +379,12 @@
   .shadow-8bit-green {
     box-shadow: 4px 4px 0px 0px #22C55E;
   }
+
+  /* Scroll progress bar glow */
+  .scroll-progress-glow {
+    box-shadow: 0 0 6px 1px rgba(245, 158, 11, 0.55),
+                0 0 2px 0px rgba(245, 158, 11, 0.9);
+  }
   
   /* Sharp borders - 2px solid */
   .border-8bit {

@@ -22,16 +22,6 @@ const ENTRIES: Entry[] = [
     ],
   },
   {
-    org: "Ngee Ann Polytechnic",
-    role: "Diploma in Business Information Technology",
-    period: "2018 – 2021",
-    tag: "EDUCATION",
-    highlights: [
-      "Graduated with a focus on IT systems, business analytics, and project management",
-      "Final-year project: full-stack web system for inventory management",
-    ],
-  },
-  {
     org: "Sembcorp Solar Singapore",
     role: "Digitization Analyst Intern",
     period: "Oct 2020 – Jun 2021",
@@ -67,7 +57,7 @@ export default function Experience() {
     <FramerReveal>
       <section className="bg-black text-white px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-5xl mx-auto">
-          <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-16">
+          <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-16 glitch" data-text="EXPERIENCE">
             EXPERIENCE
           </h2>
 

@@ -17,6 +17,16 @@ export default function Footer() {
       <div className="max-w-5xl mx-auto space-y-10">
         {/* Contact CTA */}
         <div className="text-center space-y-4">
+          {/* Availability indicator */}
+          <div className="flex items-center justify-center gap-2">
+            <motion.div
+              className="w-2 h-2 bg-green-400"
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <span className="font-pixel text-[9px] text-green-400 tracking-widest">AVAILABLE FOR HIRE</span>
+          </div>
+
           <motion.h2
             className="font-pixel text-xl sm:text-2xl text-amber-400 glitch"
             data-text="GET IN TOUCH"
@@ -40,6 +50,17 @@ export default function Footer() {
             <PixelEmail size={20} />
             SEND MESSAGE →
           </motion.a>
+
+          {/* Terminal Easter egg hint */}
+          <p className="font-mono text-[10px] text-zinc-600">
+            or open the terminal and try{' '}
+            <button
+              className="text-amber-400 hover:text-white transition-colors"
+              onClick={() => window.dispatchEvent(new Event('toggle-terminal'))}
+            >
+              {'>'} sudo hire-me
+            </button>
+          </p>
         </div>
 
         {/* Divider */}

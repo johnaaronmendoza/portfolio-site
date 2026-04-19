@@ -14,15 +14,17 @@ import profileImg from '@assets/john_profile.jpg';
 
 export default function About() {
   return (
-    <FramerReveal>
-      <section className="bg-black text-white px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
-        <div className="max-w-5xl mx-auto">
-          {/* Section Heading */}
-          <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-16">
+    <section className="bg-black text-white px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
+      <div className="max-w-5xl mx-auto">
+        {/* Section Heading */}
+        <FramerReveal variant="fade-left">
+          <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-16 glitch" data-text="ABOUT ME">
             ABOUT ME
           </h2>
+        </FramerReveal>
 
-          {/* Card Container */}
+        {/* Card Container — staggered: photo slides from left, text from right */}
+        <FramerReveal delay={0.1}>
           <div className="border-8bit shadow-8bit bg-zinc-900 p-6 sm:p-10 lg:p-14">
             <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
               {/* Profile Photo */}
@@ -50,8 +52,8 @@ export default function About() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-    </FramerReveal>
+        </FramerReveal>
+      </div>
+    </section>
   );
 }

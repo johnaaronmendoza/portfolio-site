@@ -98,14 +98,22 @@ function SkillCard({ skill, accent, delay }: { skill: Skill; accent: 'amber' | '
 
   return (
     <motion.div
-      className={`group flex flex-col items-center gap-2 p-3 border-2 border-zinc-800 bg-zinc-900 cursor-default ${hoverBorder} transition-colors duration-150`}
+      className={`group relative flex flex-col items-center gap-2 p-3 border-2 border-zinc-800 bg-zinc-900 cursor-default ${hoverBorder} transition-colors duration-150`}
       initial={{ opacity: 0, y: 16, scale: 0.92 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.35, delay, ease: [0.23, 1, 0.32, 1] }}
       whileHover={{ y: -3, transition: { duration: 0.15 } }}
     >
-      {/* Icon or abbreviation badge */}
-      <div className="w-8 h-8 flex items-center justify-center flex-shrink-0">
+      {/* Tooltip */}
+      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-zinc-900 border border-amber-400 px-2 py-0.5 font-pixel text-[7px] text-amber-400 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-20 pointer-events-none">
+        {skill.name}
+      </div>
+
+      {/* Icon — wobbles on hover */}
+      <motion.div
+        className="w-8 h-8 flex items-center justify-center flex-shrink-0"
+        whileHover={{ scale: 1.2, rotate: [0, -6, 6, 0], transition: { duration: 0.3 } }}
+      >
         {skill.icon ? (
           <img
             src={`${DEVICON}/${skill.icon}.svg`}
@@ -115,14 +123,12 @@ function SkillCard({ skill, accent, delay }: { skill: Skill; accent: 'amber' | '
             className="object-contain pixelated"
             style={{ imageRendering: 'pixelated' }}
             onError={e => {
-              // If CDN fails, hide img and show abbr sibling
               (e.currentTarget as HTMLImageElement).style.display = 'none';
               const sib = e.currentTarget.nextElementSibling as HTMLElement;
               if (sib) sib.style.display = 'flex';
             }}
           />
         ) : null}
-        {/* Abbreviation fallback (also used when icon='' initially) */}
         <span
           className="font-pixel text-[9px] font-bold w-7 h-7 border items-center justify-center flex-shrink-0"
           style={{
@@ -133,7 +139,7 @@ function SkillCard({ skill, accent, delay }: { skill: Skill; accent: 'amber' | '
         >
           {skill.abbr}
         </span>
-      </div>
+      </motion.div>
 
       {/* Skill name */}
       <span
@@ -191,7 +197,7 @@ export default function Skills() {
     <FramerReveal>
       <section id="skills" className="bg-black text-white px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-14">
+          <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-14 glitch" data-text="SKILLS">
             SKILLS
           </h2>
 

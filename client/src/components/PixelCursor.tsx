@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 // Interactive element selectors that trigger the expanded cursor state
 const INTERACTIVE = 'button, a, [role="button"], input, textarea, select, label, [tabindex]';
+
+type TrailPoint = { x: number; y: number; id: number };
 
 export default function PixelCursor() {
   const [pos, setPos] = useState({ x: -100, y: -100 });
@@ -9,8 +12,10 @@ export default function PixelCursor() {
   const [clicking, setClicking] = useState(false);
   const [visible, setVisible] = useState(false);
   const [touchDevice, setTouchDevice] = useState(false);
-  // Ref so onMove can read visible without being recreated on every change
+  const [trail, setTrail] = useState<TrailPoint[]>([]);
   const visibleRef = useRef(false);
+  const trailIdRef = useRef(0);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     // Don't show on touch-only devices
@@ -24,6 +29,14 @@ export default function PixelCursor() {
       if (!visibleRef.current) {
         visibleRef.current = true;
         setVisible(true);
+      }
+      // Trail — skip if reduced motion
+      if (!reduced) {
+        const id = trailIdRef.current++;
+        setTrail(prev => [...prev.slice(-3), { x: e.clientX, y: e.clientY, id }]);
+        setTimeout(() => {
+          setTrail(prev => prev.filter(t => t.id !== id));
+        }, 220);
       }
     };
 
@@ -71,22 +84,37 @@ export default function PixelCursor() {
   const color = hover ? '#3B82F6' : '#F59E0B';
 
   return (
-    <div
-      className="fixed pointer-events-none z-[99999]"
-      style={{
-        // Anchor at exact mouse position; transform centers the block.
-        // This prevents the jitter caused by shifting left/top when size changes.
-        left: pos.x,
-        top: pos.y,
-        transform: 'translate(-50%, -50%)',
-        width: size,
-        height: size,
-        backgroundColor: color,
-        imageRendering: 'pixelated',
-        // Size and color transition with stepped ease (8-bit snap).
-        // left/top deliberately have NO transition — cursor tracks mouse instantly.
-        transition: 'width 0.08s steps(1), height 0.08s steps(1), background-color 0.08s steps(1)',
-      }}
-    />
+    <>
+      {/* Trailing pixel dots */}
+      {trail.map((t, i) => (
+        <div
+          key={t.id}
+          className="fixed pointer-events-none z-[99998]"
+          style={{
+            left: t.x,
+            top: t.y,
+            transform: 'translate(-50%, -50%)',
+            width: 4,
+            height: 4,
+            backgroundColor: color,
+            opacity: ((i + 1) / (trail.length + 1)) * 0.45,
+          }}
+        />
+      ))}
+      {/* Main cursor */}
+      <div
+        className="fixed pointer-events-none z-[99999]"
+        style={{
+          left: pos.x,
+          top: pos.y,
+          transform: 'translate(-50%, -50%)',
+          width: size,
+          height: size,
+          backgroundColor: color,
+          imageRendering: 'pixelated',
+          transition: 'width 0.08s steps(1), height 0.08s steps(1), background-color 0.08s steps(1)',
+        }}
+      />
+    </>
   );
 }

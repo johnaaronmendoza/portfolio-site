@@ -8,17 +8,19 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 export default function ScreenTear() {
   const [shouldShow, setShouldShow] = useState(false);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
-    // Random screen tear every 8-15 seconds
+    if (reduced) return;
+
     const scheduleNextTear = () => {
-      const delay = Math.random() * 7000 + 8000; // 8-15 seconds
+      const delay = Math.random() * 7000 + 8000;
       const timeout = setTimeout(() => {
         setShouldShow(true);
-        // Hide after animation completes (3 seconds)
         setTimeout(() => setShouldShow(false), 3000);
         scheduleNextTear();
       }, delay);
@@ -27,7 +29,7 @@ export default function ScreenTear() {
 
     const timeout = scheduleNextTear();
     return () => clearTimeout(timeout);
-  }, []);
+  }, [reduced]);
 
   return (
     <>

@@ -12,6 +12,7 @@ import Projects from '@/components/Projects';
 import Skills from '@/components/Skills';
 import Footer from '@/components/Footer';
 import PixelDivider from '@/components/PixelDivider';
+import SectionNav from '@/components/SectionNav';
 import { useKeyboardNavigation } from '@/hooks/useKeyboardNavigation';
 import { useParallax } from '@/hooks/useParallax';
 import { useHomeAchievements } from '@/hooks/useAchievements';
@@ -22,6 +23,7 @@ export default function Home() {
   useHomeAchievements();
   return (
     <div className="min-h-screen bg-black text-white">
+      <SectionNav />
       {/* Main scrollable content */}
       <main>
       <div id="hero" className="section-transition">

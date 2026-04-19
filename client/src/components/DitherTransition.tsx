@@ -7,9 +7,10 @@
  * characteristic ordered-dithering pattern used in old handheld game consoles.
  */
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'wouter';
 import { play } from '@/hooks/useSound';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 // 4×4 Bayer dithering matrix (values 0–15, lower = reveals earlier)
 const BAYER_4X4 = [
@@ -48,6 +49,7 @@ export default function DitherTransition() {
   const [location] = useLocation();
   const prevLocation = useRef(location);
   const animating = useRef(false);
+  const reduced = useReducedMotion();
 
   const runTransition = useCallback(() => {
     const canvas = canvasRef.current;
@@ -93,12 +95,22 @@ export default function DitherTransition() {
     }, STEP_MS);
   }, []);
 
+  // Fire once on first home page load (after LoadingBar exits ~2.6s)
+  const hasRunOnce = useRef(false);
   useEffect(() => {
+    if (reduced || hasRunOnce.current) return;
+    hasRunOnce.current = true;
+    const t = setTimeout(runTransition, 2600);
+    return () => clearTimeout(t);
+  }, [runTransition, reduced]);
+
+  useEffect(() => {
+    if (reduced) return;
     if (location !== prevLocation.current) {
       prevLocation.current = location;
       runTransition();
     }
-  }, [location, runTransition]);
+  }, [location, runTransition, reduced]);
 
   return (
     <canvas

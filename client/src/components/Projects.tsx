@@ -166,10 +166,14 @@ function ProjectCard({
       {...preloadHandlers}
     >
       {/* Project Image */}
-      <div className="relative overflow-hidden border-4 border-amber-400 shadow-8bit mb-5 h-44 sm:h-48 bg-zinc-900">
+      <div className="relative overflow-hidden border-4 border-amber-400 group-hover:border-blue-400 shadow-8bit mb-5 h-44 sm:h-48 bg-zinc-900 transition-colors duration-150">
+        {/* Pixel corner accents — animate in on card hover */}
+        <div className="absolute top-0 left-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-100 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-100 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-100 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-100 pointer-events-none" />
+
         {project.image ? (
-          // PixelatedImage: starts pixelated, reveals crisp on scroll-into-view.
-          // Re-pixelates on hover via PixelationManager singleton (offscreen canvas).
           <PixelatedImage
             src={project.image}
             alt={project.name}
@@ -203,8 +207,8 @@ function ProjectCard({
 
       {/* Project Info */}
       <div className="space-y-3">
-        {/* Binary index — reflects original position regardless of filter */}
-        <div className="font-pixel text-[9px] text-zinc-600 tracking-widest select-none">
+        {/* Binary index — lights up on card hover */}
+        <div className="font-pixel text-[9px] text-zinc-700 group-hover:text-amber-400 transition-colors duration-150 tracking-widest select-none">
           {project.num.toString(2).padStart(8, '0')}
         </div>
         <h3 className="font-pixel text-sm sm:text-base text-blue-400 leading-relaxed">
@@ -221,12 +225,9 @@ function ProjectCard({
           ))}
         </div>
         {!isComingSoon && (
-          <motion.div
-            className="font-mono-8bit text-xs text-amber-400 font-bold hover:text-white transition-colors inline-flex items-center gap-1"
-            whileHover={{ x: 4 }}
-          >
+          <div className="font-mono-8bit text-xs text-amber-400 font-bold inline-flex items-center gap-1 translate-x-0 group-hover:translate-x-1.5 transition-transform duration-150">
             {isExternal ? 'VISIT SITE ↗' : 'VIEW WORK →'}
-          </motion.div>
+          </div>
         )}
       </div>
     </motion.div>
@@ -245,7 +246,7 @@ export default function Projects() {
     <FramerReveal>
       <section className="bg-black text-white px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-8">
+          <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-8 glitch" data-text="PROJECTS">
             PROJECTS
           </h2>
 

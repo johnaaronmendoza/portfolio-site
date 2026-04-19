@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Particles from './Particles';
 import { unlockAchievement } from '@/hooks/useAchievements';
 import { play } from '@/hooks/useSound';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
@@ -31,6 +32,7 @@ export default function Hero() {
   const [displayText, setDisplayText] = useState('');
   const [roleIdx, setRoleIdx] = useState(0);
   const fullText = 'JOHN AARON\nMENDOZA\nBRANZUELA';
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     const startDelay = setTimeout(() => {
@@ -57,22 +59,24 @@ export default function Hero() {
 
   return (
     <section className="min-h-screen bg-black text-white flex items-center justify-center px-4 sm:px-8 lg:px-16 py-20 relative overflow-hidden">
-      {/* WebGL particle background */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <Particles
-          particleColors={['#F59E0B', '#3B82F6', '#ffffff']}
-          particleCount={120}
-          particleSpread={8}
-          speed={0.05}
-          particleBaseSize={60}
-          sizeRandomness={1.2}
-          alphaParticles={true}
-          moveParticlesOnHover={true}
-          particleHoverFactor={0.4}
-          cameraDistance={22}
-          disableRotation={false}
-        />
-      </div>
+      {/* WebGL particle background — skipped if prefers-reduced-motion */}
+      {!reduced && (
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <Particles
+            particleColors={['#F59E0B', '#3B82F6', '#ffffff']}
+            particleCount={120}
+            particleSpread={8}
+            speed={0.05}
+            particleBaseSize={60}
+            sizeRandomness={1.2}
+            alphaParticles={true}
+            moveParticlesOnHover={true}
+            particleHoverFactor={0.4}
+            cameraDistance={22}
+            disableRotation={false}
+          />
+        </div>
+      )}
 
       {/* Floating pixel decorations */}
       {PIXELS.map((p, i) => (
@@ -93,10 +97,22 @@ export default function Hero() {
       <div className="max-w-4xl w-full relative z-10">
         {/* Name */}
         <motion.div
-          className="mb-10 border-8bit border-8bit-pulse shadow-8bit p-8 sm:p-10 lg:p-12 bg-black"
+          className="mb-10 border-8bit shadow-8bit p-8 sm:p-10 lg:p-12 bg-black"
           initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+            boxShadow: reduced ? '4px 4px 0px 0px #F59E0B' : [
+              '4px 4px 0px 0px #F59E0B',
+              '4px 4px 0px 0px #F59E0B, 0 0 22px rgba(245,158,11,0.25)',
+              '4px 4px 0px 0px #F59E0B',
+            ],
+          }}
+          transition={{
+            opacity:    { duration: 0.6, ease: 'easeOut' },
+            scale:      { duration: 0.6, ease: 'easeOut' },
+            boxShadow:  { duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.2 },
+          }}
         >
           <h1
             className="font-pixel text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight whitespace-pre-wrap glitch"

@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import FramerReveal from '@/components/FramerReveal';
 import { useLocation } from 'wouter';
+import { useEffect } from 'react';
+import { trackProjectVisit } from '@/hooks/useAchievements';
 import onboardingImg from '@assets/firesafety_p29_img1.png';
 import dashboardImg from '@assets/firesafety_p29_img2.png';
 import drillSetupImg from '@assets/firesafety_p29_img3.png';
@@ -12,6 +14,7 @@ import analyticsImg from '@assets/firesafety_p30_img3.png';
 
 export default function FireSafetyProject() {
   const [, setLocation] = useLocation();
+  useEffect(() => { trackProjectVisit('firesafety'); }, []);
 
   const stats = [
     { label: "KOTLIN SOURCE", value: "10,984 lines" },

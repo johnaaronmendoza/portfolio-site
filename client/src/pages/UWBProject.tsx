@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import FramerReveal from '@/components/FramerReveal';
 import { useLocation } from 'wouter';
+import { useEffect } from 'react';
+import { trackProjectVisit } from '@/hooks/useAchievements';
 import confusionImg from '@assets/da_p40_img1.png';
 import decisionBoundaryImg from '@assets/da_p39_img2.png';
 import dtAccuracyImg from '@assets/da_p35_img1.png';
@@ -9,6 +11,7 @@ import rocImg from '@assets/da_p41_img1.png';
 
 export default function UWBProject() {
   const [, setLocation] = useLocation();
+  useEffect(() => { trackProjectVisit('uwb'); }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -242,13 +245,13 @@ export default function UWBProject() {
                   ← BACK TO PORTFOLIO
                 </motion.button>
                 <motion.button
-                  onClick={() => setLocation('/projects/firesafety')}
+                  onClick={() => setLocation('/projects/uat')}
                   className="border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
                   whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6' }}
                   whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6', scale: 0.97 }}
                   transition={{ duration: 0.1 }}
                 >
-                  FIRE SAFETY APP →
+                  UAT DASHBOARD →
                 </motion.button>
               </div>
             </div>

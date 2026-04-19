@@ -14,10 +14,12 @@ import Footer from '@/components/Footer';
 import PixelDivider from '@/components/PixelDivider';
 import { useKeyboardNavigation } from '@/hooks/useKeyboardNavigation';
 import { useParallax } from '@/hooks/useParallax';
+import { useHomeAchievements } from '@/hooks/useAchievements';
 
 export default function Home() {
   useKeyboardNavigation();
   useParallax();
+  useHomeAchievements();
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Main scrollable content */}

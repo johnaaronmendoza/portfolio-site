@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import FramerReveal from '@/components/FramerReveal';
 import { useLocation } from 'wouter';
+import { useEffect } from 'react';
+import { trackProjectVisit } from '@/hooks/useAchievements';
 import heroImg from '@assets/scs_p65_img0.png';
 import adminDashImg from '@assets/scs_p71_img1.png';
 import panelEditorImg from '@assets/scs_p72_img0.png';
@@ -10,6 +12,7 @@ import adminMgmtImg from '@assets/scs_p74_img1.png';
 
 export default function SCSProject() {
   const [, setLocation] = useLocation();
+  useEffect(() => { trackProjectVisit('scs'); }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -59,6 +62,27 @@ export default function SCSProject() {
               <div className="border-4 border-amber-400 shadow-8bit overflow-hidden flex items-center justify-center bg-zinc-900">
                 <img src={heroImg} alt="SCS visual novel character" className="max-h-96 object-contain" />
               </div>
+            </div>
+          </FramerReveal>
+        </div>
+      </section>
+
+      {/* Key metrics bar */}
+      <section className="py-10 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400 bg-zinc-900">
+        <div className="max-w-6xl mx-auto">
+          <FramerReveal>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+              {[
+                { label: "AGILE SPRINTS", value: "7" },
+                { label: "LANGUAGES SUPPORTED", value: "4" },
+                { label: "QUESTION TYPES", value: "4" },
+                { label: "ADMIN PANEL", value: "No-Code" },
+              ].map(({ label, value }) => (
+                <div key={label}>
+                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-1">{value}</p>
+                  <p className="font-mono text-[10px] text-gray-500">{label}</p>
+                </div>
+              ))}
             </div>
           </FramerReveal>
         </div>
@@ -242,13 +266,13 @@ export default function SCSProject() {
                   ← BACK TO PORTFOLIO
                 </motion.button>
                 <motion.button
-                  onClick={() => setLocation('/projects/silverlink')}
+                  onClick={() => setLocation('/projects/firesafety')}
                   className="border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
                   whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6' }}
                   whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6', scale: 0.97 }}
                   transition={{ duration: 0.1 }}
                 >
-                  SILVERLINK SG →
+                  FIRE SAFETY APP →
                 </motion.button>
               </div>
             </div>

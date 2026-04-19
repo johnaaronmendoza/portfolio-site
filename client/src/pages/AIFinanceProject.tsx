@@ -1,9 +1,12 @@
 import { motion } from 'framer-motion';
 import FramerReveal from '@/components/FramerReveal';
 import { useLocation } from 'wouter';
+import { useEffect } from 'react';
+import { trackProjectVisit } from '@/hooks/useAchievements';
 
 export default function AIFinanceProject() {
   const [, setLocation] = useLocation();
+  useEffect(() => { trackProjectVisit('ai-finance'); }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -214,13 +217,13 @@ export default function AIFinanceProject() {
                   ← BACK TO PORTFOLIO
                 </motion.button>
                 <motion.button
-                  onClick={() => setLocation('/projects/uat')}
+                  onClick={() => setLocation('/projects/silverlink')}
                   className="border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
                   whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6' }}
                   whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6', scale: 0.97 }}
                   transition={{ duration: 0.1 }}
                 >
-                  UAT DASHBOARD →
+                  SILVERLINK SG →
                 </motion.button>
               </div>
             </div>

@@ -30,7 +30,7 @@ export default function Footer() {
             Open to internships, collaborations, and interesting projects.
           </p>
           <motion.a
-            href="mailto:johnaaronmendoza@gmail.com"
+            href="mailto:johnaaronmb@gmail.com"
             className="inline-block border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
             whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B', transition: { duration: 0.1 } }}
             animate={{ boxShadow: ['4px 4px 0px 0px #F59E0B', '4px 4px 0px 0px #F59E0B, 0 0 16px rgba(245,158,11,0.5)', '4px 4px 0px 0px #F59E0B'] }}

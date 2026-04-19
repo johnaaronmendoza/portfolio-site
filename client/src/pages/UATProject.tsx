@@ -1,9 +1,12 @@
 import { motion } from 'framer-motion';
 import FramerReveal from '@/components/FramerReveal';
 import { useLocation } from 'wouter';
+import { useEffect } from 'react';
+import { trackProjectVisit } from '@/hooks/useAchievements';
 
 export default function UATProject() {
   const [, setLocation] = useLocation();
+  useEffect(() => { trackProjectVisit('uat'); }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">

@@ -2,12 +2,13 @@ import FramerReveal from './FramerReveal';
 
 const ROW_1 = [
   "Java", "Python", "TypeScript", "React", "Next.js", "Tailwind CSS",
-  "Kotlin", "Jetpack Compose", "scikit-learn", "NumPy", "Pandas", "Matplotlib",
+  "Kotlin", "Jetpack Compose", "scikit-learn", "NumPy", "Pandas", "SQL",
+  "Supabase", "Power BI",
 ];
 
 const ROW_2 = [
   "Node.js", "gRPC", "Docker", "Kubernetes", "PostgreSQL", "MongoDB",
-  "AWS", "Firebase", "ARCore", "TFLite", "Git", "Figma",
+  "AWS", "Firebase", "ARCore", "TFLite", "Git", "JIRA", "Confluence",
 ];
 
 // Duplicate for seamless loop

@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import FramerReveal from '@/components/FramerReveal';
 import { useLocation } from 'wouter';
+import { useEffect } from 'react';
+import { trackProjectVisit } from '@/hooks/useAchievements';
 import eventsImg from '@assets/silverlink_p19_img0.png';
 import eventDetailImg from '@assets/silverlink_p21_img0.png';
 import livestreamImg from '@assets/silverlink_p22_img0.png';
@@ -9,6 +11,7 @@ import onboardingImg from '@assets/silverlink_p14_img0.png';
 
 export default function SilverLinkProject() {
   const [, setLocation] = useLocation();
+  useEffect(() => { trackProjectVisit('silverlink'); }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -53,6 +56,27 @@ export default function SilverLinkProject() {
                 <p className="font-pixel text-xs text-amber-400 mb-2">[ TEAM ]</p>
                 <p className="font-mono-8bit text-sm">Group 20 — Danish, John, Thomas, Hanaa, Habib, Joshua</p>
               </div>
+            </div>
+          </FramerReveal>
+        </div>
+      </section>
+
+      {/* Key metrics bar */}
+      <section className="py-10 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400 bg-zinc-900">
+        <div className="max-w-6xl mx-auto">
+          <FramerReveal>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+              {[
+                { label: "GRPC MICROSERVICES", value: "4" },
+                { label: "TEAM MEMBERS", value: "6" },
+                { label: "AGILE SPRINTS", value: "7" },
+                { label: "LIVESTREAMING", value: "WebRTC" },
+              ].map(({ label, value }) => (
+                <div key={label}>
+                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-1">{value}</p>
+                  <p className="font-mono text-[10px] text-gray-500">{label}</p>
+                </div>
+              ))}
             </div>
           </FramerReveal>
         </div>
@@ -231,7 +255,7 @@ export default function SilverLinkProject() {
                   whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6', scale: 0.97 }}
                   transition={{ duration: 0.1 }}
                 >
-                  NEXT PROJECT →
+                  SCS PLATFORM →
                 </motion.button>
               </div>
             </div>

@@ -93,7 +93,7 @@ export default function MascotChatWidget() {
     'supabase': 'In the SCS project, Supabase handles all backend needs: PostgreSQL for story/panel data, Supabase Auth for admin accounts with email verification, RLS (Row-Level Security) for role-based access, and Supabase Storage for character sprites and backgrounds.',
 
     // GreenLoopFarms
-    'greenloop': 'GreenLoopFarms is a Singapore hydroponic urban farm I co-founded, growing pesticide-free vegetables and microgreens. We won a SGD $10,000 NYP JumpStart Grant. The farm partners with FURA (World\'s 50 Best Discovery), East Bistro, NIE, NUS, and NYP — and has been featured in Channel News Asia and Lianhe ZaoBao. Visit greenloopfarms.com!',
+    'greenloop': 'GreenLoopFarms is a Singapore hydroponic urban farm growing pesticide-free vegetables and microgreens. I contributed to the early idea and business strategy, and helped co-prepare the pitch deck that won a SGD $10,000 NYP JumpStart Grant. Partners include FURA (World\'s 50 Best Discovery), East Bistro, NIE, NUS, and NYP. Visit greenloopfarms.com!',
     'grant': 'GreenLoopFarms won a SGD $10,000 NYP JumpStart Grant — a competitive startup grant from Ngee Ann Polytechnic for innovative ventures.',
 
     // Fire Safety
@@ -102,13 +102,23 @@ export default function MascotChatWidget() {
     'arcore': 'In the Fire Safety project, I integrated ARCore for real-time corridor navigation. Breadcrumb arrows are overlaid on the live camera feed, guiding residents along the Dijkstra-computed evacuation route. I wrote ArCoreSessionManager, ArCoreRenderer, and ArWaypointConverter.',
     'dijkstra': 'I implemented Dijkstra\'s shortest-path algorithm for the Fire Safety app — applied to a weighted floor plan graph with a blockedNodes param for dynamic stairwell exclusion. findPathToNearestExit() runs against all exit nodes and picks the minimum-cost route. Thread-safe with @Synchronized.',
 
+    // UAT Testing Dashboard
+    'uat': 'The UAT Testing Dashboard is a full-stack defect tracker and UAT management tool I built for a Hospital Appointment System. It tracks defects end-to-end (Open → In Progress → Resolved → Closed), links failed test cases directly to open defects, and has a real-time analytics dashboard with severity breakdown charts and UAT progress trends. Role-based access for PM, QA Lead, Tester, and Developer. CSV export for defect registers and test logs. Tech: React 18, Node.js, Express, SQLite, Recharts.',
+    'defect': 'In my UAT Testing Dashboard, defects go through a full lifecycle: Open → In Progress → Resolved → Closed. Each defect links directly to the test cases that triggered it — an auditable chain from failure to fix. Severity levels (Critical, High, Medium, Low) feed into the analytics dashboard.',
+
+    // AI Finance Insights Engine
+    'finance': 'The AI Finance Insights and Logistics Analytics Engine is an automated ETL pipeline that ingests 5 global market data sources: Brent crude, USD/SGD FX, S&P 500, logistics stocks, and geopolitical news. It computes rolling volatility, moving averages, and cross-asset correlations. An AI NLP engine classifies headlines across 9 sectors, scores sentiment, and flags supply chain risks. Output is a Star Schema data warehouse ready for Power BI. 100% Pytest coverage on all extraction and transformation logic.',
+    'etl': 'My ETL pipeline (AI Finance Insights) has 5 stages: Extract → Validate (schema + row parity) → Transform (rolling metrics) → Validate again → Load to SQLite. Two validation gates prevent corrupt data from reaching the database at any stage.',
+    'pipeline': 'The AI Finance pipeline ingests Brent crude, FX rates, S&P 500, logistics stocks, and geopolitical news. After transformation it produces a Star Schema data warehouse (Fact + Dim tables) consumed directly by Power BI for shipping and market analytics.',
+    'nlp': 'My AI NLP engine (in the Finance Insights project) classifies market headlines across 9 sectors, generates sentiment scores, flags supply chain risks, and auto-generates daily executive briefs. Built with an LLM API integration path.',
+
     // UWB / Data Analytics
     'uwb': 'The UWB Indoor Localization project (CSC3105 Data Analytics) classifies LOS/NLOS UWB signal paths using SVM-RBF (89.61% accuracy, 0.9612 ROC-AUC) vs Logistic Regression (85.75%, 0.9195 AUC). Dataset: 41,996 samples across 7 indoor environments (Decawave DWM1000). I handled the data mining methodology — model selection, train/test split, RobustScaler, hyperparameter tuning, and range regression.',
-    'machine learning': 'I have two ML projects: (1) UWB classification — SVM-RBF achieving 89.61% accuracy classifying indoor signal paths; (2) Fire Safety — on-device TFLite + YOLO for real-time fire extinguisher type classification without network dependency.',
+    'machine learning': 'I have ML work across two projects: (1) UWB classification — SVM-RBF achieving 89.61% accuracy classifying indoor signal paths; (2) Fire Safety — on-device TFLite + YOLO for real-time fire extinguisher type classification without network dependency.',
     'data': 'My data analytics work: UWB Indoor Localization (CSC3105) — full ML pipeline with PCA on 1,016 CIR dimensions, SVM-RBF (89.61% accuracy), logistic regression baseline (85.75%), and linear regression for dual-path range estimation (RMSE 1.757m). 41,996 samples, 7 environments, perfectly balanced 50/50 LOS/NLOS.',
 
     // Projects overview
-    'projects': 'I have 5 projects: (1) SilverLink SG — cloud-native gRPC microservices platform with WebRTC; (2) SCS Awareness Platform — visual novel engine with React 19 + Supabase; (3) Fire Safety Drill Companion — Android AR + ML + Dijkstra; (4) UWB Indoor Localization — SVM-RBF ML pipeline at 89.61% accuracy; (5) GreenLoopFarms — SGD $10k NYP JumpStart Grant winner, live urban farm.',
+    'projects': 'I have 7 projects: (1) SilverLink SG — cloud-native gRPC microservices platform with WebRTC; (2) SCS Awareness Platform — visual novel engine with React 19 + Supabase; (3) Fire Safety Drill Companion — Android AR + ML + Dijkstra; (4) UWB Indoor Localization — SVM-RBF ML pipeline at 89.61% accuracy; (5) UAT Testing Dashboard — full-stack defect tracker with real-time analytics; (6) AI Finance Insights Engine — ETL pipeline + NLP engine + Power BI Star Schema; (7) GreenLoopFarms — SGD $10k NYP JumpStart Grant winner.',
 
     // Skills
     'skills': 'Languages: Java, Python, C++, TypeScript, JavaScript. Frontend: React 19, Next.js, Tailwind CSS, Framer Motion. Backend: Node.js, gRPC, Prisma ORM, Supabase. DevOps: Docker, Kubernetes, GitHub Actions, Cloudflare. Databases: PostgreSQL (Neon serverless), MongoDB, SQL.',
@@ -125,8 +135,8 @@ export default function MascotChatWidget() {
     'yourself': 'I\'m John Aaron — a Computing Science student at SIT × University of Glasgow. My path into tech started at a Sembcorp internship where UAT testing sparked my curiosity about software. I love building things that solve real problems and help people.',
     'sit': 'I study at Singapore Institute of Technology (SIT) in partnership with the University of Glasgow. My course is Computing Science.',
     'nyp': 'I completed a Diploma in Electrical Engineering with Eco-Design at Ngee Ann Polytechnic (NYP) before joining SIT for my degree.',
-    'contact': 'You can reach me at johnaaronmendoza@gmail.com — or connect on LinkedIn at linkedin.com/in/john-branzuela. Always open to internships, collaborations, and interesting projects!',
-    'email': 'Drop me an email at johnaaronmendoza@gmail.com — I try to respond within a day.',
+    'contact': 'You can reach me at johnaaronmb@gmail.com — or connect on LinkedIn at linkedin.com/in/john-branzuela. Always open to internships, collaborations, and interesting projects!',
+    'email': 'Drop me an email at johnaaronmb@gmail.com — I try to respond within a day.',
     'linkedin': 'Connect with me on LinkedIn: linkedin.com/in/john-branzuela',
   };
 

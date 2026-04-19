@@ -1,49 +1,51 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle, Home } from "lucide-react";
-import { useLocation } from "wouter";
+import { motion } from 'framer-motion';
+import { useLocation } from 'wouter';
 
 export default function NotFound() {
   const [, setLocation] = useLocation();
 
-  const handleGoHome = () => {
-    setLocation("/");
-  };
-
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-      <Card className="w-full max-w-lg mx-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-        <CardContent className="pt-8 pb-8 text-center">
-          <div className="flex justify-center mb-6">
-            <div className="relative">
-              <div className="absolute inset-0 bg-red-100 rounded-full animate-pulse" />
-              <AlertCircle className="relative h-16 w-16 text-red-500" />
-            </div>
-          </div>
-
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">404</h1>
-
-          <h2 className="text-xl font-semibold text-slate-700 mb-4">
-            Page Not Found
-          </h2>
-
-          <p className="text-slate-600 mb-8 leading-relaxed">
-            Sorry, the page you are looking for doesn't exist.
-            <br />
-            It may have been moved or deleted.
+    <div className="min-h-screen bg-black text-white flex items-center justify-center px-4">
+      <div className="max-w-lg w-full text-center space-y-10">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+        >
+          <p className="font-pixel text-[80px] sm:text-[120px] text-amber-400 leading-none glitch" data-text="404">
+            404
           </p>
+        </motion.div>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button
-              onClick={handleGoHome}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
-            >
-              <Home className="w-4 h-4 mr-2" />
-              Go Home
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+        <motion.div
+          className="border-4 border-amber-400 shadow-8bit bg-zinc-900 p-8 space-y-4"
+          initial={{ opacity: 0, scale: 0.97 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.1, ease: [0.23, 1, 0.32, 1] }}
+        >
+          <p className="font-pixel text-sm text-amber-400">[ PAGE_NOT_FOUND ]</p>
+          <p className="font-mono-8bit text-sm text-gray-300 leading-relaxed">
+            This page doesn't exist or was moved.<br />
+            Head back to the portfolio.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+        >
+          <motion.button
+            onClick={() => setLocation('/')}
+            className="border-8bit shadow-8bit px-8 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
+            whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B' }}
+            whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B', scale: 0.97 }}
+            transition={{ duration: 0.1 }}
+          >
+            ← BACK TO PORTFOLIO
+          </motion.button>
+        </motion.div>
+      </div>
     </div>
   );
 }

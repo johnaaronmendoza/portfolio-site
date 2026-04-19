@@ -308,6 +308,18 @@
     z-index: 2;
   }
   
+  /* CRT Enhanced mode — cranked up scanlines */
+  body.crt-enhanced::after {
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(0, 0, 0, 0.25) 1px,
+      rgba(0, 0, 0, 0.25) 3px
+    );
+    animation: scanlines 0.1s steps(1) infinite;
+  }
+
   /* Vignette Overlay */
   html::before {
     content: '';

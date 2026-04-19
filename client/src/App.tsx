@@ -16,6 +16,8 @@ import UATProject from "./pages/UATProject";
 import AIFinanceProject from "./pages/AIFinanceProject";
 import MascotChatWidget from "./components/MascotChatWidget";
 import ScrollProgress from "./components/ScrollProgress";
+import KonamiOverlay from "./components/KonamiOverlay";
+import CRTToggle from "./components/CRTToggle";
 
 function Router() {
   return (
@@ -46,6 +48,8 @@ function App() {
           <CommandPalette />
           <ScreenTear />
           <Toaster />
+          <KonamiOverlay />
+          <CRTToggle />
           <Router />
           <MascotChatWidget />
         </TooltipProvider>

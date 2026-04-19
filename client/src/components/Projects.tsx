@@ -46,6 +46,22 @@ export default function Projects() {
       link: "/projects/uwb",
     },
     {
+      name: "UAT Testing Dashboard",
+      description:
+        "Full-stack defect tracker and UAT management tool for a Hospital Appointment System. Real-time severity charts, test case to defect linking, CSV export, and role-based access for PM, QA Lead, Tester, and Developer.",
+      image: null,
+      tags: ["React 18", "Node.js", "Express", "SQLite", "Recharts"],
+      link: "/projects/uat",
+    },
+    {
+      name: "AI Finance Insights Engine",
+      description:
+        "Automated ETL pipeline ingesting Brent crude, USD/SGD FX, logistics stocks, and geopolitical news. AI NLP engine classifies 9 sectors, scores sentiment, and flags supply chain risks. Power BI ready Star Schema output.",
+      image: null,
+      tags: ["Python", "Pandas", "SQLite", "ETL", "NLP", "Power BI"],
+      link: "/projects/ai-finance",
+    },
+    {
       name: "GreenLoopFarms",
       description:
         "Singapore hydroponic urban farm growing pesticide-free vegetables and microgreens. Contributed to the initial idea. Won SGD $10,000 NYP JumpStart Grant. Partners: FURA (World's 50 Best), NIE, NUS.",
@@ -99,8 +115,24 @@ export default function Projects() {
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center gap-3 p-4">
-                        <span className="font-pixel text-3xl">🌱</span>
-                        <span className="font-pixel text-xs text-amber-400 text-center leading-relaxed">GREENLOOP<br/>FARMS</span>
+                        {project.name === "UAT Testing Dashboard" && (
+                          <>
+                            <span className="font-pixel text-3xl">🧪</span>
+                            <span className="font-pixel text-xs text-amber-400 text-center leading-relaxed">UAT<br/>DASHBOARD</span>
+                          </>
+                        )}
+                        {project.name === "AI Finance Insights Engine" && (
+                          <>
+                            <span className="font-pixel text-3xl">📊</span>
+                            <span className="font-pixel text-xs text-amber-400 text-center leading-relaxed">AI_FINANCE<br/>INSIGHTS</span>
+                          </>
+                        )}
+                        {project.name === "GreenLoopFarms" && (
+                          <>
+                            <span className="font-pixel text-3xl">🌱</span>
+                            <span className="font-pixel text-xs text-amber-400 text-center leading-relaxed">GREENLOOP<br/>FARMS</span>
+                          </>
+                        )}
                       </div>
                     )}
                     {isComingSoon && (

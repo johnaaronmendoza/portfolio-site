@@ -12,6 +12,8 @@ import SilverLinkProject from "./pages/SilverLinkProject";
 import SCSProject from "./pages/SCSProject";
 import FireSafetyProject from "./pages/FireSafetyProject";
 import UWBProject from "./pages/UWBProject";
+import UATProject from "./pages/UATProject";
+import AIFinanceProject from "./pages/AIFinanceProject";
 import MascotChatWidget from "./components/MascotChatWidget";
 import ScrollProgress from "./components/ScrollProgress";
 
@@ -23,6 +25,8 @@ function Router() {
       <Route path={"/projects/scs"} component={SCSProject} />
       <Route path={"/projects/firesafety"} component={FireSafetyProject} />
       <Route path={"/projects/uwb"} component={UWBProject} />
+      <Route path={"/projects/uat"} component={UATProject} />
+      <Route path={"/projects/ai-finance"} component={AIFinanceProject} />
       {/* Final fallback route */}
       <Route component={Home} />
     </Switch>

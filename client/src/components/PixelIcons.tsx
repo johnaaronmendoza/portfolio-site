@@ -97,13 +97,21 @@ export function PixelLinkedIn({ size = 40 }: { size?: number }) {
   );
 }
 
-export function PixelGitHub({ size = 40 }: { size?: number }) {
+export function PixelGitHub({
+  size = 40,
+  fg = 'white',
+  bg = 'transparent',
+}: {
+  size?: number;
+  fg?: string;
+  bg?: string;
+}) {
   return (
     <svg width={size} height={size} viewBox="0 0 16 16"
       xmlns="http://www.w3.org/2000/svg"
       style={{ imageRendering: 'pixelated', display: 'block', flexShrink: 0 }}>
-      <rect width="16" height="16" fill="#111111" />
-      <PixelGrid rows={GH_ROWS} fg="white" />
+      {bg !== 'transparent' && <rect width="16" height="16" fill={bg} />}
+      <PixelGrid rows={GH_ROWS} fg={fg} />
     </svg>
   );
 }

@@ -155,7 +155,7 @@ export default function Hero() {
             whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B', scale: 0.97 }}
             transition={{ duration: 0.1 }}
           >
-            <PixelGitHub size={22} />
+            <PixelGitHub size={22} fg="#000000" />
             GitHub
           </motion.a>
           <motion.a

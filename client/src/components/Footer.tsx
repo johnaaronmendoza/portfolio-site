@@ -59,7 +59,7 @@ export default function Footer() {
               className="inline-flex items-center gap-2 font-mono-8bit text-sm text-zinc-400 hover:text-white transition-colors"
               title="GitHub"
             >
-              <PixelGitHub size={28} />
+              <PixelGitHub size={28} fg="#F59E0B" />
               <span>GitHub</span>
             </a>
             <a

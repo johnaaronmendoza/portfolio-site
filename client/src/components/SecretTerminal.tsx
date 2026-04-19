@@ -233,7 +233,7 @@ export default function SecretTerminal() {
 
   const close = useCallback(() => setOpen(false), []);
 
-  // Backtick toggle
+  // Backtick / HUD event toggle
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === '`' && !e.ctrlKey && !e.metaKey) {
@@ -244,8 +244,13 @@ export default function SecretTerminal() {
       }
       if (e.key === 'Escape') setOpen(false);
     };
+    const hudHandler = () => setOpen(v => !v);
     window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
+    window.addEventListener('toggle-terminal', hudHandler);
+    return () => {
+      window.removeEventListener('keydown', handler);
+      window.removeEventListener('toggle-terminal', hudHandler);
+    };
   }, []);
 
   // Focus input on open
@@ -301,17 +306,6 @@ export default function SecretTerminal() {
 
   return (
     <>
-      {/* Hint badge — bottom right, above chat widget */}
-      <motion.button
-        onClick={() => setOpen(v => !v)}
-        className="fixed bottom-36 right-4 z-50 font-pixel text-[9px] px-2 py-1.5 border-2 border-zinc-700 text-zinc-600 bg-black hover:border-zinc-500 hover:text-zinc-400 transition-colors"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        title="Open terminal (` key)"
-      >
-        {'>_'}
-      </motion.button>
-
       <AnimatePresence>
         {open && (
           <>

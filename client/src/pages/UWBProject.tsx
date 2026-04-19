@@ -33,8 +33,8 @@ export default function UWBProject() {
       <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-8">
           <FramerReveal>
-            <h1 className="font-pixel text-2xl sm:text-4xl text-amber-400 leading-relaxed">
-              [ UWB_INDOOR<br className="sm:hidden" />_LOCALIZATION ]
+            <h1 className="font-pixel text-2xl sm:text-4xl text-amber-400 leading-relaxed" style={{wordBreak:"break-all"}}>
+              [UWB_INDOOR_LOCALIZATION]
             </h1>
             <p className="font-mono-8bit text-base sm:text-lg text-gray-300 max-w-3xl mt-4 leading-relaxed">
               Full ML pipeline classifying LOS/NLOS Ultra-Wideband signal paths and estimating
@@ -51,15 +51,15 @@ export default function UWBProject() {
           <FramerReveal>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                <p className="font-pixel text-xs text-amber-400 mb-1">[ COURSE ]</p>
+                <p className="font-pixel text-xs text-amber-400 mb-1">[COURSE]</p>
                 <p className="font-mono-8bit text-xs">CSC3105 Data Analytics</p>
               </div>
               <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                <p className="font-pixel text-xs text-amber-400 mb-1">[ TEAM ]</p>
+                <p className="font-pixel text-xs text-amber-400 mb-1">[TEAM]</p>
                 <p className="font-mono-8bit text-xs">Group CS05, SIT</p>
               </div>
               <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                <p className="font-pixel text-xs text-amber-400 mb-1">[ DATASET ]</p>
+                <p className="font-pixel text-xs text-amber-400 mb-1">[DATASET]</p>
                 <p className="font-mono-8bit text-xs">41,996 UWB samples</p>
               </div>
               <div className="border-2 border-amber-400 bg-zinc-900 p-4">
@@ -98,7 +98,7 @@ export default function UWBProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-8">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[ THE_PROBLEM ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
             <div className="border-2 border-amber-400 bg-zinc-900 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 Ultra-Wideband (UWB) supports sub-nanosecond time resolution and centimetre-level accuracy
@@ -114,7 +114,7 @@ export default function UWBProject() {
           </FramerReveal>
 
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[ MY_CONTRIBUTIONS ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[MY_CONTRIBUTIONS]</h2>
             <div className="border-2 border-blue-400 bg-zinc-900 p-6 sm:p-8">
               <p className="font-mono-8bit text-xs text-blue-400 mb-4">John Aaron — Data Mining Methodology</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -143,7 +143,7 @@ export default function UWBProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-10">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ RESULTS ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[RESULTS]</h2>
           </FramerReveal>
 
           <FramerReveal>
@@ -186,7 +186,7 @@ export default function UWBProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ METHODOLOGY ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[METHODOLOGY]</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {[
                 {
@@ -234,7 +234,7 @@ export default function UWBProject() {
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
             <div className="border-4 border-amber-400 shadow-8bit bg-zinc-900 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[ VIEW_MORE_PROJECTS ]</h2>
+              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button
                   onClick={() => { play('back'); setLocation('/'); }}

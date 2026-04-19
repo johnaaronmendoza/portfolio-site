@@ -28,8 +28,8 @@ export default function UATProject() {
       <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-8">
           <FramerReveal>
-            <h1 className="font-pixel text-2xl sm:text-4xl text-amber-400 leading-relaxed">
-              [ UAT_TESTING_DASHBOARD<br className="sm:hidden" />_&_DEFECT_TRACKER ]
+            <h1 className="font-pixel text-2xl sm:text-4xl text-amber-400 leading-relaxed" style={{wordBreak:"break-all"}}>
+              [UAT_TESTING_DASHBOARD_&_DEFECT_TRACKER]
             </h1>
             <p className="font-mono-8bit text-base sm:text-lg text-gray-300 max-w-3xl mt-4 leading-relaxed">
               Full-stack web application for managing User Acceptance Testing for a Hospital
@@ -46,10 +46,10 @@ export default function UATProject() {
           <FramerReveal>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { label: "[ TYPE ]", value: "Full-Stack Web App" },
-                { label: "[ DOMAIN ]", value: "Hospital Appointment" },
-                { label: "[ USERS ]", value: "PM / QA Lead / Tester / Dev" },
-                { label: "[ DB ]", value: "SQLite (3 tables)" },
+                { label: "[TYPE]", value: "Full-Stack Web App" },
+                { label: "[DOMAIN]", value: "Hospital Appointment" },
+                { label: "[USERS]", value: "PM / QA Lead / Tester / Dev" },
+                { label: "[DB]", value: "SQLite (3 tables)" },
               ].map(({ label, value }) => (
                 <div key={label} className="border-2 border-amber-400 bg-zinc-900 p-4">
                   <p className="font-pixel text-xs text-amber-400 mb-1">{label}</p>
@@ -86,7 +86,7 @@ export default function UATProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-8">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[ THE_PROBLEM ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
             <div className="border-2 border-amber-400 bg-zinc-900 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 UAT for complex healthcare systems involves multiple teams — project managers, QA leads,
@@ -102,7 +102,7 @@ export default function UATProject() {
           </FramerReveal>
 
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[ KEY_FEATURES ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[KEY_FEATURES]</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {[
                 {
@@ -172,7 +172,7 @@ export default function UATProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400 bg-zinc-900">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ ARCHITECTURE ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ARCHITECTURE]</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {[
                 {
@@ -216,7 +216,7 @@ export default function UATProject() {
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
             <div className="border-4 border-amber-400 shadow-8bit bg-zinc-900 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[ VIEW_MORE_PROJECTS ]</h2>
+              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button
                   onClick={() => { play('back'); setLocation('/'); }}

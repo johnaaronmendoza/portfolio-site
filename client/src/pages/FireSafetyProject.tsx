@@ -47,8 +47,8 @@ export default function FireSafetyProject() {
       <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-8">
           <FramerReveal>
-            <h1 className="font-pixel text-2xl sm:text-4xl text-amber-400 leading-relaxed">
-              [ FIRE_SAFETY<br className="sm:hidden" />_DRILL_COMPANION ]
+            <h1 className="font-pixel text-2xl sm:text-4xl text-amber-400 leading-relaxed" style={{wordBreak:"break-all"}}>
+              [FIRE_SAFETY_DRILL_COMPANION]
             </h1>
             <p className="font-mono-8bit text-base sm:text-lg text-gray-300 max-w-3xl mt-4 leading-relaxed">
               Native Android app empowering HDB residents to rehearse fire evacuation at their own convenience —
@@ -64,19 +64,19 @@ export default function FireSafetyProject() {
           <FramerReveal>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
               <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                <p className="font-pixel text-xs text-amber-400 mb-1">[ COURSE ]</p>
+                <p className="font-pixel text-xs text-amber-400 mb-1">[COURSE]</p>
                 <p className="font-mono-8bit text-xs">INF2007 Mobile App Dev</p>
               </div>
               <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                <p className="font-pixel text-xs text-amber-400 mb-1">[ TEAM ]</p>
+                <p className="font-pixel text-xs text-amber-400 mb-1">[TEAM]</p>
                 <p className="font-mono-8bit text-xs">Group 16, SIT</p>
               </div>
               <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                <p className="font-pixel text-xs text-amber-400 mb-1">[ SPRINTS ]</p>
+                <p className="font-pixel text-xs text-amber-400 mb-1">[SPRINTS]</p>
                 <p className="font-mono-8bit text-xs">3 Agile sprints</p>
               </div>
               <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                <p className="font-pixel text-xs text-amber-400 mb-1">[ PLATFORM ]</p>
+                <p className="font-pixel text-xs text-amber-400 mb-1">[PLATFORM]</p>
                 <p className="font-mono-8bit text-xs">Android (Pixel 6a)</p>
               </div>
             </div>
@@ -104,7 +104,7 @@ export default function FireSafetyProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-8">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[ THE_PROBLEM ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
             <div className="border-2 border-amber-400 bg-zinc-900 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 Singapore's ~1.1 million HDB flats house 80% of the population, many in blocks exceeding 20 storeys.
@@ -119,7 +119,7 @@ export default function FireSafetyProject() {
           </FramerReveal>
 
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[ MY_CONTRIBUTIONS ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[MY_CONTRIBUTIONS]</h2>
             <div className="border-2 border-blue-400 bg-zinc-900 p-6 sm:p-8">
               <p className="font-mono-8bit text-xs text-blue-400 mb-4">John Aaron — Algorithms & AR (49 commits)</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -148,7 +148,7 @@ export default function FireSafetyProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-10">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ APP_SCREENS ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[APP_SCREENS]</h2>
           </FramerReveal>
 
           <FramerReveal>
@@ -210,7 +210,7 @@ export default function FireSafetyProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ ADVANCED_FEATURES ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ADVANCED_FEATURES]</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {[
                 {
@@ -259,7 +259,7 @@ export default function FireSafetyProject() {
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
             <div className="border-4 border-amber-400 shadow-8bit bg-zinc-900 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[ VIEW_MORE_PROJECTS ]</h2>
+              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button
                   onClick={() => { play('back'); setLocation('/'); }}

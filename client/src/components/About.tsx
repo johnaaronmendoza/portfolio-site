@@ -9,6 +9,7 @@
  */
 
 import FramerReveal from './FramerReveal';
+import PixelatedImage from './PixelatedImage';
 import profileImg from '@assets/john_profile.png';
 
 export default function About() {
@@ -27,13 +28,13 @@ export default function About() {
               {/* Profile Photo */}
               <div className="flex-shrink-0 mx-auto md:mx-0">
                 <div className="border-4 border-amber-400 shadow-8bit w-40 h-40 sm:w-48 sm:h-48 overflow-hidden">
-                  <img
+                  <PixelatedImage
                     src={profileImg}
                     alt="John Aaron Mendoza Branzuela"
-                    className="w-full h-full object-cover object-top"
+                    className="w-full h-full"
                   />
                 </div>
-                <p className="font-pixel text-[9px] text-amber-400 text-center mt-3">[ JOHN_AARON ]</p>
+                <p className="font-pixel text-[9px] text-amber-400 text-center mt-3">[JOHN_AARON]</p>
               </div>
 
               {/* Bio Text */}

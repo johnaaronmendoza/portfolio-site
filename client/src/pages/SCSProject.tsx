@@ -36,8 +36,8 @@ export default function SCSProject() {
           <FramerReveal>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
               <div className="space-y-6">
-                <h1 className="font-pixel text-2xl sm:text-3xl lg:text-4xl text-amber-400 leading-relaxed">
-                  [ SCS_AWARENESS<br/>PLATFORM ]
+                <h1 className="font-pixel text-2xl sm:text-3xl lg:text-4xl text-amber-400 leading-relaxed" style={{wordBreak:"break-all"}}>
+                  [SCS_AWARENESS_PLATFORM]
                 </h1>
                 <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed">
                   Interactive visual novel engine for Singapore Cancer Society outreach booths.
@@ -51,11 +51,11 @@ export default function SCSProject() {
                 </div>
                 <div className="grid grid-cols-2 gap-4 pt-2">
                   <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                    <p className="font-pixel text-xs text-amber-400 mb-1">[ INSTITUTION ]</p>
+                    <p className="font-pixel text-xs text-amber-400 mb-1">[INSTITUTION]</p>
                     <p className="font-mono-8bit text-xs leading-relaxed">SIT + University of Glasgow</p>
                   </div>
                   <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                    <p className="font-pixel text-xs text-amber-400 mb-1">[ TEAM ]</p>
+                    <p className="font-pixel text-xs text-amber-400 mb-1">[TEAM]</p>
                     <p className="font-mono-8bit text-xs leading-relaxed">Group D2 — 4 members, 7 sprints</p>
                   </div>
                 </div>
@@ -93,7 +93,7 @@ export default function SCSProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-10">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[ THE_CHALLENGE ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_CHALLENGE]</h2>
             <div className="border-2 border-amber-400 bg-zinc-900 p-6 sm:p-8">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 Singapore Cancer Society (SCS) conducts community outreach to advocate for cancer
@@ -105,7 +105,7 @@ export default function SCSProject() {
           </FramerReveal>
 
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[ MY_CONTRIBUTIONS ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[MY_CONTRIBUTIONS]</h2>
             <div className="border-2 border-blue-400 bg-zinc-900 p-6 sm:p-8">
               <p className="font-mono-8bit text-xs text-blue-400 mb-4">John Aaron — core engine and media systems</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -134,7 +134,7 @@ export default function SCSProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-10">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-2">[ ADMIN_PANEL ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-2">[ADMIN_PANEL]</h2>
             <p className="font-mono-8bit text-sm text-gray-400 mb-8">
               A full no-code CMS allowing SCS staff to create stories, manage assets, view analytics, and control admin accounts — without technical expertise.
             </p>
@@ -179,7 +179,7 @@ export default function SCSProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ FEATURES ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[FEATURES]</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {[
                 {
@@ -255,7 +255,7 @@ export default function SCSProject() {
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
             <div className="border-4 border-amber-400 shadow-8bit bg-zinc-900 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[ VIEW_MORE_PROJECTS ]</h2>
+              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button
                   onClick={() => { play('back'); setLocation('/'); }}

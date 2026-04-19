@@ -29,8 +29,8 @@ export default function AIFinanceProject() {
       <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-8">
           <FramerReveal>
-            <h1 className="font-pixel text-2xl sm:text-4xl text-amber-400 leading-relaxed">
-              [ AI_FINANCE_INSIGHTS<br className="sm:hidden" />_&_LOGISTICS_ENGINE ]
+            <h1 className="font-pixel text-2xl sm:text-4xl text-amber-400 leading-relaxed" style={{wordBreak:"break-all"}}>
+              [AI_FINANCE_INSIGHTS_&_LOGISTICS_ENGINE]
             </h1>
             <p className="font-mono-8bit text-base sm:text-lg text-gray-300 max-w-3xl mt-4 leading-relaxed">
               Enterprise-grade ETL data pipeline that ingests global logistics, commodity, and
@@ -47,8 +47,8 @@ export default function AIFinanceProject() {
           <FramerReveal>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { label: "[ TYPE ]", value: "ETL + AI Pipeline" },
-                { label: "[ DOMAIN ]", value: "Shipping & Logistics" },
+                { label: "[TYPE]", value: "ETL + AI Pipeline" },
+                { label: "[DOMAIN]", value: "Shipping & Logistics" },
                 { label: "[ DATA SOURCES ]", value: "5 Market Feeds" },
                 { label: "[ TEST COVERAGE ]", value: "100% (Pytest)" },
               ].map(({ label, value }) => (
@@ -87,7 +87,7 @@ export default function AIFinanceProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-8">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[ THE_PROBLEM ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
             <div className="border-2 border-amber-400 bg-zinc-900 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 Maritime logistics and shipping analysts deal with fragmented market data: Brent crude
@@ -105,7 +105,7 @@ export default function AIFinanceProject() {
           </FramerReveal>
 
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[ PIPELINE_ARCHITECTURE ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[PIPELINE_ARCHITECTURE]</h2>
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 items-stretch">
               {[
                 { step: "01", label: "EXTRACT", desc: "S&P 500, Brent Oil, USD/SGD FX, Maersk proxy, geopolitical news", color: "border-amber-400 text-amber-400" },
@@ -152,7 +152,7 @@ export default function AIFinanceProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400 bg-zinc-900">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ ENGINEERING_HIGHLIGHTS ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ENGINEERING_HIGHLIGHTS]</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {[
                 {
@@ -207,7 +207,7 @@ export default function AIFinanceProject() {
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
             <div className="border-4 border-amber-400 shadow-8bit bg-zinc-900 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[ VIEW_MORE_PROJECTS ]</h2>
+              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button
                   onClick={() => { play('back'); setLocation('/'); }}

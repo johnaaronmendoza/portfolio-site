@@ -33,8 +33,8 @@ export default function SilverLinkProject() {
       <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-8">
           <FramerReveal>
-            <h1 className="font-pixel text-3xl sm:text-4xl lg:text-5xl text-amber-400">
-              [ SILVERLINK_SG ]
+            <h1 className="font-pixel text-3xl sm:text-4xl lg:text-5xl text-amber-400" style={{wordBreak:"break-all"}}>
+              [SILVERLINK_SG]
             </h1>
             <p className="font-mono-8bit text-base sm:text-lg text-gray-300 max-w-3xl mt-4 leading-relaxed">
               Cloud-native intergenerational platform connecting seniors and youth through
@@ -50,11 +50,11 @@ export default function SilverLinkProject() {
           <FramerReveal>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
               <div className="border-2 border-amber-400 bg-zinc-900 p-5">
-                <p className="font-pixel text-xs text-amber-400 mb-2">[ INSTITUTION ]</p>
+                <p className="font-pixel text-xs text-amber-400 mb-2">[INSTITUTION]</p>
                 <p className="font-mono-8bit text-sm">University of Glasgow &amp; Singapore Institute of Technology</p>
               </div>
               <div className="border-2 border-amber-400 bg-zinc-900 p-5">
-                <p className="font-pixel text-xs text-amber-400 mb-2">[ TEAM ]</p>
+                <p className="font-pixel text-xs text-amber-400 mb-2">[TEAM]</p>
                 <p className="font-mono-8bit text-sm">Group 20 — Danish, John, Thomas, Hanaa, Habib, Joshua</p>
               </div>
             </div>
@@ -87,7 +87,7 @@ export default function SilverLinkProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto space-y-10">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[ THE_CHALLENGE ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_CHALLENGE]</h2>
             <div className="border-2 border-amber-400 bg-zinc-900 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 By 2030, 1 in 4 Singaporeans will be over 65. Many seniors face isolation, loss of purpose,
@@ -101,7 +101,7 @@ export default function SilverLinkProject() {
           </FramerReveal>
 
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[ THE_SOLUTION ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_SOLUTION]</h2>
             <div className="border-2 border-amber-400 bg-zinc-900 p-6 sm:p-8">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed mb-6">
                 SilverLink SG transforms potential social fragmentation into meaningful intergenerational
@@ -133,7 +133,7 @@ export default function SilverLinkProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ PLATFORM_UI ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[PLATFORM_UI]</h2>
           </FramerReveal>
 
           <div className="space-y-8">
@@ -178,7 +178,7 @@ export default function SilverLinkProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ ARCHITECTURE ]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ARCHITECTURE]</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 {
@@ -215,7 +215,7 @@ export default function SilverLinkProject() {
 
           <FramerReveal>
             <div className="mt-8 border-2 border-blue-400 bg-zinc-900 p-6 sm:p-8">
-              <p className="font-pixel text-xs text-blue-400 mb-4">[ KEY_ALGORITHMS ]</p>
+              <p className="font-pixel text-xs text-blue-400 mb-4">[KEY_ALGORITHMS]</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {[
                   { name: "Optimistic Concurrency Control", desc: "Version-checked atomic updates prevent double-booking under concurrent traffic (409 on conflict)." },
@@ -238,7 +238,7 @@ export default function SilverLinkProject() {
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
             <div className="border-4 border-amber-400 shadow-8bit bg-zinc-900 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[ VIEW_MORE_PROJECTS ]</h2>
+              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button
                   onClick={() => { play('back'); setLocation('/'); }}

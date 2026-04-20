@@ -10,6 +10,7 @@
 
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
+import ScrambleText from './ScrambleText';
 import profileImg from '@assets/john_profile.jpg';
 
 export default function About() {
@@ -19,7 +20,7 @@ export default function About() {
         {/* Section Heading */}
         <FramerReveal variant="fade-left">
           <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-16 glitch" data-text="ABOUT ME">
-            ABOUT ME
+            <ScrambleText text="ABOUT ME" onView onHover delay={100} frames={20} />
           </h2>
         </FramerReveal>
 
@@ -29,7 +30,7 @@ export default function About() {
             <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
               {/* Profile Photo */}
               <div className="flex-shrink-0 mx-auto md:mx-0">
-                <div className="border-4 border-amber-400 shadow-8bit w-40 h-40 sm:w-48 sm:h-48 overflow-hidden">
+                <div className="border-4 border-amber-400 shadow-8bit w-56 h-56 sm:w-72 sm:h-72 overflow-hidden">
                   <PixelatedImage
                     src={profileImg}
                     alt="John Aaron Mendoza Branzuela"

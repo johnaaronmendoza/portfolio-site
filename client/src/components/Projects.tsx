@@ -4,6 +4,8 @@ import { useLocation } from 'wouter';
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
+import ScrambleText from './ScrambleText';
+import { useTilt } from '@/hooks/useTilt';
 
 // ── Card images (shown in grid) ───────────────────────────────────────────
 import silverLinkImg    from '@assets/silverlink_p19_img0.png';
@@ -143,6 +145,8 @@ function ProjectCard({
 
   // Smart preload: on 300 ms hover intent, fetch detail-page screenshots.
   const { handlers: preloadHandlers } = useSmartPreload(project.preloadImages);
+  // 3D tilt on hover
+  const { ref: tiltRef, handlers: tiltHandlers } = useTilt(5);
 
   const handleClick = () => {
     if (isComingSoon) return;
@@ -155,15 +159,16 @@ function ProjectCard({
 
   return (
     <motion.div
+      ref={tiltRef}
       className={`group ${isComingSoon ? 'cursor-default' : 'cursor-pointer'}`}
       onClick={handleClick}
       initial={{ opacity: 0, y: 24, scale: 0.98 }}
       animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
       exit={{ opacity: 0, y: 12, scale: 0.96, transition: { duration: 0.18 } }}
       transition={{ duration: 0.4, delay: idx * 0.06, ease: [0.23, 1, 0.32, 1] }}
-      whileHover={isComingSoon ? {} : { y: -6, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
-      whileTap={isComingSoon ? {} : { scale: 0.98, transition: { duration: 0.1 } }}
+      whileTap={isComingSoon ? {} : { scale: 0.97, transition: { duration: 0.1 } }}
       {...preloadHandlers}
+      {...(isComingSoon ? {} : tiltHandlers)}
     >
       {/* Project Image */}
       <div className="relative overflow-hidden border-4 border-amber-400 group-hover:border-blue-400 shadow-8bit mb-5 h-44 sm:h-48 bg-zinc-900 transition-colors duration-150">
@@ -177,7 +182,11 @@ function ProjectCard({
           <PixelatedImage
             src={project.image}
             alt={project.name}
-            className={`w-full h-full ${isComingSoon ? 'opacity-50 grayscale' : ''}`}
+            className={`w-full h-full transition-all duration-500 ${
+              isComingSoon
+                ? 'opacity-50 grayscale'
+                : 'grayscale group-hover:grayscale-0 group-hover:scale-105'
+            }`}
           />
         ) : (
           <div
@@ -212,7 +221,7 @@ function ProjectCard({
           {project.num.toString(2).padStart(8, '0')}
         </div>
         <h3 className="font-pixel text-sm sm:text-base text-blue-400 leading-relaxed">
-          {project.name}
+          <ScrambleText text={project.name} onView={false} onHover frames={16} />
         </h3>
         <p className="font-mono-8bit text-xs sm:text-sm text-gray-300 leading-relaxed">
           {project.description}
@@ -247,7 +256,7 @@ export default function Projects() {
       <section className="bg-black text-white px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
           <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-8 glitch" data-text="PROJECTS">
-            PROJECTS
+            <ScrambleText text="PROJECTS" onView onHover delay={80} frames={20} />
           </h2>
 
           {/* Filter chips */}

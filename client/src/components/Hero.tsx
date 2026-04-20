@@ -4,6 +4,7 @@ import Particles from './Particles';
 import { unlockAchievement } from '@/hooks/useAchievements';
 import { play } from '@/hooks/useSound';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useTextScramble } from '@/hooks/useTextScramble';
 import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
@@ -15,6 +16,9 @@ const ROLES = [
   'UAT & SYSTEMS ANALYST',
   'CLOUD · GRPC · KUBERNETES',
 ];
+
+// Each line of the name animates in separately
+const NAME_LINES = ['JOHN AARON', 'MENDOZA', 'BRANZUELA'];
 
 const PIXELS = [
   { top: '12%',  right: '8%',   size: 4, color: 'bg-amber-400', delay: 0 },
@@ -28,27 +32,38 @@ const PIXELS = [
   { top: '72%',  left: '12%',   size: 4, color: 'bg-blue-500',  delay: 1.8 },
 ];
 
-export default function Hero() {
-  const [displayText, setDisplayText] = useState('');
-  const [roleIdx, setRoleIdx] = useState(0);
-  const fullText = 'JOHN AARON\nMENDOZA\nBRANZUELA';
-  const reduced = useReducedMotion();
+// Individual line with its own scramble
+function ScrambleLine({
+  text,
+  delay,
+  reduced,
+}: {
+  text: string;
+  delay: number;
+  reduced: boolean;
+}) {
+  const { displayText, scramble } = useTextScramble(text, {
+    delay,
+    frames: 22,
+    autoplay: true,
+  });
 
-  useEffect(() => {
-    const startDelay = setTimeout(() => {
-      let index = 0;
-      const interval = setInterval(() => {
-        if (index < fullText.length) {
-          setDisplayText(fullText.slice(0, index + 1));
-          index++;
-        } else {
-          clearInterval(interval);
-        }
-      }, 50);
-      return () => clearInterval(interval);
-    }, 800);
-    return () => clearTimeout(startDelay);
-  }, []);
+  return (
+    <motion.span
+      className="block"
+      initial={{ opacity: 0, y: 32, clipPath: 'inset(100% 0 0 0)' }}
+      animate={{ opacity: 1, y: 0, clipPath: 'inset(0% 0 0 0)' }}
+      transition={{ duration: 0.55, delay: delay / 1000, ease: EASE_OUT }}
+      onMouseEnter={() => !reduced && scramble()}
+    >
+      {reduced ? text : displayText}
+    </motion.span>
+  );
+}
+
+export default function Hero() {
+  const [roleIdx, setRoleIdx] = useState(0);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -59,7 +74,7 @@ export default function Hero() {
 
   return (
     <section className="min-h-screen bg-black text-white flex items-center justify-center px-4 sm:px-8 lg:px-16 py-20 relative overflow-hidden">
-      {/* WebGL particle background — skipped if prefers-reduced-motion */}
+      {/* WebGL particle background */}
       {!reduced && (
         <div className="absolute inset-0 z-0 pointer-events-none">
           <Particles
@@ -95,30 +110,36 @@ export default function Hero() {
       ))}
 
       <div className="max-w-4xl w-full relative z-10">
-        {/* Name */}
+
+        {/* Name — staggered line reveal + scramble */}
         <motion.div
           className="mb-10 border-8bit shadow-8bit p-8 sm:p-10 lg:p-12 bg-black"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{
             opacity: 1,
             scale: 1,
-            boxShadow: reduced ? '4px 4px 0px 0px #F59E0B' : [
-              '4px 4px 0px 0px #F59E0B',
-              '4px 4px 0px 0px #F59E0B, 0 0 22px rgba(245,158,11,0.25)',
-              '4px 4px 0px 0px #F59E0B',
-            ],
+            boxShadow: reduced
+              ? '4px 4px 0px 0px #F59E0B'
+              : ['4px 4px 0px 0px #F59E0B', '4px 4px 0px 0px #F59E0B, 0 0 22px rgba(245,158,11,0.25)', '4px 4px 0px 0px #F59E0B'],
           }}
           transition={{
-            opacity:    { duration: 0.6, ease: 'easeOut' },
-            scale:      { duration: 0.6, ease: 'easeOut' },
-            boxShadow:  { duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.2 },
+            opacity:   { duration: 0.4, ease: 'easeOut' },
+            scale:     { duration: 0.4, ease: 'easeOut' },
+            boxShadow: { duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.2 },
           }}
         >
           <h1
-            className="font-pixel text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight whitespace-pre-wrap glitch"
+            className="font-pixel text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight glitch overflow-hidden"
             data-text="JOHN AARON MENDOZA BRANZUELA"
           >
-            {displayText}
+            {NAME_LINES.map((line, i) => (
+              <ScrambleLine
+                key={line}
+                text={line}
+                delay={200 + i * 180}
+                reduced={reduced}
+              />
+            ))}
             <motion.span
               animate={{ opacity: [1, 0] }}
               transition={{ duration: 0.5, repeat: Infinity }}
@@ -132,7 +153,7 @@ export default function Hero() {
           className="mb-14 ml-2 h-8 sm:h-10 flex items-center overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
         >
           <span className="font-pixel text-xs text-amber-400 mr-3 flex-shrink-0">{'>'}</span>
           <AnimatePresence mode="wait">
@@ -157,9 +178,9 @@ export default function Hero() {
         {/* CTA Links */}
         <motion.div
           className="flex flex-col sm:flex-row gap-4 sm:gap-6 ml-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1.1, ease: EASE_OUT }}
         >
           <motion.a
             href="https://github.com/johnaaronmendoza"

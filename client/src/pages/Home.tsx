@@ -13,6 +13,7 @@ import Skills from '@/components/Skills';
 import Footer from '@/components/Footer';
 import PixelDivider from '@/components/PixelDivider';
 import SectionNav from '@/components/SectionNav';
+import MarqueeTicker from '@/components/MarqueeTicker';
 import { useKeyboardNavigation } from '@/hooks/useKeyboardNavigation';
 import { useParallax } from '@/hooks/useParallax';
 import { useHomeAchievements } from '@/hooks/useAchievements';
@@ -29,7 +30,7 @@ export default function Home() {
       <div id="hero" className="section-transition">
         <Hero />
       </div>
-      <PixelDivider variant="circuit" />
+      <MarqueeTicker speed={0.9} />
       <div id="about" className="section-transition">
         <About />
       </div>
@@ -37,7 +38,7 @@ export default function Home() {
       <div id="experience" className="section-transition">
         <Experience />
       </div>
-      <PixelDivider variant="dots" />
+      <MarqueeTicker speed={1.1} />
       <div id="projects" className="section-transition">
         <Projects />
       </div>

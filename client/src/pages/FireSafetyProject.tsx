@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import FramerReveal from '@/components/FramerReveal';
+import CountUp from '@/components/CountUp';
 import { useLocation } from 'wouter';
 import { useEffect } from 'react';
 import { trackProjectVisit } from '@/hooks/useAchievements';
@@ -113,7 +114,7 @@ export default function FireSafetyProject() {
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-px bg-amber-500/10">
               {stats.map(({ label, value }) => (
                 <div key={label} className="bg-[#1f1f1f] p-5 text-center">
-                  <p className="font-pixel text-amber-400 text-sm sm:text-base mb-2">{value}</p>
+                  <p className="font-pixel text-amber-400 text-sm sm:text-base mb-2"><CountUp to={value} duration={1600} /></p>
                   <p className="font-mono text-[10px] text-amber-500/40 uppercase tracking-widest leading-tight">{label}</p>
                 </div>
               ))}

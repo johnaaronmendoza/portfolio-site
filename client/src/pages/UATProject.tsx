@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import FramerReveal from '@/components/FramerReveal';
+import CountUp from '@/components/CountUp';
 import { useLocation } from 'wouter';
 import { useEffect } from 'react';
 import { trackProjectVisit } from '@/hooks/useAchievements';
@@ -100,7 +101,7 @@ export default function UATProject() {
                 { label: "EXPORT FORMATS", value: "CSV" },
               ].map(({ label, value }) => (
                 <div key={label} className="bg-[#1f1f1f] p-6 text-center">
-                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-2">{value}</p>
+                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-2"><CountUp to={value} duration={1600} /></p>
                   <p className="font-mono text-[10px] text-amber-500/40 uppercase tracking-widest">{label}</p>
                 </div>
               ))}

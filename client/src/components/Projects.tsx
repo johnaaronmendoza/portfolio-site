@@ -219,8 +219,8 @@ function ProjectCard({
         </p>
         <div className="flex flex-wrap gap-1.5">
           {project.tags.map(tag => (
-            <span key={tag} className="font-mono text-[10px] text-blue-400 border border-blue-400 px-1.5 py-0.5">
-              {tag}
+            <span key={tag} className="bg-[#353535] px-2 py-0.5 font-mono text-[10px] text-amber-400 border border-amber-500/20">
+              --{tag.replace(/\s+/g, '_')}
             </span>
           ))}
         </div>

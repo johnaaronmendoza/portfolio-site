@@ -4,7 +4,6 @@ import { useLocation } from 'wouter';
 import { useEffect } from 'react';
 import { trackProjectVisit } from '@/hooks/useAchievements';
 import { play } from '@/hooks/useSound';
-import heroImg from '@assets/scs_p65_img0.png';
 import adminDashImg from '@assets/scs_p71_img1.png';
 import panelEditorImg from '@assets/scs_p72_img0.png';
 import statsImg from '@assets/scs_p72_img1.png';
@@ -20,9 +19,9 @@ export default function SCSProject() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#131313] text-white">
       {/* Sticky back nav */}
-      <div className="sticky top-0 z-30 bg-black border-b-2 border-amber-400 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
+      <div className="sticky top-0 z-30 bg-[#131313] border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
         <motion.button
           onClick={() => { play('back'); setLocation('/'); }}
           className="font-pixel text-xs text-amber-400 hover:text-white transition-colors flex items-center gap-2"
@@ -34,64 +33,72 @@ export default function SCSProject() {
         <span className="font-pixel text-xs text-zinc-500 truncate">/ SCS_AWARENESS_PLATFORM</span>
       </div>
 
-      {/* Hero */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
+      {/* Hero — Sovereign Console bento */}
+      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-              <div className="space-y-6">
-                <h1 className="font-pixel text-2xl sm:text-3xl lg:text-4xl text-amber-400 leading-relaxed" style={{wordBreak:"break-all"}}>
-                  [SCS_AWARENESS_PLATFORM]
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+              {/* Identity card */}
+              <div className="lg:col-span-8 bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
+                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6" style={{wordBreak:"break-all"}}>
+                  [SCS_AWARENESS_PLATFORM]<span className="blink-cursor">█</span>
                 </h1>
-                <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed">
+                <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
                   Interactive visual novel engine for Singapore Cancer Society outreach booths.
                   Multilingual branching stories, gamification, and a full no-code admin panel
                   for SCS staff — deployed on tablets at community events.
                 </p>
-                <div className="flex flex-wrap gap-3">
-                  {["React 19", "TypeScript", "Vite", "TailwindCSS", "Supabase", "PostgreSQL", "Vercel", "Agile Scrum"].map(t => (
-                    <span key={t} className="font-mono text-xs text-blue-400 border border-blue-400 px-2 py-1">{t}</span>
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {["React_19", "TypeScript", "Vite", "TailwindCSS", "Supabase", "PostgreSQL", "Vercel", "Agile_Scrum"].map(t => (
+                    <span key={t} className="bg-[#353535] px-3 py-1 font-mono text-[11px] text-amber-400 border border-amber-500/20">--{t}</span>
                   ))}
                 </div>
-                <div className="flex gap-3">
-                  <a href="https://github.com/johnaaronmendoza" target="_blank" rel="noopener noreferrer"
-                    className="font-pixel text-[10px] text-zinc-400 border border-zinc-700 px-3 py-2 hover:border-amber-400 hover:text-amber-400 transition-colors inline-flex items-center gap-2">
-                    ↗ SOURCE CODE
-                  </a>
-                </div>
-                <div className="grid grid-cols-2 gap-4 pt-2">
-                  <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                    <p className="font-pixel text-xs text-amber-400 mb-1">[INSTITUTION]</p>
+                <div className="grid grid-cols-2 gap-px bg-amber-500/10">
+                  <div className="bg-[#1b1b1b] p-4">
+                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[INSTITUTION]</p>
                     <p className="font-mono-8bit text-xs leading-relaxed">SIT + University of Glasgow</p>
                   </div>
-                  <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                    <p className="font-pixel text-xs text-amber-400 mb-1">[TEAM]</p>
+                  <div className="bg-[#1b1b1b] p-4">
+                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[TEAM]</p>
                     <p className="font-mono-8bit text-xs leading-relaxed">Group D2 — 4 members, 7 sprints</p>
                   </div>
                 </div>
               </div>
-              <div className="border-4 border-amber-400 shadow-8bit overflow-hidden flex items-center justify-center bg-zinc-900">
-                <img src={heroImg} alt="SCS visual novel character" className="max-h-96 object-contain" />
-              </div>
+              {/* CTA card */}
+              <a
+                href="https://github.com/johnaaronmendoza"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
+              >
+                <div>
+                  <p className="font-mono text-[10px] text-amber-900/60 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
+                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">VIEW_REPOSITORY</h2>
+                </div>
+                <div className="flex items-center justify-between mt-8">
+                  <span className="font-mono-8bit text-amber-900 text-sm">[ SOURCE_CODE ]</span>
+                  <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
+                </div>
+              </a>
             </div>
           </FramerReveal>
         </div>
       </section>
 
       {/* Key metrics bar */}
-      <section className="py-10 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400 bg-zinc-900">
-        <div className="max-w-6xl mx-auto">
+      <section className="border-b border-amber-500/10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-16">
           <FramerReveal>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
               {[
                 { label: "AGILE SPRINTS", value: "7" },
                 { label: "LANGUAGES SUPPORTED", value: "4" },
                 { label: "QUESTION TYPES", value: "4" },
                 { label: "ADMIN PANEL", value: "No-Code" },
               ].map(({ label, value }) => (
-                <div key={label}>
-                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-1">{value}</p>
-                  <p className="font-mono text-[10px] text-gray-500">{label}</p>
+                <div key={label} className="bg-[#1f1f1f] p-6 text-center">
+                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-2">{value}</p>
+                  <p className="font-mono text-[10px] text-amber-500/40 uppercase tracking-widest">{label}</p>
                 </div>
               ))}
             </div>
@@ -100,11 +107,11 @@ export default function SCSProject() {
       </section>
 
       {/* Problem + Scope */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
+      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto space-y-10">
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_CHALLENGE]</h2>
-            <div className="border-2 border-amber-400 bg-zinc-900 p-6 sm:p-8">
+            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 Singapore Cancer Society (SCS) conducts community outreach to advocate for cancer
                 awareness and early detection. Traditional booths lack interactivity — many visitors
@@ -116,7 +123,7 @@ export default function SCSProject() {
 
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[MY_CONTRIBUTIONS]</h2>
-            <div className="border-2 border-blue-400 bg-zinc-900 p-6 sm:p-8">
+            <div className="bg-[#1b1b1b] border-l-4 border-blue-500 p-6 sm:p-8">
               <p className="font-mono-8bit text-xs text-blue-400 mb-4">John Aaron — core engine and media systems</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
@@ -141,7 +148,7 @@ export default function SCSProject() {
       </section>
 
       {/* Screenshots — Visitor Experience */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
+      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto space-y-10">
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-2">[ADMIN_PANEL]</h2>
@@ -153,7 +160,7 @@ export default function SCSProject() {
           <FramerReveal>
             <div className="space-y-3">
               <p className="font-pixel text-xs text-blue-400">DASHBOARD — STORY MANAGEMENT</p>
-              <img src={adminDashImg} alt="SCS admin dashboard" className="w-full border-4 border-amber-400 shadow-8bit" />
+              <img src={adminDashImg} alt="SCS admin dashboard" className="w-full border border-amber-500/20" />
             </div>
           </FramerReveal>
 
@@ -161,11 +168,11 @@ export default function SCSProject() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
                 <p className="font-pixel text-xs text-blue-400">PANEL EDITOR (WYSIWYG)</p>
-                <img src={panelEditorImg} alt="SCS panel editor" className="w-full border-4 border-amber-400 shadow-8bit" />
+                <img src={panelEditorImg} alt="SCS panel editor" className="w-full border border-amber-500/20" />
               </div>
               <div className="space-y-3">
                 <p className="font-pixel text-xs text-blue-400">STORY STATISTICS + CSV EXPORT</p>
-                <img src={statsImg} alt="SCS story statistics" className="w-full border-4 border-amber-400 shadow-8bit" />
+                <img src={statsImg} alt="SCS story statistics" className="w-full border border-amber-500/20" />
               </div>
             </div>
           </FramerReveal>
@@ -174,11 +181,11 @@ export default function SCSProject() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
                 <p className="font-pixel text-xs text-blue-400">ASSET MANAGER (DRAG & DROP)</p>
-                <img src={assetManagerImg} alt="SCS asset manager" className="w-full border-4 border-amber-400 shadow-8bit" />
+                <img src={assetManagerImg} alt="SCS asset manager" className="w-full border border-amber-500/20" />
               </div>
               <div className="space-y-3">
                 <p className="font-pixel text-xs text-blue-400">ADMIN ACCOUNT MANAGEMENT</p>
-                <img src={adminMgmtImg} alt="SCS admin management" className="w-full border-4 border-amber-400 shadow-8bit" />
+                <img src={adminMgmtImg} alt="SCS admin management" className="w-full border border-amber-500/20" />
               </div>
             </div>
           </FramerReveal>
@@ -186,7 +193,7 @@ export default function SCSProject() {
       </section>
 
       {/* Features */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
+      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[FEATURES]</h2>
@@ -239,7 +246,7 @@ export default function SCSProject() {
               ].map(({ label, items }) => (
                 <motion.div
                   key={label}
-                  className="border-2 border-amber-400 bg-zinc-900 p-6"
+                  className="bg-[#1b1b1b] border-t border-amber-500/20 p-6"
                   whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
                   whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
                   transition={{ duration: 0.2 }}
@@ -264,7 +271,7 @@ export default function SCSProject() {
       <section className="py-16 px-4 sm:px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <div className="border-4 border-amber-400 shadow-8bit bg-zinc-900 p-8 sm:p-12 text-center space-y-6">
+            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
               <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button

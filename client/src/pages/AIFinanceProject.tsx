@@ -14,9 +14,9 @@ export default function AIFinanceProject() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#131313] text-white">
       {/* Sticky back nav */}
-      <div className="sticky top-0 z-30 bg-black border-b-2 border-amber-400 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
+      <div className="sticky top-0 z-30 bg-[#131313] border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
         <motion.button
           onClick={() => { play('back'); setLocation('/'); }}
           className="font-pixel text-xs text-amber-400 hover:text-white transition-colors"
@@ -29,63 +29,80 @@ export default function AIFinanceProject() {
         <span className="font-pixel text-xs text-zinc-500 sm:hidden">/ AI_FINANCE</span>
       </div>
 
-      {/* Hero */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
-        <div className="max-w-6xl mx-auto space-y-8">
+      {/* Hero — Sovereign Console bento */}
+      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
+        <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h1 className="font-pixel text-2xl sm:text-4xl text-amber-400 leading-relaxed" style={{wordBreak:"break-all"}}>
-              [AI_FINANCE_INSIGHTS_&_LOGISTICS_ENGINE]
-            </h1>
-            <p className="font-mono-8bit text-base sm:text-lg text-gray-300 max-w-3xl mt-4 leading-relaxed">
-              Enterprise-grade ETL data pipeline that ingests global logistics, commodity, and
-              financial market data — enriched with an AI NLP summarisation engine — producing
-              a unified data warehouse ready for Power BI dashboards.
-            </p>
-            <div className="flex flex-wrap gap-3 mt-6">
-              {["Python", "Pandas", "NumPy", "SQLite", "Pytest", "ETL Pipeline", "NLP", "Power BI"].map(t => (
-                <span key={t} className="font-mono text-xs text-blue-400 border border-blue-400 px-2 py-1">{t}</span>
-              ))}
-            </div>
-            <div className="flex gap-3 mt-6">
-              <a href="https://github.com/johnaaronmendoza" target="_blank" rel="noopener noreferrer"
-                className="font-pixel text-[10px] text-zinc-400 border border-zinc-700 px-3 py-2 hover:border-amber-400 hover:text-amber-400 transition-colors inline-flex items-center gap-2">
-                ↗ SOURCE CODE
-              </a>
-            </div>
-          </FramerReveal>
-
-          <FramerReveal>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {[
-                { label: "[TYPE]", value: "ETL + AI Pipeline" },
-                { label: "[DOMAIN]", value: "Shipping & Logistics" },
-                { label: "[DATA SOURCES]", value: "5 Market Feeds" },
-                { label: "[TEST COVERAGE]", value: "100% (Pytest)" },
-              ].map(({ label, value }) => (
-                <div key={label} className="border-2 border-amber-400 bg-zinc-900 p-4">
-                  <p className="font-pixel text-xs text-amber-400 mb-1">{label}</p>
-                  <p className="font-mono-8bit text-xs">{value}</p>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+              {/* Identity card */}
+              <div className="lg:col-span-8 bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
+                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6" style={{wordBreak:"break-all"}}>
+                  [AI_FINANCE_INSIGHTS_&_LOGISTICS_ENGINE]<span className="blink-cursor">█</span>
+                </h1>
+                <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
+                  Enterprise-grade ETL data pipeline that ingests global logistics, commodity, and
+                  financial market data — enriched with an AI NLP summarisation engine — producing
+                  a unified data warehouse ready for Power BI dashboards.
+                </p>
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {["Python", "Pandas", "NumPy", "SQLite", "Pytest", "ETL_Pipeline", "NLP", "Power_BI"].map(t => (
+                    <span key={t} className="bg-[#353535] px-3 py-1 font-mono text-[11px] text-amber-400 border border-amber-500/20">--{t}</span>
+                  ))}
                 </div>
-              ))}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
+                  <div className="bg-[#1b1b1b] p-4">
+                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[TYPE]</p>
+                    <p className="font-mono-8bit text-xs">ETL + AI Pipeline</p>
+                  </div>
+                  <div className="bg-[#1b1b1b] p-4">
+                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[DOMAIN]</p>
+                    <p className="font-mono-8bit text-xs">Shipping & Logistics</p>
+                  </div>
+                  <div className="bg-[#1b1b1b] p-4">
+                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[DATA SOURCES]</p>
+                    <p className="font-mono-8bit text-xs">5 Market Feeds</p>
+                  </div>
+                  <div className="bg-[#1b1b1b] p-4">
+                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[TEST COVERAGE]</p>
+                    <p className="font-mono-8bit text-xs">100% (Pytest)</p>
+                  </div>
+                </div>
+              </div>
+              {/* CTA card */}
+              <a
+                href="https://github.com/johnaaronmendoza"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
+              >
+                <div>
+                  <p className="font-mono text-[10px] text-amber-900/60 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
+                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">VIEW_REPOSITORY</h2>
+                </div>
+                <div className="flex items-center justify-between mt-8">
+                  <span className="font-mono-8bit text-amber-900 text-sm">[ SOURCE_CODE ]</span>
+                  <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
+                </div>
+              </a>
             </div>
           </FramerReveal>
         </div>
       </section>
 
       {/* Key metrics bar */}
-      <section className="py-10 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400 bg-zinc-900">
-        <div className="max-w-6xl mx-auto">
+      <section className="border-b border-amber-500/10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-16">
           <FramerReveal>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
               {[
                 { label: "NEWS SECTORS CLASSIFIED", value: "9" },
                 { label: "DATA VALIDATION GATES", value: "2" },
                 { label: "ETL PIPELINE STAGES", value: "5" },
                 { label: "DB SCHEMA MODEL", value: "Star" },
               ].map(({ label, value }) => (
-                <div key={label}>
-                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-1">{value}</p>
-                  <p className="font-mono text-[10px] text-gray-500">{label}</p>
+                <div key={label} className="bg-[#1f1f1f] p-6 text-center">
+                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-2">{value}</p>
+                  <p className="font-mono text-[10px] text-amber-500/40 uppercase tracking-widest leading-tight">{label}</p>
                 </div>
               ))}
             </div>
@@ -94,11 +111,11 @@ export default function AIFinanceProject() {
       </section>
 
       {/* Problem */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
+      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto space-y-8">
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
-            <div className="border-2 border-amber-400 bg-zinc-900 p-6 sm:p-8 space-y-4">
+            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 Maritime logistics and shipping analysts deal with fragmented market data: Brent crude
                 prices, USD/SGD FX rates, logistics stock performance, and geopolitical news all live
@@ -127,7 +144,7 @@ export default function AIFinanceProject() {
                 arrow ? (
                   <div key={step} className="flex items-center justify-center text-gray-600 font-pixel text-lg">→</div>
                 ) : (
-                  <div key={step} className={`border-2 ${color} bg-zinc-900 p-4 space-y-2`}>
+                  <div key={step} className={`bg-[#1b1b1b] border-t-2 ${color} p-4 space-y-2`}>
                     <p className={`font-pixel text-[10px] ${color.split(' ')[1]}`}>[ {step} ]</p>
                     <p className="font-pixel text-xs text-white">{label}</p>
                     <p className="font-mono-8bit text-xs text-gray-400 leading-relaxed">{desc}</p>
@@ -146,7 +163,7 @@ export default function AIFinanceProject() {
                 arrow ? (
                   <div key={step} className="flex items-center justify-center text-gray-600 font-pixel text-lg">→</div>
                 ) : (
-                  <div key={step} className={`border-2 ${color} bg-zinc-900 p-4 space-y-2`}>
+                  <div key={step} className={`bg-[#1b1b1b] border-t-2 ${color} p-4 space-y-2`}>
                     <p className={`font-pixel text-[10px] ${color.split(' ')[1]}`}>[ {step} ]</p>
                     <p className="font-pixel text-xs text-white">{label}</p>
                     <p className="font-mono-8bit text-xs text-gray-400 leading-relaxed">{desc}</p>
@@ -159,7 +176,7 @@ export default function AIFinanceProject() {
       </section>
 
       {/* Features */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400 bg-zinc-900">
+      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ENGINEERING_HIGHLIGHTS]</h2>
@@ -192,7 +209,7 @@ export default function AIFinanceProject() {
               ].map(({ label, items }) => (
                 <motion.div
                   key={label}
-                  className="border-2 border-amber-400 bg-black p-5"
+                  className="bg-[#1b1b1b] border-t border-amber-500/20 p-5"
                   whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
                   whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
                 >
@@ -216,7 +233,7 @@ export default function AIFinanceProject() {
       <section className="py-16 px-4 sm:px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <div className="border-4 border-amber-400 shadow-8bit bg-zinc-900 p-8 sm:p-12 text-center space-y-6">
+            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
               <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button

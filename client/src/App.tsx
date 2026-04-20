@@ -46,6 +46,8 @@ function App() {
         // switchable
       >
         <TooltipProvider>
+          {/* Sovereign Console grain overlay */}
+          <div className="grain" aria-hidden="true" />
           <ScrollProgress />
           <LoadingBar />
           <CommandPalette />

@@ -33,9 +33,9 @@ export default function FireSafetyProject() {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#131313] text-white">
       {/* Sticky back nav */}
-      <div className="sticky top-0 z-30 bg-black border-b-2 border-amber-400 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
+      <div className="sticky top-0 z-30 bg-[#131313] border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
         <motion.button
           onClick={() => { play('back'); setLocation('/'); }}
           className="font-pixel text-xs text-amber-400 hover:text-white transition-colors"
@@ -47,62 +47,74 @@ export default function FireSafetyProject() {
         <span className="font-pixel text-xs text-zinc-500 truncate">/ FIRE_SAFETY_DRILL_COMPANION</span>
       </div>
 
-      {/* Hero */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
-        <div className="max-w-6xl mx-auto space-y-8">
+      {/* Hero — Sovereign Console bento */}
+      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
+        <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h1 className="font-pixel text-2xl sm:text-4xl text-amber-400 leading-relaxed" style={{wordBreak:"break-all"}}>
-              [FIRE_SAFETY_DRILL_COMPANION]
-            </h1>
-            <p className="font-mono-8bit text-base sm:text-lg text-gray-300 max-w-3xl mt-4 leading-relaxed">
-              Native Android app empowering HDB residents to rehearse fire evacuation at their own convenience —
-              with AR-guided navigation, on-device ML, and sensor-fusion positioning. No internet required.
-            </p>
-            <div className="flex flex-wrap gap-3 mt-6">
-              {["Kotlin", "Jetpack Compose", "MVVM", "Hilt DI", "ARCore", "TFLite", "Room DB", "Firebase FCM", "Dijkstra", "Weinberg PDR"].map(t => (
-                <span key={t} className="font-mono text-xs text-blue-400 border border-blue-400 px-2 py-1">{t}</span>
-              ))}
-            </div>
-            <div className="flex gap-3 mt-6">
-              <a href="https://github.com/johnaaronmendoza" target="_blank" rel="noopener noreferrer"
-                className="font-pixel text-[10px] text-zinc-400 border border-zinc-700 px-3 py-2 hover:border-amber-400 hover:text-amber-400 transition-colors inline-flex items-center gap-2">
-                ↗ SOURCE CODE
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+              {/* Identity card */}
+              <div className="lg:col-span-8 bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
+                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6" style={{wordBreak:"break-all"}}>
+                  [FIRE_SAFETY_DRILL_COMPANION]<span className="blink-cursor">█</span>
+                </h1>
+                <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
+                  Native Android app empowering HDB residents to rehearse fire evacuation at their own convenience —
+                  with AR-guided navigation, on-device ML, and sensor-fusion positioning. No internet required.
+                </p>
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {["Kotlin", "Jetpack_Compose", "MVVM", "Hilt_DI", "ARCore", "TFLite", "Room_DB", "Firebase_FCM", "Dijkstra", "Weinberg_PDR"].map(t => (
+                    <span key={t} className="bg-[#353535] px-3 py-1 font-mono text-[11px] text-amber-400 border border-amber-500/20">--{t}</span>
+                  ))}
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
+                  <div className="bg-[#1b1b1b] p-4">
+                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[COURSE]</p>
+                    <p className="font-mono-8bit text-xs">INF2007 Mobile App Dev</p>
+                  </div>
+                  <div className="bg-[#1b1b1b] p-4">
+                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[TEAM]</p>
+                    <p className="font-mono-8bit text-xs">Group 16, SIT</p>
+                  </div>
+                  <div className="bg-[#1b1b1b] p-4">
+                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[SPRINTS]</p>
+                    <p className="font-mono-8bit text-xs">3 Agile sprints</p>
+                  </div>
+                  <div className="bg-[#1b1b1b] p-4">
+                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[PLATFORM]</p>
+                    <p className="font-mono-8bit text-xs">Android (Pixel 6a)</p>
+                  </div>
+                </div>
+              </div>
+              {/* CTA card */}
+              <a
+                href="https://github.com/johnaaronmendoza"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
+              >
+                <div>
+                  <p className="font-mono text-[10px] text-amber-900/60 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
+                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">VIEW_REPOSITORY</h2>
+                </div>
+                <div className="flex items-center justify-between mt-8">
+                  <span className="font-mono-8bit text-amber-900 text-sm">[ SOURCE_CODE ]</span>
+                  <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
+                </div>
               </a>
-            </div>
-          </FramerReveal>
-
-          <FramerReveal>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
-              <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                <p className="font-pixel text-xs text-amber-400 mb-1">[COURSE]</p>
-                <p className="font-mono-8bit text-xs">INF2007 Mobile App Dev</p>
-              </div>
-              <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                <p className="font-pixel text-xs text-amber-400 mb-1">[TEAM]</p>
-                <p className="font-mono-8bit text-xs">Group 16, SIT</p>
-              </div>
-              <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                <p className="font-pixel text-xs text-amber-400 mb-1">[SPRINTS]</p>
-                <p className="font-mono-8bit text-xs">3 Agile sprints</p>
-              </div>
-              <div className="border-2 border-amber-400 bg-zinc-900 p-4">
-                <p className="font-pixel text-xs text-amber-400 mb-1">[PLATFORM]</p>
-                <p className="font-mono-8bit text-xs">Android (Pixel 6a)</p>
-              </div>
             </div>
           </FramerReveal>
         </div>
       </section>
 
       {/* Stats bar */}
-      <section className="py-10 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400 bg-zinc-900">
-        <div className="max-w-6xl mx-auto">
+      <section className="border-b border-amber-500/10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-16">
           <FramerReveal>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-px bg-amber-500/10">
               {stats.map(({ label, value }) => (
-                <div key={label} className="text-center">
-                  <p className="font-pixel text-amber-400 text-sm sm:text-base mb-1">{value}</p>
-                  <p className="font-mono text-[10px] text-gray-500">{label}</p>
+                <div key={label} className="bg-[#1f1f1f] p-5 text-center">
+                  <p className="font-pixel text-amber-400 text-sm sm:text-base mb-2">{value}</p>
+                  <p className="font-mono text-[10px] text-amber-500/40 uppercase tracking-widest leading-tight">{label}</p>
                 </div>
               ))}
             </div>
@@ -111,11 +123,11 @@ export default function FireSafetyProject() {
       </section>
 
       {/* Problem */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
+      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto space-y-8">
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
-            <div className="border-2 border-amber-400 bg-zinc-900 p-6 sm:p-8 space-y-4">
+            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 Singapore's ~1.1 million HDB flats house 80% of the population, many in blocks exceeding 20 storeys.
                 SCDF fire drills have consistently low participation — especially among elderly residents facing
@@ -130,7 +142,7 @@ export default function FireSafetyProject() {
 
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[MY_CONTRIBUTIONS]</h2>
-            <div className="border-2 border-blue-400 bg-zinc-900 p-6 sm:p-8">
+            <div className="bg-[#1b1b1b] border-l-4 border-blue-500 p-6 sm:p-8">
               <p className="font-mono-8bit text-xs text-blue-400 mb-4">John Aaron — Algorithms & AR (49 commits)</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
@@ -155,7 +167,7 @@ export default function FireSafetyProject() {
       </section>
 
       {/* Screenshots */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
+      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto space-y-10">
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[APP_SCREENS]</h2>
@@ -165,11 +177,11 @@ export default function FireSafetyProject() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
                 <p className="font-pixel text-xs text-blue-400">ONBOARDING</p>
-                <img src={onboardingImg} alt="Onboarding flow" className="w-full border-4 border-amber-400 shadow-8bit" />
+                <img src={onboardingImg} alt="Onboarding flow" className="w-full border border-amber-500/20" />
               </div>
               <div className="space-y-3">
                 <p className="font-pixel text-xs text-blue-400">MAIN DASHBOARD</p>
-                <img src={dashboardImg} alt="Dashboard" className="w-full border-4 border-amber-400 shadow-8bit" />
+                <img src={dashboardImg} alt="Dashboard" className="w-full border border-amber-500/20" />
               </div>
             </div>
           </FramerReveal>
@@ -178,11 +190,11 @@ export default function FireSafetyProject() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
                 <p className="font-pixel text-xs text-blue-400">DRILL SETUP — BLOCK & UNIT SELECTION</p>
-                <img src={drillSetupImg} alt="Drill setup" className="w-full border-4 border-amber-400 shadow-8bit" />
+                <img src={drillSetupImg} alt="Drill setup" className="w-full border border-amber-500/20" />
               </div>
               <div className="space-y-3">
                 <p className="font-pixel text-xs text-blue-400">2D FLOOR PLAN + DIJKSTRA PATHFINDING</p>
-                <img src={floorplanImg} alt="Floor plan navigation" className="w-full border-4 border-amber-400 shadow-8bit" />
+                <img src={floorplanImg} alt="Floor plan navigation" className="w-full border border-amber-500/20" />
               </div>
             </div>
           </FramerReveal>
@@ -190,7 +202,7 @@ export default function FireSafetyProject() {
           <FramerReveal>
             <div className="space-y-3">
               <p className="font-pixel text-xs text-blue-400">AR CORRIDOR NAVIGATION — LIVE BREADCRUMB ARROWS</p>
-              <img src={arImg} alt="AR navigation" className="w-full border-4 border-amber-400 shadow-8bit" />
+              <img src={arImg} alt="AR navigation" className="w-full border border-amber-500/20" />
             </div>
           </FramerReveal>
 
@@ -198,11 +210,11 @@ export default function FireSafetyProject() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
                 <p className="font-pixel text-xs text-blue-400">EXTINGUISHER ID — ON-DEVICE TFLITE ML</p>
-                <img src={extinguisherImg} alt="Extinguisher classification" className="w-full border-4 border-amber-400 shadow-8bit" />
+                <img src={extinguisherImg} alt="Extinguisher classification" className="w-full border border-amber-500/20" />
               </div>
               <div className="space-y-3">
                 <p className="font-pixel text-xs text-blue-400">SAFETY QUIZ + GAMIFICATION</p>
-                <img src={quizImg} alt="Safety quiz" className="w-full border-4 border-amber-400 shadow-8bit" />
+                <img src={quizImg} alt="Safety quiz" className="w-full border border-amber-500/20" />
               </div>
             </div>
           </FramerReveal>
@@ -210,14 +222,14 @@ export default function FireSafetyProject() {
           <FramerReveal>
             <div className="space-y-3">
               <p className="font-pixel text-xs text-blue-400">ANALYTICS DASHBOARD — DRILL HISTORY + SUS SCORES</p>
-              <img src={analyticsImg} alt="Analytics" className="w-full border-4 border-amber-400 shadow-8bit" />
+              <img src={analyticsImg} alt="Analytics" className="w-full border border-amber-500/20" />
             </div>
           </FramerReveal>
         </div>
       </section>
 
       {/* Tech deep-dive */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
+      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ADVANCED_FEATURES]</h2>
@@ -250,7 +262,7 @@ export default function FireSafetyProject() {
               ].map(({ label, desc }) => (
                 <motion.div
                   key={label}
-                  className="border-2 border-amber-400 bg-zinc-900 p-5"
+                  className="bg-[#1b1b1b] border-t border-amber-500/20 p-5"
                   whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
                   whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
                   transition={{ duration: 0.2 }}
@@ -268,7 +280,7 @@ export default function FireSafetyProject() {
       <section className="py-16 px-4 sm:px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <div className="border-4 border-amber-400 shadow-8bit bg-zinc-900 p-8 sm:p-12 text-center space-y-6">
+            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
               <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button

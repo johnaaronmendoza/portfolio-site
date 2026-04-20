@@ -19,9 +19,9 @@ export default function SilverLinkProject() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#131313] text-white">
       {/* Sticky back nav */}
-      <div className="sticky top-0 z-30 bg-black border-b-2 border-amber-400 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
+      <div className="sticky top-0 z-30 bg-[#131313] border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
         <motion.button
           onClick={() => { play('back'); setLocation('/'); }}
           className="font-pixel text-xs text-amber-400 hover:text-white transition-colors flex items-center gap-2"
@@ -33,58 +33,70 @@ export default function SilverLinkProject() {
         <span className="font-pixel text-xs text-zinc-500 truncate">/ SILVERLINK_SG</span>
       </div>
 
-      {/* Hero */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
-        <div className="max-w-6xl mx-auto space-y-8">
+      {/* Hero — Sovereign Console bento */}
+      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
+        <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h1 className="font-pixel text-3xl sm:text-4xl lg:text-5xl text-amber-400" style={{wordBreak:"break-all"}}>
-              [SILVERLINK_SG]
-            </h1>
-            <p className="font-mono-8bit text-base sm:text-lg text-gray-300 max-w-3xl mt-4 leading-relaxed">
-              Cloud-native platform bridging seniors and youth through skill-sharing and live events — backed by 4 gRPC microservices, WebRTC livestreaming, and Kubernetes autoscaling that scales to demand without manual intervention.
-            </p>
-            <div className="flex flex-wrap gap-3 mt-6">
-              {["React", "Next.js", "Node.js", "gRPC", "Docker", "Kubernetes", "PostgreSQL", "Neon", "Cloudflare", "Keycloak", "Prisma ORM", "WebRTC"].map(t => (
-                <span key={t} className="font-mono text-xs text-blue-400 border border-blue-400 px-2 py-1">{t}</span>
-              ))}
-            </div>
-            <div className="flex gap-3 mt-6">
-              <a href="https://github.com/johnaaronmendoza" target="_blank" rel="noopener noreferrer"
-                className="font-pixel text-[10px] text-zinc-400 border border-zinc-700 px-3 py-2 hover:border-amber-400 hover:text-amber-400 transition-colors inline-flex items-center gap-2">
-                ↗ SOURCE CODE
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+              {/* Identity card */}
+              <div className="lg:col-span-8 bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
+                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6" style={{wordBreak:"break-all"}}>
+                  [SILVERLINK_SG]<span className="blink-cursor">█</span>
+                </h1>
+                <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
+                  Cloud-native platform bridging seniors and youth through skill-sharing and live events — backed by 4 gRPC microservices, WebRTC livestreaming, and Kubernetes autoscaling that scales to demand without manual intervention.
+                </p>
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {["React", "Next.js", "Node.js", "gRPC", "Docker", "Kubernetes", "PostgreSQL", "Neon", "Cloudflare", "Keycloak", "Prisma_ORM", "WebRTC"].map(t => (
+                    <span key={t} className="bg-[#353535] px-3 py-1 font-mono text-[11px] text-amber-400 border border-amber-500/20">--{t}</span>
+                  ))}
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-amber-500/10">
+                  <div className="bg-[#1b1b1b] p-4">
+                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[INSTITUTION]</p>
+                    <p className="font-mono-8bit text-xs leading-relaxed">University of Glasgow &amp; Singapore Institute of Technology</p>
+                  </div>
+                  <div className="bg-[#1b1b1b] p-4">
+                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[TEAM]</p>
+                    <p className="font-mono-8bit text-xs leading-relaxed">Group 20 — Danish, John, Thomas, Hanaa, Habib, Joshua</p>
+                  </div>
+                </div>
+              </div>
+              {/* CTA card */}
+              <a
+                href="https://github.com/johnaaronmendoza"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
+              >
+                <div>
+                  <p className="font-mono text-[10px] text-amber-900/60 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
+                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">VIEW_REPOSITORY</h2>
+                </div>
+                <div className="flex items-center justify-between mt-8">
+                  <span className="font-mono-8bit text-amber-900 text-sm">[ SOURCE_CODE ]</span>
+                  <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
+                </div>
               </a>
-            </div>
-          </FramerReveal>
-
-          <FramerReveal>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-              <div className="border-2 border-amber-400 bg-zinc-900 p-5">
-                <p className="font-pixel text-xs text-amber-400 mb-2">[INSTITUTION]</p>
-                <p className="font-mono-8bit text-sm">University of Glasgow &amp; Singapore Institute of Technology</p>
-              </div>
-              <div className="border-2 border-amber-400 bg-zinc-900 p-5">
-                <p className="font-pixel text-xs text-amber-400 mb-2">[TEAM]</p>
-                <p className="font-mono-8bit text-sm">Group 20 — Danish, John, Thomas, Hanaa, Habib, Joshua</p>
-              </div>
             </div>
           </FramerReveal>
         </div>
       </section>
 
       {/* Key metrics bar */}
-      <section className="py-10 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400 bg-zinc-900">
-        <div className="max-w-6xl mx-auto">
+      <section className="border-b border-amber-500/10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-16">
           <FramerReveal>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
               {[
                 { label: "GRPC MICROSERVICES", value: "4" },
                 { label: "TEAM MEMBERS", value: "6" },
                 { label: "AGILE SPRINTS", value: "7" },
                 { label: "LIVESTREAMING", value: "WebRTC" },
               ].map(({ label, value }) => (
-                <div key={label}>
-                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-1">{value}</p>
-                  <p className="font-mono text-[10px] text-gray-500">{label}</p>
+                <div key={label} className="bg-[#1f1f1f] p-6 text-center">
+                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-2">{value}</p>
+                  <p className="font-mono text-[10px] text-amber-500/40 uppercase tracking-widest">{label}</p>
                 </div>
               ))}
             </div>
@@ -93,11 +105,11 @@ export default function SilverLinkProject() {
       </section>
 
       {/* Challenge & Solution */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
+      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto space-y-10">
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_CHALLENGE]</h2>
-            <div className="border-2 border-amber-400 bg-zinc-900 p-6 sm:p-8 space-y-4">
+            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 By 2030, 1 in 4 Singaporeans will be over 65. Many seniors face isolation, loss of purpose,
                 and exclusion from digital society — while youth miss out on cultural wisdom and mentorship
@@ -111,7 +123,7 @@ export default function SilverLinkProject() {
 
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_SOLUTION]</h2>
-            <div className="border-2 border-amber-400 bg-zinc-900 p-6 sm:p-8">
+            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed mb-6">
                 SilverLink SG transforms potential social fragmentation into meaningful intergenerational
                 exchange through a production-ready cloud-native platform.
@@ -139,7 +151,7 @@ export default function SilverLinkProject() {
       </section>
 
       {/* Platform Screenshots */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
+      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[PLATFORM_UI]</h2>
@@ -149,14 +161,14 @@ export default function SilverLinkProject() {
             <FramerReveal>
               <div className="space-y-3">
                 <p className="font-pixel text-xs text-blue-400">ONBOARDING FLOW</p>
-                <img src={onboardingImg} alt="SilverLink onboarding" className="w-full border-4 border-amber-400 shadow-8bit" />
+                <img src={onboardingImg} alt="SilverLink onboarding" className="w-full border border-amber-500/20" />
               </div>
             </FramerReveal>
 
             <FramerReveal>
               <div className="space-y-3">
                 <p className="font-pixel text-xs text-blue-400">EVENTS DISCOVERY</p>
-                <img src={eventsImg} alt="SilverLink events listing" className="w-full border-4 border-amber-400 shadow-8bit" />
+                <img src={eventsImg} alt="SilverLink events listing" className="w-full border border-amber-500/20" />
               </div>
             </FramerReveal>
 
@@ -164,11 +176,11 @@ export default function SilverLinkProject() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-3">
                   <p className="font-pixel text-xs text-blue-400">EVENT DETAIL + BOOKING</p>
-                  <img src={eventDetailImg} alt="SilverLink event detail" className="w-full border-4 border-amber-400 shadow-8bit" />
+                  <img src={eventDetailImg} alt="SilverLink event detail" className="w-full border border-amber-500/20" />
                 </div>
                 <div className="space-y-3">
                   <p className="font-pixel text-xs text-blue-400">LIVE STREAMING STUDIO</p>
-                  <img src={livestreamImg} alt="SilverLink livestream" className="w-full border-4 border-amber-400 shadow-8bit" />
+                  <img src={livestreamImg} alt="SilverLink livestream" className="w-full border border-amber-500/20" />
                 </div>
               </div>
             </FramerReveal>
@@ -176,7 +188,7 @@ export default function SilverLinkProject() {
             <FramerReveal>
               <div className="space-y-3">
                 <p className="font-pixel text-xs text-blue-400">SYSTEM METRICS + AUTOSCALING DASHBOARD</p>
-                <img src={metricsImg} alt="SilverLink system metrics" className="w-full border-4 border-amber-400 shadow-8bit" />
+                <img src={metricsImg} alt="SilverLink system metrics" className="w-full border border-amber-500/20" />
               </div>
             </FramerReveal>
           </div>
@@ -184,7 +196,7 @@ export default function SilverLinkProject() {
       </section>
 
       {/* Architecture */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b-4 border-amber-400">
+      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ARCHITECTURE]</h2>
@@ -207,7 +219,7 @@ export default function SilverLinkProject() {
                   items: ["Docker Compose (local)", "Kubernetes orchestration", "Keycloak auth + JWT", "Secrets via CI/CD / K8s"],
                 },
               ].map(({ label, items }) => (
-                <div key={label} className="border-2 border-amber-400 bg-zinc-900 p-5">
+                <div key={label} className="bg-[#1b1b1b] border-t border-amber-500/20 p-5">
                   <p className="font-pixel text-xs text-amber-400 mb-4">[ {label} ]</p>
                   <ul className="space-y-2">
                     {items.map(i => (
@@ -223,7 +235,7 @@ export default function SilverLinkProject() {
           </FramerReveal>
 
           <FramerReveal>
-            <div className="mt-8 border-2 border-blue-400 bg-zinc-900 p-6 sm:p-8">
+            <div className="mt-8 bg-[#1b1b1b] border-l-4 border-blue-500 p-6 sm:p-8">
               <p className="font-pixel text-xs text-blue-400 mb-4">[KEY_ALGORITHMS]</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {[
@@ -246,7 +258,7 @@ export default function SilverLinkProject() {
       <section className="py-16 px-4 sm:px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <div className="border-4 border-amber-400 shadow-8bit bg-zinc-900 p-8 sm:p-12 text-center space-y-6">
+            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
               <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button

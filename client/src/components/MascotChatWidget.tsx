@@ -24,7 +24,7 @@ function TypingMessage({ content, role }: { content: string; role: 'user' | 'sys
       } else {
         clearInterval(interval);
       }
-    }, 30);
+    }, 12);
     return () => clearInterval(interval);
   }, [content]);
 
@@ -236,18 +236,8 @@ export default function MascotChatWidget() {
             className="fixed bottom-24 right-0 sm:right-4 z-50 w-full sm:w-96 bg-black border-4 border-amber-400 shadow-8bit flex flex-col"
             style={{ height: '520px' }}
           >
-            {/* Header — prominent mascot */}
-            <div className="flex-shrink-0 bg-zinc-900 border-b-2 border-amber-400 px-4 py-3 flex items-center gap-4">
-              <div className="flex-shrink-0 relative w-16 h-16">
-                <img
-                  src={mascotSrc}
-                  alt="John Aaron"
-                  className="w-16 h-16"
-                  style={{ imageRendering: 'pixelated' }}
-                />
-                {/* Online indicator */}
-                <span className="absolute bottom-1 right-1 w-2.5 h-2.5 bg-green-400 border-2 border-zinc-900" />
-              </div>
+            {/* Header */}
+            <div className="flex-shrink-0 bg-zinc-900 border-b-2 border-amber-400 px-4 py-3 flex items-center gap-3">
               <div className="flex-1 min-w-0">
                 <p className="font-pixel text-xs text-amber-400">JOHN_AARON_OS</p>
                 <p className="font-mono text-[10px] text-blue-400 mt-0.5">
@@ -270,9 +260,20 @@ export default function MascotChatWidget() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2 }}
-                  className={`flex ${msg.role === 'system' ? 'justify-start' : 'justify-end'}`}
+                  className={`flex items-start gap-2 ${msg.role === 'system' ? 'justify-start' : 'justify-end'}`}
                 >
-                  <div className="max-w-[85%]">
+                  {/* Mascot avatar beside bot messages */}
+                  {msg.role === 'system' && (
+                    <div className="flex-shrink-0 w-10 h-10">
+                      <img
+                        src="https://d2xsxph8kpxj0f.cloudfront.net/310519663399162945/5mLLaUiLoCi2BBtUhHeagh/LilJohnny-happycopy_aa6087aa.png"
+                        alt="John Aaron"
+                        className="w-10 h-10"
+                        style={{ imageRendering: 'pixelated' }}
+                      />
+                    </div>
+                  )}
+                  <div className="max-w-[75%]">
                     <TypingMessage content={msg.content} role={msg.role} />
                     <p className={`font-mono text-[10px] text-gray-600 mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
                       {msg.timestamp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
@@ -284,8 +285,16 @@ export default function MascotChatWidget() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex justify-start"
+                  className="flex items-start gap-2 justify-start"
                 >
+                  <div className="flex-shrink-0 w-10 h-10">
+                    <img
+                      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663399162945/5mLLaUiLoCi2BBtUhHeagh/LilJohnny-worrycopy_8d3aee8e.png"
+                      alt="John Aaron"
+                      className="w-10 h-10"
+                      style={{ imageRendering: 'pixelated' }}
+                    />
+                  </div>
                   <div className="border-2 border-blue-400 bg-black px-4 py-3 font-mono text-xs text-blue-400">
                     <span className="animate-pulse">▌▌▌</span>
                   </div>

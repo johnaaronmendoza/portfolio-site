@@ -1,120 +1,139 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
-// Interactive element selectors that trigger the expanded cursor state
+interface Particle {
+  x: number; y: number;
+  vx: number; vy: number;
+  size: number; color: string;
+  life: number; decay: number;
+}
+
+const AMBER   = '#F59E0B';
+const GOLD    = '#FCD34D';
+const BLUE    = '#3B82F6';
+const WHITE   = '#FFFFFF';
+const PALETTE = [AMBER, AMBER, GOLD, WHITE, BLUE];
+
+// Windows XP–style arrow cursor (black outline + white fill)
+const XP_ARROW = `<svg xmlns='http://www.w3.org/2000/svg' width='14' height='22'>
+  <path d='M1 1 L1 18 L5 13 L8 20 L10.5 19 L7 12 L12 12 Z'
+        fill='black' stroke='black' stroke-width='1.5' stroke-linejoin='round'/>
+  <path d='M2 3 L2 15.5 L5.2 11.5 L8 17.5 L9.2 17 L6.2 10 L10.5 10 Z'
+        fill='white'/>
+</svg>`;
+
+// XP hand/pointer cursor
+const XP_HAND = `<svg xmlns='http://www.w3.org/2000/svg' width='14' height='22'>
+  <path d='M5 1 C5 1 5 11 5 12 L3 12 L3 9 L1.5 9 L1.5 13 L0 13 L0 17 C0 19 2 21 4 21 L10 21 C12 21 13 19 13 17 L13 11 L11 11 L11 9 L9 9 L9 12 L7 12 L7 1 Z'
+        fill='black' stroke='black' stroke-width='1' stroke-linejoin='round'/>
+  <path d='M6 2 L6 13 L8 13 L8 10 L10 10 L10 12 L12 12 L12 17 C12 18.5 11 20 10 20 L4 20 C3 20 1 18.5 1 17 L1 14 L2.5 14 L2.5 10 L4 10 L4 13 L6 13 Z'
+        fill='white'/>
+  <rect x='5.5' y='1' width='1' height='12' fill='black' opacity='0.15'/>
+</svg>`;
+
 const INTERACTIVE = 'button, a, [role="button"], input, textarea, select, label, [tabindex]';
 
-type TrailPoint = { x: number; y: number; id: number };
-
 export default function PixelCursor() {
-  const [pos, setPos] = useState({ x: -100, y: -100 });
-  const [hover, setHover] = useState(false);
-  const [clicking, setClicking] = useState(false);
-  const [visible, setVisible] = useState(false);
   const [touchDevice, setTouchDevice] = useState(false);
-  const [trail, setTrail] = useState<TrailPoint[]>([]);
-  const visibleRef = useRef(false);
-  const trailIdRef = useRef(0);
-  const reduced = useReducedMotion();
+  const canvasRef  = useRef<HTMLCanvasElement>(null);
+  const particles  = useRef<Particle[]>([]);
+  const rafId      = useRef(0);
+  const reduced    = useReducedMotion();
+  const mouse      = useRef({ x: -300, y: -300 });
 
+  // ── Particle canvas ────────────────────────────────────────────────────
   useEffect(() => {
-    // Don't show on touch-only devices
     if (window.matchMedia('(hover: none)').matches) {
       setTouchDevice(true);
       return;
     }
 
-    const onMove = (e: MouseEvent) => {
-      setPos({ x: e.clientX, y: e.clientY });
-      if (!visibleRef.current) {
-        visibleRef.current = true;
-        setVisible(true);
-      }
-      // Trail — skip if reduced motion
-      if (!reduced) {
-        const id = trailIdRef.current++;
-        setTrail(prev => [...prev.slice(-3), { x: e.clientX, y: e.clientY, id }]);
-        setTimeout(() => {
-          setTrail(prev => prev.filter(t => t.id !== id));
-        }, 220);
+    const canvas = canvasRef.current!;
+    const ctx    = canvas.getContext('2d')!;
+
+    const resize = () => {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const spawnBurst = (x: number, y: number) => {
+      if (reduced) return;
+      for (let i = 0; i < 18; i++) {
+        const angle = (i / 18) * Math.PI * 2 + Math.random() * 0.4;
+        const speed = 1.8 + Math.random() * 5.5;
+        particles.current.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          size: 2 + Math.floor(Math.random() * 5),
+          color: PALETTE[Math.floor(Math.random() * PALETTE.length)],
+          life: 1,
+          decay: 0.022 + Math.random() * 0.02,
+        });
       }
     };
 
-    const onOver = (e: MouseEvent) => {
-      setHover(!!(e.target as HTMLElement).closest(INTERACTIVE));
-    };
-
-    const onDown = () => setClicking(true);
-    const onUp = () => setClicking(false);
-    const onLeave = () => { visibleRef.current = false; setVisible(false); };
-    const onEnter = () => { visibleRef.current = true;  setVisible(true);  };
+    const onMove  = (e: MouseEvent) => { mouse.current = { x: e.clientX, y: e.clientY }; };
+    const onClick = (e: MouseEvent) => spawnBurst(e.clientX, e.clientY);
 
     window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseover', onOver);
-    window.addEventListener('mousedown', onDown);
-    window.addEventListener('mouseup', onUp);
-    document.documentElement.addEventListener('mouseleave', onLeave);
-    document.documentElement.addEventListener('mouseenter', onEnter);
+    window.addEventListener('click', onClick);
+
+    const tick = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const alive: Particle[] = [];
+      for (const p of particles.current) {
+        p.x  += p.vx;
+        p.y  += p.vy;
+        p.vy += 0.12;   // gravity
+        p.vx *= 0.97;
+        p.life -= p.decay;
+        if (p.life > 0) {
+          ctx.globalAlpha = p.life;
+          ctx.fillStyle   = p.color;
+          ctx.fillRect(Math.round(p.x), Math.round(p.y), p.size, p.size);
+          alive.push(p);
+        }
+      }
+      particles.current = alive;
+      ctx.globalAlpha   = 1;
+      rafId.current = requestAnimationFrame(tick);
+    };
+    rafId.current = requestAnimationFrame(tick);
 
     return () => {
+      cancelAnimationFrame(rafId.current);
+      window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseover', onOver);
-      window.removeEventListener('mousedown', onDown);
-      window.removeEventListener('mouseup', onUp);
-      document.documentElement.removeEventListener('mouseleave', onLeave);
-      document.documentElement.removeEventListener('mouseenter', onEnter);
+      window.removeEventListener('click', onClick);
     };
-  }, []); // ← stable: no deps, registers once, uses ref for visible tracking
+  }, []);
 
-  // Inject cursor:none globally (only on non-touch)
+  // ── Inject XP cursor CSS ───────────────────────────────────────────────
   useEffect(() => {
     if (touchDevice) return;
-    const style = document.createElement('style');
-    style.id = 'pixel-cursor-hide';
-    style.textContent = '* { cursor: none !important; }';
-    document.head.appendChild(style);
-    return () => document.getElementById('pixel-cursor-hide')?.remove();
+    const arrow   = `url("data:image/svg+xml,${encodeURIComponent(XP_ARROW)}") 1 1, auto`;
+    const hand    = `url("data:image/svg+xml,${encodeURIComponent(XP_HAND)}") 5 1, pointer`;
+    const s = document.createElement('style');
+    s.id = 'pixel-cursor-style';
+    s.textContent = `
+      * { cursor: ${arrow} !important; }
+      button, a, [role="button"], label, [tabindex]:not([tabindex="-1"]) { cursor: ${hand} !important; }
+      input, textarea, select { cursor: text !important; }
+    `;
+    document.head.appendChild(s);
+    return () => document.getElementById('pixel-cursor-style')?.remove();
   }, [touchDevice]);
 
-  if (touchDevice || !visible) return null;
-
-  // Size: 10px normal, 18px on hover, 8px on click
-  const size = clicking ? 8 : hover ? 18 : 10;
-  // Color: blue on hover, amber normally
-  const color = hover ? '#3B82F6' : '#F59E0B';
+  if (touchDevice) return null;
 
   return (
-    <>
-      {/* Trailing pixel dots */}
-      {trail.map((t, i) => (
-        <div
-          key={t.id}
-          className="fixed pointer-events-none z-[99998]"
-          style={{
-            left: t.x,
-            top: t.y,
-            transform: 'translate(-50%, -50%)',
-            width: 4,
-            height: 4,
-            backgroundColor: color,
-            opacity: ((i + 1) / (trail.length + 1)) * 0.45,
-          }}
-        />
-      ))}
-      {/* Main cursor */}
-      <div
-        className="fixed pointer-events-none z-[99999]"
-        style={{
-          left: pos.x,
-          top: pos.y,
-          transform: 'translate(-50%, -50%)',
-          width: size,
-          height: size,
-          backgroundColor: color,
-          imageRendering: 'pixelated',
-          transition: 'width 0.08s steps(1), height 0.08s steps(1), background-color 0.08s steps(1)',
-        }}
-      />
-    </>
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none z-[99999]"
+      style={{ imageRendering: 'pixelated' }}
+    />
   );
 }

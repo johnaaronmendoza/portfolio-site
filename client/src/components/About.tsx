@@ -68,6 +68,8 @@ export default function About() {
             </div>
           </div>
         </FramerReveal>
+
+
       </div>
     </section>
   );

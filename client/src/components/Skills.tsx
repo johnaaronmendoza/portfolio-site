@@ -2,6 +2,7 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import FramerReveal from './FramerReveal';
 import SectionHeading from './SectionHeading';
+import SkillRadar from './SkillRadar';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 // ── Types ─────────────────────────────────────────────────────────────────
@@ -264,8 +265,16 @@ export default function Skills() {
         <div className="max-w-6xl mx-auto">
           <SectionHeading index="04" text="SKILLS" className="mb-4" />
 
-          {/* Legend */}
-          <div className="flex items-center gap-6 mb-10 flex-wrap">
+          {/* Radar chart + Legend row */}
+          <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 mb-10">
+            <SkillRadar />
+
+            <div className="flex-1 space-y-4">
+              <p className="font-mono text-xs text-zinc-500 leading-relaxed">
+                Radar shows relative strength across six domains. Hover skills below for level breakdown.
+              </p>
+              {/* Legend */}
+          <div className="flex items-center gap-6 flex-wrap">
             {[
               { label: 'EXPERT',     color: 'text-amber-400', min: '85%+' },
               { label: 'PROFICIENT', color: 'text-blue-400',  min: '70%+' },
@@ -277,6 +286,8 @@ export default function Skills() {
                 <span className="font-mono text-[8px] text-zinc-700">{min}</span>
               </div>
             ))}
+          </div>
+            </div>
           </div>
 
           <div className="space-y-8">

@@ -158,10 +158,14 @@ function process(raw: string, setLocation: (p: string) => void): string[] {
 
     case 'sudo':
       if (arg === 'hire-me' || arg === 'hire me') {
+        setTimeout(() => window.open('/resume.pdf', '_blank'), 800);
         return [
           '[sudo] password for recruiter: ********',
           '',
-          'Request submitted.',
+          'Verifying credentials ............ [ OK ]',
+          'Submitting hire request .......... [ OK ]',
+          'Opening resume ................... [ OK ]',
+          '',
           'John Aaron has been formally requested for hire.',
           '',
           'Contact: johnaaronmb@gmail.com',

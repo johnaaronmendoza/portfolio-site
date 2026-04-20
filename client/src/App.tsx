@@ -16,6 +16,7 @@ import MascotChatWidget from "./components/MascotChatWidget";
 import ScrollProgress from "./components/ScrollProgress";
 import KonamiOverlay from "./components/KonamiOverlay";
 import SecretTerminal from "./components/SecretTerminal";
+import KeyboardShortcuts from "./components/KeyboardShortcuts";
 import { useLenis, getLenis } from "./hooks/useLenis";
 
 /** Scroll to top whenever the route changes */
@@ -61,6 +62,7 @@ function AppInner() {
       <div className="grain" aria-hidden="true" />
       <ScrollProgress />
       <CommandPalette />
+      <KeyboardShortcuts />
       <Toaster />
       <KonamiOverlay />
       <SecretTerminal />

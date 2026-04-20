@@ -20,11 +20,11 @@ export default function Footer() {
           {/* Availability indicator */}
           <div className="flex items-center justify-center gap-2">
             <motion.div
-              className="w-2 h-2 bg-green-400"
+              className="w-1.5 h-1.5 rounded-full bg-green-400"
               animate={{ opacity: [1, 0.3, 1] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
             />
-            <span className="font-pixel text-[9px] text-green-400 tracking-widest">AVAILABLE FOR HIRE</span>
+            <span className="font-mono text-xs text-zinc-400 tracking-widest">AVAILABLE FOR HIRE</span>
           </div>
 
           <motion.h2

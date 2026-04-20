@@ -236,14 +236,22 @@ export default function CommandPalette() {
             className="fixed inset-0 bg-black bg-opacity-50 z-40"
           />
 
-          {/* Command Palette */}
+          {/* Command Palette — M06 CRT boot sequence */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed top-1/4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-2xl bg-black border-4 border-amber-400 shadow-8bit"
+            initial={{ opacity: 0, scaleY: 0.04 }}
+            animate={{ opacity: 1, scaleY: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0 } }}
+            transition={{ duration: 0.12, ease: [0.23, 1, 0.32, 1] }}
+            className="fixed top-1/4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-2xl bg-black border-4 border-amber-400 shadow-8bit overflow-hidden"
+            style={{ transformOrigin: 'top' }}
           >
+            {/* CRT flash — 1-frame white flash on open */}
+            <motion.div
+              className="absolute inset-0 bg-white pointer-events-none z-10"
+              initial={{ opacity: 0.9 }}
+              animate={{ opacity: 0 }}
+              transition={{ duration: 0.08 }}
+            />
             {/* Search Input */}
             <div className="border-b-2 border-amber-400 p-4 bg-zinc-900">
               <div className="flex items-center gap-2">
@@ -272,6 +280,9 @@ export default function CommandPalette() {
                 filteredCommands.map((cmd, idx) => (
                   <motion.button
                     key={cmd.id}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.15, delay: idx * 0.04, ease: [0.23, 1, 0.32, 1] }}
                     onClick={() => {
                       cmd.action();
                       setIsOpen(false);
@@ -283,7 +294,7 @@ export default function CommandPalette() {
                     }`}
                     onMouseEnter={() => setSelectedIndex(idx)}
                   >
-                    <div className="font-pixel text-sm">{cmd.label}</div>
+                    <div className="font-mono font-bold text-sm">{cmd.label}</div>
                     <div className="font-mono text-xs text-gray-500 mt-1">{cmd.description}</div>
                   </motion.button>
                 ))

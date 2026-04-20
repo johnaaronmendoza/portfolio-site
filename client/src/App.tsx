@@ -5,8 +5,6 @@ import { useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import CommandPalette from "./components/CommandPalette";
-import ScreenTear from "./components/ScreenTear";
-import LoadingBar from "./components/LoadingBar";
 import Home from "./pages/Home";
 import SilverLinkProject from "./pages/SilverLinkProject";
 import SCSProject from "./pages/SCSProject";
@@ -18,9 +16,6 @@ import MascotChatWidget from "./components/MascotChatWidget";
 import ScrollProgress from "./components/ScrollProgress";
 import KonamiOverlay from "./components/KonamiOverlay";
 import SecretTerminal from "./components/SecretTerminal";
-import PixelCursor from "./components/PixelCursor";
-import SystemHUD from "./components/SystemHUD";
-import DitherTransition from "./components/DitherTransition";
 import { useLenis, getLenis } from "./hooks/useLenis";
 
 /** Scroll to top whenever the route changes */
@@ -65,14 +60,9 @@ function AppInner() {
       {/* Sovereign Console grain overlay */}
       <div className="grain" aria-hidden="true" />
       <ScrollProgress />
-      <LoadingBar />
       <CommandPalette />
-      <ScreenTear />
       <Toaster />
-      <PixelCursor />
-      <DitherTransition />
       <KonamiOverlay />
-      <SystemHUD />
       <SecretTerminal />
       <Router />
       <MascotChatWidget />

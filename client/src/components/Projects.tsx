@@ -4,8 +4,8 @@ import { useLocation } from 'wouter';
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
-import ScrambleText from './ScrambleText';
 import { useTilt } from '@/hooks/useTilt';
+import SectionHeading from './SectionHeading';
 
 // ── Card images (shown in grid) ───────────────────────────────────────────
 import silverLinkImg    from '@assets/silverlink_p19_img0.png';
@@ -34,6 +34,8 @@ type Project = {
   num: number;
   name: string;
   description: string;
+  metric: string;
+  year: string;
   image: string | null;
   tags: string[];
   link: string;
@@ -46,9 +48,11 @@ const PROJECTS: Project[] = [
     num: 1,
     name: "SilverLink SG",
     description:
-      "Cloud-native platform connecting seniors and youth through skill-sharing, micro-volunteering, and live events. 4 gRPC microservices, WebRTC livestreaming, predictive autoscaling.",
+      "4 gRPC microservices behind a React 19 shell. WebRTC livestreams for live events; Kubernetes HPA scales on predicted event load, not reactive CPU.",
+    metric: "8-NODE CLUSTER · 4 SERVICES · WEBRTC",
+    year: "2025",
     image: silverLinkImg,
-    tags: ["React", "gRPC", "Docker", "Kubernetes", "PostgreSQL"],
+    tags: ["React", "gRPC", "K8s", "PostgreSQL"],
     link: "/projects/silverlink",
     preloadImages: [silverLink2, silverLink3],
   },
@@ -56,7 +60,9 @@ const PROJECTS: Project[] = [
     num: 2,
     name: "SCS Awareness Platform",
     description:
-      "Interactive visual novel engine for cancer-awareness outreach booths. Multilingual branching stories, gamification leaderboard, and a no-code admin panel for SCS staff.",
+      "Branching visual-novel engine built for tablet outreach booths. Multilingual (EN/CN/Malay/Tamil), gamified leaderboard, and a no-code admin panel for SCS staff.",
+    metric: "4 LANGUAGES · 4 QUESTION TYPES · SUPABASE RLS",
+    year: "2025",
     image: scsImg,
     tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
     link: "/projects/scs",
@@ -66,9 +72,11 @@ const PROJECTS: Project[] = [
     num: 3,
     name: "Fire Safety Drill Companion",
     description:
-      "Native Android app for HDB fire evacuation training. AR-guided navigation, on-device TFLite ML, sensor-fusion PDR, Dijkstra pathfinding — fully offline. 10,984 lines of Kotlin.",
+      "ARCore nav + TFLite ML + sensor-fusion PDR — fully offline. Dijkstra pathfinding with dynamic hazard re-routing across a weighted floor-plan graph.",
+    metric: "10,984 LOC KOTLIN · ~80% TEST COVERAGE · SUS 79/100",
+    year: "2024",
     image: fireSafetyImg,
-    tags: ["Kotlin", "Jetpack Compose", "ARCore", "TFLite", "MVVM"],
+    tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
     link: "/projects/firesafety",
     preloadImages: [fireSafety2, fireSafety3],
   },
@@ -76,9 +84,11 @@ const PROJECTS: Project[] = [
     num: 4,
     name: "UWB Indoor Localization",
     description:
-      "ML pipeline classifying LOS/NLOS UWB signal paths using SVM-RBF (89.61% accuracy, 0.9612 AUC) across 41,996 samples from 7 indoor environments. Dual-path range regression.",
+      "SVM-RBF classifier on 42k UWB samples across 7 indoor environments. PCA on 1,016 CIR dimensions; dual-path range regression for NLOS compensation.",
+    metric: "89.61% ACCURACY · 0.9612 AUC · 41,996 SAMPLES",
+    year: "2024",
     image: uwbImg,
-    tags: ["Python", "SVM", "PCA", "scikit-learn", "Data Analytics"],
+    tags: ["Python", "SVM", "PCA", "scikit-learn"],
     link: "/projects/uwb",
     preloadImages: [uwb2, uwb3],
   },
@@ -86,9 +96,11 @@ const PROJECTS: Project[] = [
     num: 5,
     name: "UAT Testing Dashboard",
     description:
-      "Full-stack defect tracker and UAT management tool for a Hospital Appointment System. Real-time severity charts, test case to defect linking, CSV export, and role-based access for PM, QA Lead, Tester, and Developer.",
+      "Full-stack defect tracker for a Hospital Appointment System. Test cases link directly to open defects; severity breakdown charts update in real time.",
+    metric: "4 ROLES · CSV EXPORT · RECHARTS ANALYTICS",
+    year: "2024",
     image: uatImg,
-    tags: ["React 18", "Node.js", "Express", "SQLite", "Recharts"],
+    tags: ["React 18", "Node.js", "Express", "SQLite"],
     link: "/projects/uat",
     preloadImages: [],
   },
@@ -96,9 +108,11 @@ const PROJECTS: Project[] = [
     num: 6,
     name: "AI Finance Insights Engine",
     description:
-      "Automated ETL pipeline ingesting Brent crude, USD/SGD FX, logistics stocks, and geopolitical news. AI NLP engine classifies 9 sectors, scores sentiment, and flags supply chain risks. Power BI ready Star Schema output.",
+      "Automated ETL ingesting Brent crude, FX, S&P 500, and geopolitical news. NLP engine classifies 9 sectors, scores sentiment, flags supply chain risks.",
+    metric: "5 DATA SOURCES · STAR SCHEMA · 100% PYTEST COVERAGE",
+    year: "2024",
     image: aiFinanceImg,
-    tags: ["Python", "Pandas", "SQLite", "ETL", "NLP", "Power BI"],
+    tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
     link: "/projects/ai-finance",
     preloadImages: [],
   },
@@ -106,9 +120,11 @@ const PROJECTS: Project[] = [
     num: 7,
     name: "GreenLoopFarms",
     description:
-      "Singapore hydroponic urban farm growing pesticide-free vegetables and microgreens. Contributed to the initial idea. Won SGD $10,000 NYP JumpStart Grant. Partners: FURA (World's 50 Best), NIE, NUS.",
+      "Contributed to the founding idea for a Singapore hydroponic urban farm. Helped prepare the pitch deck that secured a competitive NYP grant.",
+    metric: "SGD $10K JUMPSTART GRANT · FURA · NIE · NUS",
+    year: "2022",
     image: greenloopImg,
-    tags: ["NYP JumpStart", "SGD $10k Grant", "Urban Farming"],
+    tags: ["NYP JumpStart", "Urban Farming"],
     link: "external",
     externalUrl: "https://greenloopfarms.com/",
     preloadImages: [greenloop2],
@@ -171,7 +187,7 @@ function ProjectCard({
       {...(isComingSoon ? {} : tiltHandlers)}
     >
       {/* Project Image */}
-      <div className="relative overflow-hidden border-4 border-amber-400 group-hover:border-blue-400 shadow-8bit mb-5 h-44 sm:h-48 bg-zinc-900 transition-colors duration-150">
+      <div className="relative overflow-hidden border-4 border-amber-400 group-hover:border-blue-400 shadow-8bit mb-5 h-44 sm:h-48 bg-zinc-900 transition-all duration-200 group-hover:[box-shadow:8px_8px_0px_0px_#F59E0B] group-hover:-translate-y-1">
         {/* Pixel corner accents — animate in on card hover */}
         <div className="absolute top-0 left-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-100 pointer-events-none" />
         <div className="absolute top-0 right-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-100 pointer-events-none" />
@@ -216,15 +232,19 @@ function ProjectCard({
 
       {/* Project Info */}
       <div className="space-y-3">
-        {/* Binary index — lights up on card hover */}
-        <div className="font-pixel text-[9px] text-zinc-700 group-hover:text-amber-400 transition-colors duration-150 tracking-widest select-none">
-          {project.num.toString(2).padStart(8, '0')}
+        {/* Index + year */}
+        <div className="font-mono text-[11px] text-zinc-600 group-hover:text-amber-400 transition-colors duration-150 tracking-widest select-none">
+          {String(project.num).padStart(2, '0')} · {project.year}
         </div>
-        <h3 className="font-pixel text-sm sm:text-base text-blue-400 leading-relaxed">
-          <ScrambleText text={project.name} onView={false} onHover frames={16} />
+        <h3 className="font-mono font-bold text-base sm:text-lg text-blue-400 leading-snug">
+          {project.name}
         </h3>
-        <p className="font-mono-8bit text-xs sm:text-sm text-gray-300 leading-relaxed">
+        <p className="font-mono text-xs sm:text-sm text-gray-300 leading-relaxed">
           {project.description}
+        </p>
+        {/* M03 — metric row slides up on hover */}
+        <p className="font-mono text-[10px] text-amber-400 tracking-wider transition-all duration-200 opacity-50 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0">
+          ■ {project.metric}
         </p>
         <div className="flex flex-wrap gap-1.5">
           {project.tags.map(tag => (
@@ -255,9 +275,7 @@ export default function Projects() {
     <FramerReveal>
       <section className="bg-black text-white px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-8 glitch" data-text="PROJECTS">
-            <ScrambleText text="PROJECTS" onView onHover delay={80} frames={20} />
-          </h2>
+          <SectionHeading index="03" text="PROJECTS" className="mb-8" />
 
           {/* Filter chips */}
           <div className="flex flex-wrap gap-2 mb-10">

@@ -1,5 +1,5 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import Particles from './Particles';
 import { unlockAchievement } from '@/hooks/useAchievements';
 import { play } from '@/hooks/useSound';
@@ -9,16 +9,10 @@ import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 
-const ROLES = [
-  'FULL-STACK DEVELOPER',
-  'DATA & ML ENGINEER',
-  'ANDROID · ARCORE · TFLITE',
-  'UAT & SYSTEMS ANALYST',
-  'CLOUD · GRPC · KUBERNETES',
-];
+const ROLE_LINE = 'FULL-STACK · DATA · ANDROID · UAT';
 
 // Each line of the name animates in separately
-const NAME_LINES = ['JOHN AARON', 'MENDOZA', 'BRANZUELA'];
+const NAME_LINES = ['JOHN AARON', 'BRANZUELA'];
 
 const PIXELS = [
   { top: '12%',  right: '8%',   size: 4, color: 'bg-amber-400', delay: 0 },
@@ -62,15 +56,31 @@ function ScrambleLine({
 }
 
 export default function Hero() {
-  const [roleIdx, setRoleIdx] = useState(0);
   const reduced = useReducedMotion();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRoleIdx(i => (i + 1) % ROLES.length);
-    }, 2800);
-    return () => clearInterval(interval);
-  }, []);
+  // M02 — parallax shadow: hero card lifts + shadow grows as user scrolls
+  const { scrollY } = useScroll();
+  const cardShadow = useTransform(scrollY, [0, 600], ['8px 8px 0px 0px #F59E0B', '24px 24px 0px 0px #F59E0B']);
+  const cardY      = useTransform(scrollY, [0, 600], [0, -12]);
+
+  // M01 — magnetic CTA ref
+  const magnetRef = useRef<HTMLAnchorElement>(null);
+  const handleMagnetMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = magnetRef.current;
+    if (!el || reduced) return;
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const tx = Math.max(-14, Math.min(14, (e.clientX - cx) * 0.25));
+    const ty = Math.max(-14, Math.min(14, (e.clientY - cy) * 0.25));
+    el.style.transform = `translate(${tx}px, ${ty}px)`;
+    el.style.boxShadow = `${2 - tx * 0.3}px ${2 - ty * 0.3}px 0 0 #F59E0B`;
+  };
+  const handleMagnetLeave = () => {
+    if (!magnetRef.current) return;
+    magnetRef.current.style.transform = '';
+    magnetRef.current.style.boxShadow = '';
+  };
 
   return (
     <section className="min-h-screen bg-black text-white flex items-center justify-center px-4 sm:px-8 lg:px-16 py-20 relative overflow-hidden">
@@ -112,21 +122,13 @@ export default function Hero() {
       <div className="max-w-4xl w-full relative z-10">
 
         {/* Name — staggered line reveal + scramble */}
+        {/* M02 — parallax: shadow grows + card lifts as user scrolls */}
         <motion.div
-          className="mb-10 border-8bit shadow-8bit p-8 sm:p-10 lg:p-12 bg-black"
+          className="mb-10 border-8bit p-8 sm:p-10 lg:p-12 bg-black"
+          style={{ boxShadow: reduced ? '8px 8px 0px 0px #F59E0B' : cardShadow, y: reduced ? 0 : cardY }}
           initial={{ opacity: 0, scale: 0.95 }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            boxShadow: reduced
-              ? '4px 4px 0px 0px #F59E0B'
-              : ['4px 4px 0px 0px #F59E0B', '4px 4px 0px 0px #F59E0B, 0 0 22px rgba(245,158,11,0.25)', '4px 4px 0px 0px #F59E0B'],
-          }}
-          transition={{
-            opacity:   { duration: 0.4, ease: 'easeOut' },
-            scale:     { duration: 0.4, ease: 'easeOut' },
-            boxShadow: { duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.2 },
-          }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ opacity: { duration: 0.4, ease: 'easeOut' }, scale: { duration: 0.4, ease: 'easeOut' } }}
         >
           <h1
             className="font-pixel text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight glitch overflow-hidden"
@@ -148,80 +150,83 @@ export default function Hero() {
           </h1>
         </motion.div>
 
-        {/* Cycling role tagline */}
+        {/* Static role line */}
         <motion.div
-          className="mb-14 ml-2 h-8 sm:h-10 flex items-center overflow-hidden"
+          className="mb-6 ml-2 flex items-center gap-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.9 }}
         >
-          <span className="font-pixel text-xs text-amber-400 mr-3 flex-shrink-0">{'>'}</span>
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={roleIdx}
-              className="font-pixel text-xs sm:text-sm text-white"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.22, ease: EASE_OUT }}
-            >
-              {ROLES[roleIdx]}
-            </motion.p>
-          </AnimatePresence>
+          <span className="font-mono text-sm text-amber-400 flex-shrink-0">{'>'}</span>
+          <p className="font-mono text-sm text-white tracking-wide">{ROLE_LINE}</p>
           <motion.span
             animate={{ opacity: [1, 0] }}
             transition={{ duration: 0.6, repeat: Infinity }}
-            className="inline-block w-2 h-4 bg-amber-400 ml-2 flex-shrink-0"
+            className="inline-block w-2 h-4 bg-amber-400 flex-shrink-0"
           />
         </motion.div>
 
-        {/* CTA Links */}
+        {/* Positioning sentence */}
+        <motion.p
+          className="mb-12 ml-2 font-mono text-sm text-zinc-400 leading-relaxed max-w-xl"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1.0, ease: EASE_OUT }}
+        >
+          Final-year CS at SIT × Glasgow. I ship{' '}
+          <span className="text-white">cloud-native microservices</span>,{' '}
+          <span className="text-white">ARCore/TFLite</span> Android apps, and{' '}
+          <span className="text-white">UAT</span> on 50 MWp solar rollouts.
+          Looking for new-grad SWE roles, May 2026.
+        </motion.p>
+
+        {/* CTAs — Resume primary (M01 magnetic), GitHub + LinkedIn ghost */}
         <motion.div
-          className="flex flex-col sm:flex-row gap-4 sm:gap-6 ml-2"
+          className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 ml-2"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1.1, ease: EASE_OUT }}
         >
-          <motion.a
-            href="https://github.com/johnaaronmendoza"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
-            onMouseEnter={() => play('blip')}
-            className="border-8bit shadow-8bit px-5 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm sm:text-base cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black inline-flex items-center gap-2.5"
-            whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B' }}
-            whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B', scale: 0.97 }}
-            transition={{ duration: 0.1 }}
+          {/* M01 — magnetic zone: slightly larger than the button so cursor "attracts" from nearby */}
+          <div
+            className="p-3 -m-3"
+            onMouseMove={handleMagnetMove}
+            onMouseLeave={handleMagnetLeave}
           >
-            <PixelGitHub size={22} fg="#000000" />
-            GitHub
-          </motion.a>
-          <motion.a
-            href="https://www.linkedin.com/in/john-branzuela/"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
-            onMouseEnter={() => play('blip')}
-            className="border-8bit-blue shadow-8bit-blue px-5 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm sm:text-base cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black inline-flex items-center gap-2.5"
-            whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6' }}
-            whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6', scale: 0.97 }}
-            transition={{ duration: 0.1 }}
-          >
-            <PixelLinkedIn size={22} />
-            LinkedIn
-          </motion.a>
-          <motion.a
-            href="/resume.pdf"
-            download="John_Aaron_Branzuela_Resume.pdf"
-            onClick={() => play('click')}
-            onMouseEnter={() => play('blip')}
-            className="border-8bit-green shadow-8bit-green px-5 py-3 font-mono-8bit font-bold text-white bg-green-500 hover:bg-green-400 transition-colors text-sm sm:text-base cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black inline-flex items-center gap-2"
-            whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #22C55E' }}
-            whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #22C55E', scale: 0.97 }}
-            transition={{ duration: 0.1 }}
-          >
-            ↓ RESUME
-          </motion.a>
+            <a
+              ref={magnetRef}
+              href="/resume.pdf"
+              download="John_Aaron_Branzuela_Resume.pdf"
+              onClick={() => play('click')}
+              onMouseEnter={() => play('blip')}
+              className="border-8bit shadow-8bit-sm px-6 py-3 font-mono font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm tracking-wider inline-flex items-center gap-2 select-none"
+              style={{ transition: 'background-color 0.1s, transform 0.15s cubic-bezier(.2,.8,.2,1), box-shadow 0.15s cubic-bezier(.2,.8,.2,1)' }}
+            >
+              ↓ RESUME.PDF
+            </a>
+          </div>
+          <div className="flex items-center gap-5">
+            <a
+              href="https://github.com/johnaaronmendoza"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
+              className="font-mono text-sm text-zinc-400 hover:text-white transition-colors inline-flex items-center gap-1.5"
+            >
+              <PixelGitHub size={16} fg="currentColor" />
+              GitHub ↗
+            </a>
+            <a
+              href="https://www.linkedin.com/in/john-branzuela/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
+              className="font-mono text-sm text-zinc-400 hover:text-white transition-colors inline-flex items-center gap-1.5"
+            >
+              <PixelLinkedIn size={16} />
+              LinkedIn ↗
+            </a>
+          </div>
         </motion.div>
       </div>
 

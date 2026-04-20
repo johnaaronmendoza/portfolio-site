@@ -10,19 +10,16 @@
 
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
-import ScrambleText from './ScrambleText';
+import SectionHeading from './SectionHeading';
+import CountUp from './CountUp';
 import profileImg from '@assets/john_profile.jpg';
 
 export default function About() {
   return (
     <section className="bg-black text-white px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
       <div className="max-w-5xl mx-auto">
-        {/* Section Heading */}
-        <FramerReveal variant="fade-left">
-          <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-16 glitch" data-text="ABOUT ME">
-            <ScrambleText text="ABOUT ME" onView onHover delay={100} frames={20} />
-          </h2>
-        </FramerReveal>
+        {/* Section Heading — M05 three-beat reveal */}
+        <SectionHeading index="01" text="ABOUT ME" className="mb-16" />
 
         {/* Card Container — staggered: photo slides from left, text from right */}
         <FramerReveal delay={0.1}>
@@ -40,7 +37,7 @@ export default function About() {
               </div>
 
               {/* Bio Text */}
-              <div className="space-y-5 prose-8bit">
+              <div className="space-y-5 prose-8bit flex-1">
                 <p className="font-mono-8bit text-sm sm:text-base text-white leading-relaxed">
                   My path into tech started on-site, not behind a desk. At Sembcorp I coordinated UAT across a 50MWp solar deployment — translating requirements between engineers and stakeholders before handoff. That gap between what a business needs and what gets built is where things go wrong, and it's what I focus on.
                 </p>
@@ -50,6 +47,23 @@ export default function About() {
                 <p className="font-mono-8bit text-sm sm:text-base text-gray-400 leading-relaxed">
                   I'm comfortable speaking to both engineers and stakeholders, and I do my best work at the boundary between the two.
                 </p>
+
+                {/* M04 — count-up KPIs */}
+                <div className="grid grid-cols-3 gap-4 pt-4 border-t border-zinc-800">
+                  {[
+                    { value: 89.6, suffix: '%', label: 'UWB accuracy' },
+                    { value: 10984, suffix: '', label: 'LOC Kotlin' },
+                    { value: 50, suffix: ' MWp', label: 'commissioned' },
+                  ].map(({ value, suffix, label }) => (
+                    <div key={label} className="text-center">
+                      <div className="font-mono font-bold text-xl text-amber-400">
+                        <CountUp to={value} duration={900} />
+                        <span>{suffix}</span>
+                      </div>
+                      <div className="font-mono text-[10px] text-zinc-500 mt-1">{label}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

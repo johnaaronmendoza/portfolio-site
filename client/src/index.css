@@ -368,21 +368,25 @@
 @layer components {
   /* 8-Bit Hardware Engineer Custom Utilities */
   
-  /* Hard shadow effect - 4px offset solid color */
-  .shadow-8bit {
-    box-shadow: 4px 4px 0px 0px #F59E0B;
+  /* Hard shadow tokens — scale with element size */
+  .shadow-8bit-sm {
+    box-shadow: 2px 2px 0px 0px #F59E0B; /* buttons, tags, chips */
   }
-  
+
+  .shadow-8bit {
+    box-shadow: 4px 4px 0px 0px #F59E0B; /* cards, project images */
+  }
+
+  .shadow-8bit-lg {
+    box-shadow: 8px 8px 0px 0px #F59E0B; /* hero block, section plates */
+  }
+
   .shadow-8bit-blue {
     box-shadow: 4px 4px 0px 0px #3B82F6;
   }
-  
+
   .shadow-8bit-dark {
     box-shadow: 4px 4px 0px 0px #18181B;
-  }
-
-  .shadow-8bit-green {
-    box-shadow: 4px 4px 0px 0px #22C55E;
   }
 
   /* Scroll progress bar glow */

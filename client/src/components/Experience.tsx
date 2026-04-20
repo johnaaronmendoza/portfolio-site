@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import FramerReveal from './FramerReveal';
+import SectionHeading from './SectionHeading';
 
 type Entry = {
   org: string;
@@ -49,7 +50,7 @@ const ENTRIES: Entry[] = [
 const TAG_COLORS: Record<string, string> = {
   EDUCATION: 'text-blue-400 border-blue-400',
   INTERNSHIP: 'text-amber-400 border-amber-400',
-  VENTURE:    'text-green-400 border-green-400',
+  VENTURE:    'text-zinc-400 border-zinc-400',
 };
 
 export default function Experience() {
@@ -57,9 +58,7 @@ export default function Experience() {
     <FramerReveal>
       <section className="bg-black text-white px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-5xl mx-auto">
-          <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-16 glitch" data-text="EXPERIENCE">
-            EXPERIENCE
-          </h2>
+          <SectionHeading index="02" text="EXPERIENCE" className="mb-16" />
 
           <div className="space-y-8">
             {ENTRIES.map((entry, idx) => (

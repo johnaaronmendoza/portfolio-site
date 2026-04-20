@@ -1,7 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import FramerReveal from './FramerReveal';
-import ScrambleText from './ScrambleText';
+import SectionHeading from './SectionHeading';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 // ── Types ─────────────────────────────────────────────────────────────────
@@ -262,9 +262,7 @@ export default function Skills() {
     <FramerReveal>
       <section id="skills" className="bg-black text-white px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 mb-4 glitch" data-text="SKILLS">
-            <ScrambleText text="SKILLS" onView onHover delay={80} frames={18} />
-          </h2>
+          <SectionHeading index="04" text="SKILLS" className="mb-4" />
 
           {/* Legend */}
           <div className="flex items-center gap-6 mb-10 flex-wrap">

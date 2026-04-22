@@ -108,8 +108,12 @@ temp/
 # Webdev artifacts (checkpoint zips, migrations, etc.)
 .webdev/
 
-# Vite / Manus debug logs (local only)
+# Manus AI agent artifacts
 .manus-logs/
+**/__manus__/
+
+# Separate project folders (maintain in their own repos)
+UAT-Testing-Dashboard-Defect-Tracker-for-Hospital-Appointment-System/
 
 # Vercel CLI local link state
 .vercel/

@@ -118,7 +118,7 @@ export default function CommandPalette() {
     {
       id: 'proj-uwb',
       label: 'Project: UWB Indoor Localization',
-      description: 'SVM-RBF ML pipeline — 89.61% accuracy',
+      description: 'SVM-RBF ML pipeline, 89.61% accuracy',
       action: () => { setLocation('/projects/uwb'); setIsOpen(false); },
       category: 'navigation',
     },

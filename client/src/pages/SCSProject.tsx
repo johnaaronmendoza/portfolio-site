@@ -15,7 +15,7 @@ export default function SCSProject() {
   const [, setLocation] = useLocation();
   useEffect(() => {
     trackProjectVisit('scs');
-    document.title = 'SCS Awareness Platform — John Aaron Branzuela';
+    document.title = 'SCS Awareness Platform | John Aaron Branzuela';
     return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
   }, []);
 
@@ -47,7 +47,7 @@ export default function SCSProject() {
                 <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
                   Interactive visual novel engine for Singapore Cancer Society outreach booths.
                   Multilingual branching stories, gamification, and a full no-code admin panel
-                  for SCS staff — deployed on tablets at community events.
+                  for SCS staff, deployed on tablets at community events.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-8">
                   {["React_19", "TypeScript", "Vite", "TailwindCSS", "Supabase", "PostgreSQL", "Vercel", "Agile_Scrum"].map(t => (
@@ -61,7 +61,7 @@ export default function SCSProject() {
                   </div>
                   <div className="bg-[#1b1b1b] p-4">
                     <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[TEAM]</p>
-                    <p className="font-mono-8bit text-xs leading-relaxed">Group D2 — 4 members, 7 sprints</p>
+                    <p className="font-mono-8bit text-xs leading-relaxed">Group D2: 4 members, 7 sprints</p>
                   </div>
                 </div>
               </div>
@@ -115,7 +115,7 @@ export default function SCSProject() {
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 Singapore Cancer Society (SCS) conducts community outreach to advocate for cancer
-                awareness and early detection. Traditional booths lack interactivity — many visitors
+                awareness and early detection. Traditional booths lack interactivity; many visitors
                 perceive outreach as monotonous or avoid it due to stigma, resulting in limited
                 knowledge and reduced interest in screening programmes.
               </p>
@@ -125,7 +125,7 @@ export default function SCSProject() {
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[MY_CONTRIBUTIONS]</h2>
             <div className="bg-[#1b1b1b] border-l-4 border-blue-500 p-6 sm:p-8">
-              <p className="font-mono-8bit text-xs text-blue-400 mb-4">John Aaron — core engine and media systems</p>
+              <p className="font-mono-8bit text-xs text-blue-400 mb-4">John Aaron: core engine and media systems</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
                   "Visual Novel Engine (PanelRenderer component)",
@@ -154,13 +154,13 @@ export default function SCSProject() {
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-2">[ADMIN_PANEL]</h2>
             <p className="font-mono-8bit text-sm text-gray-400 mb-8">
-              A full no-code CMS allowing SCS staff to create stories, manage assets, view analytics, and control admin accounts — without technical expertise.
+              A full no-code CMS allowing SCS staff to create stories, manage assets, view analytics, and control admin accounts, without technical expertise.
             </p>
           </FramerReveal>
 
           <FramerReveal>
             <div className="space-y-3">
-              <p className="font-pixel text-xs text-blue-400">DASHBOARD — STORY MANAGEMENT</p>
+              <p className="font-pixel text-xs text-blue-400">DASHBOARD: STORY MANAGEMENT</p>
               <img src={adminDashImg} alt="SCS admin dashboard" className="w-full border border-amber-500/20" />
             </div>
           </FramerReveal>
@@ -236,7 +236,7 @@ export default function SCSProject() {
                 {
                   label: "GAMIFICATION ENGINE",
                   items: [
-                    "Dynamic scoring — max score tracks visited panels",
+                    "Dynamic scoring: max score tracks visited panels",
                     "Branching choices excluded from score",
                     "Top-10 leaderboard with personal rank",
                     "Configurable post-game actions (replay / URL)",

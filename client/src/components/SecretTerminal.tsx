@@ -9,7 +9,7 @@ interface Line {
 }
 
 const BOOT = [
-  'JOHN_AARON_OS v2.6.0 — Computing Science Portfolio',
+  'JOHN_AARON_OS v2.6.0 | Computing Science Portfolio',
   'Copyright (c) 2026 John Aaron Mendoza Branzuela',
   '─────────────────────────────────────────────',
   'Type "help" to see available commands.',
@@ -18,7 +18,7 @@ const BOOT = [
 
 const FS: Record<string, string> = {
   'about.txt': `NAME     : John Aaron Mendoza Branzuela
-DEGREE   : BSc Computing Science (Hons) — SIT x University of Glasgow
+DEGREE   : BSc Computing Science (Hons) | SIT x University of Glasgow
 ROLE     : Computing Science Student | Aspiring Business Analyst
 LOCATION : Singapore
 
@@ -26,7 +26,7 @@ My path into tech started on-site, not behind a desk.
 At Sembcorp I coordinated UAT for a 50MWp solar deployment,
 translating requirements between teams before handoff.
 
-That gap between what a business needs and what gets built —
+That gap between what a business needs and what gets built,
 that's where I focus.`,
 
   'skills.txt': `LANGUAGES  : Java · Python · TypeScript · JavaScript · SQL · Kotlin · C++
@@ -44,7 +44,7 @@ WEB      : https://portfolio-site-lh1v.vercel.app
 
 Open to internships, collaborations, and interesting problems.`,
 
-  'resume.pdf': `[BINARY FILE — cannot display in terminal]
+  'resume.pdf': `[BINARY FILE: cannot display in terminal]
 Use your browser to download from the portfolio.`,
 };
 
@@ -147,11 +147,11 @@ function process(raw: string, setLocation: (p: string) => void): string[] {
         return [
           'commit a3f9c12  feat: add AI Finance Insights ETL pipeline',
           'commit 88de021  feat: add UAT Testing Dashboard with defect tracker',
-          'commit 4bc7e55  feat: SCS visual novel engine — multilingual support',
+          'commit 4bc7e55  feat: SCS visual novel engine, multilingual support',
           'commit 21a0d98  feat: Fire Safety AR corridor navigation (ARCore)',
           'commit 9ff12c3  feat: SilverLink gRPC microservices + WebRTC',
-          'commit 7e33b40  feat: UWB LOS/NLOS classification — SVM-RBF 89.61%',
-          'commit 0001337  init: portfolio-8bit — industrial retro-futurism',
+          'commit 7e33b40  feat: UWB LOS/NLOS classification, SVM-RBF 89.61%',
+          'commit 0001337  init: portfolio-8bit, industrial retro-futurism',
         ];
       }
       return [`git: '${arg}' is not a supported git command.`];
@@ -334,7 +334,7 @@ export default function SecretTerminal() {
             >
               {/* Title bar */}
               <div className="border-b-2 border-amber-400 bg-zinc-900 px-4 py-2 flex items-center justify-between">
-                <span className="font-pixel text-[10px] text-amber-400">JOHN_AARON_OS — bash</span>
+                <span className="font-pixel text-[10px] text-amber-400">JOHN_AARON_OS / bash</span>
                 <button
                   onClick={close}
                   className="font-pixel text-[10px] text-zinc-500 hover:text-amber-400 transition-colors"
@@ -344,7 +344,7 @@ export default function SecretTerminal() {
               </div>
 
               {/* Output area */}
-              <div className="h-80 overflow-y-auto p-4 space-y-0.5 font-mono text-xs leading-relaxed">
+              <div className="h-80 overflow-y-auto p-4 space-y-0.5 font-mono text-xs leading-relaxed" data-lenis-prevent>
                 {lines.map((l, i) => (
                   <div key={i} className={
                     l.type === 'input'  ? 'text-amber-400' :

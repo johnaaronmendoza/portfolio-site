@@ -18,7 +18,7 @@ export default function FireSafetyProject() {
   const [, setLocation] = useLocation();
   useEffect(() => {
     trackProjectVisit('firesafety');
-    document.title = 'Fire Safety Drill Companion — John Aaron Branzuela';
+    document.title = 'Fire Safety Drill Companion | John Aaron Branzuela';
     return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
   }, []);
 
@@ -59,7 +59,7 @@ export default function FireSafetyProject() {
                   [FIRE_SAFETY_DRILL_COMPANION]<span className="blink-cursor">█</span>
                 </h1>
                 <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
-                  Native Android app empowering HDB residents to rehearse fire evacuation at their own convenience —
+                  Native Android app empowering HDB residents to rehearse fire evacuation at their own convenience,
                   with AR-guided navigation, on-device ML, and sensor-fusion positioning. No internet required.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-8">
@@ -131,12 +131,12 @@ export default function FireSafetyProject() {
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 Singapore's ~1.1 million HDB flats house 80% of the population, many in blocks exceeding 20 storeys.
-                SCDF fire drills have consistently low participation — especially among elderly residents facing
+                SCDF fire drills have consistently low participation, especially among elderly residents facing
                 mobility challenges, language barriers, or unfamiliarity with evacuation routes in their own block.
               </p>
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed text-amber-400">
                 The Fire Safety Drill Companion lets residents rehearse fire evacuation on-demand, inside their own HDB block,
-                without organized group drills or SCDF supervision — fully offline.
+                without organized group drills or SCDF supervision, fully offline.
               </p>
             </div>
           </FramerReveal>
@@ -144,7 +144,7 @@ export default function FireSafetyProject() {
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[MY_CONTRIBUTIONS]</h2>
             <div className="bg-[#1b1b1b] border-l-4 border-blue-500 p-6 sm:p-8">
-              <p className="font-mono-8bit text-xs text-blue-400 mb-4">John Aaron — Algorithms & AR (49 commits)</p>
+              <p className="font-mono-8bit text-xs text-blue-400 mb-4">John Aaron: Algorithms & AR (49 commits)</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
                   "Dijkstra shortest-path with dynamic hazard re-routing",
@@ -190,7 +190,7 @@ export default function FireSafetyProject() {
           <FramerReveal>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">DRILL SETUP — BLOCK & UNIT SELECTION</p>
+                <p className="font-pixel text-xs text-blue-400">DRILL SETUP: BLOCK + UNIT SELECTION</p>
                 <img src={drillSetupImg} alt="Drill setup" className="w-full border border-amber-500/20" />
               </div>
               <div className="space-y-3">
@@ -202,7 +202,7 @@ export default function FireSafetyProject() {
 
           <FramerReveal>
             <div className="space-y-3">
-              <p className="font-pixel text-xs text-blue-400">AR CORRIDOR NAVIGATION — LIVE BREADCRUMB ARROWS</p>
+              <p className="font-pixel text-xs text-blue-400">AR CORRIDOR NAVIGATION: LIVE BREADCRUMB ARROWS</p>
               <img src={arImg} alt="AR navigation" className="w-full border border-amber-500/20" />
             </div>
           </FramerReveal>
@@ -210,7 +210,7 @@ export default function FireSafetyProject() {
           <FramerReveal>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">EXTINGUISHER ID — ON-DEVICE TFLITE ML</p>
+                <p className="font-pixel text-xs text-blue-400">EXTINGUISHER ID: ON-DEVICE TFLITE ML</p>
                 <img src={extinguisherImg} alt="Extinguisher classification" className="w-full border border-amber-500/20" />
               </div>
               <div className="space-y-3">
@@ -222,7 +222,7 @@ export default function FireSafetyProject() {
 
           <FramerReveal>
             <div className="space-y-3">
-              <p className="font-pixel text-xs text-blue-400">ANALYTICS DASHBOARD — DRILL HISTORY + SUS SCORES</p>
+              <p className="font-pixel text-xs text-blue-400">ANALYTICS DASHBOARD: DRILL HISTORY + SUS SCORES</p>
               <img src={analyticsImg} alt="Analytics" className="w-full border border-amber-500/20" />
             </div>
           </FramerReveal>
@@ -246,7 +246,7 @@ export default function FireSafetyProject() {
                 },
                 {
                   label: "ON-DEVICE ML",
-                  desc: "TFLite + YOLO classifies fire extinguisher types (Powder/Water/CO₂) from CameraX frames. No network latency — continues to function offline during actual emergencies.",
+                  desc: "TFLite + YOLO classifies fire extinguisher types (Powder/Water/CO₂) from CameraX frames. No network latency. Continues to function offline during actual emergencies.",
                 },
                 {
                   label: "DIJKSTRA PATHFINDING",

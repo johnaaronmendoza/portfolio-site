@@ -15,7 +15,7 @@ export default function SilverLinkProject() {
   const [, setLocation] = useLocation();
   useEffect(() => {
     trackProjectVisit('silverlink');
-    document.title = 'SilverLink SG — John Aaron Branzuela';
+    document.title = 'SilverLink SG | John Aaron Branzuela';
     return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
   }, []);
 
@@ -45,7 +45,7 @@ export default function SilverLinkProject() {
                   [SILVERLINK_SG]<span className="blink-cursor">█</span>
                 </h1>
                 <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
-                  Cloud-native platform bridging seniors and youth through skill-sharing and live events — backed by 4 gRPC microservices, WebRTC livestreaming, and Kubernetes autoscaling that scales to demand without manual intervention.
+                  Cloud-native platform bridging seniors and youth through skill-sharing and live events, backed by 4 gRPC microservices, WebRTC livestreaming, and Kubernetes autoscaling that scales to demand without manual intervention.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-8">
                   {["React", "Next.js", "Node.js", "gRPC", "Docker", "Kubernetes", "PostgreSQL", "Neon", "Cloudflare", "Keycloak", "Prisma_ORM", "WebRTC"].map(t => (
@@ -59,7 +59,7 @@ export default function SilverLinkProject() {
                   </div>
                   <div className="bg-[#1b1b1b] p-4">
                     <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[TEAM]</p>
-                    <p className="font-mono-8bit text-xs leading-relaxed">Group 20 — Danish, John, Thomas, Hanaa, Habib, Joshua</p>
+                    <p className="font-mono-8bit text-xs leading-relaxed">Group 20: Danish, John, Thomas, Hanaa, Habib, Joshua</p>
                   </div>
                 </div>
               </div>
@@ -113,11 +113,11 @@ export default function SilverLinkProject() {
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 By 2030, 1 in 4 Singaporeans will be over 65. Many seniors face isolation, loss of purpose,
-                and exclusion from digital society — while youth miss out on cultural wisdom and mentorship
+                and exclusion from digital society, while youth miss out on cultural wisdom and mentorship
                 from experienced generations.
               </p>
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed text-amber-400 font-bold">
-                "How might we leverage technology in ways that are intuitive, culturally sensitive, and engaging to build community within seniors?" — PB-2
+                "How might we leverage technology in ways that are intuitive, culturally sensitive, and engaging to build community within seniors?" (PB-2)
               </p>
             </div>
           </FramerReveal>
@@ -241,7 +241,7 @@ export default function SilverLinkProject() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {[
                   { name: "Optimistic Concurrency Control", desc: "Version-checked atomic updates prevent double-booking under concurrent traffic (409 on conflict)." },
-                  { name: "Idempotency Keys", desc: "Guarantees exactly-once execution — repeated requests with the same key return the same result." },
+                  { name: "Idempotency Keys", desc: "Guarantees exactly-once execution: repeated requests with the same key return the same result." },
                   { name: "EMA Autoscaling", desc: "Exponential Moving Average forecasts future load and recommends proactive microservice scaling." },
                 ].map(a => (
                   <div key={a.name}>

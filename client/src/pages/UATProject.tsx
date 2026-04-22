@@ -10,7 +10,7 @@ export default function UATProject() {
   const [, setLocation] = useLocation();
   useEffect(() => {
     trackProjectVisit('uat');
-    document.title = 'UAT Testing Dashboard — John Aaron Branzuela';
+    document.title = 'UAT Testing Dashboard | John Aaron Branzuela';
     return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
   }, []);
 
@@ -41,7 +41,7 @@ export default function UATProject() {
                 </h1>
                 <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
                   Full-stack web application for managing User Acceptance Testing for a Hospital
-                  Appointment System — with real-time defect tracking, test case management,
+                  Appointment System, with real-time defect tracking, test case management,
                   defect-to-test linking, and analytics dashboards.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-8">
@@ -117,8 +117,8 @@ export default function UATProject() {
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
-                UAT for complex healthcare systems involves multiple teams — project managers, QA leads,
-                testers, and developers — all needing a shared view of what is broken, what has been
+                UAT for complex healthcare systems involves multiple teams: project managers, QA leads,
+                testers, and developers, all needing a shared view of what is broken, what has been
                 tested, and what is blocking go-live. Spreadsheets break down fast.
               </p>
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">

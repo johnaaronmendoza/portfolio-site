@@ -15,7 +15,7 @@ export default function UWBProject() {
   const [, setLocation] = useLocation();
   useEffect(() => {
     trackProjectVisit('uwb');
-    document.title = 'UWB Indoor Localization — John Aaron Branzuela';
+    document.title = 'UWB Indoor Localization | John Aaron Branzuela';
     return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
   }, []);
 
@@ -46,7 +46,7 @@ export default function UWBProject() {
                 </h1>
                 <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
                   Full ML pipeline classifying LOS/NLOS Ultra-Wideband signal paths and estimating
-                  indoor range — using SVM-RBF, logistic regression, and linear regression across
+                  indoor range, using SVM-RBF, logistic regression, and linear regression across
                   41,996 samples from 7 randomised indoor environments.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-8">
@@ -125,12 +125,12 @@ export default function UWBProject() {
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 Ultra-Wideband (UWB) supports sub-nanosecond time resolution and centimetre-level accuracy
-                under ideal conditions — but accuracy degrades significantly under Non-Line-of-Sight (NLOS)
+                under ideal conditions, but accuracy degrades significantly under Non-Line-of-Sight (NLOS)
                 conditions where the direct path is blocked by walls, furniture, or human bodies.
               </p>
               <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
                 This project classifies whether two shortest dominant signal paths form a (LOS, NLOS) or (NLOS, NLOS) pair,
-                and estimates the measured range for both paths — enabling more reliable indoor positioning for
+                and estimates the measured range for both paths, enabling more reliable indoor positioning for
                 autonomous robots, drones, smart warehouses, and asset tracking.
               </p>
             </div>
@@ -139,7 +139,7 @@ export default function UWBProject() {
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[MY_CONTRIBUTIONS]</h2>
             <div className="bg-[#1b1b1b] border-l-4 border-blue-500 p-6 sm:p-8">
-              <p className="font-mono-8bit text-xs text-blue-400 mb-4">John Aaron — Data Mining Methodology</p>
+              <p className="font-mono-8bit text-xs text-blue-400 mb-4">John Aaron: Data Mining Methodology</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
                   "Model selection and justification (SVM vs LR vs DT)",
@@ -171,21 +171,21 @@ export default function UWBProject() {
 
           <FramerReveal>
             <div className="space-y-3">
-              <p className="font-pixel text-xs text-blue-400">CLASS DISTRIBUTION — PERFECTLY BALANCED (50/50 LOS/NLOS)</p>
+              <p className="font-pixel text-xs text-blue-400">CLASS DISTRIBUTION: PERFECTLY BALANCED (50/50 LOS/NLOS)</p>
               <img src={classDistImg} alt="Class distribution" className="w-full border border-amber-500/20" />
             </div>
           </FramerReveal>
 
           <FramerReveal>
             <div className="space-y-3">
-              <p className="font-pixel text-xs text-blue-400">CONFUSION MATRICES — LOGISTIC REGRESSION vs SVM-RBF</p>
+              <p className="font-pixel text-xs text-blue-400">CONFUSION MATRICES: LOGISTIC REGRESSION vs SVM-RBF</p>
               <img src={confusionImg} alt="Confusion matrices" className="w-full border border-amber-500/20" />
             </div>
           </FramerReveal>
 
           <FramerReveal>
             <div className="space-y-3">
-              <p className="font-pixel text-xs text-blue-400">MODEL COMPARISON — CLASSIFICATION METRICS + RANGE RMSE</p>
+              <p className="font-pixel text-xs text-blue-400">MODEL COMPARISON: CLASSIFICATION METRICS + RANGE RMSE</p>
               <img src={rocImg} alt="Model comparison metrics" className="w-full border border-amber-500/20" />
             </div>
           </FramerReveal>
@@ -193,11 +193,11 @@ export default function UWBProject() {
           <FramerReveal>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">DECISION TREE — OPTIMAL DEPTH SELECTION</p>
+                <p className="font-pixel text-xs text-blue-400">DECISION TREE: OPTIMAL DEPTH SELECTION</p>
                 <img src={dtAccuracyImg} alt="Decision tree accuracy vs depth" className="w-full border border-amber-500/20" />
               </div>
               <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">DECISION BOUNDARIES — 7 CLASSIFIERS (RANGE vs FP_IDX)</p>
+                <p className="font-pixel text-xs text-blue-400">DECISION BOUNDARIES: 7 CLASSIFIERS (RANGE vs FP_IDX)</p>
                 <img src={decisionBoundaryImg} alt="Decision boundaries" className="w-full border border-amber-500/20" />
               </div>
             </div>

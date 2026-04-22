@@ -10,7 +10,7 @@ export default function AIFinanceProject() {
   const [, setLocation] = useLocation();
   useEffect(() => {
     trackProjectVisit('ai-finance');
-    document.title = 'AI Finance Insights Engine — John Aaron Branzuela';
+    document.title = 'AI Finance Insights Engine | John Aaron Branzuela';
     return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
   }, []);
 
@@ -42,7 +42,7 @@ export default function AIFinanceProject() {
                 </h1>
                 <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
                   Enterprise-grade ETL data pipeline that ingests global logistics, commodity, and
-                  financial market data — enriched with an AI NLP summarisation engine — producing
+                  financial market data, enriched with an AI NLP summarisation engine, producing
                   a unified data warehouse ready for Power BI dashboards.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-8">
@@ -126,7 +126,7 @@ export default function AIFinanceProject() {
                 This pipeline solves that by automatically ingesting and transforming these data
                 sources, computing financial metrics like rolling volatility and cross-asset
                 correlations, and enriching news data with AI-generated sentiment scores and
-                supply chain risk flags — producing a clean, normalised data warehouse ready
+                supply chain risk flags, producing a clean, normalised data warehouse ready
                 for high-fidelity Power BI analytics.
               </p>
             </div>

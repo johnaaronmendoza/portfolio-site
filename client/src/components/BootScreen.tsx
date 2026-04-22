@@ -11,7 +11,7 @@ const SEQUENCE = [
   { text: 'Mounting filesystem ...... /home    [ OK ]',       type: 'ok',     delay: 1300 },
   { text: 'Starting portfolio ........ 7 items [ OK ]',       type: 'ok',     delay: 1520 },
   { text: '',                                                  type: 'blank',  delay: 1720 },
-  { text: '> SYSTEM READY — loading portfolio...',            type: 'ready',  delay: 1900 },
+  { text: '> SYSTEM READY: loading portfolio...',            type: 'ready',  delay: 1900 },
 ];
 
 const FADE_START = 2600;

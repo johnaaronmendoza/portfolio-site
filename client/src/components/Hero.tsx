@@ -9,7 +9,7 @@ import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 
-const ROLE_LINE = 'FULL-STACK · DATA · ANDROID · UAT';
+const ROLE_LINE = 'UAT · BUSINESS ANALYST · FULL-STACK · DATA';
 
 // Each line of the name animates in separately
 const NAME_LINES = ['JOHN AARON', 'BRANZUELA'];
@@ -173,11 +173,11 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1.0, ease: EASE_OUT }}
         >
-          Final-year CS at SIT × Glasgow. I ship{' '}
-          <span className="text-white">cloud-native microservices</span>,{' '}
-          <span className="text-white">ARCore/TFLite</span> Android apps, and{' '}
-          <span className="text-white">UAT</span> on 50 MWp solar rollouts.
-          Looking for new-grad SWE roles, May 2026.
+          My path into tech started on-site, not behind a desk. At Sembcorp I led{' '}
+          <span className="text-white">UAT across a 50MWp solar deployment</span>,
+          translating requirements between engineers and stakeholders. Now finishing{' '}
+          <span className="text-white">BSc Computing Science</span> at SIT × Glasgow.
+          Available <span className="text-white">May 2026</span> for BA and analyst roles.
         </motion.p>
 
         {/* CTAs — Resume primary (M01 magnetic), GitHub + LinkedIn ghost */}

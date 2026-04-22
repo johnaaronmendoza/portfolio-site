@@ -39,10 +39,10 @@ export default function About() {
               {/* Bio Text */}
               <div className="space-y-5 prose-8bit flex-1">
                 <p className="font-mono-8bit text-sm sm:text-base text-white leading-relaxed">
-                  My path into tech started on-site, not behind a desk. At Sembcorp I coordinated UAT across a 50MWp solar deployment — translating requirements between engineers and stakeholders before handoff. That gap between what a business needs and what gets built is where things go wrong, and it's what I focus on.
+                  My path into tech started on-site, not behind a desk. At Sembcorp I coordinated UAT across a 50MWp solar deployment, translating requirements between engineers and stakeholders before handoff. That gap between what a business needs and what gets built is where things go wrong, and it's what I focus on.
                 </p>
                 <p className="font-mono-8bit text-sm sm:text-base text-white leading-relaxed">
-                  Since then I've shipped cloud-native microservices with gRPC and Kubernetes, built an AR fire evacuation app for Android with on-device ML, designed an AI-powered ETL pipeline for financial market data, and led UAT for a hospital appointment system — all while completing my Computing Science degree at SIT × University of Glasgow.
+                  Since then I've shipped cloud-native microservices with gRPC and Kubernetes, built an AR fire evacuation app for Android with on-device ML, designed an AI-powered ETL pipeline for financial market data, and led UAT for a hospital appointment system, all while completing my Computing Science degree at SIT × University of Glasgow.
                 </p>
                 <p className="font-mono-8bit text-sm sm:text-base text-gray-400 leading-relaxed">
                   I'm comfortable speaking to both engineers and stakeholders, and I do my best work at the boundary between the two.
@@ -52,7 +52,7 @@ export default function About() {
                 <div className="grid grid-cols-3 gap-4 pt-4 border-t border-zinc-800">
                   {[
                     { value: 89.6, suffix: '%', label: 'UWB accuracy' },
-                    { value: 10984, suffix: '', label: 'LOC Kotlin' },
+                    { value: 79, suffix: '/100', label: 'SUS score' },
                     { value: 50, suffix: ' MWp', label: 'commissioned' },
                   ].map(({ value, suffix, label }) => (
                     <div key={label} className="text-center">

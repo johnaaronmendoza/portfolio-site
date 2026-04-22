@@ -17,9 +17,9 @@ const ENTRIES: Entry[] = [
     period: "2023 – Present",
     tag: "EDUCATION",
     highlights: [
-      "Specialising in software engineering, data analytics, and cloud systems",
-      "Relevant modules: Cloud Computing, Mobile Development, Data Analytics, Software Engineering",
-      "Built SilverLink SG (gRPC microservices, Kubernetes) and Fire Safety AR App as coursework projects",
+      "Final-year project: SilverLink SG, 8-node Kubernetes cluster, 4 gRPC microservices, WebRTC livestreaming, delivered across 7 Agile sprints",
+      "Core modules: Cloud Computing, Software Engineering, Mobile Development, Data Analytics, Requirements Engineering",
+      "Grounding in UAT methodology, requirements analysis, and end-to-end SDLC reinforced across coursework and industry placement",
     ],
   },
   {
@@ -29,20 +29,10 @@ const ENTRIES: Entry[] = [
     tag: "INTERNSHIP",
     highlights: [
       "Led rollout of Momens CRM across Projects, C&I, and SolarNova divisions for a 240MWp+ portfolio",
-      "Conducted UAT on new CRM features before deployment — verified against originator requirements and rejected non-compliant builds",
+      "Conducted UAT on new CRM features before deployment, verifying against originator requirements and rejecting non-compliant builds",
       "Hosted training sessions for 10+ stakeholders per session; gathered UX feedback and liaised with vendors to ship improvements",
       "Supported SolarNova 3 (50MWp, 20 MOE schools): milestone tracking, site visits, and documentation",
       "Translated operational data from 240MWp+ solar assets into executive dashboards for leadership review",
-    ],
-  },
-  {
-    org: "GreenLoopFarms",
-    role: "Co-Ideator",
-    period: "2022",
-    tag: "VENTURE",
-    highlights: [
-      "Contributed to the founding idea for a Singapore hydroponic urban farm growing pesticide-free microgreens",
-      "The venture won an SGD $10,000 NYP JumpStart Grant and secured partnerships with FURA (World's 50 Best), NIE, and NUS",
     ],
   },
 ];
@@ -73,11 +63,11 @@ export default function Experience() {
                 {/* Tag + Index */}
                 <div className="flex items-center gap-3 mb-4">
                   {entry.tag && (
-                    <span className={`font-pixel text-[9px] border px-2 py-0.5 ${TAG_COLORS[entry.tag] ?? 'text-zinc-400 border-zinc-400'}`}>
+                    <span className={`font-pixel text-[10px] border px-2 py-0.5 ${TAG_COLORS[entry.tag] ?? 'text-zinc-400 border-zinc-400'}`}>
                       {entry.tag}
                     </span>
                   )}
-                  <span className="font-pixel text-[9px] text-zinc-600">
+                  <span className="font-pixel text-[10px] text-zinc-600">
                     {String(idx + 1).padStart(2, '0')}
                   </span>
                 </div>

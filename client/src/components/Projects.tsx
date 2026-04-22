@@ -27,7 +27,7 @@ import uwb2             from '@assets/da_p39_img2.png';
 import uwb3             from '@assets/da_p35_img1.png';
 import greenloop2       from '@assets/greenloop_tour.jpg';
 
-const FILTER_TAGS = ['React', 'Python', 'Kotlin', 'Docker', 'TypeScript', 'gRPC', 'ML/AI'];
+const FILTER_TAGS = ['React', 'Python', 'Kotlin', 'K8s', 'TypeScript', 'gRPC', 'ML/AI'];
 
 // ── Project data ──────────────────────────────────────────────────────────
 type Project = {
@@ -48,7 +48,7 @@ const PROJECTS: Project[] = [
     num: 1,
     name: "SilverLink SG",
     description:
-      "4 gRPC microservices behind a React 19 shell. WebRTC livestreams for live events; Kubernetes HPA scales on predicted event load, not reactive CPU.",
+      "Cloud-native platform bridging seniors and youth through skill-sharing and live events. 4 gRPC microservices, WebRTC livestreaming, and Kubernetes autoscaling, delivered across 7 Agile sprints with a 6-person team.",
     metric: "8-NODE CLUSTER · 4 SERVICES · WEBRTC",
     year: "2025",
     image: silverLinkImg,
@@ -58,45 +58,9 @@ const PROJECTS: Project[] = [
   },
   {
     num: 2,
-    name: "SCS Awareness Platform",
-    description:
-      "Branching visual-novel engine built for tablet outreach booths. Multilingual (EN/CN/Malay/Tamil), gamified leaderboard, and a no-code admin panel for SCS staff.",
-    metric: "4 LANGUAGES · 4 QUESTION TYPES · SUPABASE RLS",
-    year: "2025",
-    image: scsImg,
-    tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
-    link: "/projects/scs",
-    preloadImages: [scs2, scs3],
-  },
-  {
-    num: 3,
-    name: "Fire Safety Drill Companion",
-    description:
-      "ARCore nav + TFLite ML + sensor-fusion PDR — fully offline. Dijkstra pathfinding with dynamic hazard re-routing across a weighted floor-plan graph.",
-    metric: "10,984 LOC KOTLIN · ~80% TEST COVERAGE · SUS 79/100",
-    year: "2024",
-    image: fireSafetyImg,
-    tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
-    link: "/projects/firesafety",
-    preloadImages: [fireSafety2, fireSafety3],
-  },
-  {
-    num: 4,
-    name: "UWB Indoor Localization",
-    description:
-      "SVM-RBF classifier on 42k UWB samples across 7 indoor environments. PCA on 1,016 CIR dimensions; dual-path range regression for NLOS compensation.",
-    metric: "89.61% ACCURACY · 0.9612 AUC · 41,996 SAMPLES",
-    year: "2024",
-    image: uwbImg,
-    tags: ["Python", "SVM", "PCA", "scikit-learn"],
-    link: "/projects/uwb",
-    preloadImages: [uwb2, uwb3],
-  },
-  {
-    num: 5,
     name: "UAT Testing Dashboard",
     description:
-      "Full-stack defect tracker for a Hospital Appointment System. Test cases link directly to open defects; severity breakdown charts update in real time.",
+      "Full-stack defect tracker built for a real hospital appointment system UAT cycle. Test cases link directly to open defects; severity triage charts helped manage 30+ issues across 4 user roles, from tester to project lead.",
     metric: "4 ROLES · CSV EXPORT · RECHARTS ANALYTICS",
     year: "2024",
     image: uatImg,
@@ -105,16 +69,52 @@ const PROJECTS: Project[] = [
     preloadImages: [],
   },
   {
-    num: 6,
+    num: 3,
     name: "AI Finance Insights Engine",
     description:
-      "Automated ETL ingesting Brent crude, FX, S&P 500, and geopolitical news. NLP engine classifies 9 sectors, scores sentiment, flags supply chain risks.",
+      "Automated ETL ingesting Brent crude, FX, S&P 500, and geopolitical news into a star schema. NLP classifies 9 sectors, scores sentiment, and flags supply chain risks. Output: a Power BI executive dashboard.",
     metric: "5 DATA SOURCES · STAR SCHEMA · 100% PYTEST COVERAGE",
     year: "2024",
     image: aiFinanceImg,
     tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
     link: "/projects/ai-finance",
     preloadImages: [],
+  },
+  {
+    num: 4,
+    name: "SCS Awareness Platform",
+    description:
+      "Branching visual-novel engine deployed at real Singapore Cancer Society outreach booths. Multilingual (EN/CN/Malay/Tamil), gamified leaderboard, and a no-code admin panel built for non-technical SCS staff.",
+    metric: "4 LANGUAGES · 4 QUESTION TYPES · SUPABASE RLS",
+    year: "2025",
+    image: scsImg,
+    tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
+    link: "/projects/scs",
+    preloadImages: [scs2, scs3],
+  },
+  {
+    num: 5,
+    name: "Fire Safety Drill Companion",
+    description:
+      "Offline-first Android AR evacuation guide. ARCore navigation, TFLite on-device ML, and Dijkstra pathfinding with live hazard re-routing, independently usable with no network connection.",
+    metric: "SUS 79/100 · ~80% TEST COVERAGE · FULLY OFFLINE",
+    year: "2024",
+    image: fireSafetyImg,
+    tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
+    link: "/projects/firesafety",
+    preloadImages: [fireSafety2, fireSafety3],
+  },
+  {
+    num: 6,
+    name: "UWB Indoor Localization",
+    description:
+      "SVM-RBF classifier on 42k UWB samples across 7 indoor environments. PCA on 1,016 CIR dimensions; dual-path range regression compensates for NLOS signal loss.",
+    metric: "89.61% ACCURACY · 0.9612 AUC · 41,996 SAMPLES",
+    year: "2024",
+    image: uwbImg,
+    tags: ["Python", "SVM", "PCA", "scikit-learn"],
+    link: "/projects/uwb",
+    preloadImages: [uwb2, uwb3],
   },
   {
     num: 7,

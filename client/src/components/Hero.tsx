@@ -176,10 +176,10 @@ export default function Hero() {
           I think in systems but lead with people. I'm a quick learner who communicates across teams,
           stays composed when priorities shift, and cares about the details that matter. At Sembcorp,
           that meant leading{' '}
-          <span className="text-white">UAT for a 50MWp solar deployment</span>{' '}
+          <span className="text-amber-400">UAT for a 50MWp solar deployment</span>{' '}
           and making sure both engineers and stakeholders felt heard. Finishing{' '}
-          <span className="text-white">BSc Computing Science</span> at SIT × Glasgow.
-          Available <span className="text-white">August 2026</span>.
+          <span className="text-amber-400">BSc Computing Science</span> at SIT × Glasgow.
+          Available <span className="text-amber-400">August 2026</span>.
         </motion.p>
 
         {/* CTAs — Resume primary (M01 magnetic), GitHub + LinkedIn ghost */}

@@ -173,11 +173,13 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1.0, ease: EASE_OUT }}
         >
-          My path into tech started on-site, not behind a desk. At Sembcorp I led{' '}
-          <span className="text-white">UAT across a 50MWp solar deployment</span>,
-          translating requirements between engineers and stakeholders. Now finishing{' '}
+          I think in systems but lead with people. I'm a quick learner who communicates across teams,
+          stays composed when priorities shift, and cares about the details that matter. At Sembcorp,
+          that meant leading{' '}
+          <span className="text-white">UAT for a 50MWp solar deployment</span>{' '}
+          and making sure both engineers and stakeholders felt heard. Finishing{' '}
           <span className="text-white">BSc Computing Science</span> at SIT × Glasgow.
-          Available <span className="text-white">May 2026</span> for BA and analyst roles.
+          Available <span className="text-white">August 2026</span>.
         </motion.p>
 
         {/* CTAs — Resume primary (M01 magnetic), GitHub + LinkedIn ghost */}

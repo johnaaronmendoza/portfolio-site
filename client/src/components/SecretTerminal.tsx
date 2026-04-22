@@ -22,12 +22,11 @@ DEGREE   : BSc Computing Science (Hons) | SIT x University of Glasgow
 ROLE     : Computing Science Student | Aspiring Business Analyst
 LOCATION : Singapore
 
-My path into tech started on-site, not behind a desk.
-At Sembcorp I coordinated UAT for a 50MWp solar deployment,
-translating requirements between teams before handoff.
-
-That gap between what a business needs and what gets built,
-that's where I focus.`,
+I think in systems but lead with people. Quick learner,
+clear communicator, calm when priorities shift.
+At Sembcorp, that meant leading UAT for a 50MWp solar
+deployment and making sure engineers and stakeholders
+felt heard.`,
 
   'skills.txt': `LANGUAGES  : Java · Python · TypeScript · JavaScript · SQL · Kotlin · C++
 FRONTEND   : React 19 · Next.js · Tailwind CSS · Framer Motion

@@ -120,7 +120,7 @@ const PROJECTS: Project[] = [
     num: 7,
     name: "GreenLoopFarms",
     description:
-      "Contributed to the founding idea for a Singapore hydroponic urban farm. Helped prepare the pitch deck that secured a competitive NYP grant.",
+      "Contributed to the founding idea and digital presence of a Singapore hydroponic urban farm. Helped prepare the pitch deck that secured a competitive NYP grant.",
     metric: "SGD $10K JUMPSTART GRANT · FURA · NIE · NUS",
     year: "2022",
     image: greenloopImg,

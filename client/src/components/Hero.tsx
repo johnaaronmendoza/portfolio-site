@@ -168,18 +168,15 @@ export default function Hero() {
 
         {/* Positioning sentence */}
         <motion.p
-          className="mb-12 ml-2 font-mono text-sm text-zinc-400 leading-relaxed max-w-xl"
+          className="mb-12 ml-2 font-mono text-sm text-white leading-relaxed max-w-xl"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1.0, ease: EASE_OUT }}
         >
           I think in systems but lead with people. I'm a quick learner who communicates across teams,
-          stays composed when priorities shift, and cares about the details that matter. At Sembcorp,
-          that meant leading{' '}
-          <span className="text-amber-400">UAT for a 50MWp solar deployment</span>{' '}
-          and making sure both engineers and stakeholders felt heard. Finishing{' '}
-          <span className="text-amber-400">BSc Computing Science</span> at SIT × Glasgow.
-          Available <span className="text-amber-400">August 2026</span>.
+          stays composed when priorities shift, and cares about the details that matter.Finishing{' '}
+          <span className="text-white">BSc Computing Science</span> at SIT × Glasgow.
+          Available <span className="text-white">August 2026</span>.
         </motion.p>
 
         {/* CTAs — Resume primary (M01 magnetic), GitHub + LinkedIn ghost */}

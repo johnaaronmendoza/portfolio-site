@@ -261,8 +261,23 @@ export default function SkillKeyboard() {
               />
             ))}
           </div>
-
         </div>
+
+        {/* Mascot perches on the board's top-right key and hops when a key is pressed */}
+        {perch && (
+          <motion.img
+            key={taps}
+            src={MASCOT}
+            alt=""
+            aria-hidden="true"
+            draggable={false}
+            className="absolute w-14 sm:w-16 lg:w-20 pointer-events-none"
+            style={{ left: perch.x, top: perch.y, imageRendering: 'pixelated' }}
+            initial={false}
+            animate={reduced || taps === 0 ? undefined : { y: [0, -14, 0] }}
+            transition={{ duration: motionTokens.duration.normal, ease: motionTokens.easing.smooth }}
+          />
+        )}
       </div>
     </div>
   );

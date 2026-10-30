@@ -23,6 +23,19 @@ const ENTRIES: Entry[] = [
     ],
   },
   {
+    org: "LGA Telecom",
+    role: "Service Desk Operations & AI Integration Intern",
+    period: "Aug 2026 – Present",
+    tag: "INTERNSHIP",
+    highlights: [
+      "Handle Level 1 customer tickets in Freshservice end to end (triage, troubleshooting, escalation and closure) and support customers with Microsoft 365 administration in the admin centre and Microsoft Entra ID",
+      "Designing and building Desk Assist, a Manifest V3 Chrome extension that reads the ticket thread, retrieves relevant Knowledge Base guidance and drafts a reply for the agent to review, keeping a human in control of every customer response",
+      "Defined enterprise security requirements for the extension: least-privilege permissions, no remote code or unsafe-eval, no broad host access, and data leakage prevention, with AI calls routed through a company-controlled backend aligned with LGA's local AI rollout",
+      "Configured Freshservice business rules and workflow automations for ticket closure and escalation, scoped to the Service Desk so other teams' live tickets stay unaffected",
+      "Building an automated weekly PagerDuty incident report with the PagerDuty API and Google Apps Script, delivered as CSV by email",
+    ],
+  },
+  {
     org: "Sembcorp Solar Singapore",
     role: "Digitization Analyst Intern",
     period: "Oct 2020 – Jun 2021",

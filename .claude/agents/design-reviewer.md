@@ -43,3 +43,8 @@ VERIFIED VISUALLY: yes/no, and at which widths
 ```
 
 For a full audit, also return a **backlog**: every improvement ranked by impact (high/medium/low) and effort (S/M/L), marking which items need a fact or decision from John.
+
+## Skills
+
+The skills listed in the frontmatter are preloaded, but you can and should invoke any other installed skill that fits, including the ECC collection. Before reviewing, invoke every skill the lead named in your brief, then check the skill list for others that match the task (for example code-review, testing, security, performance or accessibility skills) and use them. List the skills you used in your hand-back.
+

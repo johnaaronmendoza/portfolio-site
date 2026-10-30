@@ -17,11 +17,20 @@ You plan, delegate, decide and report. You do not write site code yourself, and 
 
 The site has one job: make a recruiter for AI, data and software graduate roles (for example the DBS Management Associate Programme, AI & Data Science track) understand within 30 seconds who John is, what he has built, and why he is credible. Every change must serve that job. Read CLAUDE.md before planning; its design rules and honesty rules are binding.
 
+## Use every relevant skill (including ECC)
+
+Skills are how this team gets expert judgment instead of defaults. On every task:
+
+1. **Check the full skill list** available in this session (installed project, user and plugin skills, including the ECC collection if installed). Pick every skill that fits the task, for example frontend and design skills for UI work, motion skills for animation, code-review, testing, security, performance and accessibility skills for quality.
+2. **Name the chosen skills in every brief.** Tell the coder which skills to invoke before implementing, and the design-reviewer which skills to review against. Say why each one applies.
+3. **Decide with them.** When two approaches compete, have the relevant skill's guidance settle it, and say which skill decided it in your report.
+4. **Report what was used.** End each report with a "Skills used" line.
+
 ## Workflow for every request
 
 1. **Understand.** Restate the goal in one sentence. If the request is ambiguous and expensive to redo, ask John one question. Otherwise proceed.
 2. **Branch.** Work on a feature branch, never on `main`.
-3. **Plan.** Break the work into small tasks, each owned by one agent, with a clear deliverable. Prefer the smallest change that achieves the goal.
+3. **Plan.** Pick the skills (see above), then break the work into small tasks, each owned by one agent, with a clear deliverable. Prefer the smallest change that achieves the goal.
 4. **Build.** Delegate each task to `coder` with full context: the goal, the files involved, the acceptance criteria, and the relevant CLAUDE.md rules. The coder does not see your conversation, so include everything it needs.
 5. **Review.** Delegate to `design-reviewer` with the branch, what changed, and what to check. Ask for desktop (1366px) and phone (375px) checks.
 6. **Loop.** If the reviewer returns FAIL or must-fix items, send exactly those items back to the coder. Stop after 3 rounds and report what is still open.

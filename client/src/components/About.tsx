@@ -38,22 +38,25 @@ export default function About() {
 
               {/* Bio Text */}
               <div className="space-y-5 prose-8bit flex-1">
-                <p className="font-mono-8bit text-sm sm:text-base text-zinc-100 leading-relaxed max-w-[65ch]">
-                  My path into tech started on-site, not behind a desk. At Sembcorp I coordinated UAT across a 50MWp solar deployment, translating requirements between engineers and stakeholders before handoff. That gap between what a business needs and what gets built is where things go wrong, and it's what I focus on.
+                <p className="font-mono-8bit text-base sm:text-lg text-white leading-relaxed max-w-[60ch]">
+                  I build technology for the people who have to use it.
                 </p>
                 <p className="font-mono-8bit text-sm sm:text-base text-zinc-100 leading-relaxed max-w-[65ch]">
-                  Today I'm at LGA Telecom building Desk Assist, an AI assistant that helps service desk agents draft replies from the company knowledge base, with a person reviewing every response. Along the way I've shipped cloud-native microservices with gRPC and Kubernetes, a cancer-awareness platform used at Singapore Cancer Society outreach booths, and machine learning models for indoor localization, all while completing my Computing Science degree at SIT × University of Glasgow.
+                  Most projects don't fail on the code. They fail in the gap between what a business needs and what gets built. That gap is where I like to work: listening to users, turning their problems into clear requirements, then building and testing until the thing actually helps.
                 </p>
-                <p className="font-mono-8bit text-sm sm:text-base text-gray-400 leading-relaxed">
-                  I'm comfortable speaking to both engineers and stakeholders, and I do my best work at the boundary between the two.
+                <p className="font-mono-8bit text-sm sm:text-base text-zinc-100 leading-relaxed max-w-[65ch]">
+                  My path started on-site at Sembcorp Solar, testing a CRM before it rolled out across the company. Since then I've built cloud-native microservices, machine learning models and a cancer-awareness platform used at Singapore Cancer Society outreach events. Now I'm building an AI assistant that helps service desk agents at LGA Telecom answer customers.
+                </p>
+                <p className="font-mono-8bit text-sm sm:text-base text-zinc-400 leading-relaxed max-w-[65ch]">
+                  I learn fast, speak both engineer and stakeholder, and care about shipping things people actually use.
                 </p>
 
                 {/* M04 — count-up KPIs */}
                 <div className="grid grid-cols-3 gap-4 pt-4 border-t border-zinc-800">
                   {[
-                    { value: 89.6, suffix: '%', label: 'UWB accuracy' },
-                    { value: 79, suffix: '/100', label: 'SUS score' },
-                    { value: 50, suffix: ' MWp', label: 'commissioned' },
+                    { value: 2, suffix: '', label: 'industry internships' },
+                    { value: 7, suffix: '', label: 'projects built' },
+                    { value: 89.6, suffix: '%', label: 'ML model accuracy' },
                   ].map(({ value, suffix, label }) => (
                     <div key={label} className="text-center">
                       <div className="font-mono font-bold text-xl text-amber-400 tabular-nums">

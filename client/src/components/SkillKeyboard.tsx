@@ -188,7 +188,7 @@ export default function SkillKeyboard() {
       const w = wrap.getBoundingClientRect();
       const k = corner.getBoundingClientRect();
       const size = window.matchMedia('(min-width: 1024px)').matches ? 80 : window.matchMedia('(min-width: 640px)').matches ? 64 : 56;
-      setPerch({ x: k.left - w.left + k.width / 2 - size / 2, y: k.top - w.top - size * 0.85 });
+      setPerch({ x: k.left - w.left + k.width / 2 - size / 2, y: k.top - w.top - size * 0.72 });
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -215,7 +215,7 @@ export default function SkillKeyboard() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,22rem)_1fr] gap-10 lg:gap-6 items-center">
       {/* Description: what the pressed key means */}
-      <div className="min-h-[200px] lg:min-h-[260px] border-l-4 border-amber-400 pl-5" aria-live="polite">
+      <div className="sticky top-0 z-20 bg-black py-4 lg:static lg:py-0 min-h-[200px] lg:min-h-[260px] border-l-4 border-amber-400 pl-5" aria-live="polite">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={active}

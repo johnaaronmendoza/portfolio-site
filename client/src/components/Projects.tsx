@@ -58,15 +58,15 @@ const PROJECTS: Project[] = [
   },
   {
     num: 2,
-    name: "UAT Testing Dashboard",
+    name: "SCS Awareness Platform",
     description:
-      "Full-stack defect tracker built for a real hospital appointment system UAT cycle. Test cases link directly to open defects; severity triage charts helped manage 30+ issues across 4 user roles, from tester to project lead.",
-    metric: "4 ROLES · CSV EXPORT · RECHARTS ANALYTICS",
-    year: "2024",
-    image: uatImg,
-    tags: ["React 18", "Node.js", "Express", "SQLite"],
-    link: "/projects/uat",
-    preloadImages: [],
+      "Branching visual-novel engine deployed at real Singapore Cancer Society outreach booths. Multilingual (EN/CN/Malay/Tamil), gamified leaderboard, and a no-code admin panel built for non-technical SCS staff.",
+    metric: "4 LANGUAGES · 4 QUESTION TYPES · SUPABASE RLS",
+    year: "2025",
+    image: scsImg,
+    tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
+    link: "/projects/scs",
+    preloadImages: [scs2, scs3],
   },
   {
     num: 3,
@@ -82,30 +82,6 @@ const PROJECTS: Project[] = [
   },
   {
     num: 4,
-    name: "SCS Awareness Platform",
-    description:
-      "Branching visual-novel engine deployed at real Singapore Cancer Society outreach booths. Multilingual (EN/CN/Malay/Tamil), gamified leaderboard, and a no-code admin panel built for non-technical SCS staff.",
-    metric: "4 LANGUAGES · 4 QUESTION TYPES · SUPABASE RLS",
-    year: "2025",
-    image: scsImg,
-    tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
-    link: "/projects/scs",
-    preloadImages: [scs2, scs3],
-  },
-  {
-    num: 5,
-    name: "Fire Safety Drill Companion",
-    description:
-      "Offline-first Android AR evacuation guide. ARCore navigation, TFLite on-device ML, and Dijkstra pathfinding with live hazard re-routing, independently usable with no network connection.",
-    metric: "SUS 79/100 · ~80% TEST COVERAGE · FULLY OFFLINE",
-    year: "2024",
-    image: fireSafetyImg,
-    tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
-    link: "/projects/firesafety",
-    preloadImages: [fireSafety2, fireSafety3],
-  },
-  {
-    num: 6,
     name: "UWB Indoor Localization",
     description:
       "SVM-RBF classifier on 42k UWB samples across 7 indoor environments. PCA on 1,016 CIR dimensions; dual-path range regression compensates for NLOS signal loss.",
@@ -115,6 +91,30 @@ const PROJECTS: Project[] = [
     tags: ["Python", "SVM", "PCA", "scikit-learn"],
     link: "/projects/uwb",
     preloadImages: [uwb2, uwb3],
+  },
+  {
+    num: 5,
+    name: "UAT Testing Dashboard",
+    description:
+      "Full-stack defect tracker built for a real hospital appointment system UAT cycle. Test cases link directly to open defects; severity triage charts helped manage 30+ issues across 4 user roles, from tester to project lead.",
+    metric: "4 ROLES · CSV EXPORT · RECHARTS ANALYTICS",
+    year: "2024",
+    image: uatImg,
+    tags: ["React 18", "Node.js", "Express", "SQLite"],
+    link: "/projects/uat",
+    preloadImages: [],
+  },
+  {
+    num: 6,
+    name: "Fire Safety Drill Companion",
+    description:
+      "Offline-first Android AR evacuation guide. ARCore navigation, TFLite on-device ML, and Dijkstra pathfinding with live hazard re-routing, independently usable with no network connection.",
+    metric: "SUS 79/100 · ~80% TEST COVERAGE · FULLY OFFLINE",
+    year: "2024",
+    image: fireSafetyImg,
+    tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
+    link: "/projects/firesafety",
+    preloadImages: [fireSafety2, fireSafety3],
   },
   {
     num: 7,
@@ -178,6 +178,12 @@ function ProjectCard({
       ref={tiltRef}
       className={`group ${isComingSoon ? 'cursor-default' : 'cursor-pointer'}`}
       onClick={handleClick}
+      role={isComingSoon ? undefined : 'link'}
+      tabIndex={isComingSoon ? undefined : 0}
+      aria-label={isComingSoon ? undefined : `${project.name}: ${isExternal ? 'visit site' : 'view case study'}`}
+      onKeyDown={(e) => {
+        if (!isComingSoon && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); handleClick(); }
+      }}
       initial={{ opacity: 0, y: 24, scale: 0.98 }}
       animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
       exit={{ opacity: 0, y: 12, scale: 0.96, transition: { duration: 0.18 } }}
@@ -187,18 +193,18 @@ function ProjectCard({
       {...(isComingSoon ? {} : tiltHandlers)}
     >
       {/* Project Image */}
-      <div className="relative overflow-hidden border-4 border-amber-400 group-hover:border-blue-400 shadow-8bit mb-5 h-44 sm:h-48 bg-zinc-900 transition-all duration-200 group-hover:[box-shadow:8px_8px_0px_0px_#F59E0B] group-hover:-translate-y-1">
+      <div className="relative overflow-hidden border-4 border-amber-400 group-hover:border-blue-400 shadow-8bit mb-5 h-44 sm:h-48 bg-zinc-900 transition-[border-color,box-shadow,transform] duration-200 group-hover:[box-shadow:8px_8px_0px_0px_#F59E0B] group-hover:-translate-y-1">
         {/* Pixel corner accents — animate in on card hover */}
-        <div className="absolute top-0 left-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-100 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-100 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-100 pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-100 pointer-events-none" />
+        <div className="absolute top-0 left-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-[opacity,transform] duration-100 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-[opacity,transform] duration-100 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-[opacity,transform] duration-100 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-[opacity,transform] duration-100 pointer-events-none" />
 
         {project.image ? (
           <PixelatedImage
             src={project.image}
             alt={project.name}
-            className={`w-full h-full transition-all duration-500 ${
+            className={`w-full h-full transition-[filter,transform] duration-500 ${
               isComingSoon
                 ? 'opacity-50 grayscale'
                 : 'grayscale group-hover:grayscale-0 group-hover:scale-105'
@@ -239,11 +245,11 @@ function ProjectCard({
         <h3 className="font-mono font-bold text-base sm:text-lg text-blue-400 leading-snug">
           {project.name}
         </h3>
-        <p className="font-mono text-xs sm:text-sm text-gray-300 leading-relaxed">
+        <p className="font-mono text-sm text-zinc-300 leading-relaxed">
           {project.description}
         </p>
         {/* M03 — metric row slides up on hover */}
-        <p className="font-mono text-[10px] text-amber-400 tracking-wider transition-all duration-200 opacity-50 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0">
+        <p className="font-mono text-[10px] text-amber-400 tracking-wider transition-[opacity,transform] duration-200 opacity-50 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0">
           ■ {project.metric}
         </p>
         <div className="flex flex-wrap gap-1.5">
@@ -281,7 +287,8 @@ export default function Projects() {
           <div className="flex flex-wrap gap-2 mb-10">
             <button
               onClick={() => setActiveFilter(null)}
-              className={`font-pixel text-[10px] px-3 py-1.5 border-2 transition-colors ${
+              aria-pressed={activeFilter === null}
+              className={`font-pixel text-[10px] px-3 py-1.5 min-h-[40px] border-2 transition-colors ${
                 activeFilter === null
                   ? 'border-amber-400 text-black bg-amber-400'
                   : 'border-zinc-700 text-zinc-500 hover:border-zinc-500 hover:text-zinc-300'
@@ -293,7 +300,8 @@ export default function Projects() {
               <button
                 key={tag}
                 onClick={() => setActiveFilter(prev => prev === tag ? null : tag)}
-                className={`font-pixel text-[10px] px-3 py-1.5 border-2 transition-colors ${
+                aria-pressed={activeFilter === tag}
+                className={`font-pixel text-[10px] px-3 py-1.5 min-h-[40px] border-2 transition-colors ${
                   activeFilter === tag
                     ? 'border-blue-400 text-black bg-blue-400'
                     : 'border-zinc-700 text-zinc-500 hover:border-blue-400 hover:text-blue-400'
@@ -305,7 +313,7 @@ export default function Projects() {
           </div>
 
           <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <AnimatePresence>
+            <AnimatePresence initial={false}>
               {visible.map((project, idx) => (
                 <ProjectCard
                   key={project.num}

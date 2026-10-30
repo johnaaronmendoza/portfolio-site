@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import FramerReveal from './FramerReveal';
 import SectionHeading from './SectionHeading';
 
@@ -65,13 +64,9 @@ export default function Experience() {
 
           <div className="space-y-8">
             {ENTRIES.map((entry, idx) => (
-              <motion.div
+              <div
                 key={idx}
                 className="border-8bit shadow-8bit bg-zinc-900 p-6 sm:p-10 lg:p-12"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.4, delay: idx * 0.07, ease: [0.23, 1, 0.32, 1] }}
               >
                 {/* Tag + Index */}
                 <div className="flex items-center gap-3 mb-4">
@@ -103,13 +98,13 @@ export default function Experience() {
                 {/* Highlights */}
                 <ul className="space-y-3">
                   {entry.highlights.map((h, i) => (
-                    <li key={i} className="font-mono-8bit text-sm text-white flex items-start gap-3">
+                    <li key={i} className="font-mono-8bit text-sm sm:text-[15px] text-zinc-200 leading-relaxed flex items-start gap-3 max-w-[75ch]">
                       <span className="text-amber-400 font-bold flex-shrink-0 mt-1">▸</span>
                       <span>{h}</span>
                     </li>
                   ))}
                 </ul>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

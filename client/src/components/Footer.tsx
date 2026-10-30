@@ -85,26 +85,17 @@ export default function Footer() {
         <div className="text-center space-y-4">
           {/* Availability indicator */}
           <div className="flex items-center justify-center gap-2">
-            <motion.div
-              className="w-1.5 h-1.5 rounded-full bg-green-400"
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            />
-            <span className="font-mono text-xs text-zinc-400 tracking-widest">AVAILABLE FOR HIRE</span>
+            <div className="w-1.5 h-1.5 bg-green-400" aria-hidden="true" />
+            <span className="font-mono text-xs text-zinc-400 tracking-wide">Graduating April 2027</span>
           </div>
 
           <motion.h2
-            className="font-pixel text-xl sm:text-2xl text-amber-400 glitch"
-            data-text="GET IN TOUCH"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
+            className="font-pixel text-xl sm:text-2xl text-amber-400"
           >
             GET IN TOUCH
           </motion.h2>
           <p className="font-mono-8bit text-sm text-gray-400 max-w-md mx-auto leading-relaxed">
-            Open to internships, collaborations, and interesting projects.
+            Open to graduate roles, collaborations and interesting projects.
           </p>
           <motion.a
             ref={sendBtnRef}
@@ -112,8 +103,6 @@ export default function Footer() {
             onClick={handleSendClick}
             className="inline-flex items-center gap-3 border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B', transition: { duration: 0.1 } }}
-            animate={{ boxShadow: ['4px 4px 0px 0px #F59E0B', '4px 4px 0px 0px #F59E0B, 0 0 16px rgba(245,158,11,0.5)', '4px 4px 0px 0px #F59E0B'] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           >
             <PixelEmail size={20} />
             SEND MESSAGE →

@@ -58,8 +58,6 @@ function AppInner() {
 
   return (
     <TooltipProvider>
-      {/* Sovereign Console grain overlay */}
-      <div className="grain" aria-hidden="true" />
       <ScrollProgress />
       <CommandPalette />
       <KeyboardShortcuts />

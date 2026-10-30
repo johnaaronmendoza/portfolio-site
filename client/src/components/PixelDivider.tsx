@@ -1,5 +1,3 @@
-import { motion } from 'framer-motion';
-
 interface PixelDividerProps {
   variant?: 'default' | 'circuit' | 'wave' | 'dots';
 }
@@ -12,11 +10,9 @@ export default function PixelDivider({ variant = 'default' }: PixelDividerProps)
         <div className="flex-1 h-px bg-amber-400 opacity-20" />
         <div className="flex items-center gap-6 px-6">
           {[0, 1, 2].map(i => (
-            <motion.div
+            <div
               key={i}
               className="w-1.5 h-1.5 bg-amber-400"
-              animate={{ opacity: [0.3, 1, 0.3] }}
-              transition={{ duration: 2, delay: i * 0.5, repeat: Infinity, ease: 'easeInOut' }}
             />
           ))}
         </div>
@@ -30,13 +26,11 @@ export default function PixelDivider({ variant = 'default' }: PixelDividerProps)
     return (
       <div className="w-full px-4 sm:px-8 lg:px-16 py-2 flex items-center gap-4">
         <div className="flex-1 h-px bg-amber-400 opacity-20" />
-        <motion.span
-          className="font-pixel text-[8px] text-amber-400 opacity-40 flex-shrink-0"
-          animate={{ opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        <span
+          className="font-pixel text-[8px] text-amber-400 opacity-40 flex-shrink-0" aria-hidden="true"
         >
           ◆
-        </motion.span>
+        </span>
         <div className="flex-1 h-px bg-amber-400 opacity-20" />
       </div>
     );
@@ -49,11 +43,9 @@ export default function PixelDivider({ variant = 'default' }: PixelDividerProps)
         <div className="flex-1 h-px bg-amber-400 opacity-20" />
         <div className="flex items-center gap-8 px-8">
           {[0, 1, 2, 3, 4].map(i => (
-            <motion.div
+            <div
               key={i}
               className="w-1 h-1 bg-blue-400 flex-shrink-0"
-              animate={{ opacity: [0.2, 0.8, 0.2] }}
-              transition={{ duration: 2.5, delay: i * 0.25, repeat: Infinity, ease: 'easeInOut' }}
             />
           ))}
         </div>

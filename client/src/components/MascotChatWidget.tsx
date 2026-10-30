@@ -10,12 +10,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useChat } from '@/hooks/useChat';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 // Typing Animation Component
 function TypingMessage({ content, role }: { content: string; role: 'user' | 'system' }) {
+  const reduceMotion = useReducedMotion();
   const [displayedText, setDisplayedText] = useState('');
 
   useEffect(() => {
+    if (reduceMotion) return;
     let index = 0;
     const interval = setInterval(() => {
       if (index < content.length) {
@@ -26,7 +29,9 @@ function TypingMessage({ content, role }: { content: string; role: 'user' | 'sys
       }
     }, 12);
     return () => clearInterval(interval);
-  }, [content]);
+  }, [content, reduceMotion]);
+
+  const visibleText = reduceMotion ? content : displayedText;
 
   return (
     <div
@@ -34,16 +39,19 @@ function TypingMessage({ content, role }: { content: string; role: 'user' | 'sys
         role === 'user'
           ? 'border-amber-400 bg-black text-white'
           : 'border-blue-400 bg-black text-white'
-      } font-mono text-[11px] leading-relaxed`}
+      } font-mono text-sm leading-relaxed`}
     >
-      {displayedText}
-      {displayedText.length < content.length && (
-        <motion.span
-          animate={{ opacity: [1, 0] }}
-          transition={{ duration: 0.5, repeat: Infinity }}
-          className="inline-block w-1 h-3 bg-white ml-1"
-        />
-      )}
+      <span className="sr-only">{content}</span>
+      <span aria-hidden="true">
+        {visibleText}
+        {visibleText.length < content.length && (
+          <motion.span
+            animate={{ opacity: [1, 0] }}
+            transition={{ duration: 0.5, repeat: Infinity }}
+            className="inline-block w-1 h-3 bg-white ml-1"
+          />
+        )}
+      </span>
     </div>
   );
 }
@@ -244,7 +252,7 @@ export default function MascotChatWidget() {
             <div className="flex-shrink-0 bg-zinc-900 border-b-2 border-amber-400 px-4 py-3 flex items-center gap-3">
               <div className="flex-1 min-w-0">
                 <p className="font-pixel text-xs text-amber-400">JOHN_AARON_OS</p>
-                <p className="font-mono text-[10px] text-blue-400 mt-0.5">
+                <p className="font-mono text-xs text-blue-400 mt-0.5">
                   {isTyping ? '● typing...' : '● online'}
                 </p>
               </div>
@@ -279,7 +287,7 @@ export default function MascotChatWidget() {
                   )}
                   <div className="max-w-[75%]">
                     <TypingMessage content={msg.content} role={msg.role} />
-                    <p className={`font-mono text-[10px] text-gray-600 mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+                    <p className={`font-mono text-xs text-gray-600 mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
                       {msg.timestamp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
                     </p>
                   </div>
@@ -320,7 +328,7 @@ export default function MascotChatWidget() {
                   <button
                     key={label}
                     onClick={() => handleQuickAction(query)}
-                    className="border border-amber-400 bg-black text-amber-400 font-pixel text-[8px] py-2 px-1 hover:bg-amber-400 hover:text-black transition-colors leading-tight"
+                    className="border border-amber-400 bg-black text-amber-400 font-pixel text-[10px] min-h-[44px] py-2 px-1 hover:bg-amber-400 hover:text-black transition-colors leading-tight"
                   >
                     {label}
                   </button>

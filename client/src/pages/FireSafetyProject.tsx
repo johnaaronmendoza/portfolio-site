@@ -111,7 +111,7 @@ export default function FireSafetyProject() {
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-px bg-amber-500/10">
               {stats.map(({ label, value }) => (
                 <div key={label} className="bg-[#1f1f1f] p-5 text-center">
-                  <p className="font-pixel text-amber-400 text-sm sm:text-base mb-2">{value}</p>
+                  <p className="font-pixel text-amber-400 text-xs sm:text-base break-words mb-2">{value}</p>
                   <p className="font-mono text-xs text-amber-400/80 uppercase tracking-widest leading-tight">{label}</p>
                 </div>
               ))}
@@ -266,7 +266,7 @@ export default function FireSafetyProject() {
                   transition={{ duration: 0.2 }}
                 >
                   <p className="font-pixel text-xs text-amber-400 mb-3">[ {label} ]</p>
-                  <p className="font-mono-8bit text-sm sm:text-[15px] text-gray-300 leading-relaxed">{desc}</p>
+                  <p className="font-mono-8bit text-[15px] text-gray-300 leading-relaxed">{desc}</p>
                 </motion.div>
               ))}
             </div>

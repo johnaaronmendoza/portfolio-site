@@ -330,7 +330,7 @@ export default function Projects() {
                 <p className="font-pixel text-xs text-zinc-400">NO_PROJECTS_MATCH [ {activeFilter} ]</p>
                 <button
                   onClick={() => setActiveFilter(null)}
-                  className="font-mono-8bit text-xs text-amber-400 mt-4 hover:text-white transition-colors"
+                  className="min-h-[44px] inline-flex items-center font-mono-8bit text-xs text-amber-400 mt-4 hover:text-white transition-colors"
                 >
                   CLEAR FILTER →
                 </button>

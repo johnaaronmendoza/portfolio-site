@@ -6,7 +6,7 @@
  * - Authentic OS-style command interface
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
 
@@ -40,6 +40,18 @@ export default function CommandPalette() {
   const [search, setSearch] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [, setLocation] = useLocation();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+
+  // Remember what had focus on open; restore it on close.
+  useEffect(() => {
+    if (!isOpen) return;
+    returnFocusRef.current = document.activeElement as HTMLElement | null;
+    return () => {
+      returnFocusRef.current?.focus({ preventScroll: true });
+      returnFocusRef.current = null;
+    };
+  }, [isOpen]);
 
   const commands: Command[] = [
     // Navigation — sections
@@ -199,6 +211,25 @@ export default function CommandPalette() {
       if (!isOpen) return;
 
       switch (e.key) {
+        case 'Tab': {
+          // Focus trap: cycle Tab / Shift+Tab within the dialog
+          const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), input:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
+          );
+          if (!focusable || focusable.length === 0) break;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          const active = document.activeElement;
+          const inside = dialogRef.current?.contains(active);
+          if (e.shiftKey && (active === first || !inside)) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && (active === last || !inside)) {
+            e.preventDefault();
+            first.focus();
+          }
+          break;
+        }
         case 'Escape':
           setIsOpen(false);
           break;
@@ -242,6 +273,7 @@ export default function CommandPalette() {
             animate={{ opacity: 1, scaleY: 1 }}
             exit={{ opacity: 0, transition: { duration: 0 } }}
             transition={{ duration: 0.12, ease: [0.23, 1, 0.32, 1] }}
+            ref={dialogRef}
             className="fixed top-1/4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-2xl bg-black border-4 border-amber-400 shadow-8bit overflow-hidden"
             style={{ transformOrigin: 'top' }}
             role="dialog"

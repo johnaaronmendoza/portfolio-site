@@ -145,7 +145,7 @@ export default function AIFinanceProject() {
                   <div key={step} className={`bg-[#1b1b1b] border-t-2 ${color} p-4 space-y-2`}>
                     <p className={`font-pixel text-xs ${color.split(' ')[1]}`}>[ {step} ]</p>
                     <p className="font-pixel text-xs text-white">{label}</p>
-                    <p className="font-mono-8bit text-sm sm:text-[15px] text-gray-400 leading-relaxed">{desc}</p>
+                    <p className="font-mono-8bit text-[15px] text-gray-400 leading-relaxed">{desc}</p>
                   </div>
                 )
               ))}
@@ -164,7 +164,7 @@ export default function AIFinanceProject() {
                   <div key={step} className={`bg-[#1b1b1b] border-t-2 ${color} p-4 space-y-2`}>
                     <p className={`font-pixel text-xs ${color.split(' ')[1]}`}>[ {step} ]</p>
                     <p className="font-pixel text-xs text-white">{label}</p>
-                    <p className="font-mono-8bit text-sm sm:text-[15px] text-gray-400 leading-relaxed">{desc}</p>
+                    <p className="font-mono-8bit text-[15px] text-gray-400 leading-relaxed">{desc}</p>
                   </div>
                 )
               ))}
@@ -216,7 +216,7 @@ export default function AIFinanceProject() {
                     {items.map(i => (
                       <li key={i} className="flex items-start gap-2">
                         <span className="text-blue-400 flex-shrink-0 mt-0.5">▸</span>
-                        <span className="font-mono-8bit text-sm sm:text-[15px] leading-relaxed">{i}</span>
+                        <span className="font-mono-8bit text-[15px] leading-relaxed">{i}</span>
                       </li>
                     ))}
                   </ul>

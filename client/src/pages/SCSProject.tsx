@@ -254,7 +254,7 @@ export default function SCSProject() {
                     {items.map(i => (
                       <li key={i} className="flex items-start gap-2">
                         <span className="text-blue-400 flex-shrink-0 mt-1">▸</span>
-                        <span className="font-mono-8bit text-sm sm:text-[15px] leading-relaxed">{i}</span>
+                        <span className="font-mono-8bit text-[15px] leading-relaxed">{i}</span>
                       </li>
                     ))}
                   </ul>

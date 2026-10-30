@@ -47,8 +47,11 @@ export default function PixelatedImage({ src, alt, className }: Props) {
     // Exponential ease toward target
     sizeRef.current += (targetRef.current - sizeRef.current) * EASE;
 
+    // Canvas backing store is in device pixels, so scale block size by DPR
+    // to keep the same on-screen block size on retina displays.
     const ps = Math.max(CRISP_SIZE, Math.round(sizeRef.current));
-    manager.draw(img, canvas, ps);
+    const dpr = window.devicePixelRatio || 1;
+    manager.draw(img, canvas, ps <= CRISP_SIZE ? CRISP_SIZE : ps * dpr);
 
     if (Math.abs(sizeRef.current - targetRef.current) > DONE_THRESH) {
       rafRef.current = requestAnimationFrame(tick);
@@ -69,8 +72,9 @@ export default function PixelatedImage({ src, alt, className }: Props) {
 
     const syncSize = () => {
       if (canvas.offsetWidth === 0) return;
-      canvas.width  = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width  = Math.round(canvas.offsetWidth * dpr);
+      canvas.height = Math.round(canvas.offsetHeight * dpr);
     };
 
     // ── Load image — assign onload BEFORE src to catch all browsers ──────
@@ -108,7 +112,7 @@ export default function PixelatedImage({ src, alt, className }: Props) {
 
   // ── Hover handlers ────────────────────────────────────────────────────
   const handleMouseEnter = useCallback(() => {
-    if (reduced) return;
+    if (reduced || !window.matchMedia('(hover: hover)').matches) return;
     targetRef.current = HOVER_SIZE;
     startLoop();
   }, [reduced, startLoop]);

@@ -112,7 +112,7 @@ export default function Footer() {
           <p className="font-mono text-xs text-zinc-400">
             or open the terminal and try{' '}
             <button
-              className="text-amber-400 hover:text-white transition-colors"
+              className="min-h-[44px] inline-flex items-center text-amber-400 hover:text-white transition-colors"
               onClick={() => window.dispatchEvent(new Event('toggle-terminal'))}
             >
               {'>'} sudo hire-me

@@ -302,9 +302,9 @@ export default function UATProject() {
               {MODULES.map((m, i) => (
                 <div
                   key={m.name}
-                  className="bg-[#1b1b1b] p-4 flex items-center justify-between gap-4"
+                  className="bg-[#1b1b1b] p-4 flex flex-wrap items-center justify-between gap-4"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
                     <span className="font-mono text-xs text-zinc-400 flex-shrink-0">
                       {String(i + 1).padStart(2, '0')}
                     </span>
@@ -312,7 +312,7 @@ export default function UATProject() {
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0">
                     <span className="font-mono text-xs text-zinc-400">{m.defects} defects</span>
-                    <span className={`font-pixel text-xs border px-1.5 py-0.5 ${RISK_COLOR[m.risk]}`}>
+                    <span className={`font-pixel text-[10px] sm:text-xs border px-1.5 py-0.5 ${RISK_COLOR[m.risk]}`}>
                       {m.risk}
                     </span>
                   </div>
@@ -331,7 +331,7 @@ export default function UATProject() {
                     <span className={`font-pixel text-xs ${color}`}>{sev}</span>
                     <span className="font-mono text-xs text-zinc-400">{pri}</span>
                   </div>
-                  <p className="font-mono-8bit text-sm sm:text-[15px] text-zinc-400 leading-relaxed">{desc}</p>
+                  <p className="font-mono-8bit text-[15px] text-zinc-400 leading-relaxed">{desc}</p>
                 </div>
               ))}
             </div>
@@ -365,14 +365,14 @@ export default function UATProject() {
                 </div>
                 <div>
                   <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">PRECONDITIONS</p>
-                  <p className="font-mono-8bit text-sm sm:text-[15px] text-zinc-300 leading-relaxed">
+                  <p className="font-mono-8bit text-[15px] text-zinc-300 leading-relaxed">
                     System is running with an active notification queue. User is authenticated as QA Tester.
                     Notification service is operational with 100+ pending items queued.
                   </p>
                 </div>
                 <div>
                   <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">TEST STEPS</p>
-                  <div className="bg-[#111] p-4 font-mono text-sm sm:text-[15px] text-gray-300 space-y-1">
+                  <div className="bg-[#111] p-4 font-mono text-[15px] text-gray-300 space-y-1">
                     <p>1. Queue 100+ notification events simultaneously across all types</p>
                     <p>2. Monitor notification service health in real time</p>
                     <p>3. Observe system behaviour under concurrent load</p>
@@ -382,13 +382,13 @@ export default function UATProject() {
                   <div>
                     <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">EXPECTED RESULT</p>
                     <div className="bg-[#0d2318] border border-green-800 p-3">
-                      <p className="font-mono-8bit text-sm sm:text-[15px] text-green-400">Notifications processed in queue without crash</p>
+                      <p className="font-mono-8bit text-[15px] text-green-400">Notifications processed in queue without crash</p>
                     </div>
                   </div>
                   <div>
                     <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">ACTUAL RESULT</p>
                     <div className="bg-[#230d0d] border border-red-800 p-3">
-                      <p className="font-mono-8bit text-sm sm:text-[15px] text-red-400">Service crashes, all pending notifications lost</p>
+                      <p className="font-mono-8bit text-[15px] text-red-400">Service crashes, all pending notifications lost</p>
                     </div>
                   </div>
                 </div>
@@ -411,7 +411,7 @@ export default function UATProject() {
                     {responsibilities.map(r => (
                       <li key={r} className="flex items-start gap-2">
                         <span className="text-blue-400 flex-shrink-0 mt-0.5">▸</span>
-                        <span className="font-mono-8bit text-sm sm:text-[15px] leading-relaxed">{r}</span>
+                        <span className="font-mono-8bit text-[15px] leading-relaxed">{r}</span>
                       </li>
                     ))}
                   </ul>
@@ -481,7 +481,7 @@ export default function UATProject() {
                     {items.map(i => (
                       <li key={i} className="flex items-start gap-2">
                         <span className="text-blue-400 flex-shrink-0 mt-0.5">▸</span>
-                        <span className="font-mono-8bit text-sm sm:text-[15px] leading-relaxed">{i}</span>
+                        <span className="font-mono-8bit text-[15px] leading-relaxed">{i}</span>
                       </li>
                     ))}
                   </ul>
@@ -524,7 +524,7 @@ export default function UATProject() {
                     {items.map(i => (
                       <li key={i} className="flex items-start gap-2">
                         <span className={`${accent} flex-shrink-0`}>▸</span>
-                        <span className="font-mono-8bit text-sm sm:text-[15px] leading-relaxed">{i}</span>
+                        <span className="font-mono-8bit text-[15px] leading-relaxed">{i}</span>
                       </li>
                     ))}
                   </ul>

@@ -222,7 +222,7 @@ export default function SilverLinkProject() {
                     {items.map(i => (
                       <li key={i} className="flex items-start gap-2">
                         <span className="text-blue-400 flex-shrink-0">▸</span>
-                        <span className="font-mono-8bit text-sm sm:text-[15px]">{i}</span>
+                        <span className="font-mono-8bit text-[15px]">{i}</span>
                       </li>
                     ))}
                   </ul>
@@ -242,7 +242,7 @@ export default function SilverLinkProject() {
                 ].map(a => (
                   <div key={a.name}>
                     <p className="font-pixel text-xs text-amber-400 mb-2">{a.name}</p>
-                    <p className="font-mono-8bit text-sm sm:text-[15px] text-gray-300 leading-relaxed">{a.desc}</p>
+                    <p className="font-mono-8bit text-[15px] text-gray-300 leading-relaxed">{a.desc}</p>
                   </div>
                 ))}
               </div>

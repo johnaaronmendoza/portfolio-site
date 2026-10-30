@@ -4,21 +4,22 @@
  * Renders a project image on a <canvas> through the PixelationManager.
  *
  * Behaviour:
- *  • Starts at full pixelation (blockSize 22) when off-screen.
- *  • On first scroll-into-view: eases blockSize → 1 (crisp reveal).
- *  • On hover-in: blockSize jumps to 8 (re-pixelates the image).
+ *  • Renders crisp (blockSize 1) as soon as the image loads. No scroll reveal.
+ *  • On hover-in: eases blockSize toward 8 (re-pixelates the image).
  *  • On hover-out: eases back to 1 (crisp).
+ *  • With prefers-reduced-motion, hover does nothing and the image stays crisp.
  *
  * The easing uses a simple exponential approach each RAF frame:
  *   current += (target - current) * 0.10
- * which gives ~600 ms to reach near-target at 60 fps.
+ * The RAF loop only runs while easing and stops once it reaches the target,
+ * so nothing runs while idle.
  */
 import { useRef, useEffect, useCallback } from 'react';
 import { PixelationManager } from '@/utils/PixelationManager';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const manager = PixelationManager.getInstance();
 const EASE = 0.10;          // lerp factor per frame
-const INITIAL_SIZE = 22;    // start fully pixelated
 const HOVER_SIZE   = 8;     // pixelate on hover
 const CRISP_SIZE   = 1;     // full-resolution target
 const DONE_THRESH  = 0.08;  // stop RAF when this close
@@ -32,10 +33,10 @@ interface Props {
 export default function PixelatedImage({ src, alt, className }: Props) {
   const canvasRef  = useRef<HTMLCanvasElement>(null);
   const imgRef     = useRef<HTMLImageElement | null>(null);
-  const sizeRef    = useRef(INITIAL_SIZE);   // current (animated) block size
-  const targetRef  = useRef(INITIAL_SIZE);   // where we're heading
+  const reduced    = useReducedMotion();
+  const sizeRef    = useRef(CRISP_SIZE);     // current (animated) block size
+  const targetRef  = useRef(CRISP_SIZE);     // where we're heading
   const rafRef     = useRef(0);
-  const revealedRef = useRef(false);         // true once first in-view reveal fires
 
   // ── Animation loop ────────────────────────────────────────────────────
   const tick = useCallback(() => {
@@ -51,6 +52,8 @@ export default function PixelatedImage({ src, alt, className }: Props) {
 
     if (Math.abs(sizeRef.current - targetRef.current) > DONE_THRESH) {
       rafRef.current = requestAnimationFrame(tick);
+    } else {
+      sizeRef.current = targetRef.current; // settle exactly; loop stops here
     }
   }, []);
 
@@ -96,34 +99,22 @@ export default function PixelatedImage({ src, alt, className }: Props) {
     });
     ro.observe(canvas);
 
-    // Scroll-into-view reveal — fires once per mount
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !revealedRef.current) {
-          revealedRef.current = true;
-          targetRef.current   = CRISP_SIZE;
-          startLoop();
-        }
-      },
-      { threshold: 0.15 }
-    );
-    io.observe(canvas);
-
     return () => {
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
-      io.disconnect();
       img.onload = null;
     };
   }, [src, startLoop]);
 
   // ── Hover handlers ────────────────────────────────────────────────────
   const handleMouseEnter = useCallback(() => {
+    if (reduced) return;
     targetRef.current = HOVER_SIZE;
     startLoop();
-  }, [startLoop]);
+  }, [reduced, startLoop]);
 
   const handleMouseLeave = useCallback(() => {
+    if (targetRef.current === CRISP_SIZE) return;
     targetRef.current = CRISP_SIZE;
     startLoop();
   }, [startLoop]);

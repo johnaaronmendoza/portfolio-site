@@ -71,11 +71,11 @@ export default function Experience() {
                 {/* Tag + Index */}
                 <div className="flex items-center gap-3 mb-4">
                   {entry.tag && (
-                    <span className={`font-pixel text-[10px] border px-2 py-0.5 ${TAG_COLORS[entry.tag] ?? 'text-zinc-400 border-zinc-400'}`}>
+                    <span className={`font-pixel text-xs border px-2 py-0.5 ${TAG_COLORS[entry.tag] ?? 'text-zinc-400 border-zinc-400'}`}>
                       {entry.tag}
                     </span>
                   )}
-                  <span className="font-pixel text-[10px] text-zinc-600">
+                  <span className="font-pixel text-xs text-zinc-400">
                     {String(idx + 1).padStart(2, '0')}
                   </span>
                 </div>

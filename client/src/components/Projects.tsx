@@ -1,10 +1,9 @@
-import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { useRef, useState } from 'react';
-import { useLocation } from 'wouter';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, type ReactNode } from 'react';
+import { Link } from 'wouter';
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
-import { useTilt } from '@/hooks/useTilt';
 import SectionHeading from './SectionHeading';
 
 // ── Card images (shown in grid) ───────────────────────────────────────────
@@ -146,52 +145,17 @@ function matchesFilter(p: Project, filter: string | null): boolean {
 }
 
 // ── ProjectCard — own component so hooks are called once per card ─────────
-function ProjectCard({
-  project,
-  idx,
-  isInView,
-}: {
-  project: Project;
-  idx: number;
-  isInView: boolean;
-}) {
-  const [, setLocation] = useLocation();
+const CARD_LINK_CLASS = 'block outline-offset-4';
+
+function ProjectCard({ project }: { project: Project }) {
   const isComingSoon = project.link === '#';
   const isExternal   = project.link === 'external';
 
   // Smart preload: on 300 ms hover intent, fetch detail-page screenshots.
   const { handlers: preloadHandlers } = useSmartPreload(project.preloadImages);
-  // 3D tilt on hover
-  const { ref: tiltRef, handlers: tiltHandlers } = useTilt(5);
 
-  const handleClick = () => {
-    if (isComingSoon) return;
-    if (isExternal && project.externalUrl) {
-      window.open(project.externalUrl, '_blank', 'noopener noreferrer');
-    } else {
-      setLocation(project.link);
-    }
-  };
-
-  return (
-    <motion.div
-      ref={tiltRef}
-      className={`group ${isComingSoon ? 'cursor-default' : 'cursor-pointer'}`}
-      onClick={handleClick}
-      role={isComingSoon ? undefined : 'link'}
-      tabIndex={isComingSoon ? undefined : 0}
-      aria-label={isComingSoon ? undefined : `${project.name}: ${isExternal ? 'visit site' : 'view case study'}`}
-      onKeyDown={(e) => {
-        if (!isComingSoon && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); handleClick(); }
-      }}
-      initial={{ opacity: 0, y: 24, scale: 0.98 }}
-      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      exit={{ opacity: 0, y: 12, scale: 0.96, transition: { duration: 0.18 } }}
-      transition={{ duration: 0.4, delay: idx * 0.06, ease: [0.23, 1, 0.32, 1] }}
-      whileTap={isComingSoon ? {} : { scale: 0.97, transition: { duration: 0.1 } }}
-      {...preloadHandlers}
-      {...(isComingSoon ? {} : tiltHandlers)}
-    >
+  const body = (
+    <>
       {/* Project Image */}
       <div className="relative overflow-hidden border-4 border-amber-400 group-hover:border-blue-400 shadow-8bit mb-5 h-44 sm:h-48 bg-zinc-900 transition-[border-color,box-shadow,transform] duration-200 group-hover:[box-shadow:8px_8px_0px_0px_#F59E0B] group-hover:-translate-y-1">
         {/* Pixel corner accents — animate in on card hover */}
@@ -207,7 +171,7 @@ function ProjectCard({
             className={`w-full h-full transition-[filter,transform] duration-500 ${
               isComingSoon
                 ? 'opacity-50 grayscale'
-                : 'grayscale group-hover:grayscale-0 group-hover:scale-105'
+                : '[@media(hover:hover)]:grayscale [@media(hover:hover)]:group-hover:grayscale-0 [@media(hover:hover)]:group-hover:scale-105'
             }`}
           />
         ) : (
@@ -222,14 +186,14 @@ function ProjectCard({
         )}
         {isComingSoon && (
           <div className="absolute inset-0 flex items-end justify-end p-3">
-            <span className="font-pixel text-[10px] text-amber-400 border border-amber-400 bg-black px-2 py-1">
+            <span className="font-pixel text-xs text-amber-400 border border-amber-400 bg-black px-2 py-1">
               COMING SOON
             </span>
           </div>
         )}
         {isExternal && (
           <div className="absolute top-2 right-2">
-            <span className="font-pixel text-[10px] text-blue-400 border border-blue-400 bg-black px-2 py-1">
+            <span className="font-pixel text-xs text-blue-400 border border-blue-400 bg-black px-2 py-1">
               ↗ LIVE
             </span>
           </div>
@@ -239,7 +203,7 @@ function ProjectCard({
       {/* Project Info */}
       <div className="space-y-3">
         {/* Index + year */}
-        <div className="font-mono text-[11px] text-zinc-600 group-hover:text-amber-400 transition-colors duration-150 tracking-widest select-none">
+        <div className="font-mono text-xs text-zinc-400 group-hover:text-amber-400 transition-colors duration-150 tracking-widest select-none">
           {String(project.num).padStart(2, '0')} · {project.year}
         </div>
         <h3 className="font-mono font-bold text-base sm:text-lg text-blue-400 leading-snug">
@@ -248,13 +212,13 @@ function ProjectCard({
         <p className="font-mono text-sm text-zinc-300 leading-relaxed">
           {project.description}
         </p>
-        {/* M03 — metric row slides up on hover */}
-        <p className="font-mono text-[10px] text-amber-400 tracking-wider transition-[opacity,transform] duration-200 opacity-50 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0">
+        {/* M03 — metric row slides up on hover (pointer devices only; always visible on touch) */}
+        <p className="font-mono text-xs text-amber-400 tracking-wider transition-[opacity,transform] duration-200 [@media(hover:hover)]:opacity-50 [@media(hover:hover)]:translate-y-1 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:translate-y-0">
           ■ {project.metric}
         </p>
         <div className="flex flex-wrap gap-1.5">
           {project.tags.map(tag => (
-            <span key={tag} className="bg-[#353535] px-2 py-0.5 font-mono text-[10px] text-amber-400 border border-amber-500/20">
+            <span key={tag} className="bg-[#353535] px-2 py-0.5 font-mono text-xs text-amber-400 border border-amber-500/20">
               --{tag.replace(/\s+/g, '_')}
             </span>
           ))}
@@ -265,14 +229,51 @@ function ProjectCard({
           </div>
         )}
       </div>
+    </>
+  );
+
+  let card: ReactNode;
+  if (isComingSoon) {
+    card = <div className="cursor-default">{body}</div>;
+  } else if (isExternal && project.externalUrl) {
+    card = (
+      <a
+        href={project.externalUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={CARD_LINK_CLASS}
+        aria-label={`${project.name}: visit site (opens in a new tab)`}
+        {...preloadHandlers}
+      >
+        {body}
+      </a>
+    );
+  } else {
+    card = (
+      <Link
+        href={project.link}
+        className={CARD_LINK_CLASS}
+        aria-label={`${project.name}: view case study`}
+        {...preloadHandlers}
+      >
+        {body}
+      </Link>
+    );
+  }
+
+  return (
+    <motion.div
+      className="group"
+      exit={{ opacity: 0, y: 12, scale: 0.96, transition: { duration: 0.18 } }}
+      whileTap={isComingSoon ? {} : { scale: 0.97, transition: { duration: 0.1 } }}
+    >
+      {card}
     </motion.div>
   );
 }
 
 // ── Projects section ──────────────────────────────────────────────────────
 export default function Projects() {
-  const gridRef = useRef(null);
-  const isInView = useInView(gridRef, { once: true, amount: 0.1 });
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
   const visible = PROJECTS.filter(p => matchesFilter(p, activeFilter));
@@ -288,7 +289,7 @@ export default function Projects() {
             <button
               onClick={() => setActiveFilter(null)}
               aria-pressed={activeFilter === null}
-              className={`font-pixel text-[10px] px-3 py-1.5 min-h-[40px] border-2 transition-colors ${
+              className={`font-pixel text-xs px-3 py-1.5 min-h-[44px] border-2 transition-colors ${
                 activeFilter === null
                   ? 'border-amber-400 text-black bg-amber-400'
                   : 'border-zinc-700 text-zinc-500 hover:border-zinc-500 hover:text-zinc-300'
@@ -301,7 +302,7 @@ export default function Projects() {
                 key={tag}
                 onClick={() => setActiveFilter(prev => prev === tag ? null : tag)}
                 aria-pressed={activeFilter === tag}
-                className={`font-pixel text-[10px] px-3 py-1.5 min-h-[40px] border-2 transition-colors ${
+                className={`font-pixel text-xs px-3 py-1.5 min-h-[44px] border-2 transition-colors ${
                   activeFilter === tag
                     ? 'border-blue-400 text-black bg-blue-400'
                     : 'border-zinc-700 text-zinc-500 hover:border-blue-400 hover:text-blue-400'
@@ -312,15 +313,10 @@ export default function Projects() {
             ))}
           </div>
 
-          <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             <AnimatePresence initial={false}>
-              {visible.map((project, idx) => (
-                <ProjectCard
-                  key={project.num}
-                  project={project}
-                  idx={idx}
-                  isInView={isInView}
-                />
+              {visible.map(project => (
+                <ProjectCard key={project.num} project={project} />
               ))}
             </AnimatePresence>
 
@@ -331,7 +327,7 @@ export default function Projects() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
-                <p className="font-pixel text-xs text-zinc-600">NO_PROJECTS_MATCH [ {activeFilter} ]</p>
+                <p className="font-pixel text-xs text-zinc-400">NO_PROJECTS_MATCH [ {activeFilter} ]</p>
                 <button
                   onClick={() => setActiveFilter(null)}
                   className="font-mono-8bit text-xs text-amber-400 mt-4 hover:text-white transition-colors"

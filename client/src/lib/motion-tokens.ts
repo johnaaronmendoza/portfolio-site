@@ -17,9 +17,6 @@ export const motionTokens = {
     sm: 8,
     md: 16,
   },
-  stagger: {
-    keycap: 0.022,
-  },
 };
 
 export const springs = {

@@ -11,7 +11,6 @@
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
 import SectionHeading from './SectionHeading';
-import CountUp from './CountUp';
 import profileImg from '@assets/john_profile.jpg';
 
 export default function About() {
@@ -51,7 +50,7 @@ export default function About() {
                   I learn fast, speak both engineer and stakeholder, and care about shipping things people actually use.
                 </p>
 
-                {/* M04 — count-up KPIs */}
+                {/* Key figures */}
                 <div className="grid grid-cols-3 gap-4 pt-4 border-t border-zinc-800">
                   {[
                     { value: 2, suffix: '', label: 'industry internships' },
@@ -60,10 +59,9 @@ export default function About() {
                   ].map(({ value, suffix, label }) => (
                     <div key={label} className="text-center">
                       <div className="font-mono font-bold text-xl text-amber-400 tabular-nums">
-                        <CountUp to={value} duration={900} />
-                        <span>{suffix}</span>
+                        {value}{suffix}
                       </div>
-                      <div className="font-mono text-[10px] text-zinc-500 mt-1">{label}</div>
+                      <div className="font-mono text-xs text-zinc-400 mt-1">{label}</div>
                     </div>
                   ))}
                 </div>

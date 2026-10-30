@@ -109,7 +109,7 @@ export default function Footer() {
           </motion.a>
 
           {/* Terminal Easter egg hint */}
-          <p className="font-mono text-[10px] text-zinc-600">
+          <p className="font-mono text-xs text-zinc-400">
             or open the terminal and try{' '}
             <button
               className="text-amber-400 hover:text-white transition-colors"
@@ -126,11 +126,11 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-4">
-            <p className="font-mono-8bit text-xs text-gray-600">
+            <p className="font-mono-8bit text-xs text-zinc-400">
               © {currentYear} John Aaron Mendoza Branzuela
             </p>
             {sgtTime && (
-              <span className="font-mono text-[10px] text-zinc-700">
+              <span className="font-mono text-xs text-zinc-400 tabular-nums">
                 SGT {sgtTime}
               </span>
             )}
@@ -141,7 +141,7 @@ export default function Footer() {
               href="https://github.com/johnaaronmendoza"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-mono-8bit text-sm text-zinc-400 hover:text-white transition-colors"
+              className="min-h-[44px] inline-flex items-center gap-2 px-2 font-mono-8bit text-sm text-zinc-400 hover:text-white transition-colors"
               title="GitHub"
             >
               <PixelGitHub size={28} fg="#F59E0B" />
@@ -151,7 +151,7 @@ export default function Footer() {
               href="https://www.linkedin.com/in/john-branzuela/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-mono-8bit text-sm text-zinc-400 hover:text-white transition-colors"
+              className="min-h-[44px] inline-flex items-center gap-2 px-2 font-mono-8bit text-sm text-zinc-400 hover:text-white transition-colors"
               title="LinkedIn"
             >
               <PixelLinkedIn size={28} />

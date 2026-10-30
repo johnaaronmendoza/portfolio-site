@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { play } from '@/hooks/useSound';
@@ -108,9 +108,8 @@ export const KEYS: Key[] = [
 
 const COLS = 7;
 
-function Keycap({ k, pressed, onPress, onPreview, delay, show, reduced }: {
+function Keycap({ k, pressed, onPress, onPreview }: {
   k: Key; pressed: boolean; onPress: () => void; onPreview: () => void;
-  delay: number; show: boolean; reduced: boolean;
 }) {
   const cap = CAP[k.label] ?? { color: '#52525B' };
   const [iconFailed, setIconFailed] = useState(false);
@@ -118,16 +117,13 @@ function Keycap({ k, pressed, onPress, onPreview, delay, show, reduced }: {
   const showIcon = cap.icon && !iconFailed;
 
   return (
-    <motion.button
+    <button
       type="button"
       onClick={onPress}
       onMouseEnter={onPreview}
       onFocus={onPreview}
       aria-pressed={pressed}
       aria-label={k.name}
-      initial={reduced ? false : { opacity: 0, y: -motionTokens.distance.md }}
-      animate={show || reduced ? { opacity: 1, y: 0 } : undefined}
-      transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.smooth, delay: reduced ? 0 : delay }}
       className="relative aspect-square select-none rounded-[12px] focus-visible:outline-offset-4"
     >
       <span
@@ -161,14 +157,13 @@ function Keycap({ k, pressed, onPress, onPreview, delay, show, reduced }: {
           </span>
         )}
       </span>
-    </motion.button>
+    </button>
   );
 }
 
 export default function SkillKeyboard() {
   const reduced = useReducedMotion();
   const boardRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(boardRef, { once: true, amount: 0.25 });
   const [active, setActive] = useState(1); // start on RAG: the AI story first
   const [taps, setTaps] = useState(0);     // drives the mascot's hop
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -196,13 +191,6 @@ export default function SkillKeyboard() {
     window.addEventListener('resize', measure);
     return () => { ro.disconnect(); window.removeEventListener('resize', measure); };
   }, []);
-
-  // Keys slide into place on first view; re-measure once they've settled.
-  useEffect(() => {
-    if (!inView) return;
-    const t = setTimeout(() => window.dispatchEvent(new Event('resize')), 900);
-    return () => clearTimeout(t);
-  }, [inView]);
 
   const current = KEYS[active];
 
@@ -255,9 +243,6 @@ export default function SkillKeyboard() {
                 pressed={i === active}
                 onPress={() => press(i)}
                 onPreview={() => setActive(i)}
-                delay={(Math.floor(i / COLS) + (i % COLS)) * motionTokens.stagger.keycap}
-                show={inView}
-                reduced={reduced}
               />
             ))}
           </div>

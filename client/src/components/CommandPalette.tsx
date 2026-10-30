@@ -43,14 +43,12 @@ export default function CommandPalette() {
   const dialogRef = useRef<HTMLDivElement>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
 
-  // Remember what had focus on open; restore it on close.
+  // Restore focus to the element captured at open time, once the palette closes.
   useEffect(() => {
-    if (!isOpen) return;
-    returnFocusRef.current = document.activeElement as HTMLElement | null;
-    return () => {
-      returnFocusRef.current?.focus({ preventScroll: true });
-      returnFocusRef.current = null;
-    };
+    if (isOpen) return;
+    const el = returnFocusRef.current;
+    returnFocusRef.current = null;
+    if (el && document.contains(el)) el.focus({ preventScroll: true });
   }, [isOpen]);
 
   const commands: Command[] = [
@@ -202,6 +200,8 @@ export default function CommandPalette() {
       // Ctrl+K or Cmd+K to open
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
+        // Capture focus before autoFocus moves it into the palette
+        if (!isOpen) returnFocusRef.current = document.activeElement as HTMLElement | null;
         setIsOpen(!isOpen);
         setSearch('');
         setSelectedIndex(0);
@@ -329,6 +329,7 @@ export default function CommandPalette() {
                         : 'bg-black text-white hover:bg-zinc-900'
                     }`}
                     onMouseEnter={() => setSelectedIndex(idx)}
+                    onFocus={() => setSelectedIndex(idx)}
                   >
                     <div className="font-mono font-bold text-sm">{cmd.label}</div>
                     <div className="font-mono text-xs text-gray-500 mt-1">{cmd.description}</div>

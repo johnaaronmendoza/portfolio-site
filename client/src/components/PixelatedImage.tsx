@@ -103,9 +103,25 @@ export default function PixelatedImage({ src, alt, className }: Props) {
     });
     ro.observe(canvas);
 
+    // Re-sync when devicePixelRatio changes (zoom, moving between displays).
+    // A resolution query only matches the current DPR, so re-register after each change.
+    let dprQuery: MediaQueryList | null = null;
+    const onDprChange = () => {
+      syncSize();
+      if (imgRef.current?.complete) startLoop();
+      watchDpr();
+    };
+    const watchDpr = () => {
+      dprQuery?.removeEventListener('change', onDprChange);
+      dprQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
+      dprQuery.addEventListener('change', onDprChange);
+    };
+    watchDpr();
+
     return () => {
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
+      dprQuery?.removeEventListener('change', onDprChange);
       img.onload = null;
     };
   }, [src, startLoop]);

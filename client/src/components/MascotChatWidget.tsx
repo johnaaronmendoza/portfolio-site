@@ -328,7 +328,7 @@ export default function MascotChatWidget() {
                   <button
                     key={label}
                     onClick={() => handleQuickAction(query)}
-                    className="border border-amber-400 bg-black text-amber-400 font-pixel text-[10px] min-h-[44px] py-2 px-1 hover:bg-amber-400 hover:text-black transition-colors leading-tight"
+                    className="border border-amber-400 bg-black text-amber-400 font-pixel text-xs whitespace-normal break-words min-h-[44px] py-2 px-1 hover:bg-amber-400 hover:text-black transition-colors leading-tight"
                   >
                     {label}
                   </button>

@@ -1,5 +1,5 @@
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { play } from '@/hooks/useSound';
 import { motionTokens } from '@/lib/motion-tokens';
@@ -171,6 +171,38 @@ export default function SkillKeyboard() {
   const inView = useInView(boardRef, { once: true, amount: 0.25 });
   const [active, setActive] = useState(1); // start on RAG: the AI story first
   const [taps, setTaps] = useState(0);     // drives the mascot's hop
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [perch, setPerch] = useState<{ x: number; y: number } | null>(null);
+
+  // The board is tilted in 3D, so measure where its top-right key actually lands
+  // on screen and stand the mascot there. Re-measure on resize.
+  useEffect(() => {
+    const measure = () => {
+      const wrap = wrapRef.current;
+      const board = boardRef.current;
+      if (!wrap || !board) return;
+      const keys = board.querySelectorAll('button');
+      const cols = window.matchMedia('(min-width: 640px)').matches ? COLS : 4;
+      const corner = keys[cols - 1] as HTMLElement | undefined;
+      if (!corner) return;
+      const w = wrap.getBoundingClientRect();
+      const k = corner.getBoundingClientRect();
+      const size = window.matchMedia('(min-width: 1024px)').matches ? 80 : window.matchMedia('(min-width: 640px)').matches ? 64 : 56;
+      setPerch({ x: k.left - w.left + k.width / 2 - size / 2, y: k.top - w.top - size * 0.85 });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (wrapRef.current) ro.observe(wrapRef.current);
+    window.addEventListener('resize', measure);
+    return () => { ro.disconnect(); window.removeEventListener('resize', measure); };
+  }, []);
+
+  // Keys slide into place on first view; re-measure once they've settled.
+  useEffect(() => {
+    if (!inView) return;
+    const t = setTimeout(() => window.dispatchEvent(new Event('resize')), 900);
+    return () => clearTimeout(t);
+  }, [inView]);
 
   const current = KEYS[active];
 
@@ -203,7 +235,7 @@ export default function SkillKeyboard() {
       {/* Keyboard: isometric on large screens, gently tilted on phones.
           --rx/--rz drive the board tilt; the mascot applies the inverse so it
           stands upright on the board's corner at every breakpoint. */}
-      <div className="relative flex justify-center [perspective:1600px] pt-10 pb-4 lg:py-10">
+      <div ref={wrapRef} className="relative flex justify-center [perspective:1600px] pt-10 pb-4 lg:py-10">
         <div
           ref={boardRef}
           role="group"
@@ -211,7 +243,6 @@ export default function SkillKeyboard() {
           className="relative w-full max-w-[440px] lg:max-w-[560px] rounded-[22px] p-3 sm:p-4 [--rx:16deg] [--rz:0deg] lg:[--rx:42deg] lg:[--rz:-24deg]"
           style={{
             transform: 'rotateX(var(--rx)) rotateZ(var(--rz))',
-            transformStyle: 'preserve-3d',
             background: 'linear-gradient(160deg, #2a2a2e 0%, #141416 100%)',
             boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.08), 0 14px 0 #0a0a0b, 0 30px 50px rgba(0,0,0,0.7)',
           }}
@@ -231,27 +262,6 @@ export default function SkillKeyboard() {
             ))}
           </div>
 
-          {/* Mascot stands on the top-right corner and hops when a key is pressed */}
-          <span
-            aria-hidden="true"
-            className="absolute top-0 right-6 sm:right-8 pointer-events-none"
-            style={{
-              transform: 'rotateZ(calc(var(--rz) * -1)) rotateX(calc(var(--rx) * -1)) translateY(-100%)',
-              transformOrigin: 'bottom center',
-            }}
-          >
-            <motion.img
-              key={taps}
-              src={MASCOT}
-              alt=""
-              draggable={false}
-              className="block w-14 sm:w-16 lg:w-20"
-              style={{ imageRendering: 'pixelated' }}
-              initial={false}
-              animate={reduced || taps === 0 ? undefined : { y: [0, -14, 0] }}
-              transition={{ duration: motionTokens.duration.normal, ease: motionTokens.easing.smooth }}
-            />
-          </span>
         </div>
       </div>
     </div>

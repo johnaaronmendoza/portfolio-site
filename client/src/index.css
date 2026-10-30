@@ -276,6 +276,8 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  body {
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="4" height="4" fill="%23F59E0B"/><rect x="6" y="2" width="4" height="4" fill="%23F59E0B"/><rect x="2" y="6" width="4" height="4" fill="%23F59E0B"/><rect x="6" y="6" width="4" height="4" fill="%23F59E0B"/><rect x="10" y="10" width="4" height="4" fill="%23F59E0B"/><rect x="14" y="10" width="4" height="4" fill="%23F59E0B"/><rect x="10" y="14" width="4" height="4" fill="%23F59E0B"/><rect x="14" y="14" width="4" height="4" fill="%23F59E0B"/></svg>') 2 2, auto;
   }
   body {
@@ -358,6 +360,17 @@
   input[type="checkbox"]:not(:disabled),
   input[type="radio"]:not(:disabled) {
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="4" height="4" fill="%233B82F6"/><rect x="6" y="2" width="4" height="4" fill="%233B82F6"/><rect x="2" y="6" width="4" height="4" fill="%233B82F6"/><rect x="6" y="6" width="4" height="4" fill="%233B82F6"/><rect x="10" y="10" width="4" height="4" fill="%233B82F6"/><rect x="14" y="10" width="4" height="4" fill="%233B82F6"/><rect x="10" y="14" width="4" height="4" fill="%233B82F6"/><rect x="14" y="14" width="4" height="4" fill="%233B82F6"/></svg>') 2 2, auto;
+  }
+
+  /* Text gets an I-beam so it reads as selectable; placed after the pixel
+     cursor rules so it wins at equal specificity. */
+  p, li, h1, h2, h3, h4, dd, dt, input, textarea {
+    cursor: text;
+  }
+  /* ...except text inside a link or button, which keeps the pointer. */
+  a[href] *,
+  button * {
+    cursor: inherit;
   }
 }
 

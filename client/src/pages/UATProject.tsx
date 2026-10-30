@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import FramerReveal from '@/components/FramerReveal';
-import CountUp from '@/components/CountUp';
 import { useLocation } from 'wouter';
 import { useEffect, useState } from 'react';
 import { trackProjectVisit } from '@/hooks/useAchievements';
@@ -130,15 +129,13 @@ export default function UATProject() {
 
       {/* Sticky back nav */}
       <div className="sticky top-0 z-30 bg-[#131313] border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
-        <motion.button
+        <button
           onClick={() => { play('back'); setLocation('/'); }}
-          className="font-pixel text-xs text-amber-400 hover:text-white transition-colors"
-          whileHover={{ x: -4 }}
-          whileTap={{ x: -4, scale: 0.95, transition: { duration: 0.1 } }}
+          className="min-h-[44px] inline-flex items-center gap-2 px-2 -ml-2 font-pixel text-xs text-amber-400 hover:text-white transition-colors"
         >
           ← BACK
-        </motion.button>
-        <span className="font-pixel text-xs text-zinc-500 truncate">/ UAT_TESTING_DASHBOARD</span>
+        </button>
+        <span className="font-pixel text-xs text-zinc-400 truncate">/ UAT_TESTING_DASHBOARD</span>
       </div>
 
       {/* Hero */}
@@ -149,7 +146,7 @@ export default function UATProject() {
               {/* Identity card */}
               <div className="lg:col-span-8 bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
                 <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6" style={{ wordBreak: 'break-all' }}>
-                  [UAT_TESTING_DASHBOARD_&_DEFECT_TRACKER]<span className="blink-cursor">█</span>
+                  [UAT_TESTING_DASHBOARD_&_DEFECT_TRACKER]
                 </h1>
                 <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
                   Full-stack defect tracker built for a real hospital appointment system UAT cycle.
@@ -158,7 +155,7 @@ export default function UATProject() {
                 </p>
                 <div className="flex flex-wrap gap-2 mb-8">
                   {['React_18', 'Vite', 'Tailwind_CSS', 'Node.js', 'Express', 'SQLite', 'Recharts', 'REST_API'].map(t => (
-                    <span key={t} className="bg-[#353535] px-3 py-1 font-mono text-[11px] text-amber-400 border border-amber-500/20">--{t}</span>
+                    <span key={t} className="bg-[#353535] px-3 py-1 font-mono text-xs text-amber-400 border border-amber-500/20">--{t}</span>
                   ))}
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
@@ -169,8 +166,8 @@ export default function UATProject() {
                     { label: '[YEAR]',   value: '2024' },
                   ].map(({ label, value }) => (
                     <div key={label} className="bg-[#1b1b1b] p-4">
-                      <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">{label}</p>
-                      <p className="font-mono-8bit text-xs">{value}</p>
+                      <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">{label}</p>
+                      <p className="font-mono-8bit text-sm">{value}</p>
                     </div>
                   ))}
                 </div>
@@ -184,7 +181,7 @@ export default function UATProject() {
                 className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
               >
                 <div>
-                  <p className="font-mono text-[10px] text-amber-900/60 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
+                  <p className="font-mono text-xs text-amber-900 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
                   <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">VIEW_REPOSITORY</h2>
                 </div>
                 <div className="flex items-center justify-between mt-8">
@@ -210,9 +207,9 @@ export default function UATProject() {
               ].map(({ label, value }) => (
                 <div key={label} className="bg-[#1f1f1f] p-6 text-center">
                   <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-2">
-                    <CountUp to={value} duration={1600} />
+                    {value}
                   </p>
-                  <p className="font-mono text-[10px] text-amber-500/40 uppercase tracking-widest">{label}</p>
+                  <p className="font-mono text-xs text-amber-400/80 uppercase tracking-widest">{label}</p>
                 </div>
               ))}
             </div>
@@ -232,10 +229,10 @@ export default function UATProject() {
                 <button
                   key={s.key}
                   onClick={() => setActiveTab(s.key)}
-                  className={`font-pixel text-[10px] px-3 py-1.5 border-2 transition-colors ${
+                  className={`font-pixel text-xs px-3 py-1.5 min-h-[44px] border-2 transition-colors ${
                     activeTab === s.key
                       ? 'border-amber-400 text-black bg-amber-400'
-                      : 'border-zinc-700 text-zinc-500 hover:border-amber-400 hover:text-amber-400'
+                      : 'border-zinc-700 text-zinc-400 hover:border-amber-400 hover:text-amber-400'
                   }`}
                 >
                   {s.label}
@@ -261,7 +258,7 @@ export default function UATProject() {
                 </motion.div>
               </AnimatePresence>
             </div>
-            <p className="font-mono-8bit text-xs text-zinc-500 mt-3 leading-relaxed">
+            <p className="font-mono-8bit text-sm text-zinc-400 mt-3 leading-relaxed">
               ▸ {activeShot.caption}
             </p>
           </FramerReveal>
@@ -296,34 +293,30 @@ export default function UATProject() {
           {/* Test scope */}
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-2">[UAT_PROCESS]</h2>
-            <p className="font-mono-8bit text-sm text-zinc-500 mb-8 leading-relaxed">
+            <p className="font-mono-8bit text-sm text-zinc-400 mb-8 leading-relaxed">
               How the test cycle was scoped, executed, and documented.
             </p>
 
             <h3 className="font-pixel text-xs text-blue-400 mb-4">[ TEST SCOPE — 8 MODULES ]</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-amber-500/10">
               {MODULES.map((m, i) => (
-                <motion.div
+                <div
                   key={m.name}
                   className="bg-[#1b1b1b] p-4 flex items-center justify-between gap-4"
-                  initial={{ opacity: 0, x: -8 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: i * 0.04 }}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-[10px] text-zinc-600 flex-shrink-0">
+                    <span className="font-mono text-xs text-zinc-400 flex-shrink-0">
                       {String(i + 1).padStart(2, '0')}
                     </span>
-                    <span className="font-mono-8bit text-xs">{m.name}</span>
+                    <span className="font-mono-8bit text-sm">{m.name}</span>
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0">
-                    <span className="font-mono text-[10px] text-zinc-500">{m.defects} defects</span>
-                    <span className={`font-pixel text-[9px] border px-1.5 py-0.5 ${RISK_COLOR[m.risk]}`}>
+                    <span className="font-mono text-xs text-zinc-400">{m.defects} defects</span>
+                    <span className={`font-pixel text-xs border px-1.5 py-0.5 ${RISK_COLOR[m.risk]}`}>
                       {m.risk}
                     </span>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </FramerReveal>
@@ -336,9 +329,9 @@ export default function UATProject() {
                 <div key={sev} className="bg-[#1b1b1b] p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <span className={`font-pixel text-xs ${color}`}>{sev}</span>
-                    <span className="font-mono text-[10px] text-zinc-600">{pri}</span>
+                    <span className="font-mono text-xs text-zinc-400">{pri}</span>
                   </div>
-                  <p className="font-mono-8bit text-xs text-zinc-400 leading-relaxed">{desc}</p>
+                  <p className="font-mono-8bit text-sm sm:text-[15px] text-zinc-400 leading-relaxed">{desc}</p>
                 </div>
               ))}
             </div>
@@ -357,8 +350,8 @@ export default function UATProject() {
                   { label: 'LINKED',  value: 'DEF-025' },
                 ].map(({ label, value }) => (
                   <div key={label} className="bg-[#1b1b1b] p-4">
-                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 tracking-widest">{label}</p>
-                    <p className={`font-mono-8bit text-xs ${value === 'FAIL' ? 'text-red-400' : value.startsWith('DEF') ? 'text-amber-400' : 'text-white'}`}>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">{label}</p>
+                    <p className={`font-mono-8bit text-sm ${value === 'FAIL' ? 'text-red-400' : value.startsWith('DEF') ? 'text-amber-400' : 'text-white'}`}>
                       {value}
                     </p>
                   </div>
@@ -367,19 +360,19 @@ export default function UATProject() {
 
               <div className="p-6 space-y-5">
                 <div>
-                  <p className="font-pixel text-[9px] text-zinc-600 mb-1 tracking-widest">TITLE</p>
+                  <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">TITLE</p>
                   <p className="font-mono-8bit text-sm text-white">Verify Notification Service Stability Under High Load</p>
                 </div>
                 <div>
-                  <p className="font-pixel text-[9px] text-zinc-600 mb-1 tracking-widest">PRECONDITIONS</p>
-                  <p className="font-mono-8bit text-xs text-zinc-300 leading-relaxed">
+                  <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">PRECONDITIONS</p>
+                  <p className="font-mono-8bit text-sm sm:text-[15px] text-zinc-300 leading-relaxed">
                     System is running with an active notification queue. User is authenticated as QA Tester.
                     Notification service is operational with 100+ pending items queued.
                   </p>
                 </div>
                 <div>
-                  <p className="font-pixel text-[9px] text-zinc-600 mb-1 tracking-widest">TEST STEPS</p>
-                  <div className="bg-[#111] p-4 font-mono text-xs text-gray-300 space-y-1">
+                  <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">TEST STEPS</p>
+                  <div className="bg-[#111] p-4 font-mono text-sm sm:text-[15px] text-gray-300 space-y-1">
                     <p>1. Queue 100+ notification events simultaneously across all types</p>
                     <p>2. Monitor notification service health in real time</p>
                     <p>3. Observe system behaviour under concurrent load</p>
@@ -387,15 +380,15 @@ export default function UATProject() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <p className="font-pixel text-[9px] text-zinc-600 mb-1 tracking-widest">EXPECTED RESULT</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">EXPECTED RESULT</p>
                     <div className="bg-[#0d2318] border border-green-800 p-3">
-                      <p className="font-mono-8bit text-xs text-green-400">Notifications processed in queue without crash</p>
+                      <p className="font-mono-8bit text-sm sm:text-[15px] text-green-400">Notifications processed in queue without crash</p>
                     </div>
                   </div>
                   <div>
-                    <p className="font-pixel text-[9px] text-zinc-600 mb-1 tracking-widest">ACTUAL RESULT</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">ACTUAL RESULT</p>
                     <div className="bg-[#230d0d] border border-red-800 p-3">
-                      <p className="font-mono-8bit text-xs text-red-400">Service crashes, all pending notifications lost</p>
+                      <p className="font-mono-8bit text-sm sm:text-[15px] text-red-400">Service crashes, all pending notifications lost</p>
                     </div>
                   </div>
                 </div>
@@ -418,7 +411,7 @@ export default function UATProject() {
                     {responsibilities.map(r => (
                       <li key={r} className="flex items-start gap-2">
                         <span className="text-blue-400 flex-shrink-0 mt-0.5">▸</span>
-                        <span className="font-mono-8bit text-xs leading-relaxed">{r}</span>
+                        <span className="font-mono-8bit text-sm sm:text-[15px] leading-relaxed">{r}</span>
                       </li>
                     ))}
                   </ul>
@@ -488,7 +481,7 @@ export default function UATProject() {
                     {items.map(i => (
                       <li key={i} className="flex items-start gap-2">
                         <span className="text-blue-400 flex-shrink-0 mt-0.5">▸</span>
-                        <span className="font-mono-8bit text-xs leading-relaxed">{i}</span>
+                        <span className="font-mono-8bit text-sm sm:text-[15px] leading-relaxed">{i}</span>
                       </li>
                     ))}
                   </ul>
@@ -531,7 +524,7 @@ export default function UATProject() {
                     {items.map(i => (
                       <li key={i} className="flex items-start gap-2">
                         <span className={`${accent} flex-shrink-0`}>▸</span>
-                        <span className="font-mono-8bit text-xs leading-relaxed">{i}</span>
+                        <span className="font-mono-8bit text-sm sm:text-[15px] leading-relaxed">{i}</span>
                       </li>
                     ))}
                   </ul>
@@ -549,24 +542,18 @@ export default function UATProject() {
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
               <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <motion.button
+                <button
                   onClick={() => { play('back'); setLocation('/'); }}
-                  className="border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
-                  whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B' }}
-                  whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B', scale: 0.97 }}
-                  transition={{ duration: 0.1 }}
+                  className="min-h-[44px] inline-flex items-center justify-center border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
                 >
                   ← BACK TO PORTFOLIO
-                </motion.button>
-                <motion.button
+                </button>
+                <button
                   onClick={() => setLocation('/projects/ai-finance')}
-                  className="border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
-                  whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6' }}
-                  whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6', scale: 0.97 }}
-                  transition={{ duration: 0.1 }}
+                  className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
                 >
                   AI FINANCE DASHBOARD →
-                </motion.button>
+                </button>
               </div>
             </div>
           </FramerReveal>

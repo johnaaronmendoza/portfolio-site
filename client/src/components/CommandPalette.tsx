@@ -244,6 +244,9 @@ export default function CommandPalette() {
             transition={{ duration: 0.12, ease: [0.23, 1, 0.32, 1] }}
             className="fixed top-1/4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-2xl bg-black border-4 border-amber-400 shadow-8bit overflow-hidden"
             style={{ transformOrigin: 'top' }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Command menu"
           >
             {/* CRT flash — 1-frame white flash on open */}
             <motion.div
@@ -265,6 +268,7 @@ export default function CommandPalette() {
                     setSelectedIndex(0);
                   }}
                   placeholder="Search commands..."
+                  aria-label="Search commands"
                   className="flex-1 bg-black text-white font-mono text-sm outline-none"
                 />
               </div>

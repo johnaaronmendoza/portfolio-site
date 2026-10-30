@@ -212,7 +212,7 @@ export default function SkillKeyboard() {
             exit={reduced ? undefined : { opacity: 0 }}
             transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.smooth }}
           >
-            <p className="font-mono text-xs text-zinc-500 mb-3">{GROUP_NAME[current.group]}</p>
+            <p className="font-mono text-xs text-zinc-400 mb-3">{GROUP_NAME[current.group]}</p>
             <h3 className="font-pixel text-lg sm:text-xl text-white leading-snug mb-4">{current.name}</h3>
             <p className="font-mono text-[15px] text-zinc-200 leading-relaxed">{current.blurb}</p>
             <p className="font-mono text-xs text-amber-400/80 mt-4">Used in: {current.usedIn}</p>

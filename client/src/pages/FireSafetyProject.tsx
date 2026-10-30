@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import FramerReveal from '@/components/FramerReveal';
-import CountUp from '@/components/CountUp';
 import { useLocation } from 'wouter';
 import { useEffect } from 'react';
 import { trackProjectVisit } from '@/hooks/useAchievements';
@@ -37,15 +36,13 @@ export default function FireSafetyProject() {
     <div className="min-h-screen bg-[#131313] text-white">
       {/* Sticky back nav */}
       <div className="sticky top-0 z-30 bg-[#131313] border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
-        <motion.button
+        <button
           onClick={() => { play('back'); setLocation('/'); }}
-          className="font-pixel text-xs text-amber-400 hover:text-white transition-colors"
-          whileHover={{ x: -4 }}
-          whileTap={{ x: -4, scale: 0.95, transition: { duration: 0.1 } }}
+          className="min-h-[44px] inline-flex items-center gap-2 px-2 -ml-2 font-pixel text-xs text-amber-400 hover:text-white transition-colors"
         >
           ← BACK
-        </motion.button>
-        <span className="font-pixel text-xs text-zinc-500 truncate">/ FIRE_SAFETY_DRILL_COMPANION</span>
+        </button>
+        <span className="font-pixel text-xs text-zinc-400 truncate">/ FIRE_SAFETY_DRILL_COMPANION</span>
       </div>
 
       {/* Hero — Sovereign Console bento */}
@@ -56,7 +53,7 @@ export default function FireSafetyProject() {
               {/* Identity card */}
               <div className="lg:col-span-8 bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
                 <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6" style={{wordBreak:"break-all"}}>
-                  [FIRE_SAFETY_DRILL_COMPANION]<span className="blink-cursor">█</span>
+                  [FIRE_SAFETY_DRILL_COMPANION]
                 </h1>
                 <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
                   Native Android app empowering HDB residents to rehearse fire evacuation at their own convenience,
@@ -64,25 +61,25 @@ export default function FireSafetyProject() {
                 </p>
                 <div className="flex flex-wrap gap-2 mb-8">
                   {["Kotlin", "Jetpack_Compose", "MVVM", "Hilt_DI", "ARCore", "TFLite", "Room_DB", "Firebase_FCM", "Dijkstra", "Weinberg_PDR"].map(t => (
-                    <span key={t} className="bg-[#353535] px-3 py-1 font-mono text-[11px] text-amber-400 border border-amber-500/20">--{t}</span>
+                    <span key={t} className="bg-[#353535] px-3 py-1 font-mono text-xs text-amber-400 border border-amber-500/20">--{t}</span>
                   ))}
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
                   <div className="bg-[#1b1b1b] p-4">
-                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[COURSE]</p>
-                    <p className="font-mono-8bit text-xs">INF2007 Mobile App Dev</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[COURSE]</p>
+                    <p className="font-mono-8bit text-sm">INF2007 Mobile App Dev</p>
                   </div>
                   <div className="bg-[#1b1b1b] p-4">
-                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[TEAM]</p>
-                    <p className="font-mono-8bit text-xs">Group 16, SIT</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[TEAM]</p>
+                    <p className="font-mono-8bit text-sm">Group 16, SIT</p>
                   </div>
                   <div className="bg-[#1b1b1b] p-4">
-                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[SPRINTS]</p>
-                    <p className="font-mono-8bit text-xs">3 Agile sprints</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[SPRINTS]</p>
+                    <p className="font-mono-8bit text-sm">3 Agile sprints</p>
                   </div>
                   <div className="bg-[#1b1b1b] p-4">
-                    <p className="font-pixel text-[9px] text-amber-400/60 mb-1 uppercase tracking-widest">[PLATFORM]</p>
-                    <p className="font-mono-8bit text-xs">Android (Pixel 6a)</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[PLATFORM]</p>
+                    <p className="font-mono-8bit text-sm">Android (Pixel 6a)</p>
                   </div>
                 </div>
               </div>
@@ -94,11 +91,11 @@ export default function FireSafetyProject() {
                 className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
               >
                 <div>
-                  <p className="font-mono text-[10px] text-amber-900/60 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
-                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">VIEW_REPOSITORY</h2>
+                  <p className="font-mono text-xs text-amber-900 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
+                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GITHUB_PROFILE</h2>
                 </div>
                 <div className="flex items-center justify-between mt-8">
-                  <span className="font-mono-8bit text-amber-900 text-sm">[ SOURCE_CODE ]</span>
+                  <span className="font-mono-8bit text-amber-900 text-sm">[ ALL_REPOSITORIES ]</span>
                   <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
                 </div>
               </a>
@@ -114,8 +111,8 @@ export default function FireSafetyProject() {
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-px bg-amber-500/10">
               {stats.map(({ label, value }) => (
                 <div key={label} className="bg-[#1f1f1f] p-5 text-center">
-                  <p className="font-pixel text-amber-400 text-sm sm:text-base mb-2"><CountUp to={value} duration={1600} /></p>
-                  <p className="font-mono text-[10px] text-amber-500/40 uppercase tracking-widest leading-tight">{label}</p>
+                  <p className="font-pixel text-amber-400 text-sm sm:text-base mb-2">{value}</p>
+                  <p className="font-mono text-xs text-amber-400/80 uppercase tracking-widest leading-tight">{label}</p>
                 </div>
               ))}
             </div>
@@ -144,7 +141,7 @@ export default function FireSafetyProject() {
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[MY_CONTRIBUTIONS]</h2>
             <div className="bg-[#1b1b1b] border-l-4 border-blue-500 p-6 sm:p-8">
-              <p className="font-mono-8bit text-xs text-blue-400 mb-4">John Aaron: Algorithms & AR (49 commits)</p>
+              <p className="font-mono-8bit text-sm text-blue-400 mb-4">John Aaron: Algorithms & AR (49 commits)</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
                   "Dijkstra shortest-path with dynamic hazard re-routing",
@@ -269,7 +266,7 @@ export default function FireSafetyProject() {
                   transition={{ duration: 0.2 }}
                 >
                   <p className="font-pixel text-xs text-amber-400 mb-3">[ {label} ]</p>
-                  <p className="font-mono-8bit text-xs text-gray-300 leading-relaxed">{desc}</p>
+                  <p className="font-mono-8bit text-sm sm:text-[15px] text-gray-300 leading-relaxed">{desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -284,24 +281,18 @@ export default function FireSafetyProject() {
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
               <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <motion.button
+                <button
                   onClick={() => { play('back'); setLocation('/'); }}
-                  className="border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
-                  whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B' }}
-                  whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B', scale: 0.97 }}
-                  transition={{ duration: 0.1 }}
+                  className="min-h-[44px] inline-flex items-center justify-center border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
                 >
                   ← BACK TO PORTFOLIO
-                </motion.button>
-                <motion.button
+                </button>
+                <button
                   onClick={() => setLocation('/projects/uwb')}
-                  className="border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
-                  whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6' }}
-                  whileTap={{ y: 4, boxShadow: '0px 0px 0px 0px #3B82F6', scale: 0.97 }}
-                  transition={{ duration: 0.1 }}
+                  className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
                 >
                   NEXT: UWB PROJECT →
-                </motion.button>
+                </button>
               </div>
             </div>
           </FramerReveal>

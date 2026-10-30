@@ -257,7 +257,7 @@ export default function MascotChatWidget() {
             </div>
 
             {/* Messages — flex-1 + min-h-0 is required for scroll to work in flex container */}
-            <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 bg-black" data-lenis-prevent>
+            <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 bg-black" data-lenis-prevent role="log" aria-live="polite" aria-label="Chat messages">
               {messages.map((msg) => (
                 <motion.div
                   key={msg.id}

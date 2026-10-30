@@ -200,14 +200,18 @@ export default function SkillKeyboard() {
         </AnimatePresence>
       </div>
 
-      {/* Keyboard: isometric on large screens, gently tilted on phones */}
-      <div className="relative flex justify-center [perspective:1600px] py-2 lg:py-0">
+      {/* Keyboard: isometric on large screens, gently tilted on phones.
+          --rx/--rz drive the board tilt; the mascot applies the inverse so it
+          stands upright on the board's corner at every breakpoint. */}
+      <div className="relative flex justify-center [perspective:1600px] pt-10 pb-4 lg:py-10">
         <div
           ref={boardRef}
           role="group"
           aria-label="Skills keyboard. Press a key to see what the skill is and where I used it."
-          className="relative w-full max-w-[420px] lg:max-w-[470px] rounded-[22px] p-3 sm:p-4 [transform:rotateX(18deg)] lg:[transform:rotateX(50deg)_rotateZ(-30deg)] lg:-my-16"
+          className="relative w-full max-w-[440px] lg:max-w-[560px] rounded-[22px] p-3 sm:p-4 [--rx:16deg] [--rz:0deg] lg:[--rx:42deg] lg:[--rz:-24deg]"
           style={{
+            transform: 'rotateX(var(--rx)) rotateZ(var(--rz))',
+            transformStyle: 'preserve-3d',
             background: 'linear-gradient(160deg, #2a2a2e 0%, #141416 100%)',
             boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.08), 0 14px 0 #0a0a0b, 0 30px 50px rgba(0,0,0,0.7)',
           }}
@@ -226,21 +230,29 @@ export default function SkillKeyboard() {
               />
             ))}
           </div>
-        </div>
 
-        {/* Mascot sits on the board's top edge and hops when a key is pressed */}
-        <motion.img
-          key={taps}
-          src={MASCOT}
-          alt=""
-          aria-hidden="true"
-          draggable={false}
-          className="absolute -top-10 right-4 sm:right-10 lg:top-2 lg:right-6 w-16 sm:w-20 pointer-events-none"
-          style={{ imageRendering: 'pixelated' }}
-          initial={reduced || taps === 0 ? false : { y: 0 }}
-          animate={reduced || taps === 0 ? undefined : { y: [0, -14, 0] }}
-          transition={{ duration: motionTokens.duration.normal, ease: motionTokens.easing.smooth }}
-        />
+          {/* Mascot stands on the top-right corner and hops when a key is pressed */}
+          <span
+            aria-hidden="true"
+            className="absolute top-0 right-6 sm:right-8 pointer-events-none"
+            style={{
+              transform: 'rotateZ(calc(var(--rz) * -1)) rotateX(calc(var(--rx) * -1)) translateY(-100%)',
+              transformOrigin: 'bottom center',
+            }}
+          >
+            <motion.img
+              key={taps}
+              src={MASCOT}
+              alt=""
+              draggable={false}
+              className="block w-14 sm:w-16 lg:w-20"
+              style={{ imageRendering: 'pixelated' }}
+              initial={false}
+              animate={reduced || taps === 0 ? undefined : { y: [0, -14, 0] }}
+              transition={{ duration: motionTokens.duration.normal, ease: motionTokens.easing.smooth }}
+            />
+          </span>
+        </div>
       </div>
     </div>
   );

@@ -114,12 +114,12 @@ export default function AIFinanceProject() {
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
-              <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
+              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
                 Maritime logistics and shipping analysts deal with fragmented market data: Brent crude
                 prices, USD/SGD FX rates, logistics stock performance, and geopolitical news all live
                 in separate sources with no unified view.
               </p>
-              <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
+              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
                 This pipeline solves that by automatically ingesting and transforming these data
                 sources, computing financial metrics like rolling volatility and cross-asset
                 correlations, and enriching news data with AI-generated sentiment scores and

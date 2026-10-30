@@ -110,7 +110,7 @@ export default function SCSProject() {
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_CHALLENGE]</h2>
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
-              <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
+              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
                 Singapore Cancer Society (SCS) conducts community outreach to advocate for cancer
                 awareness and early detection. Traditional booths lack interactivity; many visitors
                 perceive outreach as monotonous or avoid it due to stigma, resulting in limited
@@ -136,7 +136,7 @@ export default function SCSProject() {
                 ].map(c => (
                   <div key={c} className="flex items-start gap-2">
                     <span className="text-amber-400 flex-shrink-0 mt-1">▸</span>
-                    <span className="font-mono-8bit text-sm">{c}</span>
+                    <span className="font-mono-8bit text-[15px]">{c}</span>
                   </div>
                 ))}
               </div>
@@ -150,7 +150,7 @@ export default function SCSProject() {
         <div className="max-w-6xl mx-auto space-y-10">
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-2">[ADMIN_PANEL]</h2>
-            <p className="font-mono-8bit text-sm text-gray-400 mb-8">
+            <p className="font-mono-8bit text-[15px] text-gray-400 mb-8">
               A full no-code CMS allowing SCS staff to create stories, manage assets, view analytics, and control admin accounts, without technical expertise.
             </p>
           </FramerReveal>

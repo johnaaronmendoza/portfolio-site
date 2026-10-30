@@ -126,12 +126,12 @@ export default function FireSafetyProject() {
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
-              <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
+              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
                 Singapore's ~1.1 million HDB flats house 80% of the population, many in blocks exceeding 20 storeys.
                 SCDF fire drills have consistently low participation, especially among elderly residents facing
                 mobility challenges, language barriers, or unfamiliarity with evacuation routes in their own block.
               </p>
-              <p className="font-mono-8bit text-sm sm:text-base leading-relaxed text-amber-400">
+              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed text-amber-400">
                 The Fire Safety Drill Companion lets residents rehearse fire evacuation on-demand, inside their own HDB block,
                 without organized group drills or SCDF supervision, fully offline.
               </p>
@@ -155,7 +155,7 @@ export default function FireSafetyProject() {
                 ].map(c => (
                   <div key={c} className="flex items-start gap-2">
                     <span className="text-amber-400 flex-shrink-0 mt-1">▸</span>
-                    <span className="font-mono-8bit text-sm">{c}</span>
+                    <span className="font-mono-8bit text-[15px]">{c}</span>
                   </div>
                 ))}
               </div>

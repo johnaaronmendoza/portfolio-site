@@ -120,12 +120,12 @@ export default function UWBProject() {
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
-              <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
+              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
                 Ultra-Wideband (UWB) supports sub-nanosecond time resolution and centimetre-level accuracy
                 under ideal conditions, but accuracy degrades significantly under Non-Line-of-Sight (NLOS)
                 conditions where the direct path is blocked by walls, furniture, or human bodies.
               </p>
-              <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
+              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
                 This project classifies whether two shortest dominant signal paths form a (LOS, NLOS) or (NLOS, NLOS) pair,
                 and estimates the measured range for both paths, enabling more reliable indoor positioning for
                 autonomous robots, drones, smart warehouses, and asset tracking.
@@ -150,7 +150,7 @@ export default function UWBProject() {
                 ].map(c => (
                   <div key={c} className="flex items-start gap-2">
                     <span className="text-amber-400 flex-shrink-0 mt-1">▸</span>
-                    <span className="font-mono-8bit text-sm">{c}</span>
+                    <span className="font-mono-8bit text-[15px]">{c}</span>
                   </div>
                 ))}
               </div>

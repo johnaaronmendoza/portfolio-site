@@ -258,7 +258,7 @@ export default function UATProject() {
                 </motion.div>
               </AnimatePresence>
             </div>
-            <p className="font-mono-8bit text-sm text-zinc-400 mt-3 leading-relaxed">
+            <p className="font-mono-8bit text-[15px] text-zinc-400 mt-3 leading-relaxed">
               ▸ {activeShot.caption}
             </p>
           </FramerReveal>
@@ -271,12 +271,12 @@ export default function UATProject() {
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
-              <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
+              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
                 UAT for complex healthcare systems involves multiple teams: project managers,
                 QA leads, testers, and developers, all needing a shared view of what is broken,
                 what has been tested, and what is blocking go-live. Spreadsheets break down fast.
               </p>
-              <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
+              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
                 This dashboard provides a single source of truth: defects with full lifecycle
                 tracking, test cases linked directly to the defects they exposed, and a real-time
                 analytics view so the team knows exactly where UAT stands before any deployment decision.
@@ -293,7 +293,7 @@ export default function UATProject() {
           {/* Test scope */}
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-2">[UAT_PROCESS]</h2>
-            <p className="font-mono-8bit text-sm text-zinc-400 mb-8 leading-relaxed">
+            <p className="font-mono-8bit text-[15px] text-zinc-400 mb-8 leading-relaxed">
               How the test cycle was scoped, executed, and documented.
             </p>
 
@@ -312,7 +312,7 @@ export default function UATProject() {
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0">
                     <span className="font-mono text-xs text-zinc-400">{m.defects} defects</span>
-                    <span className={`font-pixel text-[10px] sm:text-xs border px-1.5 py-0.5 ${RISK_COLOR[m.risk]}`}>
+                    <span className={`font-pixel text-xs border px-1.5 py-0.5 ${RISK_COLOR[m.risk]}`}>
                       {m.risk}
                     </span>
                   </div>

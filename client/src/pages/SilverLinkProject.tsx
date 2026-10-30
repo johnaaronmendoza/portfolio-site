@@ -107,12 +107,12 @@ export default function SilverLinkProject() {
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_CHALLENGE]</h2>
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
-              <p className="font-mono-8bit text-sm sm:text-base leading-relaxed">
+              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
                 By 2030, 1 in 4 Singaporeans will be over 65. Many seniors face isolation, loss of purpose,
                 and exclusion from digital society, while youth miss out on cultural wisdom and mentorship
                 from experienced generations.
               </p>
-              <p className="font-mono-8bit text-sm sm:text-base leading-relaxed text-amber-400 font-bold">
+              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed text-amber-400 font-bold">
                 "How might we leverage technology in ways that are intuitive, culturally sensitive, and engaging to build community within seniors?" (PB-2)
               </p>
             </div>
@@ -121,7 +121,7 @@ export default function SilverLinkProject() {
           <FramerReveal>
             <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_SOLUTION]</h2>
             <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
-              <p className="font-mono-8bit text-sm sm:text-base leading-relaxed mb-6">
+              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed mb-6">
                 SilverLink SG transforms potential social fragmentation into meaningful intergenerational
                 exchange through a cloud-native platform.
               </p>
@@ -138,7 +138,7 @@ export default function SilverLinkProject() {
                 ].map(f => (
                   <div key={f} className="flex items-start gap-2">
                     <span className="text-amber-400 flex-shrink-0 mt-1">▸</span>
-                    <span className="font-mono-8bit text-sm">{f}</span>
+                    <span className="font-mono-8bit text-[15px]">{f}</span>
                   </div>
                 ))}
               </div>

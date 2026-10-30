@@ -119,7 +119,8 @@ UAT-Testing-Dashboard-Defect-Tracker-for-Hospital-Appointment-System/
 .vercel/
 
 # Claude Code / Cursor — local skills, symlinks, machine-specific permissions
-.claude/
+.claude/*
+!.claude/agents/
 .agents/
 
 # Cursor / Claude skills install lock (regenerated locally)

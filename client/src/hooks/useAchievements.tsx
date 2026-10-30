@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import React from 'react';
 import { toast } from 'sonner';
 import { play } from './useSound';
@@ -60,7 +59,7 @@ function showToast(id: string) {
         </div>
       </div>
     ),
-    { duration: 4500, position: 'bottom-right' }
+    { duration: 3500, position: 'top-right' }
   );
 }
 
@@ -86,29 +85,7 @@ export function trackProjectVisit(projectId: string) {
 
 // ── Hook: wire up home-page achievements ─────────────────────────────────
 export function useHomeAchievements() {
-  useEffect(() => {
-    // FIRST_BOOT — only once ever
-    const t1 = setTimeout(() => unlockAchievement('FIRST_BOOT'), 1600);
-
-    // NIGHT_OWL — midnight to 5am
-    const hour = new Date().getHours();
-    const t2 = hour < 5 ? setTimeout(() => unlockAchievement('NIGHT_OWL'), 2200) : null;
-
-    // EXPLORER — when #projects scrolls into view
-    const el = document.getElementById('projects');
-    let observer: IntersectionObserver | null = null;
-    if (el) {
-      observer = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) unlockAchievement('EXPLORER'); },
-        { threshold: 0.15 }
-      );
-      observer.observe(el);
-    }
-
-    return () => {
-      clearTimeout(t1);
-      if (t2) clearTimeout(t2);
-      observer?.disconnect();
-    };
-  }, []);
+  // Achievements now unlock only from deliberate actions (clicks, project visits,
+  // easter eggs). Passive ones on load or scroll covered content for first-time
+  // visitors, so they were removed.
 }

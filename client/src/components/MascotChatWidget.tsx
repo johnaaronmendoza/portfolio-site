@@ -211,18 +211,19 @@ export default function MascotChatWidget() {
       {/* Floating Toggle Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-4 z-40 bg-black border-2 border-amber-400 shadow-8bit hover:bg-zinc-900 transition-colors"
+        aria-label={isOpen ? 'Close chat' : 'Open chat'}
+        className="fixed bottom-4 right-4 sm:bottom-6 z-40 bg-black border-2 border-amber-400 shadow-8bit hover:bg-zinc-900 transition-colors"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        <div className="flex items-center gap-2 px-3 py-2">
+        <div className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-2">
           <img
             src={mascotSrc}
-            alt="Chat"
-            className="w-10 h-10"
+            alt=""
+            className="w-8 h-8 sm:w-10 sm:h-10"
             style={{ imageRendering: 'pixelated' }}
           />
-          <span className="font-pixel text-xs text-amber-400">
+          <span className="hidden sm:inline font-pixel text-xs text-amber-400">
             {isOpen ? 'CLOSE' : 'CHAT'}
           </span>
         </div>

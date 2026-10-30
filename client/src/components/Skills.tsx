@@ -1,5 +1,6 @@
 import FramerReveal from './FramerReveal';
 import SectionHeading from './SectionHeading';
+import SkillKeyboard from './SkillKeyboard';
 
 // Skills are grouped by what they're used for, each tied to where they were used.
 // No self-rated percentages: the evidence line does that job more credibly.
@@ -46,37 +47,25 @@ export default function Skills() {
         <div className="max-w-5xl mx-auto">
           <SectionHeading index="04" text="SKILLS" className="mb-12" />
 
-          <div className="border-t border-zinc-800">
+          <p className="font-mono text-sm text-zinc-400 mb-8 max-w-[60ch]">
+            Press a key to see what each skill is and where I used it.
+          </p>
+
+          <SkillKeyboard />
+
+          {/* Plain list: for skimmers, screen readers and search engines */}
+          <dl className="mt-14 border-t border-zinc-800 pt-6 space-y-3">
             {GROUPS.map(group => (
-              <div
-                key={group.label}
-                className="grid grid-cols-1 md:grid-cols-[12rem_1fr] gap-3 md:gap-8 py-6 border-b border-zinc-800"
-              >
-                <h3 className={`font-pixel text-[11px] leading-relaxed ${group.highlight ? 'text-amber-400' : 'text-blue-400'}`}>
+              <div key={group.label} className="grid grid-cols-1 sm:grid-cols-[11rem_1fr] gap-1 sm:gap-6">
+                <dt className={`font-mono text-sm font-bold ${group.highlight ? 'text-amber-400' : 'text-blue-400'}`}>
                   {group.label}
-                </h3>
-                <div>
-                  <ul className="flex flex-wrap gap-2">
-                    {group.skills.map(skill => (
-                      <li
-                        key={skill}
-                        className={`font-mono text-sm px-2.5 py-1 border ${
-                          group.highlight
-                            ? 'border-amber-400/60 text-amber-100 bg-amber-400/5'
-                            : 'border-zinc-700 text-zinc-200 bg-zinc-900'
-                        }`}
-                      >
-                        {skill}
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="font-mono text-xs text-zinc-500 mt-3">
-                    Used in: {group.usedIn}
-                  </p>
-                </div>
+                </dt>
+                <dd className="font-mono text-sm text-zinc-300 leading-relaxed">
+                  {group.skills.join(', ')}
+                </dd>
               </div>
             ))}
-          </div>
+          </dl>
         </div>
       </section>
     </FramerReveal>

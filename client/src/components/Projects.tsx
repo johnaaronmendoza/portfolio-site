@@ -6,6 +6,7 @@ import PixelatedImage from './PixelatedImage';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
 import { motionTokens } from '@/lib/motion-tokens';
 import SectionHeading from './SectionHeading';
+import Window from './Window';
 
 // ── Card images (shown in grid) ───────────────────────────────────────────
 import silverLinkImg    from '@assets/silverlink_p19_img0.png';
@@ -41,9 +42,9 @@ type Project = {
   link: string;
   externalUrl?: string;
   preloadImages: string[];
-  /** Grid width in the poster collage (sm: 2 cols, lg: 6 cols) */
+  /** Grid width in the tile grid (sm: 2 cols, lg: 6 cols) */
   span: string;
-  /** Lead poster: taller image, bigger title, always in colour */
+  /** Lead tile: taller image, bigger title, always in colour */
   featured?: boolean;
 };
 
@@ -159,30 +160,20 @@ function matchesFilter(p: Project, filter: string | null): boolean {
 }
 
 // ── ProjectCard — own component so hooks are called once per card ─────────
-const CARD_LINK_CLASS = 'flex h-full flex-col outline-offset-4';
-
-// Title blocks rotate through the band colours with their approved text
-// pairing. Signal red is kept for stickers (CLAUDE.md), so it marks the year.
-type Tone = 'lime' | 'amber' | 'cobalt';
-const TONES: Tone[] = ['lime', 'amber', 'cobalt'];
-const TONE_CLASS: Record<Tone, { frame: string; block: string }> = {
-  lime: { frame: 'border-[color:var(--lime)]', block: 'bg-[var(--lime)] text-black' },
-  amber: { frame: 'border-[color:var(--amber)]', block: 'bg-[var(--amber)] text-black' },
-  cobalt: { frame: 'border-[color:var(--cobalt)]', block: 'bg-[var(--cobalt)] text-white' },
-};
+// Wide outline offset leaves a cream gap outside the tile's border and shadow
+const CARD_LINK_CLASS = 'flex h-full flex-col outline-offset-[10px]';
 
 function ProjectCard({ project }: { project: Project }) {
   const isComingSoon = project.link === '#';
   const isExternal   = project.link === 'external';
-  const tone = TONE_CLASS[TONES[(project.num - 1) % TONES.length]];
 
   // Smart preload: on 300 ms hover intent, fetch detail-page screenshots.
   const { handlers: preloadHandlers } = useSmartPreload(project.preloadImages);
 
   const body = (
     <>
-      {/* Project Image: full-bleed poster top */}
-      <div className={`relative overflow-hidden border-b-4 border-black bg-zinc-900 ${project.featured ? 'h-56 lg:h-72' : 'h-48'}`}>
+      {/* Project image on top, framed by the tile border and a 3px rule */}
+      <div className={`relative overflow-hidden border-b-[3px] border-black bg-[var(--navy)] ${project.featured ? 'h-56 lg:h-72' : 'h-48'}`}>
         {project.image ? (
           <PixelatedImage
             src={project.image}
@@ -196,59 +187,50 @@ function ProjectCard({ project }: { project: Project }) {
             }`}
           />
         ) : (
-          <div
-            className="w-full h-full flex items-center justify-center relative overflow-hidden"
-            style={{
-              backgroundImage:
-                'repeating-linear-gradient(0deg,transparent,transparent 18px,rgba(245,158,11,0.06) 18px,rgba(245,158,11,0.06) 19px),' +
-                'repeating-linear-gradient(90deg,transparent,transparent 18px,rgba(245,158,11,0.06) 18px,rgba(245,158,11,0.06) 19px)',
-            }}
-          />
+          <div className="w-full h-full" />
         )}
         {isComingSoon && (
           <div className="absolute inset-0 flex items-end justify-end p-3">
-            <span className="font-pixel text-xs text-amber-400 border border-amber-400 bg-black px-2 py-1">
+            <span className="font-pixel text-xs text-black border-2 border-black bg-[var(--cream)] px-2 py-1">
               COMING SOON
             </span>
           </div>
         )}
         {isExternal && (
           <div className="absolute top-2 right-2">
-            <span className="font-pixel text-xs text-[color:var(--lime)] border-2 border-[color:var(--lime)] bg-black px-2 py-1">
+            <span className="font-pixel text-xs text-black border-2 border-black bg-[var(--teal)] px-2 py-1">
               ↗ LIVE
             </span>
           </div>
         )}
       </div>
 
-      {/* Title block; the year sticker overlaps the image edge, not the title */}
-      <div className={`relative px-5 pt-8 pb-5 ${tone.block}`}>
-        <span className="sticker absolute -top-5 right-4 rotate-[5deg] rounded-lg border-4 border-black bg-[var(--signal)] text-black px-2.5 py-1.5 font-pixel text-xs">
-          {project.year}
-        </span>
-        <h3 className={`font-pixel leading-snug ${project.featured ? 'text-lg lg:text-2xl' : 'text-base'}`}>
-          {project.name}
-        </h3>
-      </div>
-
       {/* Project Info */}
       <div className="flex flex-1 flex-col gap-4 p-5">
-        <p className="font-mono text-[15px] sm:text-base text-zinc-200 leading-relaxed">
+        <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+          <h3 className={`font-pixel leading-snug break-words min-w-0 text-[color:var(--navy)] ${project.featured ? 'text-lg lg:text-2xl' : 'text-[15px]'}`}>
+            {project.name}
+          </h3>
+          <span className="flex-shrink-0 border-2 border-black bg-[var(--orange)] px-2 py-1 font-pixel text-xs text-black">
+            {project.year}
+          </span>
+        </div>
+        <p className="font-mono text-[15px] sm:text-base leading-relaxed">
           {project.description}
         </p>
-        <p className="font-mono text-[15px] text-amber-400 tracking-wider">
+        <p className="font-mono text-[15px] font-bold text-black tracking-wider">
           ■ {project.metric}
         </p>
         <div className="flex flex-wrap gap-1.5">
           {project.tags.map(tag => (
-            <span key={tag} className="bg-black px-2 py-0.5 font-mono text-xs text-amber-400 border border-amber-500/40">
-              --{tag.replace(/\s+/g, '_')}
+            <span key={tag} className="border-2 border-black px-2 py-0.5 font-mono text-xs">
+              {tag}
             </span>
           ))}
         </div>
         {!isComingSoon && (
-          <div className="mt-auto pt-2 font-mono-8bit text-sm text-[color:var(--lime)] font-bold inline-flex items-center gap-1 translate-x-0 group-hover:translate-x-1.5 transition-[translate] duration-150">
-            {isExternal ? 'VISIT SITE ↗' : 'VIEW WORK →'}
+          <div className="mt-auto pt-2 font-mono-8bit text-[15px] text-black font-bold underline underline-offset-4 decoration-2 inline-flex items-center gap-1 translate-x-0 group-hover:translate-x-1.5 transition-[translate] duration-150">
+            {isExternal ? 'Visit site ↗' : 'View work →'}
           </div>
         )}
       </div>
@@ -286,13 +268,23 @@ function ProjectCard({ project }: { project: Project }) {
 
   return (
     <motion.div
-      className={`group border-4 bg-black shadow-[6px_6px_0_0_var(--paper)] ${tone.frame} ${project.span}`}
+      className={`group border-[3px] border-black bg-[var(--cream)] shadow-[4px_4px_0_0_#000] ${project.span}`}
       exit={{ opacity: 0, y: 12, scale: 0.96, transition: { duration: motionTokens.duration.fast } }}
       whileTap={isComingSoon ? {} : { scale: 0.97, transition: { duration: motionTokens.duration.instant } }}
     >
       {card}
     </motion.div>
   );
+}
+
+// Retro filter chip: cream with an ink frame; the active chip turns orange and
+// sits pressed into its shadow.
+function chipClass(active: boolean) {
+  return `font-pixel text-xs text-black px-3 py-1.5 min-h-[44px] border-[3px] border-black transition-[translate,box-shadow,background-color] duration-150 ${
+    active
+      ? 'bg-[var(--orange)] translate-x-[3px] translate-y-[3px] shadow-none'
+      : 'bg-[var(--cream)] shadow-[3px_3px_0_0_#000] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none'
+  }`;
 }
 
 // ── Projects section ──────────────────────────────────────────────────────
@@ -303,65 +295,60 @@ export default function Projects() {
 
   return (
     <FramerReveal>
-      <section className="bg-black text-white px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
+      {/* Full-width teal band; all text on it is black or sits on cream */}
+      <section className="bg-[var(--teal)] text-black border-y-[3px] border-black px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
-          <SectionHeading index="03" text="PROJECTS" className="mb-8" />
+          <SectionHeading text="PROJECTS" tone="ink" className="mb-12" />
 
-          {/* Filter chips */}
-          <div className="flex flex-wrap gap-2 mb-10">
-            <button
-              onClick={() => setActiveFilter(null)}
-              aria-pressed={activeFilter === null}
-              className={`font-pixel text-xs px-3 py-1.5 min-h-[44px] border-2 transition-colors ${
-                activeFilter === null
-                  ? 'border-amber-400 text-black bg-amber-400'
-                  : 'border-zinc-600 text-zinc-300 hover:border-zinc-400 hover:text-white'
-              }`}
-            >
-              ALL
-            </button>
-            {FILTER_TAGS.map(tag => (
+          <Window title="featured_projects" bodyClassName="p-4 sm:p-6 lg:p-8">
+            {/* Filter chips */}
+            <div className="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-10">
               <button
-                key={tag}
-                onClick={() => setActiveFilter(prev => prev === tag ? null : tag)}
-                aria-pressed={activeFilter === tag}
-                className={`font-pixel text-xs px-3 py-1.5 min-h-[44px] border-2 transition-colors ${
-                  activeFilter === tag
-                    ? 'border-[color:var(--lime)] text-black bg-[var(--lime)]'
-                    : 'border-zinc-600 text-zinc-300 hover:border-[color:var(--lime)] hover:text-[color:var(--lime)]'
-                }`}
+                onClick={() => setActiveFilter(null)}
+                aria-pressed={activeFilter === null}
+                className={chipClass(activeFilter === null)}
               >
-                {tag}
+                ALL
               </button>
-            ))}
-          </div>
-
-          {/* Poster collage: rows of 3+3, 2+2+2, 3+3 on large screens; GreenLoop
-              spans both columns at sm so the 7th tile is never orphaned */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 sm:gap-8">
-            <AnimatePresence initial={false}>
-              {visible.map(project => (
-                <ProjectCard key={project.num} project={project} />
-              ))}
-            </AnimatePresence>
-
-            {/* Empty state */}
-            {activeFilter !== null && visible.length === 0 && (
-              <motion.div
-                className="col-span-full border-2 border-zinc-800 bg-zinc-900 p-10 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <p className="font-pixel text-xs text-zinc-400">NO_PROJECTS_MATCH [ {activeFilter} ]</p>
+              {FILTER_TAGS.map(tag => (
                 <button
-                  onClick={() => setActiveFilter(null)}
-                  className="min-h-[44px] inline-flex items-center font-mono-8bit text-xs text-amber-400 mt-4 hover:text-white transition-colors"
+                  key={tag}
+                  onClick={() => setActiveFilter(prev => prev === tag ? null : tag)}
+                  aria-pressed={activeFilter === tag}
+                  className={chipClass(activeFilter === tag)}
                 >
-                  CLEAR FILTER →
+                  {tag}
                 </button>
-              </motion.div>
-            )}
-          </div>
+              ))}
+            </div>
+
+            {/* Tile grid: rows of 3+3, 2+2+2, 3+3 on large screens; GreenLoop
+                spans both columns at sm so the 7th tile is never orphaned */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
+              <AnimatePresence initial={false}>
+                {visible.map(project => (
+                  <ProjectCard key={project.num} project={project} />
+                ))}
+              </AnimatePresence>
+
+              {/* Empty state */}
+              {activeFilter !== null && visible.length === 0 && (
+                <motion.div
+                  className="col-span-full border-[3px] border-black p-10 text-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <p className="font-pixel text-xs">NO_PROJECTS_MATCH [ {activeFilter} ]</p>
+                  <button
+                    onClick={() => setActiveFilter(null)}
+                    className="btn btn-primary mt-4"
+                  >
+                    CLEAR FILTER →
+                  </button>
+                </motion.div>
+              )}
+            </div>
+          </Window>
         </div>
       </section>
     </FramerReveal>

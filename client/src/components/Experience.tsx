@@ -1,8 +1,11 @@
 import FramerReveal from './FramerReveal';
 import SectionHeading from './SectionHeading';
+import Window from './Window';
 
 type Entry = {
   org: string;
+  /** Window title, filename style */
+  file: string;
   role: string;
   period: string;
   highlights: string[];
@@ -12,6 +15,7 @@ type Entry = {
 const ENTRIES: Entry[] = [
   {
     org: "LGA Telecom",
+    file: "lga_telecom.exe",
     role: "Service Desk Operations & AI Integration Intern",
     period: "Aug 2026 – Present",
     tag: "INTERNSHIP",
@@ -25,6 +29,7 @@ const ENTRIES: Entry[] = [
   },
   {
     org: "Sembcorp Solar Singapore",
+    file: "sembcorp_solar.exe",
     role: "Digitization Analyst Intern",
     period: "Oct 2020 – Jun 2021",
     tag: "INTERNSHIP",
@@ -38,6 +43,7 @@ const ENTRIES: Entry[] = [
   },
   {
     org: "Singapore Institute of Technology × University of Glasgow",
+    file: "education.txt",
     role: "BSc (Hons) Computing Science",
     period: "Sep 2024 – Apr 2027",
     tag: "EDUCATION",
@@ -49,45 +55,41 @@ const ENTRIES: Entry[] = [
   },
 ];
 
+// Black text on orange or teal (approved pairings)
 const TAG_COLORS: Record<string, string> = {
-  EDUCATION: 'text-[color:var(--lime)] border-[color:var(--lime)]',
-  INTERNSHIP: 'text-amber-400 border-amber-400',
-  VENTURE:    'text-zinc-400 border-zinc-400',
+  EDUCATION: 'bg-[var(--teal)]',
+  INTERNSHIP: 'bg-[var(--orange)]',
 };
 
 export default function Experience() {
   return (
     <FramerReveal>
-      {/* Full-width cobalt band; text on it is white, card text stays on black */}
-      <section className="bg-[var(--cobalt)] text-white border-y-4 border-black px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
+      <section className="px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-5xl mx-auto">
-          <SectionHeading index="02" text="EXPERIENCE" tone="white" className="mb-16" />
+          <SectionHeading text="EXPERIENCE" className="mb-16" />
 
-          <div className="space-y-8">
+          <div className="space-y-10">
             {ENTRIES.map((entry) => (
-              <div
-                key={entry.org}
-                className="border-4 border-[color:var(--lime)] bg-black shadow-[8px_8px_0_0_#000] p-6 sm:p-10 lg:p-12"
-              >
+              <Window key={entry.org} title={entry.file} bodyClassName="p-6 sm:p-10 lg:p-12">
                 {entry.tag && (
                   <div className="flex items-center mb-4">
-                    <span className={`font-pixel text-xs border px-2 py-0.5 ${TAG_COLORS[entry.tag] ?? 'text-zinc-400 border-zinc-400'}`}>
+                    <span className={`font-pixel text-xs text-black border-2 border-black px-2 py-1 ${TAG_COLORS[entry.tag] ?? 'bg-[var(--cream)]'}`}>
                       {entry.tag.charAt(0) + entry.tag.slice(1).toLowerCase()}
                     </span>
                   </div>
                 )}
 
                 {/* Header Row */}
-                <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 mb-8 pb-6 border-b-2 border-amber-400">
+                <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 mb-8 pb-6 border-b-[3px] border-black">
                   <div>
-                    <h3 className="font-pixel text-base sm:text-lg text-[color:var(--lime)] mb-2 leading-relaxed">
+                    <h3 className="font-pixel text-base sm:text-lg text-black mb-2 leading-relaxed">
                       {entry.org}
                     </h3>
-                    <p className="font-mono-8bit text-sm font-bold text-amber-400">
+                    <p className="font-mono-8bit text-[15px] sm:text-base font-bold">
                       {entry.role}
                     </p>
                   </div>
-                  <p className="font-mono-8bit text-sm text-white whitespace-nowrap flex-shrink-0">
+                  <p className="font-mono-8bit text-[15px] sm:text-base whitespace-nowrap flex-shrink-0">
                     {entry.period}
                   </p>
                 </div>
@@ -95,13 +97,13 @@ export default function Experience() {
                 {/* Highlights */}
                 <ul className="space-y-3">
                   {entry.highlights.map((h, i) => (
-                    <li key={i} className="font-mono-8bit text-[15px] text-zinc-200 leading-relaxed flex items-start gap-3 max-w-[75ch]">
-                      <span className="text-amber-400 font-bold flex-shrink-0 mt-1">▸</span>
+                    <li key={i} className="font-mono-8bit text-[15px] leading-relaxed flex items-start gap-3 max-w-[75ch]">
+                      <span aria-hidden="true" className="flex-shrink-0 mt-[0.6em] w-2.5 h-2.5 bg-[var(--orange)] border-2 border-black" />
                       <span>{h}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </Window>
             ))}
           </div>
         </div>

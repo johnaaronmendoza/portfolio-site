@@ -43,24 +43,24 @@ const GROUPS: Group[] = [
 export default function Skills() {
   return (
     <FramerReveal>
-      <section className="bg-black text-white px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
+      <section className="text-[color:var(--cream)] px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-5xl mx-auto">
-          <SectionHeading index="04" text="SKILLS" className="mb-12" />
+          <SectionHeading text="SKILLS" className="mb-12" />
 
-          <p className="font-mono text-sm text-zinc-400 mb-8 max-w-[60ch]">
+          <p className="font-mono text-[15px] sm:text-base mb-8 max-w-[60ch]">
             Press a key to see what each skill is and where I used it.
           </p>
 
           <SkillKeyboard />
 
           {/* Plain list: for skimmers, screen readers and search engines */}
-          <dl className="mt-14 border-t border-zinc-800 pt-6 space-y-3">
+          <dl className="mt-14 border-t-[3px] border-[color:var(--teal)] pt-6 space-y-3">
             {GROUPS.map(group => (
               <div key={group.label} className="grid grid-cols-1 sm:grid-cols-[11rem_1fr] gap-1 sm:gap-6">
-                <dt className={`font-mono text-sm font-bold ${group.highlight ? 'text-amber-400' : 'text-blue-400'}`}>
+                <dt className={`font-mono text-[15px] font-bold ${group.highlight ? 'text-[color:var(--orange)]' : 'text-[color:var(--teal)]'}`}>
                   {group.label}
                 </dt>
-                <dd className="font-mono text-sm text-zinc-300 leading-relaxed">
+                <dd className="font-mono text-[15px] leading-relaxed">
                   {group.skills.join(', ')}
                 </dd>
               </div>

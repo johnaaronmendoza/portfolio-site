@@ -203,7 +203,7 @@ export default function SkillKeyboard() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,22rem)_1fr] gap-10 lg:gap-6 items-center">
       {/* Description: what the pressed key means */}
-      <div className="sticky top-0 z-20 bg-black py-4 lg:static lg:py-0 min-h-[200px] lg:min-h-[260px] border-l-4 border-amber-400 pl-5" aria-live="polite">
+      <div className="sticky top-0 z-20 bg-[var(--navy)] text-[color:var(--cream)] py-4 lg:static lg:py-0 min-h-[200px] lg:min-h-[260px] border-l-[3px] border-[color:var(--orange)] pl-5" aria-live="polite">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={active}
@@ -212,10 +212,10 @@ export default function SkillKeyboard() {
             exit={reduced ? undefined : { opacity: 0 }}
             transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.smooth }}
           >
-            <p className="font-mono text-xs text-zinc-400 mb-3">{GROUP_NAME[current.group]}</p>
-            <h3 className="font-pixel text-lg sm:text-xl text-white leading-snug mb-4">{current.name}</h3>
-            <p className="font-mono text-[15px] text-zinc-200 leading-relaxed">{current.blurb}</p>
-            <p className="font-mono text-xs text-amber-400/80 mt-4">Used in: {current.usedIn}</p>
+            <p className="font-mono text-sm text-[color:var(--teal)] mb-3">{GROUP_NAME[current.group]}</p>
+            <h3 className="font-pixel text-lg sm:text-xl leading-snug mb-4">{current.name}</h3>
+            <p className="font-mono text-[15px] leading-relaxed">{current.blurb}</p>
+            <p className="font-mono text-sm text-[color:var(--orange)] mt-4">Used in: {current.usedIn}</p>
           </motion.div>
         </AnimatePresence>
       </div>

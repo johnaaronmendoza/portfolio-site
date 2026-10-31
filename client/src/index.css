@@ -136,13 +136,6 @@
   100% { transform: translateX(0); }
 }
 
-/* Sticker wiggle: one shake on hover, layered over the sticker's own rotate */
-@keyframes sticker-wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-4deg); }
-  75% { transform: rotate(4deg); }
-}
-
 /* Screen Tear VHS Effect */
 @keyframes screenTear {
   0% {
@@ -208,13 +201,17 @@
 }
 
 :root {
-  /* Maximalist 8-bit palette tokens (see CLAUDE.md Design rules for pairings) */
+  /* Neo-brutalist retro web palette (see CLAUDE.md Design rules for pairings) */
+  --navy: #16163F;
   --ink: #000;
-  --paper: #FAFAFA;
+  --cream: #F4EAD5;
+  --orange: #FF7A2F;
+  --teal: #2EC4B6;
+  --violet: #6C4AD0;
   --amber: #F59E0B;
-  --lime: #C6FF3D;
-  --cobalt: #2B35FF;
-  --signal: #FF3B30;
+  /* Focus ring colour. Orange reads on navy; cream window bodies set it to
+     ink and the violet footer sets it to cream (orange is under 3:1 there). */
+  --focus: var(--orange);
 
   /* Hardware Engineer 8-Bit Palette */
   --primary: #F59E0B;
@@ -296,13 +293,15 @@
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="4" height="4" fill="%23F59E0B"/><rect x="6" y="2" width="4" height="4" fill="%23F59E0B"/><rect x="2" y="6" width="4" height="4" fill="%23F59E0B"/><rect x="6" y="6" width="4" height="4" fill="%23F59E0B"/><rect x="10" y="10" width="4" height="4" fill="%23F59E0B"/><rect x="14" y="10" width="4" height="4" fill="%23F59E0B"/><rect x="10" y="14" width="4" height="4" fill="%23F59E0B"/><rect x="14" y="14" width="4" height="4" fill="%23F59E0B"/></svg>') 2 2, auto;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background-color: var(--navy);
     font-family: 'Courier Prime', monospace;
     position: relative;
     overflow-x: hidden;
   }
-  
-  /* Grid Background Layer */
+
+  /* Faint pixel grid on the navy page. Sits behind #root, so it only shows
+     where a page leaves its background transparent (Home). */
   body::before {
     content: '';
     position: fixed;
@@ -310,10 +309,10 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
-      linear-gradient(0deg, transparent 24%, rgba(245, 158, 11, 0.05) 25%, rgba(245, 158, 11, 0.05) 26%, transparent 27%, transparent 74%, rgba(245, 158, 11, 0.05) 75%, rgba(245, 158, 11, 0.05) 76%, transparent 77%, transparent),
-      linear-gradient(90deg, transparent 24%, rgba(245, 158, 11, 0.05) 25%, rgba(245, 158, 11, 0.05) 26%, transparent 27%, transparent 74%, rgba(245, 158, 11, 0.05) 75%, rgba(245, 158, 11, 0.05) 76%, transparent 77%, transparent);
-    background-size: 40px 40px;
+    background-image:
+      linear-gradient(0deg, rgb(46 196 182 / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(108 74 208 / 0.12) 1px, transparent 1px);
+    background-size: 24px 24px;
     background-position: 0 0;
     pointer-events: none;
     z-index: 1;
@@ -511,10 +510,87 @@
     animation: borderPulseBlue 1.5s ease-in-out infinite;
   }
   
-  /* Focus-visible: amber ring for keyboard nav, invisible for mouse/touch */
+  /* Focus-visible: 3px ring for keyboard nav, invisible for mouse/touch.
+     Orange by default; surfaces where orange is under 3:1 override --focus. */
   :focus-visible {
-    outline: 2px solid #F59E0B;
+    outline: 3px solid var(--focus);
     outline-offset: 3px;
+  }
+
+  /* Retro OS window: cream body, thick ink frame, hard offset shadow, violet
+     title bar. Kept in the components layer so utilities passed through
+     className / bodyClassName override it cleanly. */
+  .window {
+    border: 3px solid var(--ink);
+    background-color: var(--cream);
+    box-shadow: 6px 6px 0 0 var(--ink);
+  }
+
+  .window-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 2.25rem;
+    padding: 0.375rem 0.75rem;
+    background-color: var(--violet);
+    color: var(--cream);
+    border-bottom: 3px solid var(--ink);
+  }
+
+  .window-body {
+    --focus: var(--ink);
+    background-color: var(--cream);
+    color: var(--navy);
+  }
+
+  /* Retro buttons: 3px ink frame, 4px hard shadow; pressing moves the button
+     into its shadow. Only translate, box-shadow and colours transition. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.625rem 1.25rem;
+    border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 0 var(--ink);
+    font-family: 'Courier Prime', monospace;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    letter-spacing: 0.04em;
+    user-select: none;
+    transition-property: translate, box-shadow, background-color, color;
+    transition-duration: 150ms;
+    transition-timing-function: var(--ease-out);
+  }
+
+  .btn:active {
+    translate: 4px 4px;
+    box-shadow: 0 0 0 0 var(--ink);
+  }
+
+  .btn-primary {
+    background-color: var(--orange);
+    color: var(--ink);
+  }
+
+  .btn-secondary {
+    background-color: var(--teal);
+    color: var(--ink);
+  }
+
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--cream);
+    border-color: var(--cream);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn-ghost:hover {
+      background-color: var(--cream);
+      color: var(--navy);
+    }
   }
 
   /* Gate marquee tag hover behind pointer device check */
@@ -551,8 +627,8 @@
     animation-play-state: paused;
   }
 
-  /* Ribbon tickers: the site's signature texture. Transform only, pauses on
-     hover, fully static under reduced motion (see the end of this file).
+  /* Marquee strips between sections. Transform only, pauses on hover, fully
+     static under reduced motion (see the end of this file).
      The track holds two identical halves, so -50% loops seamlessly. */
   .ribbon-track {
     display: flex;
@@ -568,28 +644,9 @@
     animation-play-state: paused;
   }
 
-  /* Neon glow: hero name only (CLAUDE.md design rules) */
-  .neon-lime {
-    text-shadow:
-      0 0 4px var(--lime),
-      0 0 14px var(--lime),
-      0 0 32px rgb(198 255 61 / 0.5);
-  }
-
-  /* Stickers wiggle once on hover, on pointer devices with motion allowed */
-  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    .sticker:hover {
-      animation: sticker-wiggle 350ms ease-in-out 1;
-    }
-  }
-
   /* Viewer's "Pause motion" toggle (SectionNav, WCAG 2.2.2) */
   :root[data-motion="paused"] .ribbon-track {
     animation-play-state: paused;
-  }
-
-  :root[data-motion="paused"] .sticker {
-    animation: none;
   }
 
   /* Monospace body font — line-height 1.7 for light text on dark backgrounds (impeccable) */
@@ -661,9 +718,8 @@
     transition-duration: 0.01ms !important;
   }
 
-  /* Ribbons and stickers stay completely still */
-  .ribbon-track,
-  .sticker {
+  /* Marquee strips stay completely still */
+  .ribbon-track {
     animation: none !important;
   }
 }

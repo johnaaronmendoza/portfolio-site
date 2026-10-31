@@ -10,7 +10,7 @@ const SECTIONS = [
   { id: 'footer',     label: 'CONTACT' },
 ];
 
-// Viewer's choice to stop the ribbon tickers (WCAG 2.2.2). index.css reads
+// Viewer's choice to stop the marquee strips (WCAG 2.2.2). index.css reads
 // data-motion="paused" on <html>; the choice persists across visits.
 const MOTION_KEY = 'ja_motion_paused';
 
@@ -51,13 +51,15 @@ export default function SectionNav() {
 
   return (
     <>
-    {/* Bottom-left at every width; the chat launcher owns bottom-right */}
+    {/* Bottom-left at every width; the chat launcher owns bottom-right. The focus
+        ring hugs the black border so it reads over every band it floats above.
+        Paused = orange and pressed into its shadow, so the state shows at a glance */}
     <button
       type="button"
       onClick={toggleMotion}
       aria-pressed={motionPaused}
-      className={`motion-reduce:hidden fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-2 px-3 border-2 border-amber-400 shadow-8bit font-mono text-sm font-bold transition-colors duration-150 ${
-        motionPaused ? 'bg-[var(--lime)] text-black' : 'bg-black text-amber-400 hover:bg-zinc-900'
+      className={`btn outline-offset-0 motion-reduce:hidden fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 min-w-[44px] px-3 text-sm text-black ${
+        motionPaused ? 'bg-[var(--orange)] translate-x-1 translate-y-1 shadow-none' : 'bg-[var(--cream)]'
       }`}
     >
       <span aria-hidden="true">❚❚</span>
@@ -74,13 +76,13 @@ export default function SectionNav() {
           transition={{ duration: 0.1 }}
         >
           {/* Label tooltip */}
-          <span className="font-pixel text-[8px] text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-150 whitespace-nowrap">
+          <span className="font-pixel text-[8px] text-[color:var(--orange)] opacity-0 group-hover:opacity-100 transition-opacity duration-150 whitespace-nowrap">
             {label}
           </span>
           {/* Dot */}
           <div
             className={`w-2 h-2 transition-colors duration-150 ${
-              active === id ? 'bg-amber-400' : 'bg-zinc-700 group-hover:bg-zinc-500'
+              active === id ? 'bg-[var(--orange)]' : 'bg-zinc-500 group-hover:bg-[var(--cream)]'
             }`}
           />
         </motion.button>

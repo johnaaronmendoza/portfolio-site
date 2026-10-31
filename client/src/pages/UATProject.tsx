@@ -125,17 +125,17 @@ export default function UATProject() {
   const activeShot = SCREENSHOTS.find(s => s.key === activeTab)!;
 
   return (
-    <div className="min-h-screen bg-[#131313] text-white">
+    <div className="min-h-screen bg-black text-white">
 
       {/* Sticky back nav */}
-      <div className="sticky top-0 z-30 bg-[#131313] border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
+      <div className="sticky top-0 z-30 bg-black border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
         <button
           onClick={() => { play('back'); setLocation('/'); }}
           className="min-h-[44px] inline-flex items-center gap-2 px-2 -ml-2 font-pixel text-xs text-amber-400 hover:text-white transition-colors"
         >
-          ← BACK
+          ← Back
         </button>
-        <span className="font-pixel text-xs text-zinc-400 truncate">/ UAT_TESTING_DASHBOARD</span>
+        <span className="font-pixel text-xs text-zinc-400 truncate">/ UAT Testing Dashboard</span>
       </div>
 
       {/* Hero */}
@@ -144,9 +144,9 @@ export default function UATProject() {
           <FramerReveal>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
               {/* Identity card */}
-              <div className="lg:col-span-8 bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
-                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6" style={{ wordBreak: 'break-all' }}>
-                  [UAT_TESTING_DASHBOARD_&_DEFECT_TRACKER]
+              <div className="lg:col-span-8 bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8">
+                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6 break-words text-balance">
+                  UAT Testing Dashboard
                 </h1>
                 <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
                   Full-stack defect tracker built for a real hospital appointment system UAT cycle.
@@ -165,7 +165,7 @@ export default function UATProject() {
                     { label: '[ROLES]',  value: 'PM / QA Lead / Tester / Dev' },
                     { label: '[YEAR]',   value: '2024' },
                   ].map(({ label, value }) => (
-                    <div key={label} className="bg-[#1b1b1b] p-4">
+                    <div key={label} className="bg-zinc-900 p-4">
                       <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">{label}</p>
                       <p className="font-mono-8bit text-sm">{value}</p>
                     </div>
@@ -182,10 +182,10 @@ export default function UATProject() {
               >
                 <div>
                   <p className="font-mono text-xs text-amber-900 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
-                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">VIEW_REPOSITORY</h2>
+                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">View repository</h2>
                 </div>
                 <div className="flex items-center justify-between mt-8">
-                  <span className="font-mono-8bit text-amber-900 text-sm">[ SOURCE_CODE ]</span>
+                  <span className="font-mono-8bit text-amber-900 text-sm">Source code</span>
                   <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
                 </div>
               </a>
@@ -205,7 +205,7 @@ export default function UATProject() {
                 { label: 'PASS RATE %',    value: 31 },
                 { label: 'MODULES TESTED', value: 8  },
               ].map(({ label, value }) => (
-                <div key={label} className="bg-[#1f1f1f] p-6 text-center">
+                <div key={label} className="bg-zinc-900 p-6 text-center">
                   <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-2">
                     {value}
                   </p>
@@ -221,7 +221,7 @@ export default function UATProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[SCREENSHOTS]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Screenshots</h2>
 
             {/* Tab row */}
             <div className="flex flex-wrap gap-2 mb-5">
@@ -241,7 +241,7 @@ export default function UATProject() {
             </div>
 
             {/* Screenshot display */}
-            <div className="relative border-2 border-amber-500/20 bg-[#1b1b1b] overflow-hidden">
+            <div className="relative border-2 border-amber-500/20 bg-zinc-900 overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}
@@ -269,8 +269,8 @@ export default function UATProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
-            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">The problem</h2>
+            <div className="bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
                 UAT for complex healthcare systems involves multiple teams: project managers,
                 QA leads, testers, and developers, all needing a shared view of what is broken,
@@ -292,7 +292,7 @@ export default function UATProject() {
 
           {/* Test scope */}
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-2">[UAT_PROCESS]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-2">UAT process</h2>
             <p className="font-mono-8bit text-[15px] text-zinc-400 mb-8 leading-relaxed">
               How the test cycle was scoped, executed, and documented.
             </p>
@@ -302,7 +302,7 @@ export default function UATProject() {
               {MODULES.map((m, i) => (
                 <div
                   key={m.name}
-                  className="bg-[#1b1b1b] p-4 flex flex-wrap items-center justify-between gap-4"
+                  className="bg-zinc-900 p-4 flex flex-wrap items-center justify-between gap-4"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <span className="font-mono text-xs text-zinc-400 flex-shrink-0">
@@ -326,7 +326,7 @@ export default function UATProject() {
             <h3 className="font-pixel text-xs text-blue-400 mb-4">[ SEVERITY / PRIORITY MATRIX ]</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-amber-500/10">
               {SEVERITY_MATRIX.map(({ sev, pri, color, desc }) => (
-                <div key={sev} className="bg-[#1b1b1b] p-5">
+                <div key={sev} className="bg-zinc-900 p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <span className={`font-pixel text-xs ${color}`}>{sev}</span>
                     <span className="font-mono text-xs text-zinc-400">{pri}</span>
@@ -340,7 +340,7 @@ export default function UATProject() {
           {/* Sample test case */}
           <FramerReveal>
             <h3 className="font-pixel text-xs text-blue-400 mb-4">[ SAMPLE TEST CASE ARTIFACT — TC-022 ]</h3>
-            <div className="bg-[#1b1b1b] border-2 border-amber-500/20">
+            <div className="bg-zinc-900 border-2 border-amber-500/20">
               {/* Header */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
                 {[
@@ -349,7 +349,7 @@ export default function UATProject() {
                   { label: 'STATUS',  value: 'FAIL' },
                   { label: 'LINKED',  value: 'DEF-025' },
                 ].map(({ label, value }) => (
-                  <div key={label} className="bg-[#1b1b1b] p-4">
+                  <div key={label} className="bg-zinc-900 p-4">
                     <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">{label}</p>
                     <p className={`font-mono-8bit text-sm ${value === 'FAIL' ? 'text-red-400' : value.startsWith('DEF') ? 'text-amber-400' : 'text-white'}`}>
                       {value}
@@ -372,7 +372,7 @@ export default function UATProject() {
                 </div>
                 <div>
                   <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">TEST STEPS</p>
-                  <div className="bg-[#111] p-4 font-mono text-[15px] text-gray-300 space-y-1">
+                  <div className="bg-black p-4 font-mono text-[15px] text-gray-300 space-y-1">
                     <p>1. Queue 100+ notification events simultaneously across all types</p>
                     <p>2. Monitor notification service health in real time</p>
                     <p>3. Observe system behaviour under concurrent load</p>
@@ -403,7 +403,7 @@ export default function UATProject() {
               {ROLES.map(({ role, color, responsibilities }) => (
                 <motion.div
                   key={role}
-                  className="bg-[#1b1b1b] border-t border-amber-500/20 p-5"
+                  className="bg-zinc-900 border-t border-amber-500/20 p-5"
                   whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
                 >
                   <p className={`font-pixel text-xs ${color} mb-4`}>[ {role.toUpperCase().replace(/ /g, '_')} ]</p>
@@ -426,7 +426,7 @@ export default function UATProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[KEY_FEATURES]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Key features</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {[
                 {
@@ -472,7 +472,7 @@ export default function UATProject() {
               ].map(({ label, items }) => (
                 <motion.div
                   key={label}
-                  className="bg-[#1b1b1b] border-t border-amber-500/20 p-5"
+                  className="bg-zinc-900 border-t border-amber-500/20 p-5"
                   whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
                   whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
                 >
@@ -496,7 +496,7 @@ export default function UATProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ARCHITECTURE]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Architecture</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {[
                 {
@@ -518,7 +518,7 @@ export default function UATProject() {
                   items: ['SQLite (uat_tracker.db)', 'users table (4 roles)', 'defects table (full lifecycle)', 'test_cases table (exec tracking)', 'FK: test_cases → defects', 'Timestamps on all records'],
                 },
               ].map(({ label, color, accent, items }) => (
-                <div key={label} className={`bg-[#1b1b1b] border-t-2 ${color} p-5`}>
+                <div key={label} className={`bg-zinc-900 border-t-2 ${color} p-5`}>
                   <p className={`font-pixel text-xs ${accent} mb-4`}>[ {label} ]</p>
                   <ul className="space-y-2">
                     {items.map(i => (
@@ -539,20 +539,20 @@ export default function UATProject() {
       <section className="py-16 px-4 sm:px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
+            <div className="bg-zinc-900 border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
+              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">View more projects</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                   onClick={() => { play('back'); setLocation('/'); }}
                   className="min-h-[44px] inline-flex items-center justify-center border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
                 >
-                  ← BACK TO PORTFOLIO
+                  ← Back to portfolio
                 </button>
                 <button
                   onClick={() => setLocation('/projects/ai-finance')}
                   className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
                 >
-                  AI FINANCE DASHBOARD →
+                  AI Finance dashboard →
                 </button>
               </div>
             </div>

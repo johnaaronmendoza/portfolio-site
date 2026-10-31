@@ -18,16 +18,16 @@ export default function SilverLinkProject() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#131313] text-white">
+    <div className="min-h-screen bg-black text-white">
       {/* Sticky back nav */}
-      <div className="sticky top-0 z-30 bg-[#131313] border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
+      <div className="sticky top-0 z-30 bg-black border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
         <button
           onClick={() => { play('back'); setLocation('/'); }}
           className="min-h-[44px] inline-flex items-center gap-2 px-2 -ml-2 font-pixel text-xs text-amber-400 hover:text-white transition-colors"
         >
-          ← BACK
+          ← Back
         </button>
-        <span className="font-pixel text-xs text-zinc-400 truncate">/ SILVERLINK_SG</span>
+        <span className="font-pixel text-xs text-zinc-400 truncate">/ SilverLink SG</span>
       </div>
 
       {/* Hero — Sovereign Console bento */}
@@ -36,9 +36,9 @@ export default function SilverLinkProject() {
           <FramerReveal>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
               {/* Identity card */}
-              <div className="lg:col-span-8 bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
-                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6" style={{wordBreak:"break-all"}}>
-                  [SILVERLINK_SG]
+              <div className="lg:col-span-8 bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8">
+                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6 break-words text-balance">
+                  SilverLink SG
                 </h1>
                 <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
                   Cloud-native platform bridging seniors and youth through skill-sharing and live events, backed by 4 gRPC microservices, WebRTC livestreaming, and Kubernetes autoscaling that scales to demand without manual intervention.
@@ -49,11 +49,11 @@ export default function SilverLinkProject() {
                   ))}
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-amber-500/10">
-                  <div className="bg-[#1b1b1b] p-4">
+                  <div className="bg-zinc-900 p-4">
                     <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[INSTITUTION]</p>
                     <p className="font-mono-8bit text-sm leading-relaxed">University of Glasgow &amp; Singapore Institute of Technology</p>
                   </div>
-                  <div className="bg-[#1b1b1b] p-4">
+                  <div className="bg-zinc-900 p-4">
                     <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[TEAM]</p>
                     <p className="font-mono-8bit text-sm leading-relaxed">Group 20: Danish, John, Thomas, Hanaa, Habib, Joshua</p>
                   </div>
@@ -68,10 +68,10 @@ export default function SilverLinkProject() {
               >
                 <div>
                   <p className="font-mono text-xs text-amber-900 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
-                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GITHUB_PROFILE</h2>
+                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GitHub profile</h2>
                 </div>
                 <div className="flex items-center justify-between mt-8">
-                  <span className="font-mono-8bit text-amber-900 text-sm">[ ALL_REPOSITORIES ]</span>
+                  <span className="font-mono-8bit text-amber-900 text-sm">All repositories</span>
                   <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
                 </div>
               </a>
@@ -91,7 +91,7 @@ export default function SilverLinkProject() {
                 { label: "AGILE SPRINTS", value: "7" },
                 { label: "LIVESTREAMING", value: "WebRTC" },
               ].map(({ label, value }) => (
-                <div key={label} className="bg-[#1f1f1f] p-6 text-center">
+                <div key={label} className="bg-zinc-900 p-6 text-center">
                   <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-2">{value}</p>
                   <p className="font-mono text-xs text-amber-400/80 uppercase tracking-widest">{label}</p>
                 </div>
@@ -105,8 +105,8 @@ export default function SilverLinkProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto space-y-10">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_CHALLENGE]</h2>
-            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">The challenge</h2>
+            <div className="bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
                 By 2030, 1 in 4 Singaporeans will be over 65. Many seniors face isolation, loss of purpose,
                 and exclusion from digital society, while youth miss out on cultural wisdom and mentorship
@@ -119,8 +119,8 @@ export default function SilverLinkProject() {
           </FramerReveal>
 
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_SOLUTION]</h2>
-            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">The solution</h2>
+            <div className="bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8">
               <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed mb-6">
                 SilverLink SG transforms potential social fragmentation into meaningful intergenerational
                 exchange through a cloud-native platform.
@@ -151,7 +151,7 @@ export default function SilverLinkProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[PLATFORM_UI]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Platform UI</h2>
           </FramerReveal>
 
           <div className="space-y-8">
@@ -196,7 +196,7 @@ export default function SilverLinkProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ARCHITECTURE]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Architecture</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 {
@@ -216,7 +216,7 @@ export default function SilverLinkProject() {
                   items: ["Docker Compose (local)", "Kubernetes orchestration", "Keycloak auth + JWT", "Secrets via CI/CD / K8s"],
                 },
               ].map(({ label, items }) => (
-                <div key={label} className="bg-[#1b1b1b] border-t border-amber-500/20 p-5">
+                <div key={label} className="bg-zinc-900 border-t border-amber-500/20 p-5">
                   <p className="font-pixel text-xs text-amber-400 mb-4">[ {label} ]</p>
                   <ul className="space-y-2">
                     {items.map(i => (
@@ -232,8 +232,8 @@ export default function SilverLinkProject() {
           </FramerReveal>
 
           <FramerReveal>
-            <div className="mt-8 bg-[#1b1b1b] border-l-4 border-blue-500 p-6 sm:p-8">
-              <p className="font-pixel text-xs text-blue-400 mb-4">[KEY_ALGORITHMS]</p>
+            <div className="mt-8 bg-zinc-900 border-l-4 border-blue-500 p-6 sm:p-8">
+              <p className="font-pixel text-xs text-blue-400 mb-4">Key algorithms</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {[
                   { name: "Optimistic Concurrency Control", desc: "Version-checked atomic updates prevent double-booking under concurrent traffic (409 on conflict)." },
@@ -255,20 +255,20 @@ export default function SilverLinkProject() {
       <section className="py-16 px-4 sm:px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
+            <div className="bg-zinc-900 border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
+              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">View more projects</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                   onClick={() => { play('back'); setLocation('/'); }}
                   className="min-h-[44px] inline-flex items-center justify-center border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
                 >
-                  ← BACK TO PORTFOLIO
+                  ← Back to portfolio
                 </button>
                 <button
                   onClick={() => setLocation('/projects/scs')}
                   className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
                 >
-                  SCS PLATFORM →
+                  SCS platform →
                 </button>
               </div>
             </div>

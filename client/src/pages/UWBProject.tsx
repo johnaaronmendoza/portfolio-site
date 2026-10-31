@@ -19,16 +19,16 @@ export default function UWBProject() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#131313] text-white">
+    <div className="min-h-screen bg-black text-white">
       {/* Sticky back nav */}
-      <div className="sticky top-0 z-30 bg-[#131313] border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
+      <div className="sticky top-0 z-30 bg-black border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
         <button
           onClick={() => { play('back'); setLocation('/'); }}
           className="min-h-[44px] inline-flex items-center gap-2 px-2 -ml-2 font-pixel text-xs text-amber-400 hover:text-white transition-colors"
         >
-          ← BACK
+          ← Back
         </button>
-        <span className="font-pixel text-xs text-zinc-400 truncate">/ UWB_INDOOR_LOCALIZATION</span>
+        <span className="font-pixel text-xs text-zinc-400 truncate">/ UWB Indoor Localization</span>
       </div>
 
       {/* Hero — Sovereign Console bento */}
@@ -37,9 +37,9 @@ export default function UWBProject() {
           <FramerReveal>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
               {/* Identity card */}
-              <div className="lg:col-span-8 bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
-                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6" style={{wordBreak:"break-all"}}>
-                  [UWB_INDOOR_LOCALIZATION]
+              <div className="lg:col-span-8 bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8">
+                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6 break-words text-balance">
+                  UWB Indoor Localization
                 </h1>
                 <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
                   Full ML pipeline classifying LOS/NLOS Ultra-Wideband signal paths and estimating
@@ -52,19 +52,19 @@ export default function UWBProject() {
                   ))}
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
-                  <div className="bg-[#1b1b1b] p-4">
+                  <div className="bg-zinc-900 p-4">
                     <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[COURSE]</p>
                     <p className="font-mono-8bit text-sm">CSC3105 Data Analytics</p>
                   </div>
-                  <div className="bg-[#1b1b1b] p-4">
+                  <div className="bg-zinc-900 p-4">
                     <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[TEAM]</p>
                     <p className="font-mono-8bit text-sm">Group CS05, SIT</p>
                   </div>
-                  <div className="bg-[#1b1b1b] p-4">
+                  <div className="bg-zinc-900 p-4">
                     <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[DATASET]</p>
                     <p className="font-mono-8bit text-sm">41,996 UWB samples</p>
                   </div>
-                  <div className="bg-[#1b1b1b] p-4">
+                  <div className="bg-zinc-900 p-4">
                     <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[BEST ACCURACY]</p>
                     <p className="font-mono-8bit text-sm">89.61% (SVM-RBF)</p>
                   </div>
@@ -79,10 +79,10 @@ export default function UWBProject() {
               >
                 <div>
                   <p className="font-mono text-xs text-amber-900 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
-                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GITHUB_PROFILE</h2>
+                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GitHub profile</h2>
                 </div>
                 <div className="flex items-center justify-between mt-8">
-                  <span className="font-mono-8bit text-amber-900 text-sm">[ ALL_REPOSITORIES ]</span>
+                  <span className="font-mono-8bit text-amber-900 text-sm">All repositories</span>
                   <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
                 </div>
               </a>
@@ -104,7 +104,7 @@ export default function UWBProject() {
                 { label: "RANGE RMSE", value: "1.757 m" },
                 { label: "PATH 2 R²", value: "0.6809" },
               ].map(({ label, value }) => (
-                <div key={label} className="bg-[#1f1f1f] p-5 text-center">
+                <div key={label} className="bg-zinc-900 p-5 text-center">
                   <p className="font-pixel text-amber-400 text-base sm:text-lg mb-2">{value}</p>
                   <p className="font-mono text-xs text-amber-400/80 uppercase tracking-widest leading-tight">{label}</p>
                 </div>
@@ -118,8 +118,8 @@ export default function UWBProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto space-y-8">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
-            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">The problem</h2>
+            <div className="bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
                 Ultra-Wideband (UWB) supports sub-nanosecond time resolution and centimetre-level accuracy
                 under ideal conditions, but accuracy degrades significantly under Non-Line-of-Sight (NLOS)
@@ -134,8 +134,8 @@ export default function UWBProject() {
           </FramerReveal>
 
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[MY_CONTRIBUTIONS]</h2>
-            <div className="bg-[#1b1b1b] border-l-4 border-blue-500 p-6 sm:p-8">
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">My contributions</h2>
+            <div className="bg-zinc-900 border-l-4 border-blue-500 p-6 sm:p-8">
               <p className="font-mono-8bit text-sm text-blue-400 mb-4">John Aaron: Data Mining Methodology</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
@@ -163,7 +163,7 @@ export default function UWBProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto space-y-10">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[RESULTS]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Results</h2>
           </FramerReveal>
 
           <FramerReveal>
@@ -206,7 +206,7 @@ export default function UWBProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[METHODOLOGY]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Methodology</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {[
                 {
@@ -228,7 +228,7 @@ export default function UWBProject() {
               ].map(({ label, items }) => (
                 <motion.div
                   key={label}
-                  className="bg-[#1b1b1b] border-t border-amber-500/20 p-5"
+                  className="bg-zinc-900 border-t border-amber-500/20 p-5"
                   whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
                   whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
                   transition={{ duration: 0.2 }}
@@ -253,20 +253,20 @@ export default function UWBProject() {
       <section className="py-16 px-4 sm:px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
+            <div className="bg-zinc-900 border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
+              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">View more projects</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                   onClick={() => { play('back'); setLocation('/'); }}
                   className="min-h-[44px] inline-flex items-center justify-center border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
                 >
-                  ← BACK TO PORTFOLIO
+                  ← Back to portfolio
                 </button>
                 <button
                   onClick={() => setLocation('/projects/uat')}
                   className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
                 >
-                  UAT DASHBOARD →
+                  UAT dashboard →
                 </button>
               </div>
             </div>

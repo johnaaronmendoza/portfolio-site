@@ -11,24 +11,13 @@ type Entry = {
 
 const ENTRIES: Entry[] = [
   {
-    org: "Singapore Institute of Technology × University of Glasgow",
-    role: "BSc (Hons) Computing Science",
-    period: "2023 – Present",
-    tag: "EDUCATION",
-    highlights: [
-      "Final-year project: SilverLink SG, 8-node Kubernetes cluster, 4 gRPC microservices, WebRTC livestreaming, delivered across 7 Agile sprints",
-      "Core modules: Cloud Computing, Software Engineering, Mobile Development, Data Analytics, Requirements Engineering",
-      "Grounding in UAT methodology, requirements analysis, and end-to-end SDLC reinforced across coursework and industry placement",
-    ],
-  },
-  {
     org: "LGA Telecom",
     role: "Service Desk Operations & AI Integration Intern",
     period: "Aug 2026 – Present",
     tag: "INTERNSHIP",
     highlights: [
-      "Handle Level 1 customer tickets in Freshservice end to end (triage, troubleshooting, escalation and closure) and support customers with Microsoft 365 administration in the admin centre and Microsoft Entra ID",
       "Designing and building Desk Assist, a Manifest V3 Chrome extension that reads the ticket thread, retrieves relevant Knowledge Base guidance and drafts a reply for the agent to review, keeping a human in control of every customer response",
+      "Handle Level 1 customer tickets in Freshservice end to end (triage, troubleshooting, escalation and closure) and support customers with Microsoft 365 administration in the admin centre and Microsoft Entra ID",
       "Defined enterprise security requirements for the extension: least-privilege permissions, no remote code or unsafe-eval, no broad host access, and data leakage prevention, with AI calls routed through a company-controlled backend aligned with LGA's local AI rollout",
       "Configured Freshservice business rules and workflow automations for ticket closure and escalation, scoped to the Service Desk so other teams' live tickets stay unaffected",
       "Building an automated weekly PagerDuty incident report with the PagerDuty API and Google Apps Script, delivered as CSV by email",
@@ -47,6 +36,17 @@ const ENTRIES: Entry[] = [
       "Translated operational data from 240MWp+ solar assets into executive dashboards for leadership review",
     ],
   },
+  {
+    org: "Singapore Institute of Technology × University of Glasgow",
+    role: "BSc (Hons) Computing Science",
+    period: "2023 – Present",
+    tag: "EDUCATION",
+    highlights: [
+      "Final-year project: SilverLink SG, 8-node Kubernetes cluster, 4 gRPC microservices, WebRTC livestreaming, delivered across 7 Agile sprints",
+      "Core modules: Cloud Computing, Software Engineering, Mobile Development, Data Analytics, Requirements Engineering",
+      "Grounding in UAT methodology, requirements analysis, and end-to-end SDLC reinforced across coursework and industry placement",
+    ],
+  },
 ];
 
 const TAG_COLORS: Record<string, string> = {
@@ -63,22 +63,18 @@ export default function Experience() {
           <SectionHeading index="02" text="EXPERIENCE" className="mb-16" />
 
           <div className="space-y-8">
-            {ENTRIES.map((entry, idx) => (
+            {ENTRIES.map((entry) => (
               <div
-                key={idx}
+                key={entry.org}
                 className="border-8bit shadow-8bit bg-zinc-900 p-6 sm:p-10 lg:p-12"
               >
-                {/* Tag + Index */}
-                <div className="flex items-center gap-3 mb-4">
-                  {entry.tag && (
+                {entry.tag && (
+                  <div className="flex items-center mb-4">
                     <span className={`font-pixel text-xs border px-2 py-0.5 ${TAG_COLORS[entry.tag] ?? 'text-zinc-400 border-zinc-400'}`}>
-                      {entry.tag}
+                      {entry.tag.charAt(0) + entry.tag.slice(1).toLowerCase()}
                     </span>
-                  )}
-                  <span className="font-pixel text-xs text-zinc-400">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
-                </div>
+                  </div>
+                )}
 
                 {/* Header Row */}
                 <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 mb-8 pb-6 border-b-2 border-amber-400">

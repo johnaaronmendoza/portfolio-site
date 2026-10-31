@@ -316,7 +316,7 @@ export default function MascotChatWidget() {
             </div>
 
             {/* Quick Actions (show only on first message) */}
-            <div className="flex-shrink-0 border-t-2 border-amber-400 bg-zinc-900 p-2 grid grid-cols-3 gap-1.5">
+            <div className="flex-shrink-0 border-t-2 border-amber-400 bg-zinc-900 p-2 grid grid-cols-2 gap-1.5">
                 {[
                   { label: 'About Me', query: 'Tell me about yourself' },
                   { label: 'Projects', query: 'Tell me about your projects' },

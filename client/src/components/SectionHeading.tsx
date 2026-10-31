@@ -1,15 +1,12 @@
 interface Props {
-  index: string; // e.g. "01"
+  index: string; // kept so call sites compile; no longer rendered
   text: string;  // e.g. "PROJECTS"
   className?: string;
 }
 
-export default function SectionHeading({ index, text, className = '' }: Props) {
+export default function SectionHeading({ text, className = '' }: Props) {
   return (
     <div className={`flex items-center gap-4 ${className}`}>
-      <span className="font-mono text-sm text-zinc-500 flex-shrink-0 tabular-nums" aria-hidden="true">
-        {index} ·
-      </span>
       <h2 className="font-pixel text-2xl sm:text-3xl font-bold text-amber-400 flex-shrink-0">
         {text}
       </h2>

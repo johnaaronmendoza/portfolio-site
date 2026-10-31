@@ -6,7 +6,7 @@ import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 
-const ROLE_LINE = 'AI · DATA · FULL-STACK';
+const ROLE_LINE = 'AI, data and full-stack engineering';
 
 // Each line of the name reveals in turn: the page's one orchestrated moment
 const NAME_LINES = ['JOHN AARON', 'BRANZUELA'];

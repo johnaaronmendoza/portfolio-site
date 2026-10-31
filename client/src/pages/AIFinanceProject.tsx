@@ -14,17 +14,17 @@ export default function AIFinanceProject() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#131313] text-white">
+    <div className="min-h-screen bg-black text-white">
       {/* Sticky back nav */}
-      <div className="sticky top-0 z-30 bg-[#131313] border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
+      <div className="sticky top-0 z-30 bg-black border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
         <button
           onClick={() => { play('back'); setLocation('/'); }}
           className="min-h-[44px] inline-flex items-center gap-2 px-2 -ml-2 font-pixel text-xs text-amber-400 hover:text-white transition-colors"
         >
-          ← BACK
+          ← Back
         </button>
-        <span className="font-pixel text-xs text-zinc-400 truncate hidden sm:block">/ AI_FINANCE_INSIGHTS_DASHBOARD</span>
-        <span className="font-pixel text-xs text-zinc-400 sm:hidden">/ AI_FINANCE</span>
+        <span className="font-pixel text-xs text-zinc-400 truncate hidden sm:block">/ AI Finance Insights Engine</span>
+        <span className="font-pixel text-xs text-zinc-400 sm:hidden">/ AI Finance</span>
       </div>
 
       {/* Hero — Sovereign Console bento */}
@@ -33,9 +33,9 @@ export default function AIFinanceProject() {
           <FramerReveal>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
               {/* Identity card */}
-              <div className="lg:col-span-8 bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8">
-                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6" style={{wordBreak:"break-all"}}>
-                  [AI_FINANCE_INSIGHTS_&_LOGISTICS_ENGINE]
+              <div className="lg:col-span-8 bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8">
+                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6 break-words text-balance">
+                  AI Finance Insights Engine
                 </h1>
                 <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
                   An ETL data pipeline that ingests global logistics, commodity, and
@@ -48,19 +48,19 @@ export default function AIFinanceProject() {
                   ))}
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
-                  <div className="bg-[#1b1b1b] p-4">
+                  <div className="bg-zinc-900 p-4">
                     <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[TYPE]</p>
                     <p className="font-mono-8bit text-sm">ETL + AI Pipeline</p>
                   </div>
-                  <div className="bg-[#1b1b1b] p-4">
+                  <div className="bg-zinc-900 p-4">
                     <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[DOMAIN]</p>
                     <p className="font-mono-8bit text-sm">Shipping & Logistics</p>
                   </div>
-                  <div className="bg-[#1b1b1b] p-4">
+                  <div className="bg-zinc-900 p-4">
                     <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[DATA SOURCES]</p>
                     <p className="font-mono-8bit text-sm">5 Market Feeds</p>
                   </div>
-                  <div className="bg-[#1b1b1b] p-4">
+                  <div className="bg-zinc-900 p-4">
                     <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[TEST COVERAGE]</p>
                     <p className="font-mono-8bit text-sm">100% (Pytest)</p>
                   </div>
@@ -75,10 +75,10 @@ export default function AIFinanceProject() {
               >
                 <div>
                   <p className="font-mono text-xs text-amber-900 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
-                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GITHUB_PROFILE</h2>
+                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GitHub profile</h2>
                 </div>
                 <div className="flex items-center justify-between mt-8">
-                  <span className="font-mono-8bit text-amber-900 text-sm">[ ALL_REPOSITORIES ]</span>
+                  <span className="font-mono-8bit text-amber-900 text-sm">All repositories</span>
                   <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
                 </div>
               </a>
@@ -98,7 +98,7 @@ export default function AIFinanceProject() {
                 { label: "ETL PIPELINE STAGES", value: "5" },
                 { label: "DB SCHEMA MODEL", value: "Star" },
               ].map(({ label, value }) => (
-                <div key={label} className="bg-[#1f1f1f] p-6 text-center">
+                <div key={label} className="bg-zinc-900 p-6 text-center">
                   <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-2">{value}</p>
                   <p className="font-mono text-xs text-amber-400/80 uppercase tracking-widest leading-tight">{label}</p>
                 </div>
@@ -112,8 +112,8 @@ export default function AIFinanceProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto space-y-8">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[THE_PROBLEM]</h2>
-            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">The problem</h2>
+            <div className="bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
               <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
                 Maritime logistics and shipping analysts deal with fragmented market data: Brent crude
                 prices, USD/SGD FX rates, logistics stock performance, and geopolitical news all live
@@ -130,7 +130,7 @@ export default function AIFinanceProject() {
           </FramerReveal>
 
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">[PIPELINE_ARCHITECTURE]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">Pipeline architecture</h2>
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 items-stretch">
               {[
                 { step: "01", label: "EXTRACT", desc: "S&P 500, Brent Oil, USD/SGD FX, Maersk proxy, geopolitical news", color: "border-amber-400 text-amber-400" },
@@ -142,7 +142,7 @@ export default function AIFinanceProject() {
                 arrow ? (
                   <div key={step} className="flex items-center justify-center text-zinc-400 font-pixel text-lg">→</div>
                 ) : (
-                  <div key={step} className={`bg-[#1b1b1b] border-t-2 ${color} p-4 space-y-2`}>
+                  <div key={step} className={`bg-zinc-900 border-t-2 ${color} p-4 space-y-2`}>
                     <p className={`font-pixel text-xs ${color.split(' ')[1]}`}>[ {step} ]</p>
                     <p className="font-pixel text-xs text-white">{label}</p>
                     <p className="font-mono-8bit text-[15px] text-gray-400 leading-relaxed">{desc}</p>
@@ -161,7 +161,7 @@ export default function AIFinanceProject() {
                 arrow ? (
                   <div key={step} className="flex items-center justify-center text-zinc-400 font-pixel text-lg">→</div>
                 ) : (
-                  <div key={step} className={`bg-[#1b1b1b] border-t-2 ${color} p-4 space-y-2`}>
+                  <div key={step} className={`bg-zinc-900 border-t-2 ${color} p-4 space-y-2`}>
                     <p className={`font-pixel text-xs ${color.split(' ')[1]}`}>[ {step} ]</p>
                     <p className="font-pixel text-xs text-white">{label}</p>
                     <p className="font-mono-8bit text-[15px] text-gray-400 leading-relaxed">{desc}</p>
@@ -177,7 +177,7 @@ export default function AIFinanceProject() {
       <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">[ENGINEERING_HIGHLIGHTS]</h2>
+            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Engineering highlights</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {[
                 {
@@ -207,7 +207,7 @@ export default function AIFinanceProject() {
               ].map(({ label, items }) => (
                 <motion.div
                   key={label}
-                  className="bg-[#1b1b1b] border-t border-amber-500/20 p-5"
+                  className="bg-zinc-900 border-t border-amber-500/20 p-5"
                   whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
                   whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
                 >
@@ -231,20 +231,20 @@ export default function AIFinanceProject() {
       <section className="py-16 px-4 sm:px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
           <FramerReveal>
-            <div className="bg-[#1b1b1b] border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">[VIEW_MORE_PROJECTS]</h2>
+            <div className="bg-zinc-900 border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
+              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">View more projects</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                   onClick={() => { play('back'); setLocation('/'); }}
                   className="min-h-[44px] inline-flex items-center justify-center border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
                 >
-                  ← BACK TO PORTFOLIO
+                  ← Back to portfolio
                 </button>
                 <button
                   onClick={() => setLocation('/projects/silverlink')}
                   className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
                 >
-                  SILVERLINK SG →
+                  SilverLink SG →
                 </button>
               </div>
             </div>

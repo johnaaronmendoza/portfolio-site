@@ -154,6 +154,7 @@ export default function CommandPalette() {
       action: () => {
         const chatButton = document.querySelector('button[data-chat-toggle]') as HTMLButtonElement;
         if (chatButton) chatButton.click();
+        returnFocusRef.current = null; // let focus stay in the chat
         setIsOpen(false);
       },
       category: 'chat',
@@ -163,6 +164,7 @@ export default function CommandPalette() {
       label: 'Ask About Experience',
       description: 'Chat: Sembcorp internship details',
       action: () => {
+        returnFocusRef.current = null;
         setIsOpen(false);
         triggerChatQuery('Tell me about your Sembcorp experience');
       },
@@ -173,6 +175,7 @@ export default function CommandPalette() {
       label: 'Ask About Projects',
       description: 'Chat: overview of all projects',
       action: () => {
+        returnFocusRef.current = null;
         setIsOpen(false);
         triggerChatQuery('What are your projects');
       },
@@ -183,6 +186,7 @@ export default function CommandPalette() {
       label: 'Ask About Skills',
       description: 'Chat: tech stack and tools',
       action: () => {
+        returnFocusRef.current = null;
         setIsOpen(false);
         triggerChatQuery('What are your skills');
       },

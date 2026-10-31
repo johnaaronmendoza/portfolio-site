@@ -77,7 +77,7 @@ Recruiters for AI, data and software graduate roles (currently the DBS 2027 Mana
   - lime `#C6FF3D` (loud bands, neon glow, highlights)
   - cobalt `#2B35FF` (full-width bands)
   - signal red `#FF3B30` (stickers only)
-  - Approved text pairings only: white or lime or amber on black; black on lime or amber; white on cobalt. Never amber or lime text on cobalt.
+  - Approved text pairings only: white or lime or amber on black; black on lime or amber; white on cobalt; black on signal red (stickers only). Never amber or lime text on cobalt, never white on signal red.
 - **Type:** pixel fonts (`Press Start 2P` / `VT323`) for display, set large; `font-mono` for body. Neon glow (lime `text-shadow`) is allowed on the hero name only.
 - **Hard shadows only** (`shadow-8bit` style, offset, no blur), thick black borders, slight rotations (±2–6°) on stickers and ribbons.
 - **Motion:** the hero reveal is the one load-in moment. Scrolling ribbons are allowed as the site's signature texture: CSS transform only, pause on hover, and completely static under `prefers-reduced-motion`. Stickers may wiggle on hover only. Still no scroll-triggered fades, particles or passive pop-ups.

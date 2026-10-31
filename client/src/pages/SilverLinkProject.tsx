@@ -199,19 +199,19 @@ export default function SilverLinkProject() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 {
-                  label: "CLOUD_LAYER",
+                  label: "Cloud layer",
                   items: ["Neon Serverless PostgreSQL", "Cloudflare Tunnel (HTTPS)", "GitHub Actions CI/CD", "One-command deploy scripts"],
                 },
                 {
-                  label: "MICROSERVICES",
+                  label: "Microservices",
                   items: ["API Gateway (REST → gRPC)", "Event Service (port 50051)", "Booking Service (port 50052)", "Volunteer + User Services"],
                 },
                 {
-                  label: "DATABASE",
+                  label: "Database",
                   items: ["8 isolated schemas", "Prisma ORM (type-safe)", "Per-service Prisma client", "Connection pooling"],
                 },
                 {
-                  label: "DEVOPS",
+                  label: "DevOps",
                   items: ["Docker Compose (local)", "Kubernetes orchestration", "Keycloak auth + JWT", "Secrets via CI/CD / K8s"],
                 },
               ].map(({ label, items }) => (

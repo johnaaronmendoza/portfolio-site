@@ -1,9 +1,7 @@
-import { motion } from 'framer-motion';
-import FramerReveal from '@/components/FramerReveal';
-import { Link, useLocation } from 'wouter';
-import { useEffect } from 'react';
-import { trackProjectVisit } from '@/hooks/useAchievements';
-import { play } from '@/hooks/useSound';
+import CaseLayout from '@/components/case/CaseLayout';
+import CaseHeader, { GITHUB_PROFILE } from '@/components/case/CaseHeader';
+import { CaseSection, CardGrid, FeatureList, FigureList, Prose, TechStack } from '@/components/case/CaseBlocks';
+import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
 import onboardingImg from '@assets/firesafety_p29_img1.png';
 import dashboardImg from '@assets/firesafety_p29_img2.png';
 import drillSetupImg from '@assets/firesafety_p29_img3.png';
@@ -13,294 +11,157 @@ import extinguisherImg from '@assets/firesafety_p30_img0.png';
 import quizImg from '@assets/firesafety_p30_img1.png';
 import analyticsImg from '@assets/firesafety_p30_img3.png';
 
+const SHOTS: Shot[] = [
+  {
+    file: 'onboarding.png', src: onboardingImg, width: 896, height: 564, span: 'half',
+    caption: 'Onboarding: quick intros to scanning extinguishers and safety alerts.',
+    alt: "Three phone screens: the app's shield-and-flame logo, an onboarding card 'Scan Extinguisher' and an onboarding card 'Stay Informed'.",
+  },
+  {
+    file: 'dashboard.png', src: dashboardImg, width: 605, height: 520, span: 'half',
+    caption: 'Home: start a drill, or open the floor plan, extinguisher ID, quiz and history.',
+    alt: 'Fire Safety Drill home screen with a Start drill button and menu items for floor plan, extinguisher ID, safety quiz, history and settings.',
+  },
+  {
+    file: 'drill_setup.png', src: drillSetupImg, width: 790, height: 487, span: 'half',
+    caption: 'Drill setup: choose slab or point block, then your unit.',
+    alt: 'Drill Setup screens: a unit dropdown and a summary for Block 123 Ang Mo Kio Ave 4, floor 12, unit 12-01, with a Start drill button.',
+  },
+  {
+    file: 'floor_plan.png', src: floorplanImg, width: 586, height: 1041, span: 'half',
+    caption: 'Floor plan: tap a room and Dijkstra draws the shortest route to the nearest exit.',
+    alt: 'Floor Plan screens: a node graph of rooms, stairwells and exits, with the shortest route drawn in red from the chosen unit to an exit, for slab and point blocks.',
+  },
+  {
+    file: 'ar_navigation.png', src: arImg, width: 436, height: 737, span: 'half',
+    caption: 'AR drill: arrows on the camera view lead to the exit.',
+    alt: "AR Drill screens: red chevron arrows over a live corridor view, a display of steps, distance and time, a 'Path lost' warning and tips for fixing tracking.",
+  },
+  {
+    file: 'extinguisher_id.png', src: extinguisherImg, width: 911, height: 744, span: 'half',
+    caption: 'Extinguisher ID: names the type and the fires it suits, processed on the phone.',
+    alt: "Extinguisher ID screen framing a red extinguisher, labelled CO2 at 78% confidence with suitable fire types, next to a 'How to scan' help dialog.",
+  },
+  {
+    file: 'safety_quiz.png', src: quizImg, width: 947, height: 642, span: 'half',
+    caption: 'Safety quiz: picture questions with explanations from SCDF guidelines.',
+    alt: 'Safety Quiz screens: a question on using the lift in a fire, a question on what to do when the alarm sounds, and a result of 4 out of 8 correct.',
+  },
+  {
+    file: 'analytics.png', src: analyticsImg, width: 754, height: 872, span: 'half',
+    caption: 'History: drill times, steps and quiz scores over time, and a shareable certificate.',
+    alt: 'Analytics Dashboard screens: drill count, average time and quiz average, trend charts, a printable certificate of completion, and a note that the certificate leaves out name, unit and location.',
+  },
+];
+
 export default function FireSafetyProject() {
-  const [, setLocation] = useLocation();
-  useEffect(() => {
-    trackProjectVisit('firesafety');
-    document.title = 'Fire Safety Drill Companion | John Aaron Branzuela';
-    return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
-  }, []);
-
-  const stats = [
-    { label: "KOTLIN SOURCE", value: "10,984 lines" },
-    { label: "TEST CODE", value: "5,458 lines" },
-    { label: "TEST FILES", value: "26 files" },
-    { label: "TEST COVERAGE", value: "~80%" },
-    { label: "GIT COMMITS", value: "120" },
-    { label: "SUS SCORE", value: "79 / 100" },
-    { label: "LANGUAGES", value: "4 (EN/ZH/TA/MS)" },
-    { label: "BACKLOG DELIVERED", value: "9/9 + 6 bonus" },
-  ];
-
   return (
-    <main className="min-h-screen bg-black text-white">
-      {/* Sticky back nav */}
-      <nav aria-label="Project page" className="sticky top-0 z-30 bg-black border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
-        <Link
-          href="/#projects"
-          replace
-          onClick={() => play('back')}
-          className="min-h-[44px] inline-flex items-center gap-2 px-2 -ml-2 font-pixel text-xs text-amber-400 hover:text-white transition-colors"
-        >
-          <span aria-hidden="true">←</span> Back
-        </Link>
-        <span className="font-pixel text-xs text-zinc-400 truncate">/ Fire Safety Drill Companion</span>
-      </nav>
+    <CaseLayout slug="firesafety">
+      <CaseHeader
+        slug="firesafety"
+        file="fire_safety_drill.apk"
+        meta={[
+          { label: 'Type', value: 'Team project, INF2007 Mobile App Development, SIT', wide: true },
+          { label: 'Team', value: 'Group 16' },
+          { label: 'My role', value: 'Algorithms and AR' },
+          { label: 'Sprints', value: '3 Agile sprints' },
+          { label: 'Platform', value: 'Android, Pixel 6a' },
+        ]}
+        links={[GITHUB_PROFILE]}
+        stats={[
+          { value: '79/100', label: 'SUS usability score' },
+          { value: '~80%', label: 'test coverage' },
+          { value: '4', label: 'languages' },
+          { value: '9/9', label: 'backlog items, plus 6 extra' },
+        ]}
+      />
 
-      {/* Hero — Sovereign Console bento */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
-              {/* Identity card */}
-              <div className="lg:col-span-8 bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8">
-                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6 break-words text-balance">
-                  Fire Safety Drill Companion
-                </h1>
-                <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
-                  Native Android app empowering HDB residents to rehearse fire evacuation at their own convenience,
-                  with AR-guided navigation, on-device ML, and sensor-fusion positioning. No internet required.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {["Kotlin", "Jetpack_Compose", "MVVM", "Hilt_DI", "ARCore", "TFLite", "Room_DB", "Firebase_FCM", "Dijkstra", "Weinberg_PDR"].map(t => (
-                    <span key={t} className="bg-[#353535] px-3 py-1 font-mono text-xs text-amber-400 border border-amber-500/20">--{t}</span>
-                  ))}
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
-                  <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1">Course</p>
-                    <p className="font-mono-8bit text-sm">INF2007 Mobile App Dev</p>
-                  </div>
-                  <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1">Team</p>
-                    <p className="font-mono-8bit text-sm">Group 16, SIT</p>
-                  </div>
-                  <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1">Sprints</p>
-                    <p className="font-mono-8bit text-sm">3 Agile sprints</p>
-                  </div>
-                  <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1">Platform</p>
-                    <p className="font-mono-8bit text-sm">Android (Pixel 6a)</p>
-                  </div>
-                </div>
-              </div>
-              {/* CTA card */}
-              <a
-                href="https://github.com/johnaaronmendoza"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
-              >
-                <div>
-                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GitHub profile</h2>
-                </div>
-                <div className="flex items-center justify-between mt-8">
-                  <span className="font-mono-8bit text-amber-900 text-sm">All repositories</span>
-                  <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
-                </div>
-              </a>
-            </div>
-          </FramerReveal>
+      <CaseSection id="problem" heading="The problem" icon="icon-about" file="problem.txt">
+        <Prose>
+          <p>
+            About 1.1 million HDB flats house 80% of Singapore's population, many in blocks over 20
+            storeys. SCDF fire drills have consistently low turnout, especially among elderly
+            residents facing mobility issues, language barriers or unfamiliar escape routes.
+          </p>
+        </Prose>
+      </CaseSection>
+
+      <CaseSection id="what" heading="What it does" icon="icon-projects" file="what_it_does.md">
+        <div className="space-y-6">
+          <Prose lead="Residents rehearse on demand, inside their own block, without a group drill or SCDF supervision." />
+          <FeatureList
+            items={[
+              'Pick your block type and unit, then follow AR arrows to the nearest exit',
+              'See the route on a 2D floor plan',
+              'Mark a stairwell as smoke-filled and watch the route re-plan',
+              'Point the camera at an extinguisher to identify its type',
+              'Take a picture-based safety quiz with read-aloud',
+              'Track drill times, steps and quiz scores, and share a completion certificate',
+              'Get drill reminders by push notification, in English, Chinese, Tamil or Malay',
+            ]}
+          />
         </div>
-      </section>
+      </CaseSection>
 
-      {/* Stats bar */}
-      <section className="border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-16">
-          <FramerReveal>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-px bg-amber-500/10">
-              {stats.map(({ label, value }) => (
-                <div key={label} className="bg-zinc-900 p-5 text-center">
-                  <p className="font-pixel text-amber-400 text-xs sm:text-base break-words mb-2">{value}</p>
-                  <p className="font-mono text-xs text-amber-400/80 uppercase tracking-widest leading-tight">{label}</p>
-                </div>
-              ))}
-            </div>
-          </FramerReveal>
+      <CaseSection id="part" heading="My part" icon="icon-experience" file="my_part.log">
+        <div className="space-y-6">
+          <Prose lead="I built the algorithms and AR (49 of the team's 120 commits):" />
+          <FeatureList
+            columns={2}
+            items={[
+              'Dijkstra shortest-path routing that re-plans when a stairwell is blocked',
+              'Nearest-exit search across every exit node (findPathToNearestExit())',
+              'ARCore session lifecycle, AR corridor rendering and waypoint placement',
+              '3D-to-2D projection between the AR scene and the floor-plan graph (ArWaypointConverter)',
+              'Tuned step-based positioning (PDR) fusing accelerometer and gyroscope',
+              'Thread-safe path computation (@Synchronized)',
+            ]}
+          />
         </div>
-      </section>
+      </CaseSection>
 
-      {/* Problem */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto space-y-8">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">The problem</h2>
-            <div className="bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
-              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
-                Singapore's ~1.1 million HDB flats house 80% of the population, many in blocks exceeding 20 storeys.
-                SCDF fire drills have consistently low participation, especially among elderly residents facing
-                mobility challenges, language barriers, or unfamiliarity with evacuation routes in their own block.
-              </p>
-              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed text-amber-400">
-                The Fire Safety Drill Companion lets residents rehearse fire evacuation on-demand, inside their own HDB block,
-                without organized group drills or SCDF supervision, fully offline.
-              </p>
-            </div>
-          </FramerReveal>
+      <CaseSection id="decisions" heading="Key decisions" icon="icon-skills" file="key_decisions.md">
+        <CardGrid
+          cols={3}
+          cards={[
+            { title: "Works when the network doesn't", body: 'Routing, ML and data all run on the phone, so a drill still works offline.' },
+            { title: 'Routing', body: 'O((V+E) log V) priority-queue Dijkstra on JSON floor-plan graphs; blockedNodes removes smoke-filled stairwells and re-routes.' },
+            { title: 'Positioning without GPS or Wi-Fi', body: 'Weinberg stride estimation (K × amplitude^0.25) fused with accelerometer, gyroscope and step counter, aiming for metre-level accuracy indoors.' },
+            { title: 'AR on the camera feed', body: 'ARCore draws breadcrumb arrows; the converter maps graph coordinates to metres with origin offset and viewport transforms.' },
+            { title: 'On-device ML', body: 'TFLite with YOLO classifies extinguishers (powder, water, CO₂) from CameraX frames, with no network delay.' },
+            { title: 'Local history', body: 'Room database v3 with three tables (drill history, quiz scores, SUS scores), tested migrations v1 → v2 → v3, and Flow queries that keep charts current.' },
+            { title: 'Reminders', body: 'Firebase Cloud Messaging push reminders, localised in all 4 languages.' },
+          ]}
+        />
+      </CaseSection>
 
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">My contributions</h2>
-            <div className="bg-zinc-900 border-l-4 border-blue-500 p-6 sm:p-8">
-              <p className="font-mono-8bit text-sm text-blue-400 mb-4">John Aaron: Algorithms & AR (49 commits)</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  "Dijkstra shortest-path with dynamic hazard re-routing",
-                  "ARCore session lifecycle management",
-                  "AR corridor rendering and waypoint placement",
-                  "3D-to-2D coordinate projection (ArWaypointConverter)",
-                  "PDR sensor fusion optimization (accelerometer + gyroscope)",
-                  "Blocked-node parameter for real-time stairwell exclusion",
-                  "findPathToNearestExit() across all exit nodes",
-                  "Thread-safe @Synchronized path computation",
-                ].map(c => (
-                  <div key={c} className="flex items-start gap-2">
-                    <span className="text-amber-400 flex-shrink-0 mt-1">▸</span>
-                    <span className="font-mono-8bit text-[15px]">{c}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </FramerReveal>
+      <ScreenGallery shots={SHOTS} />
+
+      <CaseSection id="outcome" heading="Outcome" icon="icon-results" file="outcome.txt">
+        <div className="space-y-6">
+          <Prose>
+            <p>
+              Delivered all 9 backlog items plus 6 extra in 3 Agile sprints, with a SUS usability
+              score of 79/100 and about 80% test coverage.
+            </p>
+          </Prose>
+          <FigureList
+            items={[
+              { value: '10,984', label: 'lines of Kotlin' },
+              { value: '5,458', label: 'lines of tests' },
+              { value: '26', label: 'test files' },
+              { value: '120', label: 'commits' },
+            ]}
+          />
         </div>
-      </section>
+      </CaseSection>
 
-      {/* Screenshots */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto space-y-10">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">App screens</h2>
-          </FramerReveal>
-
-          <FramerReveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">ONBOARDING</p>
-                <img src={onboardingImg} alt="Onboarding flow" className="w-full border border-amber-500/20" />
-              </div>
-              <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">MAIN DASHBOARD</p>
-                <img src={dashboardImg} alt="Dashboard" className="w-full border border-amber-500/20" />
-              </div>
-            </div>
-          </FramerReveal>
-
-          <FramerReveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">DRILL SETUP: BLOCK + UNIT SELECTION</p>
-                <img src={drillSetupImg} alt="Drill setup" className="w-full border border-amber-500/20" />
-              </div>
-              <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">2D FLOOR PLAN + DIJKSTRA PATHFINDING</p>
-                <img src={floorplanImg} alt="Floor plan navigation" className="w-full border border-amber-500/20" />
-              </div>
-            </div>
-          </FramerReveal>
-
-          <FramerReveal>
-            <div className="space-y-3">
-              <p className="font-pixel text-xs text-blue-400">AR CORRIDOR NAVIGATION: LIVE BREADCRUMB ARROWS</p>
-              <img src={arImg} alt="AR navigation" className="w-full border border-amber-500/20" />
-            </div>
-          </FramerReveal>
-
-          <FramerReveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">EXTINGUISHER ID: ON-DEVICE TFLITE ML</p>
-                <img src={extinguisherImg} alt="Extinguisher classification" className="w-full border border-amber-500/20" />
-              </div>
-              <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">SAFETY QUIZ + GAMIFICATION</p>
-                <img src={quizImg} alt="Safety quiz" className="w-full border border-amber-500/20" />
-              </div>
-            </div>
-          </FramerReveal>
-
-          <FramerReveal>
-            <div className="space-y-3">
-              <p className="font-pixel text-xs text-blue-400">ANALYTICS DASHBOARD: DRILL HISTORY + SUS SCORES</p>
-              <img src={analyticsImg} alt="Analytics" className="w-full border border-amber-500/20" />
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
-
-      {/* Tech deep-dive */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Advanced features</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {[
-                {
-                  label: "SENSOR FUSION PDR",
-                  desc: "Weinberg stride estimation (K × amplitude^0.25) fused with accelerometer, gyroscope, and step counter. Targets meter-level indoor positioning without GPS or WiFi infrastructure.",
-                },
-                {
-                  label: "AR NAVIGATION",
-                  desc: "ARCore overlays breadcrumb arrows on live camera feed. ArWaypointConverter handles 3D-to-2D graph-to-metre coordinate projection with origin offset and viewport transforms.",
-                },
-                {
-                  label: "ON-DEVICE ML",
-                  desc: "TFLite + YOLO classifies fire extinguisher types (Powder/Water/CO₂) from CameraX frames. No network latency. Continues to function offline during actual emergencies.",
-                },
-                {
-                  label: "DIJKSTRA PATHFINDING",
-                  desc: "O((V+E)logV) priority-queue implementation on JSON floor plan graphs. blockedNodes param dynamically excludes smoke-affected stairwells for real-time re-routing.",
-                },
-                {
-                  label: "ROOM DATABASE v3",
-                  desc: "Three entities: drill_history, quiz_scores, sus_scores. Tested schema migrations v1→v2→v3. Flow-based reactive queries for real-time chart updates.",
-                },
-                {
-                  label: "FIREBASE FCM",
-                  desc: "Push notifications for drill reminders. DrillReminderService handles background delivery. Fully localised notification content across all 4 languages.",
-                },
-              ].map(({ label, desc }) => (
-                <motion.div
-                  key={label}
-                  className="bg-zinc-900 border-t border-amber-500/20 p-5"
-                  whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
-                  whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <p className="font-pixel text-xs text-amber-400 mb-3">{label}</p>
-                  <p className="font-mono-8bit text-[15px] text-gray-300 leading-relaxed">{desc}</p>
-                </motion.div>
-              ))}
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-16 px-4 sm:px-8 lg:px-16">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <div className="bg-zinc-900 border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">View more projects</h2>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/#projects"
-                  replace
-                  onClick={() => play('back')}
-                  className="min-h-[44px] inline-flex items-center justify-center border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
-                >
-                  <span aria-hidden="true">←</span> Back to portfolio
-                </Link>
-                <button
-                  onClick={() => setLocation('/projects/uwb')}
-                  className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
-                >
-                  Next: UWB project →
-                </button>
-              </div>
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
-    </main>
+      <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">
+        <TechStack
+          tags={['Kotlin', 'Jetpack Compose', 'MVVM', 'Hilt', 'ARCore', 'TensorFlow Lite', 'YOLO', 'CameraX', 'Room', 'Firebase Cloud Messaging']}
+          more={{ label: 'Methods', tags: ['Dijkstra', 'Weinberg PDR'] }}
+        />
+      </CaseSection>
+    </CaseLayout>
   );
 }

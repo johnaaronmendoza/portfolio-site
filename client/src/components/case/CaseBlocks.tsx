@@ -56,7 +56,7 @@ export function FeatureList({ items, columns = 1 }: { items: string[]; columns?:
       {items.map(item => (
         <li key={item} className="flex items-start gap-3">
           <span aria-hidden="true" className="flex-shrink-0 mt-[0.6em] w-2.5 h-2.5 bg-[var(--orange)] border-2 border-black" />
-          <span className="min-w-0">{item}</span>
+          <span className="min-w-0 break-words">{item}</span>
         </li>
       ))}
     </ul>
@@ -80,7 +80,7 @@ export function CardGrid({ cards, cols, headingLevel = 3 }: { cards: Card[]; col
           <Heading className="font-pixel text-xs sm:text-sm leading-[1.5] text-black break-words border-b-[3px] border-black pb-3 mb-3">
             {title}
           </Heading>
-          {body && <p className={`${BODY} text-[color:var(--navy)]`}>{body}</p>}
+          {body && <p className={`${BODY} text-[color:var(--navy)] break-words`}>{body}</p>}
           {items && <div className={body ? 'mt-3' : undefined}><FeatureList items={items} /></div>}
         </li>
       ))}

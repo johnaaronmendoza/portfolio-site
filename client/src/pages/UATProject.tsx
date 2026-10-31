@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import CaseLayout from '@/components/case/CaseLayout';
 import CaseHeader from '@/components/case/CaseHeader';
 import { CaseSection, CardGrid, FeatureList, Prose, SubHeading, TechStack } from '@/components/case/CaseBlocks';
@@ -114,7 +115,7 @@ function SeverityList() {
   );
 }
 
-const RECORD: { label: string; value: React.ReactNode }[] = [
+const RECORD: { label: string; value: ReactNode }[] = [
   { label: 'Code', value: 'TC-022' },
   { label: 'Module', value: 'Notifications' },
   { label: 'Status', value: <span className="inline-block border-2 border-black bg-[var(--orange)] px-2 py-1 font-pixel text-xs text-black">Fail</span> },

@@ -80,7 +80,7 @@ export default function ChatWindow({
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="border-8bit-blue shadow-8bit-blue bg-zinc-900 px-4 py-3 font-mono-8bit text-sm">
+          <div className="border-8bit-blue shadow-8bit bg-zinc-900 px-4 py-3 font-mono-8bit text-sm">
             <motion.span
               animate={{ opacity: [0.3, 1, 0.3] }}
               transition={{ duration: 1.5, repeat: Infinity }}

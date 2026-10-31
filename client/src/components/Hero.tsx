@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import type { ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Particles from './Particles';
 import { unlockAchievement } from '@/hooks/useAchievements';
 import { play } from '@/hooks/useSound';
@@ -7,6 +7,7 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useCalmMotion } from '@/hooks/useCalmMotion';
 import { useTextScramble } from '@/hooks/useTextScramble';
 import { motionTokens } from '@/lib/motion-tokens';
+import { scrollToSection } from '@/lib/utils';
 import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 import PixelArt from '@/components/PixelArt';
 import Window from '@/components/Window';
@@ -76,7 +77,8 @@ function ScrambleLine({
   return (
     <motion.span
       className={`block whitespace-nowrap ${color}`}
-      initial={{ opacity: 0, y: 32, clipPath: 'inset(100% 0 0 0)' }}
+      // Reduced motion: the name renders final, with no clip reveal (MASTER 3.6)
+      initial={reduced ? false : { opacity: 0, y: 32, clipPath: 'inset(100% 0 0 0)' }}
       animate={{ opacity: 1, y: 0, clipPath: 'inset(0% 0 0 0)' }}
       transition={{ duration: HERO.line, delay, ease: easing.out }}
       onMouseEnter={() => !calm && scramble()}
@@ -91,8 +93,19 @@ export default function Hero() {
   const reduced = useReducedMotion();
   const calm = useCalmMotion();
 
+  // Particles also pause while the hero is scrolled out of view
+  const sectionRef = useRef<HTMLElement>(null);
+  const [onScreen, setOnScreen] = useState(true);
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <section className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--cream)] px-4 sm:px-8 lg:px-16 pt-12 pb-6 sm:pt-20">
+    <section ref={sectionRef} className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--cream)] px-4 sm:px-8 lg:px-16 pt-12 pb-6 sm:pt-20">
       {/* WebGL particles (skipped with reduced motion, frozen by Pause motion) */}
       {!reduced && (
         <div className="absolute inset-0 z-0 pointer-events-none">
@@ -108,7 +121,7 @@ export default function Hero() {
             particleHoverFactor={0.4}
             cameraDistance={22}
             disableRotation={false}
-            paused={calm}
+            paused={calm || !onScreen}
           />
         </div>
       )}
@@ -213,6 +226,13 @@ export default function Hero() {
                 <PixelArt name="floppy" size={16} />
                 Download resume
               </a>
+              <a
+                href="#projects"
+                onClick={(e) => { e.preventDefault(); scrollToSection('projects', reduced); }}
+                className="btn btn-secondary w-full sm:w-auto"
+              >
+                See projects
+              </a>
               <div className="flex flex-wrap items-center gap-3">
                 <a href="mailto:johnaaronmb@gmail.com" className="btn btn-ghost">
                   <PixelArt name="icon-contact" size={16} />
@@ -258,7 +278,7 @@ export default function Hero() {
       <motion.button
         type="button"
         aria-label="Scroll to About"
-        onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' })}
+        onClick={() => scrollToSection('about', reduced)}
         className="relative z-10 self-center mt-8 min-h-[44px] min-w-[44px] px-3 flex flex-col items-center justify-center gap-1 text-[color:var(--orange)]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

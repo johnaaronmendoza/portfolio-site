@@ -34,7 +34,7 @@ export default function ChatBubble({ message, sender }: ChatBubbleProps) {
         className={`max-w-xs sm:max-w-md lg:max-w-lg px-4 py-3 font-mono-8bit text-sm sm:text-base leading-relaxed ${
           isUser
             ? 'border-8bit shadow-8bit bg-black text-amber-400'
-            : 'border-8bit-blue shadow-8bit-blue bg-zinc-900 text-white'
+            : 'border-8bit-blue shadow-8bit bg-zinc-900 text-white'
         }`}
       >
         {message}

@@ -58,10 +58,10 @@ export default function Skills() {
           <dl className="mt-14 border-t-[3px] border-[color:var(--teal)] pt-6 space-y-3">
             {GROUPS.map(group => (
               <div key={group.label} className="grid grid-cols-1 sm:grid-cols-[11rem_1fr] gap-1 sm:gap-6">
-                <dt className={`font-mono text-[15px] font-bold ${group.highlight ? 'text-[color:var(--orange)]' : 'text-[color:var(--teal)]'}`}>
+                <dt className={`font-mono text-[15px] sm:text-base font-bold ${group.highlight ? 'text-[color:var(--orange)]' : 'text-[color:var(--teal)]'}`}>
                   {group.label}
                 </dt>
-                <dd className="font-mono text-[15px] leading-relaxed">
+                <dd className="font-mono text-[15px] sm:text-base leading-relaxed">
                   {group.skills.join(', ')}
                 </dd>
               </div>

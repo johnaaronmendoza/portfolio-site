@@ -14,7 +14,6 @@ import UWBProject from "./pages/UWBProject";
 import UATProject from "./pages/UATProject";
 import AIFinanceProject from "./pages/AIFinanceProject";
 import MascotChatWidget from "./components/MascotChatWidget";
-import ScrollProgress from "./components/ScrollProgress";
 import KonamiOverlay from "./components/KonamiOverlay";
 import SecretTerminal from "./components/SecretTerminal";
 import KeyboardShortcuts from "./components/KeyboardShortcuts";
@@ -31,9 +30,14 @@ function ScrollToTop() {
   const [location] = useLocation();
   const popRef = useRef(false);
   const firstRef = useRef(true);
+  // Pathname the last effect ran for; a popstate only counts as "Back" when
+  // it actually changes the pathname (not for hash-only history entries).
+  const lastPathRef = useRef(window.location.pathname);
 
   useEffect(() => {
-    const onPop = () => { popRef.current = true; };
+    const onPop = () => {
+      if (window.location.pathname !== lastPathRef.current) popRef.current = true;
+    };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, []);
@@ -43,6 +47,7 @@ function ScrollToTop() {
     popRef.current = false;
     const isFirst = firstRef.current;
     firstRef.current = false;
+    lastPathRef.current = window.location.pathname;
     if (window.location.hash) return;
 
     const y = wasPop && location === "/" ? savedHomeScroll() : 0;
@@ -88,7 +93,6 @@ function AppInner() {
 
   return (
     <TooltipProvider>
-      <ScrollProgress />
       <CommandPalette />
       <KeyboardShortcuts />
       <Toaster />

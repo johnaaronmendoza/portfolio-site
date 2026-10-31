@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PixelArt from './PixelArt';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { scrollToSection } from '@/lib/utils';
 
 const SECTIONS = [
   { id: 'hero',       label: 'Top' },
@@ -54,14 +55,14 @@ export default function SectionNav() {
   return (
     <>
     {/* Bottom-left at every width; the chat launcher owns bottom-right. The focus
-        ring hugs the black border so it reads over every band it floats above.
+        ring is ink with a cream halo so it reads over every band it floats above.
         Paused = orange and pressed into its shadow, so the state shows at a glance */}
     <button
       type="button"
       onClick={toggleMotion}
       aria-pressed={motionPaused}
-      className={`btn outline-offset-0 motion-reduce:hidden fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 min-w-[44px] px-3 text-sm text-black ${
-        motionPaused ? 'bg-[var(--orange)] translate-x-1 translate-y-1 shadow-none' : 'bg-[var(--cream)]'
+      className={`btn focus-ring-float motion-reduce:hidden fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 min-w-[44px] px-3 text-black ${
+        motionPaused ? 'bg-[var(--orange)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--cream)]'
       }`}
     >
       <span aria-hidden="true">❚❚</span>
@@ -75,7 +76,7 @@ export default function SectionNav() {
           <li key={id}>
             <button
               type="button"
-              onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' })}
+              onClick={() => scrollToSection(id, reduced)}
               aria-label={`Go to ${label}`}
               aria-current={active === id ? 'location' : undefined}
               className="group relative flex items-center justify-center w-11 h-11"

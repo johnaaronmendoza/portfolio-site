@@ -106,25 +106,6 @@
   }
 }
 
-/* Animated Border Pulse */
-@keyframes borderPulse {
-  0%, 100% {
-    box-shadow: 4px 4px 0px 0px #F59E0B, 0 0 10px rgba(245, 158, 11, 0);
-  }
-  50% {
-    box-shadow: 4px 4px 0px 0px #F59E0B, 0 0 20px rgba(245, 158, 11, 0.6);
-  }
-}
-
-@keyframes borderPulseBlue {
-  0%, 100% {
-    box-shadow: 4px 4px 0px 0px #3B82F6, 0 0 10px rgba(59, 130, 246, 0);
-  }
-  50% {
-    box-shadow: 4px 4px 0px 0px #3B82F6, 0 0 20px rgba(59, 130, 246, 0.6);
-  }
-}
-
 /* Marquee scroll animations */
 @keyframes marquee {
   0% { transform: translateX(0); }
@@ -213,76 +194,78 @@
      ink and the violet footer sets it to cream (orange is under 3:1 there). */
   --focus: var(--orange);
 
-  /* Hardware Engineer 8-Bit Palette */
-  --primary: #F59E0B;
-  --primary-foreground: #FAFAFA;
-  --sidebar-primary: #F59E0B;
-  --sidebar-primary-foreground: #FAFAFA;
-  --chart-1: #3B82F6;
-  --chart-2: #F59E0B;
-  --chart-3: #3B82F6;
-  --chart-4: #F59E0B;
-  --chart-5: #3B82F6;
   --radius: 0;
-  --background: #000000;
-  --foreground: #FAFAFA;
-  --card: #18181B;
-  --card-foreground: #FAFAFA;
-  --popover: #18181B;
-  --popover-foreground: #FAFAFA;
-  --secondary: #3B82F6;
-  --secondary-foreground: #FAFAFA;
-  --muted: #3B82F6;
-  --muted-foreground: #FAFAFA;
-  --accent: #F59E0B;
-  --accent-foreground: #000000;
-  --destructive: #EF4444;
-  --destructive-foreground: #FAFAFA;
-  --border: #F59E0B;
-  --input: #18181B;
-  --ring: #F59E0B;
-  --sidebar: #18181B;
-  --sidebar-foreground: #FAFAFA;
-  --sidebar-accent: #F59E0B;
-  --sidebar-accent-foreground: #000000;
-  --sidebar-border: #F59E0B;
-  --sidebar-ring: #F59E0B;
+
+  /* shadcn aliases: always palette tokens, never their own hex (MASTER 2.10) */
+  --background: var(--navy);
+  --foreground: var(--cream);
+  --card: var(--cream);
+  --card-foreground: var(--navy);
+  --popover: var(--cream);
+  --popover-foreground: var(--navy);
+  --primary: var(--orange);
+  --primary-foreground: var(--ink);
+  --secondary: var(--teal);
+  --secondary-foreground: var(--ink);
+  --muted: var(--cream);
+  --muted-foreground: var(--navy);
+  --accent: var(--teal);
+  --accent-foreground: var(--ink);
+  --destructive: var(--orange);
+  --destructive-foreground: var(--ink);
+  --border: var(--ink);
+  --input: var(--cream);
+  --ring: var(--orange);
+  --chart-1: var(--orange);
+  --chart-2: var(--teal);
+  --chart-3: var(--violet);
+  --chart-4: var(--cream);
+  --chart-5: var(--navy);
+  --sidebar: var(--cream);
+  --sidebar-foreground: var(--navy);
+  --sidebar-primary: var(--orange);
+  --sidebar-primary-foreground: var(--ink);
+  --sidebar-accent: var(--teal);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--ink);
+  --sidebar-ring: var(--orange);
 }
 
+/* Dark mode is not exposed; it uses the same aliases */
 .dark {
-  /* Hardware Engineer 8-Bit Palette (Dark Mode) */
-  --primary: #F59E0B;
-  --primary-foreground: #FAFAFA;
-  --sidebar-primary: #F59E0B;
-  --sidebar-primary-foreground: #FAFAFA;
-  --background: #000000;
-  --foreground: #FAFAFA;
-  --card: #18181B;
-  --card-foreground: #FAFAFA;
-  --popover: #18181B;
-  --popover-foreground: #FAFAFA;
-  --secondary: #3B82F6;
-  --secondary-foreground: #FAFAFA;
-  --muted: #3B82F6;
-  --muted-foreground: #FAFAFA;
-  --accent: #F59E0B;
-  --accent-foreground: #000000;
-  --destructive: #EF4444;
-  --destructive-foreground: #FAFAFA;
-  --border: #F59E0B;
-  --input: #18181B;
-  --ring: #F59E0B;
-  --chart-1: #3B82F6;
-  --chart-2: #F59E0B;
-  --chart-3: #3B82F6;
-  --chart-4: #F59E0B;
-  --chart-5: #3B82F6;
-  --sidebar: #18181B;
-  --sidebar-foreground: #FAFAFA;
-  --sidebar-accent: #F59E0B;
-  --sidebar-accent-foreground: #000000;
-  --sidebar-border: #F59E0B;
-  --sidebar-ring: #F59E0B;
+  /* shadcn aliases: always palette tokens, never their own hex (MASTER 2.10) */
+  --background: var(--navy);
+  --foreground: var(--cream);
+  --card: var(--cream);
+  --card-foreground: var(--navy);
+  --popover: var(--cream);
+  --popover-foreground: var(--navy);
+  --primary: var(--orange);
+  --primary-foreground: var(--ink);
+  --secondary: var(--teal);
+  --secondary-foreground: var(--ink);
+  --muted: var(--cream);
+  --muted-foreground: var(--navy);
+  --accent: var(--teal);
+  --accent-foreground: var(--ink);
+  --destructive: var(--orange);
+  --destructive-foreground: var(--ink);
+  --border: var(--ink);
+  --input: var(--cream);
+  --ring: var(--orange);
+  --chart-1: var(--orange);
+  --chart-2: var(--teal);
+  --chart-3: var(--violet);
+  --chart-4: var(--cream);
+  --chart-5: var(--navy);
+  --sidebar: var(--cream);
+  --sidebar-foreground: var(--navy);
+  --sidebar-primary: var(--orange);
+  --sidebar-primary-foreground: var(--ink);
+  --sidebar-accent: var(--teal);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--ink);
+  --sidebar-ring: var(--orange);
 }
 
 @layer base {
@@ -290,7 +273,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="4" height="4" fill="%23F59E0B"/><rect x="6" y="2" width="4" height="4" fill="%23F59E0B"/><rect x="2" y="6" width="4" height="4" fill="%23F59E0B"/><rect x="6" y="6" width="4" height="4" fill="%23F59E0B"/><rect x="10" y="10" width="4" height="4" fill="%23F59E0B"/><rect x="14" y="10" width="4" height="4" fill="%23F59E0B"/><rect x="10" y="14" width="4" height="4" fill="%23F59E0B"/><rect x="14" y="14" width="4" height="4" fill="%23F59E0B"/></svg>') 2 2, auto;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="6" y="2" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="2" y="6" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="6" y="6" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="10" y="10" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="14" y="10" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="10" y="14" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="14" y="14" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/></svg>') 2 2, auto;
   }
   body {
     @apply text-foreground;
@@ -375,7 +358,7 @@
   select:not(:disabled),
   input[type="checkbox"]:not(:disabled),
   input[type="radio"]:not(:disabled) {
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="4" height="4" fill="%233B82F6"/><rect x="6" y="2" width="4" height="4" fill="%233B82F6"/><rect x="2" y="6" width="4" height="4" fill="%233B82F6"/><rect x="6" y="6" width="4" height="4" fill="%233B82F6"/><rect x="10" y="10" width="4" height="4" fill="%233B82F6"/><rect x="14" y="10" width="4" height="4" fill="%233B82F6"/><rect x="10" y="14" width="4" height="4" fill="%233B82F6"/><rect x="14" y="14" width="4" height="4" fill="%233B82F6"/></svg>') 2 2, auto;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="6" y="2" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="2" y="6" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="6" y="6" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="10" y="10" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="14" y="10" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="10" y="14" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="14" y="14" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/></svg>') 2 2, auto;
   }
 
   /* Text gets an I-beam so it reads as selectable; placed after the pixel
@@ -391,50 +374,26 @@
 }
 
 @layer components {
-  /* 8-Bit Hardware Engineer Custom Utilities */
-  
-  /* Hard shadow tokens — scale with element size */
+  /* Hard ink shadow tokens: scale with element size */
   .shadow-8bit-sm {
-    box-shadow: 2px 2px 0px 0px #F59E0B; /* buttons, tags, chips */
+    box-shadow: 2px 2px 0 0 var(--ink); /* tags, chips */
   }
 
   .shadow-8bit {
-    box-shadow: 4px 4px 0px 0px #F59E0B; /* cards, project images */
+    box-shadow: 4px 4px 0 0 var(--ink); /* cards, buttons */
   }
 
   .shadow-8bit-lg {
-    box-shadow: 8px 8px 0px 0px #F59E0B; /* hero block, section plates */
+    box-shadow: 8px 8px 0 0 var(--ink); /* large plates */
   }
 
-  .shadow-8bit-blue {
-    box-shadow: 4px 4px 0px 0px #3B82F6;
-  }
-
-  .shadow-8bit-dark {
-    box-shadow: 4px 4px 0px 0px #18181B;
-  }
-
-  /* Scroll progress bar glow */
-  .scroll-progress-glow {
-    box-shadow: 0 0 6px 1px rgba(245, 158, 11, 0.55),
-                0 0 2px 0px rgba(245, 158, 11, 0.9);
-  }
-  
-  /* Sharp borders - 2px solid */
+  /* Still used by the case-study pages; restyle there before removing */
   .border-8bit {
     border: 2px solid #F59E0B;
   }
-  
+
   .border-8bit-blue {
     border: 2px solid #3B82F6;
-  }
-  
-  .border-8bit-green {
-    border: 2px solid #22C55E;
-  }
-
-  .border-8bit-thick {
-    border: 4px solid #F59E0B;
   }
   
   /* Pixel-art heading font */
@@ -503,15 +462,6 @@
     margin-left: 2px;
   }
 
-  /* Animated Border Pulse on Hover */
-  .border-8bit-pulse:hover {
-    animation: borderPulse 1.5s ease-in-out infinite;
-  }
-
-  .border-8bit-blue-pulse:hover {
-    animation: borderPulseBlue 1.5s ease-in-out infinite;
-  }
-  
   /* Focus-visible: 3px ring for keyboard nav, invisible for mouse/touch.
      Orange by default; surfaces where orange is under 3:1 override --focus. */
   :focus-visible {
@@ -584,9 +534,18 @@
     transition-timing-function: var(--ease-out);
   }
 
-  .btn:active {
+  .btn:active:not([aria-disabled="true"]) {
     translate: 4px 4px;
     box-shadow: 0 0 0 0 var(--ink);
+  }
+
+  /* Unavailable (e.g. Send while the bot replies): cream fill, ink text, no
+     shadow. Contrast stays 17.58; never lowered opacity (MASTER 2.2). */
+  .btn[aria-disabled="true"] {
+    background-color: var(--cream);
+    color: var(--ink);
+    box-shadow: none;
+    cursor: not-allowed;
   }
 
   .btn-primary {
@@ -605,10 +564,17 @@
     border-color: var(--cream);
   }
 
+  /* Ghost for cream surfaces (chat quick actions): ink frame, navy text */
+  .btn-ghost-ink {
+    background-color: transparent;
+    color: var(--navy);
+    border-color: var(--ink);
+  }
+
   @media (hover: hover) and (pointer: fine) {
     /* :not(:active) so a press still sinks the button into its shadow */
-    .btn-primary:hover:not(:active),
-    .btn-secondary:hover:not(:active) {
+    .btn-primary:hover:not(:active):not([aria-disabled="true"]),
+    .btn-secondary:hover:not(:active):not([aria-disabled="true"]) {
       translate: -2px -2px;
       box-shadow: 6px 6px 0 0 var(--ink);
     }
@@ -617,21 +583,10 @@
       background-color: var(--cream);
       color: var(--navy);
     }
-  }
 
-  /* Gate marquee tag hover behind pointer device check */
-  .skill-tag {
-    transition: background-color 150ms ease, color 150ms ease;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .skill-tag-amber:hover {
-      background-color: #F59E0B;
-      color: #000;
-    }
-    .skill-tag-blue:hover {
-      background-color: #3B82F6;
-      color: #000;
+    .btn-ghost-ink:hover {
+      background-color: var(--teal);
+      color: var(--ink);
     }
   }
 
@@ -687,17 +642,6 @@
     max-width: 65ch;
   }
   
-  /* Hover effect for buttons - color shift */
-  .hover-8bit:hover {
-    background-color: #F59E0B;
-    color: #000000;
-  }
-  
-  .hover-8bit-blue:hover {
-    background-color: #3B82F6;
-    color: #FAFAFA;
-  }
-  
   /* Container utility */
   .container {
     width: 100%;
@@ -732,6 +676,16 @@
 #root {
   position: relative;
   z-index: 4;
+}
+
+/* Fixed buttons that float over every band (Pause motion, chat launcher):
+   ink ring with a cream gap and halo, so focus reads over orange, teal, navy
+   and cream alike. Unlayered so it wins over utility shadows; a pressed
+   button sets --float-shadow to none to stay sunk. */
+.focus-ring-float:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+  box-shadow: var(--float-shadow, 4px 4px 0 0 var(--ink)), 0 0 0 9px var(--cream);
 }
 
 /* Respect user motion preferences */

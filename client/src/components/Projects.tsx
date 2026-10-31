@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, type ReactNode } from 'react';
+import { useState, type ReactNode, type Ref } from 'react';
 import { Link } from 'wouter';
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
@@ -174,7 +174,9 @@ function matchesFilter(p: Project, filter: string | null): boolean {
 // Wide outline offset leaves a cream gap outside the tile's border and shadow
 const CARD_LINK_CLASS = 'flex h-full flex-col outline-offset-[10px]';
 
-function ProjectCard({ project }: { project: Project }) {
+// `ref` is a plain prop in React 19; AnimatePresence popLayout needs it on the
+// motion element to measure the exiting tile.
+function ProjectCard({ project, ref }: { project: Project; ref?: Ref<HTMLDivElement> }) {
   const isComingSoon = project.link === '#';
   const isExternal   = project.link === 'external';
 
@@ -290,10 +292,11 @@ function ProjectCard({ project }: { project: Project }) {
     // Press sinks the tile into its shadow (translate, not scale); hover lifts it
     // on pointers that can hover (Tailwind v4 gates hover: on that media query)
     <motion.div
-      className={`group border-[3px] border-black bg-[var(--cream)] shadow-[4px_4px_0_0_#000] transition-[translate,box-shadow] duration-150 ease-[var(--ease-out)] ${
-        isComingSoon ? '' : 'hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_#000] active:translate-x-1 active:translate-y-1 active:shadow-none'
+      ref={ref}
+      className={`group border-[3px] border-black bg-[var(--cream)] shadow-[4px_4px_0_0_var(--ink)] transition-[translate,box-shadow] duration-150 ease-[var(--ease-out)] ${
+        isComingSoon ? '' : 'hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--ink)] active:translate-x-1 active:translate-y-1 active:shadow-none'
       } ${project.span}`}
-      exit={{ opacity: 0, y: 12, transition: { duration: motionTokens.duration.fast } }}
+      exit={{ opacity: 0, y: motionTokens.distance.sm, transition: { duration: motionTokens.duration.fast } }}
     >
       {card}
     </motion.div>
@@ -306,7 +309,7 @@ function chipClass(active: boolean) {
   return `font-pixel text-xs text-black px-3 py-1.5 min-h-[44px] border-[3px] border-black transition-[translate,box-shadow,background-color] duration-150 ${
     active
       ? 'bg-[var(--orange)] translate-x-[3px] translate-y-[3px] shadow-none'
-      : 'bg-[var(--cream)] shadow-[3px_3px_0_0_#000] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none'
+      : 'bg-[var(--cream)] hover:bg-[var(--teal)] shadow-[3px_3px_0_0_var(--ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none'
   }`;
 }
 
@@ -366,7 +369,7 @@ export default function Projects() {
             {/* Tile grid: rows of 3+3, 2+2+2, 3+3 on large screens; GreenLoop
                 spans both columns at sm so the 7th tile is never orphaned */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
-              <AnimatePresence initial={false}>
+              <AnimatePresence initial={false} mode="popLayout">
                 {visible.map(project => (
                   <ProjectCard key={project.num} project={project} />
                 ))}

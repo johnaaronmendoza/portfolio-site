@@ -150,7 +150,9 @@ function Keycap({ k, pressed, onPress, onPreview }: {
           />
         ) : (
           <span
-            className="font-pixel text-[7px] sm:text-[8px] leading-none"
+            // 12px minimum (CLAUDE.md keyboard exception); mono fits 6 letters on
+            // the 48px keys at sm, 14px where keys are wider (base 4 cols, lg)
+            className="font-mono font-bold text-sm sm:text-xs lg:text-sm leading-none"
             style={{ color: cap.dark ? '#18181B' : '#FFFFFF' }}
           >
             {k.label}

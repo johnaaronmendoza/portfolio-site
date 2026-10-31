@@ -42,7 +42,7 @@ export default function ChatHeader() {
             href="https://www.linkedin.com/in/john-branzuela/"
             target="_blank"
             rel="noopener noreferrer"
-            className="border-8bit-blue shadow-8bit-blue px-3 sm:px-4 py-2 font-pixel text-xs sm:text-sm font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors"
+            className="border-8bit-blue shadow-8bit px-3 sm:px-4 py-2 font-pixel text-xs sm:text-sm font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors"
           >
             IN
           </a>

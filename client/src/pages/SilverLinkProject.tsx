@@ -269,7 +269,7 @@ export default function SilverLinkProject() {
                 </Link>
                 <button
                   onClick={() => setLocation('/projects/scs')}
-                  className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
+                  className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
                 >
                   SCS platform →
                 </button>

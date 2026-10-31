@@ -31,7 +31,7 @@ const ENTRIES: Entry[] = [
     badges: ["Internship", "In progress"],
     highlights: [
       "Building Desk Assist (in progress), an AI assistant for service desk agents. The Manifest V3 Chrome extension reads the ticket thread, finds matching knowledge-base guidance and drafts a reply. The agent reviews every draft before it's sent.",
-      "Defined enterprise security requirements for the extension: least-privilege permissions, no remote code or unsafe-eval, no broad host access, and data leakage prevention, with AI calls routed through a company-controlled backend aligned with LGA's local AI rollout.",
+      "Defined enterprise security requirements for the extension: least-privilege permissions, no remote code or unsafe-eval, no broad host access, and data leakage prevention, with AI calls routed through a company-controlled backend aligned with LGA's local AI plans.",
       "Led the full-stack integration of the FreeSDN network management platform across 4+ equipment manufacturers, and migrated 1,000+ network configurations through REST API integrations and migration scripts.",
       "Configured Freshservice business rules and workflows for ticket closure and escalation, scoped to the Service Desk so other teams' live tickets stay untouched, cutting manual agent actions by 40%.",
       "Cut incident resolution time by 15 minutes by integrating Freshservice with Microsoft Teams for automated escalation alerts.",
@@ -51,6 +51,7 @@ const ENTRIES: Entry[] = [
       "Hosted training sessions for 10+ stakeholders per session; gathered UX feedback and liaised with vendors to ship improvements.",
       "Supported SolarNova 3 (50MWp, 20 MOE schools): milestone tracking, site visits, and documentation.",
       "Turned operational data from 240MWp+ of solar assets into executive dashboards for leadership.",
+      "Awarded an Internship Distinction and earned a contract extension.",
     ],
   },
   {
@@ -104,7 +105,7 @@ export default function Experience() {
                 {/* Highlights */}
                 <ul className="space-y-3">
                   {entry.highlights.map((h, i) => (
-                    <li key={i} className="font-mono-8bit text-[15px] leading-relaxed flex items-start gap-3 max-w-[75ch]">
+                    <li key={i} className="font-mono-8bit text-[15px] sm:text-base leading-relaxed flex items-start gap-3 max-w-[75ch]">
                       <span aria-hidden="true" className="flex-shrink-0 mt-[0.6em] w-2.5 h-2.5 bg-[var(--orange)] border-2 border-black" />
                       <span>{h}</span>
                     </li>

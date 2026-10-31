@@ -2,6 +2,10 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
 import { play } from '@/hooks/useSound';
+import { useModalFocus } from '@/hooks/useModalFocus';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { motionTokens } from '@/lib/motion-tokens';
+import { WindowBar } from './Window';
 
 interface Line {
   type: 'input' | 'output' | 'error' | 'system';
@@ -25,13 +29,13 @@ LOCATION : Singapore
 I build AI and data tools for the people who have to use them.
 Now building Desk Assist at LGA Telecom.`,
 
-  'skills.txt': `LANGUAGES  : Java · Python · TypeScript · JavaScript · SQL · Kotlin · C++
-FRONTEND   : React 19 · Next.js · Tailwind CSS · Framer Motion
-BACKEND    : Node.js · gRPC · Express · Prisma ORM · Supabase
-DEVOPS     : Docker · Kubernetes · AWS · GitHub Actions
-DATA       : Pandas · NumPy · scikit-learn · Power BI · SQLite
-MOBILE     : Kotlin · Jetpack Compose · ARCore · TFLite
-METHODS    : Agile/Scrum · UAT · Requirements Gathering · SDLC`,
+  // Mirrors the Skills section (copy.md §11 #6): nothing that isn't on the resume
+  'skills.txt': `AI & LLMS  : Prompt engineering · RAG · LLM-assisted workflows · AI guardrails · Human-in-the-loop design
+DATA & ML  : Python · Pandas · NumPy · scikit-learn · SQL · ETL pipelines · Power BI · TFLite
+BACKEND    : Node.js · Express · gRPC · PostgreSQL · Supabase · Prisma ORM · Docker · Kubernetes · Git
+FRONTEND   : TypeScript · JavaScript · React · Next.js · Tailwind CSS · Kotlin · Jetpack Compose · ARCore
+ALSO       : Java · C++ · AWS · GitHub Actions · MongoDB · Cloudflare
+METHODS    : Agile/Scrum · UAT · Requirements gathering · Process documentation · JIRA · Confluence`,
 
   'contact.txt': `EMAIL    : johnaaronmb@gmail.com
 LINKEDIN : linkedin.com/in/john-branzuela
@@ -54,7 +58,11 @@ const PROJECTS: Record<string, string> = {
   'greenloop':   'GreenLoopFarms               2022  SGD 10,000 NYP JumpStart Grant winner',
 };
 
-function process(raw: string, setLocation: (p: string) => void): string[] {
+/** Output lines, or one error line (shown with an "error:" prefix) */
+type Result = string[] | { error: string };
+
+// Runs inside the Enter keypress, so window.open counts as the visitor's own action
+function process(raw: string, setLocation: (p: string) => void): Result {
   const [cmd, ...args] = raw.trim().toLowerCase().split(/\s+/);
   const arg = args.join(' ');
 
@@ -107,7 +115,7 @@ function process(raw: string, setLocation: (p: string) => void): string[] {
           `Run "open ${target}" to view full project page.`,
         ];
       }
-      return [`cat: ${arg}: No such file or directory`];
+      return { error: `cat: ${arg}: No such file or directory` };
     }
 
     case 'open': {
@@ -124,19 +132,19 @@ function process(raw: string, setLocation: (p: string) => void): string[] {
         setTimeout(() => setLocation(routes[arg]), 400);
         return [`Navigating to ${arg}...`];
       }
-      return [`open: ${arg}: project not found. Try "ls projects" for names.`];
+      return { error: `open: ${arg}: project not found. Try "ls projects" for names.` };
     }
 
     case 'ping':
       if (arg === 'github' || arg === 'github.com') {
-        setTimeout(() => window.open('https://github.com/johnaaronmendoza', '_blank'), 300);
+        window.open('https://github.com/johnaaronmendoza', '_blank', 'noopener');
         return ['PING github.com/johnaaronmendoza ...', '64 bytes: seq=0 ttl=64 time=12ms  ✓'];
       }
       if (arg === 'linkedin') {
-        setTimeout(() => window.open('https://www.linkedin.com/in/john-branzuela/', '_blank'), 300);
+        window.open('https://www.linkedin.com/in/john-branzuela/', '_blank', 'noopener');
         return ['PING linkedin.com/in/john-branzuela ...', '64 bytes: seq=0 ttl=64 time=18ms  ✓'];
       }
-      return [`ping: ${arg}: unknown host`];
+      return { error: `ping: ${arg}: unknown host` };
 
     case 'git':
       if (arg === 'log' || arg === 'log --oneline') {
@@ -150,11 +158,11 @@ function process(raw: string, setLocation: (p: string) => void): string[] {
           'commit 0001337  init: portfolio, retro web',
         ];
       }
-      return [`git: '${arg}' is not a supported git command.`];
+      return { error: `git: '${arg}' is not a supported git command.` };
 
     case 'sudo':
       if (arg === 'hire-me' || arg === 'hire me') {
-        setTimeout(() => window.open('/resume.pdf', '_blank'), 800);
+        window.open('/resume.pdf', '_blank', 'noopener');
         return [
           '[sudo] password for recruiter: ********',
           '',
@@ -170,7 +178,7 @@ function process(raw: string, setLocation: (p: string) => void): string[] {
           '> Best decision you\'ll make today.',
         ];
       }
-      return ['sudo: command not found'];
+      return { error: 'sudo: command not found' };
 
     case 'vim':
     case 'nano':
@@ -196,10 +204,10 @@ function process(raw: string, setLocation: (p: string) => void): string[] {
           'It was inside you the whole time.',
         ];
       }
-      return ['npm: this is a portfolio, not a Node project.'];
+      return { error: 'npm: this is a portfolio, not a Node project.' };
 
     case 'cd':
-      return [`cd: ${arg || '~'}: permission denied (this is a read-only terminal)`];
+      return { error: `cd: ${arg || '~'}: permission denied (this is a read-only terminal)` };
 
     case 'pwd':
       return ['/home/john-aaron/portfolio'];
@@ -217,7 +225,7 @@ function process(raw: string, setLocation: (p: string) => void): string[] {
       return [];
 
     default:
-      return [`${cmd}: command not found. Type "help" for available commands.`];
+      return { error: `${cmd}: command not found. Type "help" for available commands.` };
   }
 }
 
@@ -227,11 +235,16 @@ export default function SecretTerminal() {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>([]);
   const [histIdx, setHistIdx] = useState(-1);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const logRef = useRef<HTMLDivElement>(null);
   const [, setLocation] = useLocation();
+  const reduced = useReducedMotion();
 
   const close = useCallback(() => setOpen(false), []);
+
+  // Focus the input on open, trap Tab, return focus to the opener on close
+  useModalFocus(open, dialogRef, inputRef);
 
   // Backtick / HUD event toggle
   useEffect(() => {
@@ -253,15 +266,11 @@ export default function SecretTerminal() {
     };
   }, []);
 
-  // Focus input on open
+  // Keep the newest line in view (scrolls the log only, never the page)
   useEffect(() => {
-    if (open) setTimeout(() => inputRef.current?.focus(), 80);
-  }, [open]);
-
-  // Scroll to bottom
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [lines]);
+    const log = logRef.current;
+    log?.scrollTo({ top: log.scrollHeight, behavior: reduced ? 'auto' : 'smooth' });
+  }, [lines, reduced]);
 
   const submit = () => {
     if (!input.trim() && input !== '') { setInput(''); return; }
@@ -269,16 +278,15 @@ export default function SecretTerminal() {
     const cmd = input.trim();
     const result = process(cmd, setLocation);
 
-    if (result[0] === '__CLEAR__') {
+    if (Array.isArray(result) && result[0] === '__CLEAR__') {
       setLines(BOOT.map(t => ({ type: 'system', text: t })));
-    } else if (result[0] === '__EXIT__') {
+    } else if (Array.isArray(result) && result[0] === '__EXIT__') {
       close();
     } else {
-      setLines(prev => [
-        ...prev,
-        { type: 'input', text: cmd },
-        ...result.map(t => ({ type: 'output' as const, text: t })),
-      ]);
+      const output: Line[] = Array.isArray(result)
+        ? result.map(t => ({ type: 'output', text: t }))
+        : [{ type: 'error', text: result.error }];
+      setLines(prev => [...prev, { type: 'input', text: cmd }, ...output]);
     }
 
     if (cmd) {
@@ -305,75 +313,81 @@ export default function SecretTerminal() {
   };
 
   return (
-    <>
-      <AnimatePresence>
-        {open && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              className="fixed inset-0 bg-black/70 z-[60]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={close}
-            />
+    <AnimatePresence>
+      {open && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            key="terminal-backdrop"
+            className="fixed inset-0 bg-black/70 z-[60]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={close}
+          />
 
-            {/* Terminal window */}
-            <motion.div
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[70] w-full max-w-3xl border-4 border-amber-400 bg-black"
-              style={{ boxShadow: '8px 8px 0px 0px #F59E0B' }}
-              initial={{ opacity: 0, scale: 0.94, y: -16 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.94, y: -16 }}
-              transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-              onClick={e => e.stopPropagation()}
-            >
-              {/* Title bar */}
-              <div className="border-b-2 border-amber-400 bg-zinc-900 px-4 py-2 flex items-center justify-between">
-                <span className="font-pixel text-[10px] text-amber-400">JOHN_AARON_OS / bash</span>
-                <button
-                  onClick={close}
-                  className="font-pixel text-[10px] text-zinc-500 hover:text-amber-400 transition-colors"
-                >
-                  [X]
-                </button>
-              </div>
+          {/* terminal.sh: terminal-variant window (MASTER 2.10) */}
+          <motion.div
+            key="terminal"
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Terminal"
+            tabIndex={-1}
+            className="window fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[70] w-[calc(100%-2rem)] max-w-3xl"
+            initial={{ opacity: 0, y: -motionTokens.distance.md }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -motionTokens.distance.md }}
+            transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
+          >
+            <WindowBar title="terminal.sh" onClose={close} closeLabel="Close terminal" />
 
-              {/* Output area */}
-              <div className="h-80 overflow-y-auto p-4 space-y-0.5 font-mono text-xs leading-relaxed" data-lenis-prevent>
+            <div className="bg-black text-[color:var(--cream)] [--focus:var(--orange)]">
+              {/* Output */}
+              <div
+                ref={logRef}
+                role="log"
+                aria-live="polite"
+                aria-label="Terminal output"
+                className="h-80 max-h-[50dvh] overflow-y-auto p-4 space-y-0.5 font-mono text-[15px] leading-relaxed whitespace-pre-wrap break-words"
+                data-lenis-prevent
+              >
                 {lines.map((l, i) => (
-                  <div key={i} className={
-                    l.type === 'input'  ? 'text-amber-400' :
-                    l.type === 'error'  ? 'text-red-400' :
-                    l.type === 'system' ? 'text-blue-400' :
-                    'text-gray-300'
-                  }>
-                    {l.type === 'input' ? `$ ${l.text}` : l.text || '\u00A0'}
+                  <div key={i}>
+                    {l.type === 'input' ? (
+                      <span className="text-[color:var(--orange)]">$ {l.text}</span>
+                    ) : l.type === 'error' ? (
+                      <span className="bg-[var(--orange)] text-black px-1">error: {l.text}</span>
+                    ) : l.type === 'system' ? (
+                      <span className="text-[color:var(--teal)]">{l.text || '\u00A0'}</span>
+                    ) : (
+                      l.text || '\u00A0'
+                    )}
                   </div>
                 ))}
-                <div ref={bottomRef} />
               </div>
 
-              {/* Input row */}
-              <div className="border-t-2 border-amber-400 px-4 py-3 flex items-center gap-2 bg-zinc-900">
-                <span className="font-pixel text-xs text-amber-400 flex-shrink-0">$</span>
+              {/* Input row: the ring sits on the row; the input itself has no outline */}
+              <div className="border-t-2 border-[color:var(--cream)] px-4 py-3 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--orange)] focus-within:outline-offset-[-6px]">
+                <span aria-hidden="true" className="font-mono text-base font-bold text-[color:var(--orange)] flex-shrink-0">$</span>
                 <input
                   ref={inputRef}
                   type="text"
                   value={input}
                   onChange={e => { setInput(e.target.value); play('type'); }}
                   onKeyDown={handleKey}
-                  className="flex-1 bg-transparent text-white font-mono text-xs outline-none caret-amber-400"
+                  aria-label="Terminal command"
+                  className="flex-1 min-w-0 bg-transparent text-[color:var(--cream)] placeholder:text-[color:var(--cream)] placeholder:italic font-mono text-base outline-none caret-[var(--orange)]"
                   placeholder="type a command..."
                   spellCheck={false}
                   autoComplete="off"
                 />
-                <span className="font-pixel text-[9px] text-zinc-600">ESC to close</span>
+                <span className="hidden sm:inline font-mono text-sm text-[color:var(--cream)] flex-shrink-0">Esc to close</span>
               </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-    </>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }

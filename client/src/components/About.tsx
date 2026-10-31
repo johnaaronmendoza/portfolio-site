@@ -27,7 +27,7 @@ export default function About() {
           <Window title="about_me.txt" bodyClassName="flex flex-col md:flex-row gap-8 md:gap-12 items-start p-6 sm:p-10 lg:p-14">
             {/* Photo + facts */}
             <div className="flex-shrink-0 w-full md:w-auto flex flex-col items-center md:items-start gap-8">
-              <div className="border-[3px] border-black shadow-[4px_4px_0_0_#000] w-56 h-56 sm:w-72 sm:h-72 overflow-hidden">
+              <div className="border-[3px] border-black shadow-[4px_4px_0_0_var(--ink)] w-56 h-56 sm:w-72 sm:h-72 overflow-hidden">
                 <PixelatedImage
                   src={profileImg}
                   alt="Portrait of John Aaron Branzuela"

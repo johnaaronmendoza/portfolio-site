@@ -41,7 +41,9 @@ type Project = {
   link: string;
   externalUrl?: string;
   preloadImages: string[];
-  /** Big poster: spans 3 of 6 columns on large screens */
+  /** Grid width in the poster collage (sm: 2 cols, lg: 6 cols) */
+  span: string;
+  /** Lead poster: taller image, bigger title, always in colour */
   featured?: boolean;
 };
 
@@ -56,6 +58,7 @@ const PROJECTS: Project[] = [
     image: silverLinkImg,
     tags: ["React", "gRPC", "K8s", "PostgreSQL"],
     link: "/projects/silverlink",
+    span: 'lg:col-span-3',
     preloadImages: [silverLink2, silverLink3],
     featured: true,
   },
@@ -69,6 +72,7 @@ const PROJECTS: Project[] = [
     image: scsImg,
     tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
     link: "/projects/scs",
+    span: 'lg:col-span-3',
     preloadImages: [scs2, scs3],
     featured: true,
   },
@@ -82,6 +86,7 @@ const PROJECTS: Project[] = [
     image: aiFinanceImg,
     tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
     link: "/projects/ai-finance",
+    span: 'lg:col-span-2',
     preloadImages: [],
   },
   {
@@ -94,6 +99,7 @@ const PROJECTS: Project[] = [
     image: uwbImg,
     tags: ["Python", "SVM", "PCA", "scikit-learn"],
     link: "/projects/uwb",
+    span: 'lg:col-span-2',
     preloadImages: [uwb2, uwb3],
   },
   {
@@ -106,6 +112,7 @@ const PROJECTS: Project[] = [
     image: uatImg,
     tags: ["React 18", "Node.js", "Express", "SQLite"],
     link: "/projects/uat",
+    span: 'lg:col-span-2',
     preloadImages: [],
   },
   {
@@ -118,6 +125,7 @@ const PROJECTS: Project[] = [
     image: fireSafetyImg,
     tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
     link: "/projects/firesafety",
+    span: 'lg:col-span-3',
     preloadImages: [fireSafety2, fireSafety3],
   },
   {
@@ -130,6 +138,7 @@ const PROJECTS: Project[] = [
     image: greenloopImg,
     tags: ["NYP JumpStart", "Urban Farming"],
     link: "external",
+    span: 'sm:col-span-2 lg:col-span-3',
     externalUrl: "https://greenloopfarms.com/",
     preloadImages: [greenloop2],
   },
@@ -178,10 +187,12 @@ function ProjectCard({ project }: { project: Project }) {
           <PixelatedImage
             src={project.image}
             alt={project.name}
-            className={`w-full h-full transition-[filter,transform] duration-500 ${
+            className={`w-full h-full transition-[filter,scale] duration-500 ${
               isComingSoon
                 ? 'opacity-50 grayscale'
-                : '[@media(hover:hover)]:grayscale [@media(hover:hover)]:group-hover:grayscale-0 [@media(hover:hover)]:group-hover:scale-105'
+                : project.featured
+                  ? '[@media(hover:hover)]:group-hover:scale-105'
+                  : '[@media(hover:hover)]:grayscale [@media(hover:hover)]:group-hover:grayscale-0 [@media(hover:hover)]:group-hover:scale-105'
             }`}
           />
         ) : (
@@ -225,7 +236,7 @@ function ProjectCard({ project }: { project: Project }) {
         <p className="font-mono text-[15px] sm:text-base text-zinc-200 leading-relaxed">
           {project.description}
         </p>
-        <p className="font-mono text-sm text-amber-400 tracking-wider">
+        <p className="font-mono text-[15px] text-amber-400 tracking-wider">
           ■ {project.metric}
         </p>
         <div className="flex flex-wrap gap-1.5">
@@ -236,7 +247,7 @@ function ProjectCard({ project }: { project: Project }) {
           ))}
         </div>
         {!isComingSoon && (
-          <div className="mt-auto pt-2 font-mono-8bit text-sm text-[color:var(--lime)] font-bold inline-flex items-center gap-1 translate-x-0 group-hover:translate-x-1.5 transition-transform duration-150">
+          <div className="mt-auto pt-2 font-mono-8bit text-sm text-[color:var(--lime)] font-bold inline-flex items-center gap-1 translate-x-0 group-hover:translate-x-1.5 transition-[translate] duration-150">
             {isExternal ? 'VISIT SITE ↗' : 'VIEW WORK →'}
           </div>
         )}
@@ -275,9 +286,7 @@ function ProjectCard({ project }: { project: Project }) {
 
   return (
     <motion.div
-      className={`group border-4 bg-black shadow-[6px_6px_0_0_var(--paper)] ${tone.frame} ${
-        project.featured ? 'lg:col-span-3' : 'lg:col-span-2'
-      }`}
+      className={`group border-4 bg-black shadow-[6px_6px_0_0_var(--paper)] ${tone.frame} ${project.span}`}
       exit={{ opacity: 0, y: 12, scale: 0.96, transition: { duration: motionTokens.duration.fast } }}
       whileTap={isComingSoon ? {} : { scale: 0.97, transition: { duration: motionTokens.duration.instant } }}
     >
@@ -327,7 +336,8 @@ export default function Projects() {
             ))}
           </div>
 
-          {/* Poster collage: 6 columns on large screens, featured posters span 3 */}
+          {/* Poster collage: rows of 3+3, 2+2+2, 3+3 on large screens; GreenLoop
+              spans both columns at sm so the 7th tile is never orphaned */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 sm:gap-8">
             <AnimatePresence initial={false}>
               {visible.map(project => (

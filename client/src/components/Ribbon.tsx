@@ -19,8 +19,10 @@ const TONES: Record<RibbonTone, string> = {
   cobalt: 'bg-[var(--cobalt)] text-white',
 };
 
-const CHAR_PX = 17; // rough advance of one pixel-font glyph at sm:text-base
-const MIN_HALF_PX = 3200; // each half of the loop must be wider than a wide screen
+// Lower-bound glyph advance: Press Start 2P is 1em wide (14px at text-sm) and
+// fallback glyphs like ✦ are narrower, so this errs towards extra repeats.
+const CHAR_PX = 14;
+const MIN_HALF_PX = 4200; // each half of the loop must be wider than a wide screen
 const SPEED_PX_PER_S = 60; // same scroll speed whatever the text length
 
 /**

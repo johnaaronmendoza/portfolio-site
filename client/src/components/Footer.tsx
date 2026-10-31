@@ -41,7 +41,7 @@ export default function Footer() {
             <span className="font-mono text-[15px] tracking-wide">Graduating April 2027</span>
           </div>
 
-          <h2 className="font-pixel text-[28px] sm:text-5xl lg:text-7xl leading-tight">
+          <h2 className="font-pixel text-[28px] sm:text-5xl lg:text-7xl leading-tight text-balance">
             GET IN TOUCH
           </h2>
           <p className="font-mono-8bit text-[15px] sm:text-base max-w-md mx-auto leading-relaxed">

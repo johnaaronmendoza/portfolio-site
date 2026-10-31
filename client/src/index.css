@@ -497,7 +497,7 @@
 
   /* Sovereign Console — blinking block cursor */
   .blink-cursor {
-    animation: blinker 1s step-end infinite;
+    animation: blinker 1s step-end 4; /* a few blinks, then stays visible */
     display: inline-block;
     margin-left: 2px;
   }
@@ -581,6 +581,15 @@
     .sticker:hover {
       animation: sticker-wiggle 350ms ease-in-out 1;
     }
+  }
+
+  /* Viewer's "Pause motion" toggle (SectionNav, WCAG 2.2.2) */
+  :root[data-motion="paused"] .ribbon-track {
+    animation-play-state: paused;
+  }
+
+  :root[data-motion="paused"] .sticker {
+    animation: none;
   }
 
   /* Monospace body font — line-height 1.7 for light text on dark backgrounds (impeccable) */

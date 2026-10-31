@@ -89,9 +89,15 @@ export default function Hero() {
                 href="/resume.pdf"
                 download="John_Aaron_Branzuela_Resume.pdf"
                 onClick={() => play('click')}
-                className="border-8bit shadow-8bit-sm px-6 py-3 font-mono font-bold text-black bg-amber-400 hover:bg-amber-300 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none text-sm tracking-wider inline-flex items-center gap-2 select-none min-h-[44px] transition-[background-color,transform,box-shadow] duration-150 ease-out"
+                className="border-8bit shadow-8bit-sm px-6 py-3 font-mono font-bold text-black bg-amber-400 hover:bg-amber-300 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none text-sm tracking-wider inline-flex items-center gap-2 select-none min-h-[44px] transition-[background-color,translate,box-shadow] duration-150 ease-out"
               >
                 Download resume
+              </a>
+              <a
+                href="#projects"
+                className="border-4 border-[color:var(--lime)] bg-black px-6 py-3 font-mono font-bold text-[color:var(--lime)] hover:bg-[var(--lime)] hover:text-black text-sm tracking-wider inline-flex items-center select-none min-h-[44px] transition-colors duration-150 ease-out"
+              >
+                See projects
               </a>
               <div className="flex items-center gap-2">
                 <a
@@ -132,7 +138,7 @@ export default function Hero() {
       {/* Two ribbons crossing in one grid cell */}
       <div className="grid *:col-start-1 *:row-start-1 *:self-center">
         <Ribbon tone="cobalt" tilt={-3} items={['AI', 'DATA', 'FULL-STACK', 'DESK ASSIST (IN PROGRESS)']} />
-        <Ribbon tone="lime" tilt={2} reverse items={['SILVERLINK SG', 'SCS AWARENESS PLATFORM', 'VIEW WORK ↓']} />
+        <Ribbon tone="lime" tilt={2} reverse items={['SILVERLINK SG', 'SCS AWARENESS PLATFORM', 'DATA PIPELINES']} />
       </div>
     </section>
   );

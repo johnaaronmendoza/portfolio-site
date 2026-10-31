@@ -1,11 +1,12 @@
 type Stat = { value: string; label: string };
 
-// Only figures already on the site: About (internships, projects, UWB model
-// accuracy) and the SCS Awareness Platform (EN/CN/Malay/Tamil).
+// Only figures already on the site: internships (Experience), the six projects
+// with case studies (GreenLoopFarms was a pitch, not a build), UWB model
+// accuracy and the SCS Awareness Platform's languages (EN/CN/Malay/Tamil).
 // Number sizes are capped so "89.6%" fits its column from 360px to 1366px.
 const STATS: Stat[] = [
   { value: '2', label: 'industry internships' },
-  { value: '7', label: 'projects built' },
+  { value: '6', label: 'projects built' },
   { value: '89.6%', label: 'ML model accuracy' },
   { value: '4', label: 'languages on the SCS platform' },
 ];

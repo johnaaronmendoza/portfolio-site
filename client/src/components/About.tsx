@@ -25,7 +25,7 @@ export default function About() {
           <article className="border-4 border-[color:var(--paper)] bg-black shadow-[8px_8px_0_0_var(--lime)] sm:shadow-[12px_12px_0_0_var(--lime)]">
             {/* ID card header strip: white on cobalt */}
             <p className="bg-[var(--cobalt)] text-white border-b-4 border-black font-pixel text-xs sm:text-sm leading-relaxed px-5 py-4 sm:px-8">
-              PLAYER 1 — JOHN AARON BRANZUELA
+              PLAYER 1: JOHN AARON BRANZUELA
             </p>
 
             <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start p-6 sm:p-10 lg:p-14">

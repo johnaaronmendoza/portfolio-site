@@ -467,6 +467,21 @@ offsets with `var(--ink)`; delete `.shadow-8bit-blue`, `.shadow-8bit-dark`,
 
 Motion: open 150–200ms opacity + translate only; no white CRT flash.
 
+### 2.11 Case-study additions (Oct 2026; full spec in `pages/case-study.md`)
+
+Variants of existing components. No new colours and no new text pairings.
+
+| Addition | Tokens |
+|---|---|
+| Window `figure` variant (`.window--figure`) | `<figure>`, same 3px frame and violet bar, **`shadow-raised` (4px)** instead of `shadow-window`, body padding 0, 3px ink rule above the `<figcaption>` |
+| Static card (inside windows) | cream, `border-fine` (2px ink), **no shadow**, no hover or tap: not pressable (1.5) |
+| `StatStrip variant="status"` | 2.6 cells as the header window's last row (full-bleed, 3px ink top rule). Value `clamp(18px,5.4vw,24px)` below `lg`, **28px** from `lg`; ≤ 6 glyphs |
+| `SectionHeading size="case"` | h2 `clamp(18px,5.3vw,22px)` / 28 `sm` / 32 `lg`, icon 32px, margin-bottom 24 |
+| Case h1 | pixel, ink on cream, `clamp(20px,6vw,24px)` / 32 `sm` / 40 `lg`, line-height 1.3 |
+| `CaseTaskbar` | violet, sticky, 56px + 3px ink bottom, `--focus: cream`, `btn-ghost` |
+| Severity badges | 2.4 badge: Critical orange, High teal, Medium/Low cream + 2px ink; ink text |
+| Scroll padding | `scroll-padding-top: 72px` while the sticky taskbar is mounted (WCAG 2.4.11) |
+
 ---
 
 ## 3. Motion rules

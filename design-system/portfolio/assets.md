@@ -207,9 +207,42 @@ in**.
 
 ---
 
+## Case-study additions (2, Oct 2026)
+
+Same shared rules as above. Placement: `pages/case-study.md` §4. Until they
+land, those two headings render without an icon, so they don't block the build.
+
+### 13. `icon-screens.svg`
+
+- **Grid:** 16×16. Shown at 32px (2×).
+- **Palette:** cream (frame body), violet (2-unit title strip), navy (pane),
+  teal (two short content bars in the pane), ink (outline).
+- **Drawing:** a tiny app window seen straight on. Outer fill cream so it
+  reads on navy, violet title strip across the top, navy pane with two teal
+  bars of different lengths. No ○ □ ✕ glyphs (no text-like marks).
+- **Purpose:** marks the Screens gallery, the section made of window figures.
+- **Placement:** left of the "Screens" / "Charts" h2 on case pages.
+- **Backgrounds:** navy.
+- **Decorative:** yes.
+
+### 14. `icon-results.svg`
+
+- **Grid:** 16×16. Shown at 32px (2×).
+- **Palette:** cream (card), orange and teal (bars), ink (outline, baseline).
+- **Drawing:** a cream card with three bars of **uneven, not ascending**
+  heights (e.g. medium, tall, short) on an ink baseline, alternating orange
+  and teal. Not a rising chart, trophy, tick or medal: the section lists
+  measurements, and the icon must not suggest success or improvement.
+- **Purpose:** marks the Results section (measured figures).
+- **Placement:** left of the "Results" h2 on case pages.
+- **Backgrounds:** navy.
+- **Decorative:** yes.
+
+---
+
 ## Delivery checklist
 
-- [ ] 12 files with exactly these names in `client/public/assets/pixel/`
+- [ ] 12 files (14 with the case-study additions) with exactly these names in `client/public/assets/pixel/`
 - [ ] Each `viewBox` equals its grid; integer coordinates only;
       `shape-rendering="crispEdges"`
 - [ ] Only the six palette hex values appear (grep the files)

@@ -42,7 +42,7 @@ const ENTRIES: Entry[] = [
     period: "Sep 2024 – Apr 2027",
     tag: "EDUCATION",
     highlights: [
-      "Final-year project: SilverLink SG, 8-node Kubernetes cluster, 4 gRPC microservices, WebRTC livestreaming, delivered across 7 Agile sprints",
+      "Team project: SilverLink SG, 8-node Kubernetes cluster, 4 gRPC microservices, WebRTC livestreaming, delivered across 7 Agile sprints",
       "Core modules: Cloud Computing, Software Engineering, Mobile Development, Data Analytics, Requirements Engineering",
       "Grounding in UAT methodology, requirements analysis, and end-to-end SDLC reinforced across coursework and industry placement",
     ],

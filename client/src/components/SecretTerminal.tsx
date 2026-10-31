@@ -49,11 +49,11 @@ Use your browser to download from the portfolio.`,
 
 const PROJECTS: Record<string, string> = {
   'silverlink':  'SilverLink SG          2025  React · gRPC · Docker · Kubernetes · PostgreSQL',
-  'scs':         'SCS Awareness Platform 2026  React 19 · TypeScript · Supabase · Vercel',
+  'scs':         'SCS Awareness Platform 2025  React 19 · TypeScript · Supabase · Vercel',
   'firesafety':  'Fire Safety Companion  2025  Kotlin · ARCore · TFLite · Jetpack Compose',
   'uwb':         'UWB Localization       2025  Python · SVM-RBF · scikit-learn · PCA',
-  'uat':         'UAT Testing Dashboard  2026  React 18 · Node.js · SQLite · Recharts',
-  'ai-finance':  'AI Finance Engine      2026  Python · Pandas · SQLite · NLP · Power BI',
+  'uat':         'UAT Testing Dashboard  2024  React 18 · Node.js · SQLite · Recharts',
+  'ai-finance':  'AI Finance Engine      2024  Python · Pandas · SQLite · NLP · Power BI',
   'greenloop':   'GreenLoopFarms         2020  SGD $10k NYP JumpStart Grant winner',
 };
 

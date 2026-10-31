@@ -240,9 +240,162 @@ land, those two headings render without an icon, so they don't block the build.
 
 ---
 
+## Visuals pass additions (13, Oct 2026)
+
+Placement and sizes: `visual-hierarchy.md` §3. Same shared rules as above,
+with these differences for the spot illustrations:
+
+- **Spot illustrations (#15–22): grid 48×48**, shown at 96px (2×), 144px (3×)
+  and 192px (4×). Never at 1×. Size budget ≤ 6 KB each.
+- They always sit on a **colour plate** (3px ink border, solid orange or teal
+  fill, set per spot below). Leave a 3-unit transparent margin inside the
+  grid so the drawing doesn't touch the plate border. The plate colour must
+  not be the drawing's main fill: on an orange plate, use cream and teal for
+  the big shapes; on a teal plate, cream and orange.
+- Check each one on its plate, on cream and on navy.
+- Generic subjects only: no logos or brand marks, no known characters, no
+  recognisable real product (no specific phone, headset or extinguisher
+  brand shape), no text, letters, numerals, currency symbols or pictograms
+  from real signage (no ISO running-man exit sign).
+- All decorative: `<img alt="">` inside an `aria-hidden` plate. The project
+  name sits beside every use.
+
+Until these land, the plate renders empty and chips render without an icon,
+so they don't block the build.
+
+### 15. `spot-silverlink.svg`
+
+- **Plate:** orange.
+- **Palette:** cream, teal, navy, violet, ink.
+- **Drawing:** two people side by side from the chest up, an older person
+  (cream hair as a 2-unit cap, small ink glasses) and a younger person
+  (navy hair), both with teal tops, turned slightly toward each other. Behind
+  them a wide screen on a stand: navy screen, a cream play triangle in the
+  middle and a single orange 2×2 "live" dot top-left. Two small cream
+  speech-bubble shapes between the people (empty).
+- **Purpose:** seniors and youth meeting through live events.
+- **Placement:** SilverLink tile sticker (96), case header (96/144/192).
+
+### 16. `spot-scs.svg`
+
+- **Plate:** teal.
+- **Palette:** cream, orange, navy, violet, ink.
+- **Drawing:** a tablet in landscape, cream bezel, navy screen. On the screen
+  a tiny story panel: a simple pixel figure (orange top, cream face, no
+  features beyond 1-unit eyes) on the left, a cream text box along the bottom
+  holding two short navy bars (abstract lines, not letters), and two small
+  orange arrow buttons at the box's right end (back and next). A violet
+  4-unit tab sticks up from the top edge like a panel bookmark. No ribbon
+  symbols.
+- **Purpose:** the branching story visitors play on a booth tablet.
+- **Placement:** SCS tile sticker, case header.
+
+### 17. `spot-ai-finance.svg`
+
+- **Plate:** orange.
+- **Palette:** cream, teal, navy, ink, violet.
+- **Drawing:** a cream chart card (front-right) with three teal bars of
+  uneven height and an ink zig-zag line over them; behind it, front-left, a
+  navy oil barrel with two cream hoops and a teal top rim; a small cream
+  sheet tucked behind the barrel with three violet bars (a news page,
+  abstract lines). No currency signs, no stock tickers.
+- **Purpose:** market and news data turned into one view.
+- **Placement:** AI Finance tile sticker, case header. Important here: the
+  case page has no confirmed screenshot, so this is its main image.
+
+### 18. `spot-uwb.svg`
+
+- **Plate:** teal.
+- **Palette:** cream, orange, navy, violet, ink.
+- **Drawing:** left, a small cream anchor box on a short stand with three
+  stepped cream arcs radiating right (signal waves). Right, an orange
+  location pin (round head with a cream 2×2 centre, pointed tail). Between
+  them a navy wall block (brick seam in ink) that one of the arcs runs into
+  and stops at, while the upper arc passes over the wall to reach the pin:
+  one blocked path, one clear path.
+- **Purpose:** telling clear signals from blocked (NLOS) ones indoors.
+- **Placement:** UWB tile sticker, case header.
+
+### 19. `spot-uat.svg`
+
+- **Plate:** orange.
+- **Palette:** cream, teal, navy, violet, ink.
+- **Drawing:** a cream clipboard with an ink clip at the top and four rows:
+  each row a small square box and a short navy bar. Two boxes hold teal
+  ticks, one an ink cross, one is empty. A bug sits on the lower-right corner
+  of the board, overlapping its edge: rounded navy body with a cream belly
+  stripe, six ink legs, two short antennae, a violet 2×2 eye spot. Friendly,
+  not gross.
+- **Purpose:** test cases checked off and defects caught.
+- **Placement:** UAT tile sticker, case header.
+
+### 20. `spot-firesafety.svg`
+
+- **Plate:** teal.
+- **Palette:** cream, orange, navy, violet, ink.
+- **Drawing:** a generic fire extinguisher, front-left: orange body with a
+  cream band (blank label), ink handle and short hose. Behind it a corridor
+  in one-point perspective: navy floor tapering to a cream doorway at the
+  back, with three orange chevrons on the floor pointing toward the door
+  (the AR arrows), each outlined in ink. No exit sign, no running figure.
+- **Purpose:** AR arrows guiding residents to an exit.
+- **Placement:** Fire Safety tile sticker, case header.
+
+### 21. `spot-greenloop.svg`
+
+- **Plate:** orange.
+- **Palette:** cream, teal, navy, violet, ink.
+- **Drawing:** a horizontal navy hydroponic pipe with two round holes; from
+  each hole a teal sprout (two leaves) with cream root lines dropping into
+  the pipe. Front-right, a single cream coin standing on its edge, seen at a
+  slight angle, with an ink rim and a blank face (no symbol).
+- **Purpose:** an urban farm idea that won a grant.
+- **Placement:** GreenLoopFarms tile sticker.
+
+### 22. `spot-desk-assist.svg`
+
+- **Plate:** teal.
+- **Palette:** cream, orange, navy, violet, ink.
+- **Drawing:** left, a cream ticket card with a notched (perforated) left
+  edge and two short navy bars. Centre, a larger cream chat bubble with an
+  ink tail, holding three navy bars (a drafted reply) and a violet 2-unit
+  cursor block at the end of the last bar. Right, a person from the chest up
+  (orange top, navy hair, generic headset band in ink with a small mic arm)
+  looking at the bubble, one hand raised with a small teal tick beside it:
+  a person reviewing the draft. Ticket → bubble → person reads left to right.
+- **Purpose:** Desk Assist: AI drafts, an agent reviews (in progress, not
+  shipped; nothing in the drawing should suggest "sent" or "done").
+- **Placement:** Experience, LGA window, Desk Assist block (96 / 144).
+
+### 23–26. Fact-chip icons
+
+**Grid:** 16×16, shown at 16px (1×). **Palette** as each says. Cream or
+orange outer fill so they read on cream chips. Beside chip text that says
+the same thing, so decorative.
+
+| # | File | Drawing |
+|---|---|---|
+| 23 | `chip-school.svg` | Flat cream book standing open (two pages, ink spine), a small teal bookmark ribbon hanging from the top. Not a mortarboard |
+| 24 | `chip-calendar.svg` | Cream page with an orange top band and two ink binder rings; a 3×2 grid of ink dots below (no numbers) |
+| 25 | `chip-team.svg` | Two people heads-and-shoulders, overlapping: front one teal top, back one orange top, cream faces |
+| 26 | `chip-phone.svg` | Generic upright phone: cream body, navy screen with one teal bar, ink outline; no notch or camera cluster shaped like a real model |
+
+### 27. `bullet.svg`
+
+- **Grid:** 8×8, shown at 16px (2×).
+- **Palette:** orange (fill), ink (1-unit outline).
+- **Drawing:** a stepped right-pointing arrowhead (DOS menu pointer):
+  1-unit steps up to a point on the right, orange inside, ink outline.
+- **Purpose:** the pixel list marker that replaces the 10px orange square.
+- **Placement:** every bullet list (Experience, What it does, My part, card
+  lists, tile facts).
+- **Backgrounds:** cream, navy (the orange fill carries it).
+
+---
+
 ## Delivery checklist
 
-- [ ] 12 files (14 with the case-study additions) with exactly these names in `client/public/assets/pixel/`
+- [ ] 12 files (14 with the case-study additions, 27 with the visuals pass) with exactly these names in `client/public/assets/pixel/`
 - [ ] Each `viewBox` equals its grid; integer coordinates only;
       `shape-rendering="crispEdges"`
 - [ ] Only the six palette hex values appear (grep the files)

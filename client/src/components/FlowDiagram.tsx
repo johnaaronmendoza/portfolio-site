@@ -46,8 +46,9 @@ const LABEL = 'font-mono font-bold text-[15px] sm:text-base leading-[1.4] text-b
 
 export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols = 1, className = '' }: FlowDiagramProps) {
   const row = lgCols > 1;
-  // Items sit side by side while the node is full width, and stack inside a narrow row node
-  const itemCols = row ? 'sm:grid-cols-2 lg:grid-cols-1' : 'grid-cols-2 sm:grid-cols-4';
+  // Items sit side by side while the node is full width (one column under 360px,
+  // where two would squeeze a 9-letter label), and stack inside a narrow row node
+  const itemCols = row ? 'sm:grid-cols-2 lg:grid-cols-1' : 'min-[360px]:grid-cols-2 sm:grid-cols-4';
 
   return (
     <figure aria-labelledby={labelledBy} className={className}>
@@ -88,8 +89,8 @@ export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols
               {items && (
                 <ul className={`mt-3 grid gap-2 ${itemCols}`}>
                   {items.map(item => (
-                    <li key={item.label} className="border-2 border-black bg-[var(--cream)] px-2.5 py-2">
-                      <span className={`block ${LABEL}`}>{item.label}</span>
+                    <li key={item.label} className="min-w-0 border-2 border-black bg-[var(--cream)] px-2.5 py-2">
+                      <span className={`block break-words ${LABEL}`}>{item.label}</span>
                       {item.detail && (
                         <span className="block mt-1 font-mono text-[15px] leading-[1.5] text-[color:var(--navy)]">{item.detail}</span>
                       )}

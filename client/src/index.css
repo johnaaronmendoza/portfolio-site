@@ -511,12 +511,12 @@
   }
 
   @media (min-width: 1024px) {
+    /* Level with the first label line, so a loop note under a node can't shift it */
     .flow--row .flow-link {
       left: -1.5rem;
-      top: 50%;
+      top: 1.75rem;
       width: 1.5rem;
       height: 3px;
-      translate: 0 -50%;
     }
 
     .flow--row .flow-link::after {

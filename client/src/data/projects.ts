@@ -33,7 +33,8 @@ export type Project = {
   /** Case-study pages only */
   slug?: CaseSlug;
   /** One line, ≤ 14 words: the Home tile text and the lead under the case-study
-   *  h1 (one string, so they can't drift). `**…**` marks a key term. */
+   *  h1 (one string, so they can't drift). No key terms:
+   *  the tile's facts carry the emphasis. */
   description: string;
   /** Program icon: spot illustration and its plate colour (visual-hierarchy §3.1) */
   spot: Spot;
@@ -60,7 +61,7 @@ export const PROJECTS: Project[] = [
     name: "SilverLink SG",
     slug: 'silverlink',
     description:
-      "Connects seniors and youth through skill-sharing and live events, built to block **double-bookings**.",
+      "Connects seniors and youth through skill-sharing and live events, built to block double-bookings.",
     spot: { name: 'spot-silverlink', tone: 'orange' },
     facts: ["8-node cluster", "4 services", "6-person team"],
     year: "2025",
@@ -78,7 +79,7 @@ export const PROJECTS: Project[] = [
     name: "SCS Awareness Platform",
     slug: 'scs',
     description:
-      "Teaches cancer awareness through a **branching story** at **Singapore Cancer Society** booths.",
+      "Teaches cancer awareness through a branching story at Singapore Cancer Society booths.",
     spot: { name: 'spot-scs', tone: 'teal' },
     facts: ["4 languages", "4 question types", "4-person team"],
     year: "2025",
@@ -96,7 +97,7 @@ export const PROJECTS: Project[] = [
     name: "AI Finance Insights Engine",
     slug: 'ai-finance',
     description:
-      "Pulls market data into one **Power BI**-ready warehouse; NLP flags **supply-chain risk**.",
+      "Pulls market data into one Power BI-ready warehouse; NLP flags supply-chain risk.",
     spot: { name: 'spot-ai-finance', tone: 'orange' },
     facts: ["5 data sources", "star schema", "100% Pytest coverage"],
     year: "2024",
@@ -113,7 +114,7 @@ export const PROJECTS: Project[] = [
     name: "UWB Indoor Localization",
     slug: 'uwb',
     description:
-      "Tells clear UWB signals from **blocked (NLOS)** ones with an **SVM-RBF** model.",
+      "Tells clear UWB signals from blocked (NLOS) ones with an SVM-RBF model.",
     spot: { name: 'spot-uwb', tone: 'teal' },
     facts: ["89.61% accuracy", "0.9612 AUC", "41,996 samples"],
     year: "2025",
@@ -130,7 +131,7 @@ export const PROJECTS: Project[] = [
     name: "UAT Testing Dashboard",
     slug: 'uat',
     description:
-      "Course project: links each failed test to its defect to show what **blocks go-live**.",
+      "Course project: links each failed test to its defect to show what blocks go-live.",
     spot: { name: 'spot-uat', tone: 'orange' },
     facts: ["25 sample defects", "8 modules", "4 roles"],
     year: "2024",
@@ -147,7 +148,7 @@ export const PROJECTS: Project[] = [
     name: "Fire Safety Drill Companion",
     slug: 'firesafety',
     description:
-      "Lets HDB residents rehearse fire evacuation in their own block with **AR arrows**.",
+      "Lets HDB residents rehearse fire evacuation in their own block with AR arrows.",
     spot: { name: 'spot-firesafety', tone: 'teal' },
     facts: ["SUS 79/100", "~80% test coverage", "drill works offline"],
     year: "2025",
@@ -163,7 +164,7 @@ export const PROJECTS: Project[] = [
     num: 7,
     name: "GreenLoopFarms",
     description:
-      "Helped pitch a Singapore **hydroponic urban farm** to an industry investor panel.",
+      "Helped pitch a Singapore hydroponic urban farm to an industry investor panel.",
     spot: { name: 'spot-greenloop', tone: 'orange' },
     facts: ["SGD 10,000 NYP JumpStart Grant"],
     year: "2022",

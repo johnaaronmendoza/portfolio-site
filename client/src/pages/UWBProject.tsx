@@ -20,22 +20,22 @@ const HERO_SHOT: Shot = {
 const SHOTS: Shot[] = [
   {
     file: 'pca_variance.png', src: pcaImg, width: 989, height: 490,
-    caption: 'PCA: 848 components keep 95% of variance.',
+    caption: 'PCA: 848 components, 95% variance.',
     alt: 'Line chart of cumulative explained variance by number of principal components, crossing 95% at 848 components and 99% at 963.',
   },
   {
     file: 'confusion_matrices.png', src: confusionImg, width: 1229, height: 490,
-    caption: 'SVM-RBF: 7,527 of 8,400 right; logistic regression: 7,203.',
+    caption: 'Correct of 8,400: SVM-RBF 7,527; baseline 7,203.',
     alt: 'Two confusion matrices. Logistic regression: 3,809 and 3,394 correct, 391 and 806 wrong. SVM-RBF: 3,928 and 3,599 correct, 272 and 601 wrong.',
   },
   {
     file: 'tree_depth.png', src: dtAccuracyImg, width: 1013, height: 646,
-    caption: 'Tree accuracy by depth; depth 4 chosen (test 0.867).',
+    caption: 'Tree depth 4 chosen (test 0.867).',
     alt: 'Line chart of decision tree training and test accuracy for depths 2 to 50. Training accuracy climbs to 1.0; test accuracy peaks near depth 10 and settles around 0.87. Depth 4 is marked.',
   },
   {
     file: 'decision_boundaries.png', src: decisionBoundaryImg, width: 1097, height: 1120,
-    caption: 'Decision boundaries on range and first-path index.',
+    caption: 'Boundaries: range vs first-path index.',
     alt: 'Six panels of decision boundaries on scaled RANGE and FP_IDX for KNN, naive Bayes, logistic regression, linear SVM, non-linear SVM and an MLP.',
   },
 ];
@@ -87,7 +87,7 @@ export default function UWBProject() {
         id="problem"
         heading="The problem"
         icon="icon-about"
-        lead="UWB positions to **centimetres** at best; blocked (**NLOS**) signals cut accuracy sharply."
+        lead="UWB positions to centimetres at best; blocked (NLOS) signals **cut accuracy sharply**."
         file="problem.txt"
       >
         <PixelList items={['Spotting them is a step toward reliable positioning for **robots and drones**.']} />
@@ -127,7 +127,7 @@ export default function UWBProject() {
       >
         <div className="space-y-8 lg:space-y-10">
           <FlowDiagram steps={PIPELINE} labelledBy="how-heading" lgCols={4} />
-          <PixelList items={['Dropped **zero-variance** features; engineered features for **NLOS signal loss**.']} />
+          <PixelList items={['Dropped zero-variance features; engineered features for **NLOS signal loss**.']} />
         </div>
       </CaseSection>
 
@@ -138,12 +138,11 @@ export default function UWBProject() {
         lead="**SVM-RBF** beat the baseline: 89.61% vs 85.75%."
         file="results.txt"
       >
-        {/* "1.757m" without the space keeps the value to 6 glyphs; the label names the unit */}
         <StatStrip
           variant="inline"
           stats={[
             { value: '0.9195', label: 'logistic regression ROC-AUC' },
-            { value: '1.757m', label: 'range RMSE, in metres' },
+            { value: '1.757 m', label: 'range RMSE' },
             { value: '0.458', label: 'path 1 R²' },
             { value: '0.6809', label: 'path 2 R²' },
           ]}

@@ -33,6 +33,7 @@ export function KeyText({ text, max = 1, surface = 'teal' }: KeyTextProps) {
     <>
       {runs.map((run, i) => {
         if (i % 2 === 0 || used >= max) return run;
+        if (!run) return null; // "****" marks nothing
         used += 1;
         return (
           <strong
@@ -60,14 +61,27 @@ const LEAD_TEXT: Record<LeadTone, string> = {
  * L2 lead: the one sentence to read if you read nothing else. Bold 18/22 with
  * a hanging `>` prompt, so wrapped lines align with the first word.
  */
-export function Lead({ text, tone = 'navy', className = '' }: { text: string; tone?: LeadTone; className?: string }) {
+export function Lead({
+  text,
+  tone = 'navy',
+  prompt = true,
+  className = '',
+}: {
+  text: string;
+  tone?: LeadTone;
+  /** false where a `>` line already sits directly above (the hero role line) */
+  prompt?: boolean;
+  className?: string;
+}) {
   return (
     <p
-      className={`relative pl-[2ch] max-w-[42ch] font-mono font-bold text-lg leading-[1.4] lg:text-[22px] lg:leading-[1.35] text-balance ${LEAD_TEXT[tone]} ${className}`}
+      className={`relative max-w-[42ch] font-mono font-bold text-lg leading-[1.4] lg:text-[22px] lg:leading-[1.35] text-balance ${prompt ? 'pl-[2ch]' : ''} ${LEAD_TEXT[tone]} ${className}`}
     >
-      <span aria-hidden="true" className={`absolute left-0 ${tone === 'navy' ? 'text-[color:var(--orange)]' : ''}`}>
-        {'>'}
-      </span>
+      {prompt && (
+        <span aria-hidden="true" className={`absolute left-0 ${tone === 'navy' ? 'text-[color:var(--orange)]' : ''}`}>
+          {'>'}
+        </span>
+      )}
       <KeyText text={text} max={1} surface={tone === 'teal' ? 'cream' : 'teal'} />
     </p>
   );

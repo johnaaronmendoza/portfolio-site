@@ -94,7 +94,7 @@ export default function SCSProject() {
         id="problem"
         heading="The problem"
         icon="icon-about"
-        lead="SCS booths weren't **interactive**, so visitors learned little about **early screening**."
+        lead="SCS booths weren't interactive, so visitors **learned little** about early screening."
         file="problem.txt"
       >
         <PixelList items={['Many found them dull; others stayed away because of **stigma**.']} />
@@ -149,7 +149,7 @@ export default function SCSProject() {
           </div>
           <PixelList
             items={[
-              'Supabase **Row-Level Security** enforces admin roles; visitors pass a **PDPA** consent gate.',
+              'Supabase **Row-Level Security** enforces admin roles; visitors pass a PDPA consent gate.',
               'Kiosk mode keeps the booth tablet in **full screen**.',
               "**Fair scores**: only panels a visitor reached count; branching choices don't.",
             ]}

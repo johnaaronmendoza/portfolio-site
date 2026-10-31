@@ -9,7 +9,7 @@ import { useTextScramble } from '@/hooks/useTextScramble';
 import { motionTokens } from '@/lib/motion-tokens';
 import { scrollToSection } from '@/lib/utils';
 import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
-import { Lead } from '@/components/Hierarchy';
+import { Chip, Lead } from '@/components/Hierarchy';
 import PixelArt from '@/components/PixelArt';
 import Window from '@/components/Window';
 
@@ -198,14 +198,15 @@ export default function Hero() {
               <Cursor calm={calm} className="w-2 h-4" />
             </motion.div>
 
-            {/* Positioning: the L2 lead (one key term, per the hierarchy caps) */}
+            {/* Positioning: the L2 lead (no prompt: the role line above has it) + study chip */}
             <motion.div
-              className="mb-8 sm:mb-10"
+              className="mb-8 sm:mb-10 space-y-4"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: HERO.line, delay: HERO.body, ease: easing.out }}
             >
-              <Lead text="I build AI and data tools people can trust, now building **Desk Assist** at **LGA Telecom**." />
+              <Lead text="I build AI and data tools people can trust, now building Desk Assist at LGA Telecom." prompt={false} />
+              <Chip icon="chip-school" text="SIT × Glasgow · graduating Apr 2027" />
             </motion.div>
 
             {/* CTAs: resume first; email beside the profiles so contact is above the fold */}

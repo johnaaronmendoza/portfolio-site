@@ -20,7 +20,7 @@ const FACTS: Fact[] = [
 ];
 
 const BIO = [
-  "At **LGA Telecom** I'm building **Desk Assist**, which drafts ticket replies for an agent to review.",
+  "At LGA Telecom I'm building **Desk Assist**, which drafts ticket replies for an agent to review.",
   'I listen first, write **clear requirements**, then build and test until the tool helps.',
 ];
 
@@ -29,7 +29,7 @@ export default function About() {
     <section className="px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
       <div className="max-w-5xl mx-auto">
         <SectionHeading text="ABOUT ME" icon="icon-about" className="mb-4 lg:mb-5" />
-        <Lead text="I build AI and data tools for the people who have to use them." className="mb-6 lg:mb-8" />
+        <Lead text="From Electrical Engineering at Nanyang Polytechnic to Computing Science at SIT × Glasgow." className="mb-6 lg:mb-8" />
 
         <FramerReveal delay={0.1}>
           <Window title="about_me.txt" bodyClassName="flex flex-col md:flex-row gap-8 md:gap-12 items-start p-6 sm:p-10 lg:p-14">

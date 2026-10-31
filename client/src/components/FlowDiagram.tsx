@@ -70,7 +70,6 @@ export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols
                       emphasis ? 'bg-[var(--cream)]' : 'bg-[var(--orange)]'
                     }`}
                   >
-                    <span className="sr-only">Step </span>
                     {i + 1}
                   </span>
                 )}

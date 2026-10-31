@@ -144,7 +144,7 @@ export default function FireSafetyProject() {
         file="how_it_works.md"
       >
         <div className="space-y-8 lg:space-y-10">
-          <FlowDiagram steps={DRILL} labelledBy="how-heading" lgCols={5} />
+          <FlowDiagram steps={DRILL} labelledBy="how-heading" />
           <PixelList
             items={[
               '**TFLite** with YOLO classifies extinguishers: powder, water or CO₂.',

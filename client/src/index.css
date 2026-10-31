@@ -143,6 +143,8 @@
 }
 
 @theme inline {
+  /* Body face: font-mono is Courier Prime site-wide (loaded in client/index.html) */
+  --font-mono: 'Courier Prime', ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

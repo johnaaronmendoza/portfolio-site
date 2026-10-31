@@ -188,7 +188,7 @@ export default function UATProject() {
         facts={[
           { icon: 'chip-school', text: 'Course project' },
           { icon: 'icon-projects', text: 'Hospital appointment system' },
-          { icon: 'chip-team', text: 'Roles: project manager, QA lead, tester, developer' },
+          { icon: 'icon-projects', text: 'User roles: PM, QA lead, tester, dev' },
         ]}
         links={[{
           label: 'View source code',

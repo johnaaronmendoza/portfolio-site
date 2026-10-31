@@ -4,7 +4,7 @@ import { Link } from 'wouter';
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
 import PixelArt from './PixelArt';
-import { KeyText, Lead, SpotPlate } from './Hierarchy';
+import { Lead, SpotPlate } from './Hierarchy';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
 import { motionTokens } from '@/lib/motion-tokens';
 import SectionHeading from './SectionHeading';
@@ -116,7 +116,7 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
           {project.name}
         </h3>
         <p className="font-mono text-[15px] sm:text-base leading-relaxed">
-          <KeyText text={project.description} max={1} />
+          {project.description}
         </p>
         <ul className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[15px] font-bold text-black">
           {project.facts.map(fact => (
@@ -219,7 +219,7 @@ export default function Projects() {
       <section className="bg-[var(--teal)] text-black border-y-[3px] border-black px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
           <SectionHeading text="PROJECTS" tone="ink" icon="icon-projects" className="mb-4 lg:mb-5" />
-          <Lead text="Start with the two **featured** projects." tone="teal" className="mb-6 lg:mb-8" />
+          <Lead text="Start with **SilverLink SG** and the SCS Awareness Platform." tone="teal" className="mb-6 lg:mb-8" />
 
           <Window title="projects/" bodyClassName="p-4 sm:p-6 lg:p-8">
             {/* Filter chips */}

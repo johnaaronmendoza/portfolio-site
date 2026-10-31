@@ -46,7 +46,7 @@ function DeskAssistFlow() {
       <div className="flex items-center gap-4 mb-6 lg:mb-8">
         <SpotPlate spot={{ name: 'spot-desk-assist', tone: 'teal' }} className="size-24 lg:size-36" />
         <h4 id="desk-assist-flow" className="font-pixel text-[15px] sm:text-base leading-[1.5] text-black">
-          How Desk Assist drafts a reply
+          How Desk Assist will draft a reply
         </h4>
       </div>
       <FlowDiagram steps={DESK_ASSIST_FLOW} labelledBy="desk-assist-flow" lgCols={3} />
@@ -63,9 +63,9 @@ const ENTRIES: Entry[] = [
     // Desk Assist is in progress (CLAUDE.md honesty rule); AI work first
     badges: ["Internship", "In progress"],
     highlights: [
-      "Building **Desk Assist**: an AI Chrome extension that drafts ticket replies for **agent review**.",
-      "**1,000+ network configurations** migrated while leading the **FreeSDN** integration across 4+ manufacturers.",
-      "**40%** fewer manual agent actions, **15 minutes** faster incident resolution, via Freshservice automation.",
+      "Building Desk Assist: an AI Chrome extension that drafts ticket replies for agent review.",
+      "**1,000+ network configurations** migrated while leading the FreeSDN integration across 4+ manufacturers.",
+      "**40%** fewer manual agent actions, 15 minutes faster incident resolution, via Freshservice automation.",
     ],
     extra: <DeskAssistFlow />,
   },
@@ -76,9 +76,9 @@ const ENTRIES: Entry[] = [
     period: "Oct 2020 – Jun 2021",
     badges: ["Internship"],
     highlights: [
-      "Led the **Momens CRM** rollout across 3 divisions for a **240MWp+** portfolio.",
-      "**50+ defects** tracked to resolution in **UAT** before the CRM went live.",
-      "Earned an **Internship Distinction** and a contract extension.",
+      "Led the Momens CRM rollout across 3 divisions for a **240MWp+** portfolio.",
+      "**50+ defects** tracked to resolution in UAT before the CRM went live.",
+      "Earned an Internship Distinction and a contract extension.",
     ],
   },
   {
@@ -89,7 +89,7 @@ const ENTRIES: Entry[] = [
     badges: ["Education"],
     highlights: [
       "Core modules: Cloud Computing, Software Engineering, Mobile Development, Data Analytics, Requirements Engineering.",
-      "Certifications: AI4I Literacy in AI (**AI Singapore**); Fundamentals of Deep Learning (**NVIDIA DLI**), 2026.",
+      "Certifications: AI4I Literacy in AI (AI Singapore); Fundamentals of Deep Learning (NVIDIA DLI), 2026.",
     ],
   },
 ];

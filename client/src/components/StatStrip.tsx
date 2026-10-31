@@ -12,19 +12,19 @@ interface StatStripProps {
   className?: string;
 }
 
-// Band and inline cells are size containers, so 15cqi keeps a 6-glyph value
-// ("89.61%" is 6.3em wide in the pixel font) inside its cell at every width
+// Cells are size containers, so 15cqi keeps a 6-glyph value ("89.61%" is
+// 6.3em wide in the pixel font) inside its cell at every width from 320px.
+// Inline uses 13cqi so a 7-glyph value ("1.757 m") fits too.
 const CELL: Record<Variant, string> = {
   band: 'px-4 py-6 sm:px-6 sm:py-8 [container-type:inline-size]',
-  status: 'p-4',
+  status: 'p-4 [container-type:inline-size]',
   inline: 'p-3 sm:p-4 [container-type:inline-size]',
 };
 
 const VALUE: Record<Variant, string> = {
   band: 'text-[length:min(24px,15cqi)] sm:text-[length:min(36px,15cqi)] lg:text-[length:min(30px,15cqi)] xl:text-[length:min(38px,15cqi)]',
-  // At most 6 glyphs, so a 2x2 cell holds the value from 320px up (MASTER 2.11)
-  status: 'text-[length:clamp(18px,5.4vw,24px)] lg:text-[28px]',
-  inline: 'text-[length:min(28px,15cqi)]',
+  status: 'text-[length:min(24px,15cqi)] lg:text-[length:min(28px,15cqi)]',
+  inline: 'text-[length:min(28px,13cqi)]',
 };
 
 const FRAME: Record<Variant, string> = {

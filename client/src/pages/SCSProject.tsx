@@ -1,297 +1,158 @@
-import { motion } from 'framer-motion';
-import FramerReveal from '@/components/FramerReveal';
-import { Link, useLocation } from 'wouter';
-import { useEffect } from 'react';
-import { trackProjectVisit } from '@/hooks/useAchievements';
-import { play } from '@/hooks/useSound';
+import CaseLayout from '@/components/case/CaseLayout';
+import CaseHeader, { GITHUB_PROFILE } from '@/components/case/CaseHeader';
+import { CaseSection, CardGrid, FeatureList, Prose, TechStack } from '@/components/case/CaseBlocks';
+import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
+import storyPlayerImg from '@assets/scs_p65_img0.png';
 import adminDashImg from '@assets/scs_p71_img1.png';
 import panelEditorImg from '@assets/scs_p72_img0.png';
 import statsImg from '@assets/scs_p72_img1.png';
 import assetManagerImg from '@assets/scs_p73_img0.png';
+// Email column already redacted in this file
 import adminMgmtImg from '@assets/scs_p74_img1.png';
 
+const SHOTS: Shot[] = [
+  {
+    file: 'story_player.png', src: storyPlayerImg, width: 532, height: 843, span: 'half',
+    caption: 'The story player on a booth tablet (template text shown).',
+    alt: 'Story player on a tablet: a pixel-art boy in an office scene above a text box, with back and next arrows.',
+  },
+  {
+    file: 'panel_editor.png', src: panelEditorImg, width: 1278, height: 985, span: 'half',
+    caption: "Panel editor: write each language's version and preview it on a tablet frame.",
+    alt: "Editor for a true/false question, 'I exercise often I do not need to go for screening!', with English, Chinese, Malay and Tamil tabs and a live tablet preview.",
+  },
+  {
+    file: 'admin_dashboard.png', src: adminDashImg, width: 1887, height: 1006, span: 'full',
+    caption: 'Story editor: every panel in order, with counts of text panels and questions.',
+    alt: "Panel Builder screen for 'Main Story' showing 7 panels, 2 text panels and 3 questions, including a single-choice question about colorectal cancer screening.",
+  },
+  {
+    file: 'story_stats.png', src: statsImg, width: 1915, height: 1003, span: 'half',
+    caption: 'Story statistics, ready to export as CSV.',
+    alt: 'Story Statistics page with total attempts, average score and max score, and an Export CSV button.',
+  },
+  {
+    file: 'asset_manager.png', src: assetManagerImg, width: 1884, height: 1005, span: 'half',
+    caption: 'Asset manager: drag and drop sprites and backgrounds.',
+    alt: 'Asset Manager with a drag-and-drop upload area, filter tabs and pixel-art sprites of an elderly man.',
+  },
+  {
+    file: 'admin_accounts.png', src: adminMgmtImg, width: 1917, height: 1003, span: 'full',
+    caption: 'Admin accounts: verify, promote or remove admins.',
+    alt: 'Admin Management table of admin accounts with roles, verification status and Promote, Demote and Delete actions.',
+  },
+];
+
 export default function SCSProject() {
-  const [, setLocation] = useLocation();
-  useEffect(() => {
-    trackProjectVisit('scs');
-    document.title = 'SCS Awareness Platform | John Aaron Branzuela';
-    return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
-  }, []);
-
   return (
-    <main className="min-h-screen bg-black text-white">
-      {/* Sticky back nav */}
-      <nav aria-label="Project page" className="sticky top-0 z-30 bg-black border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
-        <Link
-          href="/#projects"
-          replace
-          onClick={() => play('back')}
-          className="min-h-[44px] inline-flex items-center gap-2 px-2 -ml-2 font-pixel text-xs text-amber-400 hover:text-white transition-colors"
-        >
-          <span aria-hidden="true">←</span> Back
-        </Link>
-        <span className="font-pixel text-xs text-zinc-400 truncate">/ SCS Awareness Platform</span>
-      </nav>
+    <CaseLayout slug="scs">
+      <CaseHeader
+        slug="scs"
+        file="scs_awareness.exe"
+        meta={[
+          { label: 'Type', value: 'Team project for the Singapore Cancer Society, SIT × University of Glasgow', wide: true },
+          { label: 'Team', value: 'Group D2, 4 people' },
+          { label: 'My role', value: 'Core engine and media systems' },
+        ]}
+        links={[GITHUB_PROFILE]}
+        stats={[
+          { value: '4', label: 'languages' },
+          { value: '4', label: 'question types' },
+          { value: '4', label: 'people on the team' },
+          { value: '7', label: 'Agile sprints' },
+        ]}
+      />
 
-      {/* Hero — Sovereign Console bento */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
-              {/* Identity card */}
-              <div className="lg:col-span-8 bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8">
-                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6 break-words text-balance">
-                  SCS Awareness Platform
-                </h1>
-                <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
-                  Interactive visual novel engine for Singapore Cancer Society outreach booths.
-                  Multilingual branching stories, gamification, and a full no-code admin panel
-                  for SCS staff, deployed on tablets at community events.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {["React_19", "TypeScript", "Vite", "TailwindCSS", "Supabase", "PostgreSQL", "Vercel", "Agile_Scrum"].map(t => (
-                    <span key={t} className="bg-[#353535] px-3 py-1 font-mono text-xs text-amber-400 border border-amber-500/20">--{t}</span>
-                  ))}
-                </div>
-                <div className="grid grid-cols-2 gap-px bg-amber-500/10">
-                  <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1">Institution</p>
-                    <p className="font-mono-8bit text-sm leading-relaxed">SIT + University of Glasgow</p>
-                  </div>
-                  <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1">Team</p>
-                    <p className="font-mono-8bit text-sm leading-relaxed">Group D2: 4 members, 7 sprints</p>
-                  </div>
-                </div>
-              </div>
-              {/* CTA card */}
-              <a
-                href="https://github.com/johnaaronmendoza"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
-              >
-                <div>
-                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GitHub profile</h2>
-                </div>
-                <div className="flex items-center justify-between mt-8">
-                  <span className="font-mono-8bit text-amber-900 text-sm">All repositories</span>
-                  <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
-                </div>
-              </a>
-            </div>
-          </FramerReveal>
+      <CaseSection id="problem" heading="The problem" icon="icon-about" file="problem.txt">
+        <Prose>
+          <p>
+            SCS runs community booths to raise cancer awareness and encourage early screening. The
+            booths weren't interactive: many visitors found them dull or stayed away because of
+            stigma, so they learned little and showed less interest in screening.
+          </p>
+        </Prose>
+      </CaseSection>
+
+      <CaseSection id="what" heading="What it does" icon="icon-projects" file="what_it_does.md">
+        <CardGrid
+          cols={2}
+          cards={[
+            {
+              title: 'For visitors at the booth',
+              items: [
+                'Play a branching story with pixel-art characters',
+                'Answer 4 question types: single choice, multiple choice, true/false and branching',
+                'Play in English, Chinese, Malay or Tamil',
+                'See their score and a top-10 leaderboard with their own rank',
+                'Agree to a PDPA consent notice before playing (staff can edit the wording)',
+                'Get confetti and a sound when they answer correctly',
+              ],
+            },
+            {
+              title: 'For SCS staff, with no code',
+              body: 'SCS staff run everything from a no-code admin panel:',
+              items: [
+                'Edit panels in a WYSIWYG editor with live preview',
+                'Upload sprites and backgrounds by drag and drop',
+                "See a story's branches as a colour-coded flow map (6 colours)",
+                'View analytics and export them to Excel or CSV',
+                'Auto-translate text with the MyMemory API',
+                'Manage admin and super admin accounts',
+              ],
+            },
+          ]}
+        />
+      </CaseSection>
+
+      <CaseSection id="part" heading="My part" icon="icon-experience" file="my_part.log">
+        <div className="space-y-6">
+          <Prose lead="I built the core engine and media systems:" />
+          <FeatureList
+            columns={2}
+            items={[
+              'The visual novel engine (the panel renderer)',
+              'Multi-sprite character rendering',
+              'Text animation and font controls',
+              'Button sound effects and haptic feedback',
+              'The question bank service, with editor validation for all 4 question types',
+              'Admin sign-in and sign-up',
+              'Tablet scaling and accessibility',
+              'Bug fixing and integration testing',
+            ]}
+          />
         </div>
-      </section>
+      </CaseSection>
 
-      {/* Key metrics bar */}
-      <section className="border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-16">
-          <FramerReveal>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
-              {[
-                { label: "AGILE SPRINTS", value: "7" },
-                { label: "LANGUAGES SUPPORTED", value: "4" },
-                { label: "QUESTION TYPES", value: "4" },
-                { label: "ADMIN PANEL", value: "No-Code" },
-              ].map(({ label, value }) => (
-                <div key={label} className="bg-zinc-900 p-6 text-center">
-                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-2">{value}</p>
-                  <p className="font-mono text-xs text-amber-400/80 uppercase tracking-widest">{label}</p>
-                </div>
-              ))}
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
+      <CaseSection id="decisions" heading="Key decisions" icon="icon-skills" file="key_decisions.md">
+        <CardGrid
+          cols={3}
+          cards={[
+            { title: 'One app, two audiences', body: 'A single React 19 app serves visitors and admins, deployed together on Vercel from GitHub.' },
+            { title: 'Access enforced in the database', body: 'Supabase Row-Level Security applies the admin and super admin roles at the database, not only in the UI.' },
+            { title: 'Built for a booth', body: 'Kiosk mode keeps the tablet in full screen.' },
+            { title: 'Fair scores', body: "The maximum score counts only the panels a visitor reached, and branching choices aren't scored." },
+            { title: 'Safe editing', body: 'Deleted panels can be restored, and staff choose what happens after a game (replay or open a link).' },
+          ]}
+        />
+      </CaseSection>
 
-      {/* Problem + Scope */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto space-y-10">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">The challenge</h2>
-            <div className="bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8">
-              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
-                Singapore Cancer Society (SCS) conducts community outreach to advocate for cancer
-                awareness and early detection. Traditional booths lack interactivity; many visitors
-                perceive outreach as monotonous or avoid it due to stigma, resulting in limited
-                knowledge and reduced interest in screening programmes.
-              </p>
-            </div>
-          </FramerReveal>
+      <ScreenGallery shots={SHOTS} />
 
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">My contributions</h2>
-            <div className="bg-zinc-900 border-l-4 border-blue-500 p-6 sm:p-8">
-              <p className="font-mono-8bit text-sm text-blue-400 mb-4">John Aaron: core engine and media systems</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  "Visual Novel Engine (PanelRenderer component)",
-                  "Multi-sprite & character rendering system",
-                  "Text animation and font controls",
-                  "Button sound effects and haptic feedback",
-                  "Question Bank service and editor validation",
-                  "Admin authentication (login / sign-up flows)",
-                  "UI / Accessibility (tablet scaling)",
-                  "Bug fixing and integration testing",
-                ].map(c => (
-                  <div key={c} className="flex items-start gap-2">
-                    <span className="text-amber-400 flex-shrink-0 mt-1">▸</span>
-                    <span className="font-mono-8bit text-[15px]">{c}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
+      <CaseSection id="outcome" heading="Outcome" icon="icon-results" file="outcome.txt">
+        <Prose>
+          <p>
+            Deployed on tablets at SCS community outreach booths, with an admin panel that lets
+            non-technical SCS staff run the stories without a developer.
+          </p>
+        </Prose>
+      </CaseSection>
 
-      {/* Screenshots — Visitor Experience */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto space-y-10">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-2">Admin panel</h2>
-            <p className="font-mono-8bit text-[15px] text-gray-400 mb-8">
-              A full no-code CMS allowing SCS staff to create stories, manage assets, view analytics, and control admin accounts, without technical expertise.
-            </p>
-          </FramerReveal>
-
-          <FramerReveal>
-            <div className="space-y-3">
-              <p className="font-pixel text-xs text-blue-400">DASHBOARD: STORY MANAGEMENT</p>
-              <img src={adminDashImg} alt="SCS admin dashboard" className="w-full border border-amber-500/20" />
-            </div>
-          </FramerReveal>
-
-          <FramerReveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">PANEL EDITOR (WYSIWYG)</p>
-                <img src={panelEditorImg} alt="SCS panel editor" className="w-full border border-amber-500/20" />
-              </div>
-              <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">STORY STATISTICS + CSV EXPORT</p>
-                <img src={statsImg} alt="SCS story statistics" className="w-full border border-amber-500/20" />
-              </div>
-            </div>
-          </FramerReveal>
-
-          <FramerReveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">ASSET MANAGER (DRAG & DROP)</p>
-                <img src={assetManagerImg} alt="SCS asset manager" className="w-full border border-amber-500/20" />
-              </div>
-              <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">ADMIN ACCOUNT MANAGEMENT</p>
-                <img src={adminMgmtImg} alt="SCS admin management" className="w-full border border-amber-500/20" />
-              </div>
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Features</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {[
-                {
-                  label: "VISITOR EXPERIENCE",
-                  items: [
-                    "Branching visual novel with character sprites",
-                    "4 question types (single, multi, T/F, branching)",
-                    "Multilingual: English, Chinese, Malay, Tamil",
-                    "Real-time score tracking + leaderboard",
-                    "PDPA consent gate with customisable text",
-                    "Confetti + audio feedback on correct answers",
-                  ],
-                },
-                {
-                  label: "ADMIN PANEL",
-                  items: [
-                    "WYSIWYG panel editor with live preview",
-                    "Drag-and-drop asset management (sprites, BGs)",
-                    "Story flow visualisation (SVG auto-layout)",
-                    "Analytics dashboard with Excel/CSV export",
-                    "Auto-translate via MyMemory API",
-                    "Role-based access: admin / super_admin",
-                  ],
-                },
-                {
-                  label: "ARCHITECTURE",
-                  items: [
-                    "React 19 SPA (visitor + admin, single deploy)",
-                    "Supabase BaaS: PostgreSQL, Auth, Storage",
-                    "Row-Level Security (RLS) at database level",
-                    "Vercel hosting with GitHub auto-deploy",
-                    "Kiosk mode: enforced fullscreen for booths",
-                    "7 Agile Scrum sprints with burndown charts",
-                  ],
-                },
-                {
-                  label: "GAMIFICATION ENGINE",
-                  items: [
-                    "Dynamic scoring: max score tracks visited panels",
-                    "Branching choices excluded from score",
-                    "Top-10 leaderboard with personal rank",
-                    "Configurable post-game actions (replay / URL)",
-                    "Soft-delete panels with restore capability",
-                    "6-colour branch coding in flow visualiser",
-                  ],
-                },
-              ].map(({ label, items }) => (
-                <motion.div
-                  key={label}
-                  className="bg-zinc-900 border-t border-amber-500/20 p-6"
-                  whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
-                  whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <p className="font-pixel text-xs text-amber-400 mb-4">{label}</p>
-                  <ul className="space-y-2">
-                    {items.map(i => (
-                      <li key={i} className="flex items-start gap-2">
-                        <span className="text-blue-400 flex-shrink-0 mt-1">▸</span>
-                        <span className="font-mono-8bit text-[15px] leading-relaxed">{i}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              ))}
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
-
-      {/* Back CTA */}
-      <section className="py-16 px-4 sm:px-8 lg:px-16">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <div className="bg-zinc-900 border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">View more projects</h2>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/#projects"
-                  replace
-                  onClick={() => play('back')}
-                  className="min-h-[44px] inline-flex items-center justify-center border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
-                >
-                  <span aria-hidden="true">←</span> Back to portfolio
-                </Link>
-                <button
-                  onClick={() => setLocation('/projects/firesafety')}
-                  className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
-                >
-                  Fire Safety app →
-                </button>
-              </div>
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
-    </main>
+      <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">
+        <TechStack
+          tags={['React 19', 'TypeScript', 'Vite', 'Tailwind CSS', 'Supabase (PostgreSQL, Auth, Storage)', 'Vercel', 'MyMemory API']}
+          more={{ label: 'Methods', tags: ['Agile Scrum, 7 sprints'] }}
+        />
+      </CaseSection>
+    </CaseLayout>
   );
 }

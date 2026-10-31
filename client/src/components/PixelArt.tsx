@@ -10,6 +10,8 @@ export type PixelArtName =
   | 'icon-projects'
   | 'icon-skills'
   | 'icon-contact'
+  | 'icon-screens'
+  | 'icon-results'
   | 'globe';
 
 interface PixelArtProps {

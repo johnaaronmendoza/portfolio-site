@@ -7,26 +7,7 @@ import { useSmartPreload } from '@/hooks/useSmartPreload';
 import { motionTokens } from '@/lib/motion-tokens';
 import SectionHeading from './SectionHeading';
 import Window from './Window';
-
-// ── Card images (shown in grid) ───────────────────────────────────────────
-import silverLinkImg    from '@assets/silverlink_p19_img0.png';
-import scsImg           from '@assets/scs_p65_img0.png';
-import fireSafetyImg    from '@assets/firesafety_p29_img2.png';
-import uwbImg           from '@assets/da_p40_img1.png';
-import greenloopImg     from '@assets/greenloop_hero.jpg';
-import uatImg           from '@assets/uat_dashboard.jpg';
-import aiFinanceImg     from '@assets/aifinance_dashboard.jpg';
-
-// ── Secondary images to preload on hover (detail-page screenshots) ─────────
-import silverLink2      from '@assets/silverlink_p21_img0.png';
-import silverLink3      from '@assets/silverlink_p22_img0.png';
-import scs2             from '@assets/scs_p71_img1.png';
-import scs3             from '@assets/scs_p72_img0.png';
-import fireSafety2      from '@assets/firesafety_p29_img1.png';
-import fireSafety3      from '@assets/firesafety_p29_img3.png';
-import uwb2             from '@assets/da_p39_img2.png';
-import uwb3             from '@assets/da_p35_img1.png';
-import greenloop2       from '@assets/greenloop_tour.jpg';
+import { PROJECTS, type Project } from '@/data/projects';
 
 // Display label and the key matched against project tags (kept separate so a
 // friendlier label doesn't change which projects match)
@@ -38,122 +19,6 @@ const FILTERS: { label: string; match: string }[] = [
   { label: 'Kubernetes', match: 'K8s' },
   { label: 'gRPC', match: 'gRPC' },
   { label: 'Kotlin', match: 'Kotlin' },
-];
-
-// ── Project data ──────────────────────────────────────────────────────────
-type Project = {
-  num: number;
-  name: string;
-  description: string;
-  /** Short facts shown as a list under the description */
-  facts: string[];
-  year: string;
-  image: string | null;
-  tags: string[];
-  link: string;
-  externalUrl?: string;
-  preloadImages: string[];
-  /** Grid width in the tile grid (sm: 2 cols, lg: 6 cols) */
-  span: string;
-  /** Lead tile: taller image, bigger title, always in colour */
-  featured?: boolean;
-};
-
-const PROJECTS: Project[] = [
-  {
-    num: 1,
-    name: "SilverLink SG",
-    description:
-      "Connects seniors and youth through skill-sharing and live events, and is built to block double-bookings under concurrent traffic. A 6-person team shipped it in 7 Agile sprints: 4 gRPC microservices, WebRTC livestreaming and autoscaling on Kubernetes.",
-    facts: ["8-node cluster", "4 services", "6-person team"],
-    year: "2025",
-    image: silverLinkImg,
-    tags: ["React", "gRPC", "K8s", "PostgreSQL"],
-    link: "/projects/silverlink",
-    span: 'lg:col-span-3',
-    preloadImages: [silverLink2, silverLink3],
-    featured: true,
-  },
-  {
-    num: 2,
-    name: "SCS Awareness Platform",
-    description:
-      "Teaches cancer awareness through a branching visual novel, used on tablets at Singapore Cancer Society outreach booths in English, Chinese, Malay and Tamil. A no-code admin panel lets SCS staff edit stories and export analytics without a developer.",
-    facts: ["4 languages", "4 question types", "4-person team"],
-    year: "2025",
-    image: scsImg,
-    tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
-    link: "/projects/scs",
-    span: 'lg:col-span-3',
-    preloadImages: [scs2, scs3],
-    featured: true,
-  },
-  {
-    num: 3,
-    name: "AI Finance Insights Engine",
-    description:
-      "Turns five market data sources into a Power BI dashboard, using NLP to score headline sentiment and flag supply-chain risk across 9 sectors. An automated ETL pipeline feeds a star schema, with 100% Pytest coverage on extraction and transformation.",
-    facts: ["5 data sources", "star schema", "100% Pytest coverage"],
-    year: "2024",
-    image: aiFinanceImg,
-    tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
-    link: "/projects/ai-finance",
-    span: 'lg:col-span-2',
-    preloadImages: [],
-  },
-  {
-    num: 4,
-    name: "UWB Indoor Localization",
-    description:
-      "Tells clear UWB signals from blocked (NLOS) ones with 89.61% accuracy and 0.9612 ROC-AUC, using an SVM-RBF model on 41,996 samples from 7 indoor environments. PCA compresses 1,016 signal dimensions, and a regression model estimates range on both signal paths.",
-    facts: ["89.61% accuracy", "0.9612 AUC", "41,996 samples"],
-    year: "2025",
-    image: uwbImg,
-    tags: ["Python", "SVM", "PCA", "scikit-learn"],
-    link: "/projects/uwb",
-    span: 'lg:col-span-2',
-    preloadImages: [uwb2, uwb3],
-  },
-  {
-    num: 5,
-    name: "UAT Testing Dashboard",
-    description:
-      "Shows a UAT team what's blocking go-live by linking every failed test case to its defect. A course project built around a hospital appointment system UAT scenario: 25 issues across 8 modules and 4 user roles, with severity charts and CSV export.",
-    facts: ["25 issues", "8 modules", "4 roles"],
-    year: "2024",
-    image: uatImg,
-    tags: ["React 18", "Node.js", "Express", "SQLite"],
-    link: "/projects/uat",
-    span: 'lg:col-span-2',
-    preloadImages: [],
-  },
-  {
-    num: 6,
-    name: "Fire Safety Drill Companion",
-    description:
-      "Guides residents out of a building in augmented reality, with no network connection needed. A Kotlin Android app with ARCore navigation, on-device TFLite, and Dijkstra routing that re-plans around hazards.",
-    facts: ["SUS 79/100", "~80% test coverage", "fully offline"],
-    year: "2025",
-    image: fireSafetyImg,
-    tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
-    link: "/projects/firesafety",
-    span: 'lg:col-span-3',
-    preloadImages: [fireSafety2, fireSafety3],
-  },
-  {
-    num: 7,
-    name: "GreenLoopFarms",
-    description:
-      "Helped shape the idea for a Singapore hydroponic urban farm and prepare the pitch that won a SGD 10,000 NYP JumpStart Grant. We pitched it to an industry investor panel.",
-    facts: ["SGD 10,000 NYP JumpStart Grant"],
-    year: "2022",
-    image: greenloopImg,
-    tags: ["NYP JumpStart", "Urban Farming"],
-    link: "external",
-    span: 'sm:col-span-2 lg:col-span-3',
-    externalUrl: "https://greenloopfarms.com/",
-    preloadImages: [greenloop2],
-  },
 ];
 
 function matchesFilter(p: Project, filter: string | null): boolean {
@@ -170,13 +35,23 @@ function matchesFilter(p: Project, filter: string | null): boolean {
   );
 }
 
-// ── ProjectCard — own component so hooks are called once per card ─────────
+// ── ProjectTile — own component so hooks are called once per card ─────────
 // Wide outline offset leaves a cream gap outside the tile's border and shadow
 const CARD_LINK_CLASS = 'flex h-full flex-col outline-offset-[10px]';
 
+interface ProjectTileProps {
+  project: Project;
+  ref?: Ref<HTMLDivElement>;
+  /** Grid span; defaults to the project's Home span */
+  span?: string;
+  /** Image box height; defaults to the Home sizes (featured taller) */
+  imageHeight?: string;
+}
+
 // `ref` is a plain prop in React 19; AnimatePresence popLayout needs it on the
-// motion element to measure the exiting tile.
-function ProjectCard({ project, ref }: { project: Project; ref?: Ref<HTMLDivElement> }) {
+// motion element to measure the exiting tile. Also used by the case-study
+// "Next project" band.
+export function ProjectTile({ project, ref, span = project.span, imageHeight }: ProjectTileProps) {
   const isComingSoon = project.link === '#';
   const isExternal   = project.link === 'external';
 
@@ -186,7 +61,7 @@ function ProjectCard({ project, ref }: { project: Project; ref?: Ref<HTMLDivElem
   const body = (
     <>
       {/* Project image on top, framed by the tile border and a 3px rule */}
-      <div className={`relative overflow-hidden border-b-[3px] border-black bg-[var(--navy)] ${project.featured ? 'h-56 lg:h-72' : 'h-48'}`}>
+      <div className={`relative overflow-hidden border-b-[3px] border-black bg-[var(--navy)] ${imageHeight ?? (project.featured ? 'h-56 lg:h-72' : 'h-48')}`}>
         {/* alt="" because the tile's link already names the project */}
         {project.image ? (
           <PixelatedImage
@@ -295,7 +170,7 @@ function ProjectCard({ project, ref }: { project: Project; ref?: Ref<HTMLDivElem
       ref={ref}
       className={`group border-[3px] border-black bg-[var(--cream)] shadow-[4px_4px_0_0_var(--ink)] transition-[translate,box-shadow] duration-150 ease-[var(--ease-out)] ${
         isComingSoon ? '' : 'hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--ink)] active:translate-x-1 active:translate-y-1 active:shadow-none'
-      } ${project.span}`}
+      } ${span}`}
       exit={{ opacity: 0, y: motionTokens.distance.sm, transition: { duration: motionTokens.duration.fast } }}
     >
       {card}
@@ -371,7 +246,7 @@ export default function Projects() {
             <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
               <AnimatePresence initial={false} mode="popLayout">
                 {visible.map(project => (
-                  <ProjectCard key={project.num} project={project} />
+                  <ProjectTile key={project.num} project={project} />
                 ))}
               </AnimatePresence>
 

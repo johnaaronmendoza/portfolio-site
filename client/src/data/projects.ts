@@ -1,0 +1,196 @@
+// One source for the Home project tiles, the case-study headers and the
+// "Next project" band, so names, years and summaries can't drift apart.
+// Order = Home tile order; the case-study "Next project" chain follows it.
+
+// ── Card images (shown in grid) ───────────────────────────────────────────
+import silverLinkImg    from '@assets/silverlink_p19_img0.png';
+import scsImg           from '@assets/scs_p65_img0.png';
+import fireSafetyImg    from '@assets/firesafety_p29_img2.png';
+import uwbImg           from '@assets/da_p40_img1.png';
+import greenloopImg     from '@assets/greenloop_hero.jpg';
+import uatImg           from '@assets/uat_dashboard.jpg';
+import aiFinanceImg     from '@assets/aifinance_dashboard.jpg';
+
+// ── Secondary images to preload on hover (detail-page screenshots) ─────────
+import silverLink2      from '@assets/silverlink_p21_img0.png';
+import silverLink3      from '@assets/silverlink_p22_img0.png';
+import scs2             from '@assets/scs_p71_img1.png';
+import scs3             from '@assets/scs_p72_img0.png';
+import fireSafety2      from '@assets/firesafety_p29_img1.png';
+import fireSafety3      from '@assets/firesafety_p29_img3.png';
+import uwb2             from '@assets/da_p39_img2.png';
+import uwb3             from '@assets/da_p35_img1.png';
+import greenloop2       from '@assets/greenloop_tour.jpg';
+
+/** Route segment of a case-study page: /projects/{slug} */
+export type CaseSlug = 'silverlink' | 'scs' | 'ai-finance' | 'uwb' | 'uat' | 'firesafety';
+
+export type Project = {
+  num: number;
+  name: string;
+  /** Case-study pages only */
+  slug?: CaseSlug;
+  /** Home tile text */
+  description: string;
+  /** One-line summary under the case-study h1 */
+  summary?: string;
+  /** Short facts shown as a list under the description */
+  facts: string[];
+  year: string;
+  image: string | null;
+  /** Intrinsic size of `image`, so the box is reserved before it loads */
+  imageWidth: number;
+  imageHeight: number;
+  tags: string[];
+  link: string;
+  externalUrl?: string;
+  preloadImages: string[];
+  /** Grid width in the tile grid (sm: 2 cols, lg: 6 cols) */
+  span: string;
+  /** Lead tile: taller image, bigger title, always in colour */
+  featured?: boolean;
+};
+
+export const PROJECTS: Project[] = [
+  {
+    num: 1,
+    name: "SilverLink SG",
+    slug: 'silverlink',
+    description:
+      "Connects seniors and youth through skill-sharing and live events, and is built to block double-bookings under concurrent traffic. A 6-person team shipped it in 7 Agile sprints: 4 gRPC microservices, WebRTC livestreaming and autoscaling on Kubernetes.",
+    summary:
+      "Connects seniors and youth through skill-sharing and live events, and blocks double-bookings when many people book at once.",
+    facts: ["8-node cluster", "4 services", "6-person team"],
+    year: "2025",
+    image: silverLinkImg,
+    imageWidth: 873,
+    imageHeight: 560,
+    tags: ["React", "gRPC", "K8s", "PostgreSQL"],
+    link: "/projects/silverlink",
+    span: 'lg:col-span-3',
+    preloadImages: [silverLink2, silverLink3],
+    featured: true,
+  },
+  {
+    num: 2,
+    name: "SCS Awareness Platform",
+    slug: 'scs',
+    description:
+      "Teaches cancer awareness through a branching visual novel, used on tablets at Singapore Cancer Society outreach booths in English, Chinese, Malay and Tamil. A no-code admin panel lets SCS staff edit stories and export analytics without a developer.",
+    summary:
+      "Turns Singapore Cancer Society outreach booths into a story visitors play on a tablet, in English, Chinese, Malay or Tamil.",
+    facts: ["4 languages", "4 question types", "4-person team"],
+    year: "2025",
+    image: scsImg,
+    imageWidth: 532,
+    imageHeight: 843,
+    tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
+    link: "/projects/scs",
+    span: 'lg:col-span-3',
+    preloadImages: [scs2, scs3],
+    featured: true,
+  },
+  {
+    num: 3,
+    name: "AI Finance Insights Engine",
+    slug: 'ai-finance',
+    description:
+      "Turns five market data sources into a Power BI-ready warehouse, using NLP to score headline sentiment and flag supply-chain risk across 9 sectors. An automated ETL pipeline feeds a star schema, with 100% Pytest coverage on extraction and transformation.",
+    summary:
+      "Pulls five market data sources into one Power BI-ready warehouse, and flags supply-chain risk in the news.",
+    facts: ["5 data sources", "star schema", "100% Pytest coverage"],
+    year: "2024",
+    image: aiFinanceImg,
+    imageWidth: 1024,
+    imageHeight: 1024,
+    tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
+    link: "/projects/ai-finance",
+    span: 'lg:col-span-2',
+    preloadImages: [],
+  },
+  {
+    num: 4,
+    name: "UWB Indoor Localization",
+    slug: 'uwb',
+    description:
+      "Tells clear UWB signals from blocked (NLOS) ones with 89.61% accuracy and 0.9612 ROC-AUC, using an SVM-RBF model on 41,996 samples from 7 indoor environments. It applies PCA to 1,016 signal dimensions, and a regression model estimates range on both signal paths.",
+    summary:
+      "Tells clear UWB signals from blocked (NLOS) ones with 89.61% accuracy, and estimates range on both signal paths.",
+    facts: ["89.61% accuracy", "0.9612 AUC", "41,996 samples"],
+    year: "2025",
+    image: uwbImg,
+    imageWidth: 1229,
+    imageHeight: 490,
+    tags: ["Python", "SVM", "PCA", "scikit-learn"],
+    link: "/projects/uwb",
+    span: 'lg:col-span-2',
+    preloadImages: [uwb2, uwb3],
+  },
+  {
+    num: 5,
+    name: "UAT Testing Dashboard",
+    slug: 'uat',
+    description:
+      "Shows a UAT team what's blocking go-live by linking every failed test case to its defect. A course project built around a hospital appointment system UAT scenario: 25 sample defects across 8 modules and 4 user roles, with severity charts and CSV export.",
+    summary:
+      "Shows a test team what's blocking go-live by linking each failed test case to its defect. Built around a hospital appointment system scenario.",
+    facts: ["25 sample defects", "8 modules", "4 roles"],
+    year: "2024",
+    image: uatImg,
+    imageWidth: 1280,
+    imageHeight: 627,
+    tags: ["React 18", "Node.js", "Express", "SQLite"],
+    link: "/projects/uat",
+    span: 'lg:col-span-2',
+    preloadImages: [],
+  },
+  {
+    num: 6,
+    name: "Fire Safety Drill Companion",
+    slug: 'firesafety',
+    description:
+      "Guides residents out of a building in augmented reality, with no network connection needed. A Kotlin Android app with ARCore navigation, on-device TFLite, and Dijkstra routing that re-plans around hazards.",
+    summary:
+      "Lets HDB residents rehearse a fire evacuation in their own block, guided by AR arrows. The drill works without internet.",
+    facts: ["SUS 79/100", "~80% test coverage", "drill works offline"],
+    year: "2025",
+    image: fireSafetyImg,
+    imageWidth: 605,
+    imageHeight: 520,
+    tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
+    link: "/projects/firesafety",
+    span: 'lg:col-span-3',
+    preloadImages: [fireSafety2, fireSafety3],
+  },
+  {
+    num: 7,
+    name: "GreenLoopFarms",
+    description:
+      "Helped shape the idea for a Singapore hydroponic urban farm and prepare the pitch that won a SGD 10,000 NYP JumpStart Grant. We pitched it to an industry investor panel.",
+    facts: ["SGD 10,000 NYP JumpStart Grant"],
+    year: "2022",
+    image: greenloopImg,
+    imageWidth: 1200,
+    imageHeight: 800,
+    tags: ["NYP JumpStart", "Urban Farming"],
+    link: "external",
+    span: 'sm:col-span-2 lg:col-span-3',
+    externalUrl: "https://greenloopfarms.com/",
+    preloadImages: [greenloop2],
+  },
+];
+
+/** Projects that have a case-study page, in Home tile order */
+const CASES = PROJECTS.filter((p): p is Project & { slug: CaseSlug } => p.slug !== undefined);
+
+export function getCase(slug: CaseSlug): Project & { slug: CaseSlug } {
+  const project = CASES.find(p => p.slug === slug);
+  if (!project) throw new Error(`No project for case slug "${slug}"`);
+  return project;
+}
+
+/** The following case in Home tile order, wrapping to the first */
+export function getNextCase(slug: CaseSlug): Project & { slug: CaseSlug } {
+  const i = CASES.findIndex(p => p.slug === slug);
+  return CASES[(i + 1) % CASES.length];
+}

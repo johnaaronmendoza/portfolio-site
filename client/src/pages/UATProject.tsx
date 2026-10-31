@@ -1,9 +1,7 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import FramerReveal from '@/components/FramerReveal';
-import { Link, useLocation } from 'wouter';
-import { useEffect, useState } from 'react';
-import { trackProjectVisit } from '@/hooks/useAchievements';
-import { play } from '@/hooks/useSound';
+import CaseLayout from '@/components/case/CaseLayout';
+import CaseHeader from '@/components/case/CaseHeader';
+import { CaseSection, CardGrid, FeatureList, Prose, SubHeading, TechStack } from '@/components/case/CaseBlocks';
+import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
 
 import uatDashboardImg  from '@assets/uat_dashboard_full.png';
 import uatDefectsImg    from '@assets/uat_defects.png';
@@ -11,558 +9,305 @@ import uatDetailImg     from '@assets/uat_defect_detail.png';
 import uatTestcasesImg  from '@assets/uat_testcases.png';
 import uatReportsImg    from '@assets/uat_reports_full.png';
 
-const SCREENSHOTS = [
+const SHOTS: Shot[] = [
   {
-    key: 'dashboard',
-    label: 'DASHBOARD',
-    src: uatDashboardImg,
-    caption: 'Executive dashboard: real-time defect counts, severity breakdown bar chart, and monthly trend area chart',
+    file: 'dashboard.png', src: uatDashboardImg, width: 1440, height: 922, span: 'full',
+    caption: 'Dashboard: defect counts by status, test pass rate, defects by severity and a monthly trend.',
+    alt: 'UAT Executive Dashboard with sample data: 25 defects (14 open, 5 in progress, 6 resolved), 35 test cases (11 passed, 24 failed), a defects-by-severity bar chart and a monthly trend chart.',
   },
   {
-    key: 'defects',
-    label: 'DEFECTS',
-    src: uatDefectsImg,
-    caption: 'Defect register: 25 logged issues across 8 modules, filterable by module, severity, and lifecycle status',
+    file: 'defects.png', src: uatDefectsImg, width: 1440, height: 900, span: 'half',
+    caption: 'Defect register: 25 sample defects across 8 modules, filtered by module, severity and status.',
+    alt: 'Defect Management table listing defects DEF-016 to DEF-025 with title, module, severity, status and assignee, plus search, filters and a Log defect button.',
   },
   {
-    key: 'detail',
-    label: 'DEFECT DETAIL',
-    src: uatDetailImg,
-    caption: 'DEF-025: full defect record with severity badge, expected vs actual result, and reproduction steps',
+    file: 'defect_detail.png', src: uatDetailImg, width: 1440, height: 900, span: 'half',
+    caption: 'DEF-025: severity, priority, expected vs actual result and steps to reproduce.',
+    alt: "Defect detail for DEF-025, 'Notification Service Crashes Under High Load': open, critical, P1. Expected: notifications processed without a crash. Actual: service crashes and pending notifications are lost.",
   },
   {
-    key: 'testcases',
-    label: 'TEST CASES',
-    src: uatTestcasesImg,
-    caption: 'Test case management: 35 cases with execution status and direct links to the defects they exposed',
+    file: 'test_cases.png', src: uatTestcasesImg, width: 1440, height: 900, span: 'half',
+    caption: 'Test cases: 35 sample cases, each failure linked to its defect.',
+    alt: 'Test Case Management table of test cases with module, pass or fail status, linked defect code and who ran each one.',
   },
   {
-    key: 'reports',
-    label: 'REPORTS',
-    src: uatReportsImg,
-    caption: 'Analytics: defects by module, defects by status, and test execution coverage breakdown per module',
+    file: 'reports.png', src: uatReportsImg, width: 1440, height: 1146, span: 'half',
+    caption: 'Reports: defects by module and status, results per module, and CSV export.',
+    alt: 'Analytics and Reports page with donut charts of defects by module and by status, a stacked bar chart of passed and failed tests per module, and Export defects and Export test cases buttons.',
   },
 ];
 
-const MODULES = [
-  { name: 'Appointment Scheduling', defects: 5, risk: 'HIGH' },
-  { name: 'User Authentication',    defects: 5, risk: 'HIGH' },
-  { name: 'Notifications',          defects: 4, risk: 'CRITICAL' },
-  { name: 'Billing & Payments',     defects: 4, risk: 'HIGH' },
-  { name: 'Medical Records',        defects: 3, risk: 'MEDIUM' },
-  { name: 'Patient Registration',   defects: 2, risk: 'MEDIUM' },
-  { name: 'Doctor Management',      defects: 1, risk: 'LOW' },
-  { name: 'Reports & Analytics',    defects: 1, risk: 'LOW' },
-];
+type Level = 'Critical' | 'High' | 'Medium' | 'Low';
 
-const RISK_COLOR: Record<string, string> = {
-  CRITICAL: 'text-red-400 border-red-400',
-  HIGH:     'text-amber-400 border-amber-400',
-  MEDIUM:   'text-blue-400 border-blue-400',
-  LOW:      'text-zinc-400 border-zinc-400',
+// The word carries the meaning; the fill only helps scanning. Ink text on all.
+const LEVEL_FILL: Record<Level, string> = {
+  Critical: 'bg-[var(--orange)]',
+  High: 'bg-[var(--teal)]',
+  Medium: 'bg-[var(--cream)]',
+  Low: 'bg-[var(--cream)]',
 };
 
-const ROLES = [
-  {
-    role: 'Project manager',
-    color: 'text-amber-400',
-    responsibilities: [
-      'Full dashboard read access and trend analytics',
-      'Export defect register and test case log to CSV',
-      'View severity distribution for go/no-go decisions',
-      'Assign defects to team members',
-    ],
-  },
-  {
-    role: 'QA lead',
-    color: 'text-blue-400',
-    responsibilities: [
-      'Create and edit test cases with preconditions and steps',
-      'Triage defect severity (Critical to Low) and priority (P1 to P4)',
-      'Link failed test cases to the defects they exposed',
-      'Manage execution status across the full test suite',
-    ],
-  },
-  {
-    role: 'Tester',
-    color: 'text-amber-400',
-    responsibilities: [
-      'Log new defects with expected vs actual results',
-      'Update execution status on assigned test cases',
-      'Document steps to reproduce for each logged defect',
-      'View own defect assignments and status updates',
-    ],
-  },
-  {
-    role: 'Developer',
-    color: 'text-blue-400',
-    responsibilities: [
-      'View assigned defects with full reproduction steps',
-      'Update defect status: In Progress, Resolved',
-      'Access expected vs actual result for each bug',
-      'Track resolution history via timestamps',
-    ],
-  },
+function LevelBadge({ level }: { level: Level }) {
+  return (
+    <span className={`inline-block border-2 border-black px-2 py-1 font-pixel text-xs text-black ${LEVEL_FILL[level]}`}>
+      {level}
+    </span>
+  );
+}
+
+const MODULES: { name: string; defects: number; risk: Level }[] = [
+  { name: 'Appointment Scheduling', defects: 5, risk: 'High' },
+  { name: 'User Authentication',    defects: 5, risk: 'High' },
+  { name: 'Notifications',          defects: 4, risk: 'Critical' },
+  { name: 'Billing & Payments',     defects: 4, risk: 'High' },
+  { name: 'Medical Records',        defects: 3, risk: 'Medium' },
+  { name: 'Patient Registration',   defects: 2, risk: 'Medium' },
+  { name: 'Doctor Management',      defects: 1, risk: 'Low' },
+  { name: 'Reports & Analytics',    defects: 1, risk: 'Low' },
 ];
 
-const SEVERITY_MATRIX = [
-  { sev: 'Critical', pri: 'P1', color: 'text-red-400',   desc: 'System unusable or data loss risk. Blocks go-live.' },
-  { sev: 'High',     pri: 'P2', color: 'text-amber-400', desc: 'Core functionality broken. Major workaround required.' },
-  { sev: 'Medium',   pri: 'P3', color: 'text-blue-400',  desc: 'Feature degraded. Minor workaround available.' },
-  { sev: 'Low',      pri: 'P4', color: 'text-zinc-400',  desc: 'Cosmetic or edge case. No workflow impact.' },
+const CELL = 'border-b-2 border-black py-3 align-middle';
+
+function ModuleTable() {
+  return (
+    <table aria-labelledby="test-scope-heading" className="w-full max-w-[65ch] border-collapse font-mono text-[15px] sm:text-base text-[color:var(--navy)]">
+      <thead>
+        <tr className="text-left text-black">
+          <th scope="col" className={`${CELL} border-b-[3px] pr-4`}>Module</th>
+          <th scope="col" className={`${CELL} border-b-[3px] px-4 text-right`}>Defects</th>
+          <th scope="col" className={`${CELL} border-b-[3px] pl-4`}>Risk</th>
+        </tr>
+      </thead>
+      <tbody>
+        {MODULES.map(m => (
+          <tr key={m.name}>
+            <th scope="row" className={`${CELL} pr-4 text-left font-normal break-words`}>{m.name}</th>
+            <td className={`${CELL} px-4 text-right tabular-nums`}>{m.defects}</td>
+            <td className={`${CELL} pl-4`}><LevelBadge level={m.risk} /></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+const SEVERITY: { level: Level; priority: string; desc: string }[] = [
+  { level: 'Critical', priority: 'P1', desc: 'System unusable or data at risk. Blocks go-live.' },
+  { level: 'High',     priority: 'P2', desc: 'Core feature broken. Needs a major workaround.' },
+  { level: 'Medium',   priority: 'P3', desc: 'Feature degraded. A minor workaround exists.' },
+  { level: 'Low',      priority: 'P4', desc: 'Cosmetic or edge case. No effect on the workflow.' },
 ];
+
+function SeverityList() {
+  return (
+    <dl className="max-w-[65ch] font-mono text-[15px] sm:text-base leading-[1.65]">
+      {SEVERITY.map(({ level, priority, desc }) => (
+        <div key={level} className="flex flex-col sm:flex-row sm:items-baseline gap-x-4 gap-y-2 border-b-2 border-black py-3">
+          <dt className="flex flex-shrink-0 items-center gap-3 sm:w-44 font-bold text-black">
+            <LevelBadge level={level} />
+            {priority}
+          </dt>
+          <dd className="text-[color:var(--navy)]">{desc}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+const RECORD: { label: string; value: React.ReactNode }[] = [
+  { label: 'Code', value: 'TC-022' },
+  { label: 'Module', value: 'Notifications' },
+  { label: 'Status', value: <span className="inline-block border-2 border-black bg-[var(--orange)] px-2 py-1 font-pixel text-xs text-black">Fail</span> },
+  { label: 'Linked defect', value: 'DEF-025' },
+  { label: 'Title', value: 'Verify Notification Service Stability Under High Load' },
+  { label: 'Preconditions', value: 'System is running with an active notification queue. User is authenticated as QA Tester. Notification service is operational with 100+ pending items queued.' },
+];
+
+function TestCaseRecord() {
+  return (
+    <div className="border-2 border-black p-4 sm:p-6 max-w-[75ch] font-mono text-[15px] sm:text-base leading-[1.65] text-[color:var(--navy)] space-y-6">
+      <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-2">
+        {RECORD.map(({ label, value }) => (
+          <div key={label} className={label === 'Title' || label === 'Preconditions' ? 'sm:col-span-2' : undefined}>
+            <dt className="font-bold text-black">{label}</dt>
+            <dd className="mt-1">{value}</dd>
+          </div>
+        ))}
+      </dl>
+      <div>
+        <p className="font-bold text-black">Test steps</p>
+        <ol className="mt-1 list-decimal pl-6 space-y-1">
+          <li>Queue 100+ notification events simultaneously across all types</li>
+          <li>Monitor notification service health in real time</li>
+          <li>Observe system behaviour under concurrent load</li>
+        </ol>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 text-black">
+        <div className="border-2 border-black bg-[var(--teal)] p-3">
+          <p className="font-bold">Expected</p>
+          <p>Notifications processed in queue without crash</p>
+        </div>
+        <div className="border-2 border-black bg-[var(--orange)] p-3">
+          <p className="font-bold">Actual</p>
+          <p>Service crashes, all pending notifications lost</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function UATProject() {
-  const [, setLocation] = useLocation();
-  const [activeTab, setActiveTab] = useState('dashboard');
-
-  useEffect(() => {
-    trackProjectVisit('uat');
-    document.title = 'UAT Testing Dashboard | John Aaron Branzuela';
-    return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
-  }, []);
-
-  const activeShot = SCREENSHOTS.find(s => s.key === activeTab)!;
-
   return (
-    <main className="min-h-screen bg-black text-white">
+    <CaseLayout slug="uat">
+      <CaseHeader
+        slug="uat"
+        file="uat_dashboard.exe"
+        meta={[
+          { label: 'Type', value: 'Full-stack web app' },
+          { label: 'Scenario', value: 'Hospital appointment system' },
+          { label: 'User roles', value: 'Project manager, QA lead, tester, developer', wide: true },
+        ]}
+        links={[{
+          label: 'View source code',
+          href: 'https://github.com/johnaaronmendoza/UAT-Testing-Dashboard-Defect-Tracker-for-Hospital-Appointment-System',
+          kind: 'repo',
+        }]}
+        stats={[
+          { value: '8', label: 'modules' },
+          { value: '4', label: 'user roles' },
+          { value: '25', label: 'sample defects' },
+          { value: '35', label: 'sample test cases' },
+        ]}
+      />
 
-      {/* Sticky back nav */}
-      <nav aria-label="Project page" className="sticky top-0 z-30 bg-black border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
-        <Link
-          href="/#projects"
-          replace
-          onClick={() => play('back')}
-          className="min-h-[44px] inline-flex items-center gap-2 px-2 -ml-2 font-pixel text-xs text-amber-400 hover:text-white transition-colors"
-        >
-          <span aria-hidden="true">←</span> Back
-        </Link>
-        <span className="font-pixel text-xs text-zinc-400 truncate">/ UAT Testing Dashboard</span>
-      </nav>
+      <CaseSection id="problem" heading="The problem" icon="icon-about" file="problem.txt">
+        <Prose>
+          <p>
+            UAT on a large healthcare system involves project managers, QA leads, testers and
+            developers. They all need one view of what's broken, what's been tested and what's
+            blocking go-live, and spreadsheets break down fast.
+          </p>
+        </Prose>
+      </CaseSection>
 
-      {/* Hero */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
-              {/* Identity card */}
-              <div className="lg:col-span-8 bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8">
-                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6 break-words text-balance">
-                  UAT Testing Dashboard
-                </h1>
-                <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
-                  Full-stack defect tracker, a course project built around a hospital appointment
-                  system UAT scenario. Test cases link directly to open defects, and severity triage
-                  charts track 25 issues across 8 modules and 4 user roles, from tester to project lead.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {['React_18', 'Vite', 'Tailwind_CSS', 'Node.js', 'Express', 'SQLite', 'Recharts', 'REST_API'].map(t => (
-                    <span key={t} className="bg-[#353535] px-3 py-1 font-mono text-xs text-amber-400 border border-amber-500/20">--{t}</span>
-                  ))}
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
-                  {[
-                    { label: 'Type',     value: 'Full-Stack Web App' },
-                    { label: 'Domain',   value: 'Hospital Appointment' },
-                    { label: 'Roles',    value: 'PM / QA Lead / Tester / Dev' },
-                    { label: 'Year',     value: '2024' },
-                  ].map(({ label, value }) => (
-                    <div key={label} className="bg-zinc-900 p-4">
-                      <p className="font-mono text-xs text-amber-400/80 mb-1">{label}</p>
-                      <p className="font-mono-8bit text-sm">{value}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+      <CaseSection id="what" heading="What it does" icon="icon-projects" file="what_it_does.md">
+        <FeatureList
+          items={[
+            'Logs defects with severity (Critical to Low), priority (P1 to P4), expected vs actual result and steps to reproduce',
+            'Tracks each defect from Open to In progress, Resolved, Closed or Reopened',
+            'Records each test run as Pass, Fail, Blocked or Not executed, with who ran it and when',
+            'Links every failed test case to the defect it exposed',
+            'Charts defects by severity, module and status, plus a monthly trend',
+            'Exports the defect register and test case log to CSV in one click',
+            'Gives project managers, QA leads, testers and developers their own access',
+          ]}
+        />
+      </CaseSection>
 
-              {/* CTA card */}
-              <a
-                href="https://github.com/johnaaronmendoza/UAT-Testing-Dashboard-Defect-Tracker-for-Hospital-Appointment-System"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
-              >
-                <div>
-                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">View repository</h2>
-                </div>
-                <div className="flex items-center justify-between mt-8">
-                  <span className="font-mono-8bit text-amber-900 text-sm">Source code</span>
-                  <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
-                </div>
-              </a>
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
+      <CaseSection id="decisions" heading="Key decisions" icon="icon-skills" file="key_decisions.md">
+        <div className="space-y-12">
+          <CardGrid
+            cols={2}
+            cards={[
+              { title: 'Failures point to fixes', body: 'A foreign key from test_cases to defects keeps the trail from a failed test to its fix.' },
+              { title: 'Small, simple back end', body: 'Node.js and Express REST API on SQLite (better-sqlite3), Morgan request logging, and a seed script that loads demo data on first run.' },
+            ]}
+          />
 
-      {/* Key metrics */}
-      <section className="border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-16">
-          <FramerReveal>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
-              {[
-                { label: 'DEFECTS LOGGED', value: 25 },
-                { label: 'TEST CASES',     value: 35 },
-                { label: 'PASS RATE %',    value: 31 },
-                { label: 'MODULES TESTED', value: 8  },
-              ].map(({ label, value }) => (
-                <div key={label} className="bg-zinc-900 p-6 text-center">
-                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-2">
-                    {value}
-                  </p>
-                  <p className="font-mono text-xs text-amber-400/80 uppercase tracking-widest">{label}</p>
-                </div>
-              ))}
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
+          <div className="space-y-4">
+            <SubHeading>Severity drives priority</SubHeading>
+            <SeverityList />
+          </div>
 
-      {/* Screenshots */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Screenshots</h2>
+          <div className="space-y-4">
+            <Prose><p>How the sample test cycle is scoped and recorded.</p></Prose>
+            <SubHeading className="pt-2"><span id="test-scope-heading">Test scope: 8 modules (sample data)</span></SubHeading>
+            <ModuleTable />
+          </div>
 
-            {/* Tab row */}
-            <div className="flex flex-wrap gap-2 mb-5">
-              {SCREENSHOTS.map(s => (
-                <button
-                  key={s.key}
-                  onClick={() => setActiveTab(s.key)}
-                  className={`font-pixel text-xs px-3 py-1.5 min-h-[44px] border-2 transition-colors ${
-                    activeTab === s.key
-                      ? 'border-amber-400 text-black bg-amber-400'
-                      : 'border-zinc-700 text-zinc-400 hover:border-amber-400 hover:text-amber-400'
-                  }`}
-                >
-                  {s.label}
-                </button>
-              ))}
-            </div>
+          <div className="space-y-4">
+            <SubHeading>Sample test case TC-022</SubHeading>
+            <TestCaseRecord />
+          </div>
 
-            {/* Screenshot display */}
-            <div className="relative border-2 border-amber-500/20 bg-zinc-900 overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeTab}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-                >
-                  <img
-                    src={activeShot.src}
-                    alt={activeShot.label}
-                    className="w-full h-auto block"
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            <p className="font-mono-8bit text-[15px] text-zinc-400 mt-3 leading-relaxed">
-              ▸ {activeShot.caption}
-            </p>
-          </FramerReveal>
-        </div>
-      </section>
-
-      {/* Problem */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">The problem</h2>
-            <div className="bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
-              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
-                UAT for complex healthcare systems involves multiple teams: project managers,
-                QA leads, testers, and developers, all needing a shared view of what is broken,
-                what has been tested, and what is blocking go-live. Spreadsheets break down fast.
-              </p>
-              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
-                This dashboard provides a single source of truth: defects with full lifecycle
-                tracking, test cases linked directly to the defects they exposed, and a real-time
-                analytics view so the team knows exactly where UAT stands before any deployment decision.
-              </p>
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
-
-      {/* UAT Process */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto space-y-14">
-
-          {/* Test scope */}
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-2">UAT process</h2>
-            <p className="font-mono-8bit text-[15px] text-zinc-400 mb-8 leading-relaxed">
-              How the test cycle was scoped, executed, and documented.
-            </p>
-
-            <h3 className="font-pixel text-xs text-blue-400 mb-4">Test scope: 8 modules</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-amber-500/10">
-              {MODULES.map((m, i) => (
-                <div
-                  key={m.name}
-                  className="bg-zinc-900 p-4 flex flex-wrap items-center justify-between gap-4"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <span className="font-mono text-xs text-zinc-400 flex-shrink-0">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <span className="font-mono-8bit text-sm">{m.name}</span>
-                  </div>
-                  <div className="flex items-center gap-3 flex-shrink-0">
-                    <span className="font-mono text-xs text-zinc-400">{m.defects} defects</span>
-                    <span className={`font-pixel text-xs border px-1.5 py-0.5 ${RISK_COLOR[m.risk]}`}>
-                      {m.risk}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </FramerReveal>
-
-          {/* Severity matrix */}
-          <FramerReveal>
-            <h3 className="font-pixel text-xs text-blue-400 mb-4">Severity and priority</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-amber-500/10">
-              {SEVERITY_MATRIX.map(({ sev, pri, color, desc }) => (
-                <div key={sev} className="bg-zinc-900 p-5">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className={`font-pixel text-xs ${color}`}>{sev}</span>
-                    <span className="font-mono text-xs text-zinc-400">{pri}</span>
-                  </div>
-                  <p className="font-mono-8bit text-[15px] text-zinc-400 leading-relaxed">{desc}</p>
-                </div>
-              ))}
-            </div>
-          </FramerReveal>
-
-          {/* Sample test case */}
-          <FramerReveal>
-            <h3 className="font-pixel text-xs text-blue-400 mb-4">Sample test case TC-022</h3>
-            <div className="bg-zinc-900 border-2 border-amber-500/20">
-              {/* Header */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
-                {[
-                  { label: 'CODE',    value: 'TC-022' },
-                  { label: 'MODULE',  value: 'Notifications' },
-                  { label: 'STATUS',  value: 'FAIL' },
-                  { label: 'LINKED',  value: 'DEF-025' },
-                ].map(({ label, value }) => (
-                  <div key={label} className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">{label}</p>
-                    <p className={`font-mono-8bit text-sm ${value === 'FAIL' ? 'text-red-400' : value.startsWith('DEF') ? 'text-amber-400' : 'text-white'}`}>
-                      {value}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="p-6 space-y-5">
-                <div>
-                  <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">TITLE</p>
-                  <p className="font-mono-8bit text-sm text-white">Verify Notification Service Stability Under High Load</p>
-                </div>
-                <div>
-                  <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">PRECONDITIONS</p>
-                  <p className="font-mono-8bit text-[15px] text-zinc-300 leading-relaxed">
-                    System is running with an active notification queue. User is authenticated as QA Tester.
-                    Notification service is operational with 100+ pending items queued.
-                  </p>
-                </div>
-                <div>
-                  <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">TEST STEPS</p>
-                  <div className="bg-black p-4 font-mono text-[15px] text-gray-300 space-y-1">
-                    <p>1. Queue 100+ notification events simultaneously across all types</p>
-                    <p>2. Monitor notification service health in real time</p>
-                    <p>3. Observe system behaviour under concurrent load</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">EXPECTED RESULT</p>
-                    <div className="bg-[#0d2318] border border-green-800 p-3">
-                      <p className="font-mono-8bit text-[15px] text-green-400">Notifications processed in queue without crash</p>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="font-mono text-xs text-amber-400/80 mb-1 tracking-widest">ACTUAL RESULT</p>
-                    <div className="bg-[#230d0d] border border-red-800 p-3">
-                      <p className="font-mono-8bit text-[15px] text-red-400">Service crashes, all pending notifications lost</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </FramerReveal>
-
-          {/* Stakeholder roles */}
-          <FramerReveal>
-            <h3 className="font-pixel text-xs text-blue-400 mb-4">Requirements by stakeholder role</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {ROLES.map(({ role, color, responsibilities }) => (
-                <motion.div
-                  key={role}
-                  className="bg-zinc-900 border-t border-amber-500/20 p-5"
-                  whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
-                >
-                  <p className={`font-pixel text-xs ${color} mb-4`}>{role}</p>
-                  <ul className="space-y-2">
-                    {responsibilities.map(r => (
-                      <li key={r} className="flex items-start gap-2">
-                        <span className="text-blue-400 flex-shrink-0 mt-0.5">▸</span>
-                        <span className="font-mono-8bit text-[15px] leading-relaxed">{r}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              ))}
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
-
-      {/* Key Features */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Key features</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {[
+          <div className="space-y-4">
+            <SubHeading>What each role can do</SubHeading>
+            <CardGrid
+              cols={2}
+              headingLevel={4}
+              cards={[
                 {
-                  label: 'DEFECT MANAGEMENT',
+                  title: 'Project manager',
                   items: [
-                    'Full CRUD with search and severity/status filtering',
-                    'Severity: Critical, High, Medium, Low with P1-P4 priority',
-                    'Status lifecycle: Open, In Progress, Resolved, Closed, Reopened',
-                    'Assigned-to tracking with steps to reproduce',
-                    'Expected vs actual result fields on every defect',
+                    'Full dashboard read access and trend analytics',
+                    'Export defect register and test case log to CSV',
+                    'View severity distribution for go/no-go decisions',
+                    'Assign defects to team members',
                   ],
                 },
                 {
-                  label: 'TEST CASE MANAGEMENT',
+                  title: 'QA lead',
                   items: [
-                    'Test case execution tracking: Pass, Fail, Blocked, Not Executed',
-                    'Preconditions and step-by-step test documentation',
-                    'Direct linking of failed test cases to open defects',
-                    'Module-based organisation across 8 system areas',
-                    'Executed-by and execution date logging',
+                    'Create and edit test cases with preconditions and steps',
+                    'Triage defect severity (Critical to Low) and priority (P1 to P4)',
+                    'Link failed test cases to the defects they exposed',
+                    'Manage execution status across the full test suite',
                   ],
                 },
                 {
-                  label: 'ANALYTICS DASHBOARD',
+                  title: 'Tester',
                   items: [
-                    'Real-time defect severity breakdown bar chart',
-                    'Monthly defect trend area chart (total, open, closed)',
-                    'Test execution status donut charts by module',
-                    'Live count metrics for open, in-progress, and resolved',
-                    'Built with Recharts for responsive, declarative charts',
+                    'Log new defects with expected vs actual results',
+                    'Update execution status on assigned test cases',
+                    'Document steps to reproduce for each logged defect',
+                    'View own defect assignments and status updates',
                   ],
                 },
                 {
-                  label: 'REPORTING AND EXPORT',
+                  title: 'Developer',
                   items: [
-                    '1-click CSV export for defect register and test case log',
-                    'Role-based access: PM, QA Lead, Tester, Developer',
-                    'Morgan request logging for auditability',
-                    'Seed script generates realistic demo data on first run',
-                    'Sonner toast notifications for all CRUD operations',
+                    'View assigned defects with full reproduction steps',
+                    'Update defect status: In progress, Resolved',
+                    'Access expected vs actual result for each bug',
+                    'Track resolution history via timestamps',
                   ],
                 },
-              ].map(({ label, items }) => (
-                <motion.div
-                  key={label}
-                  className="bg-zinc-900 border-t border-amber-500/20 p-5"
-                  whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
-                  whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
-                >
-                  <p className="font-pixel text-xs text-amber-400 mb-4">{label}</p>
-                  <ul className="space-y-2">
-                    {items.map(i => (
-                      <li key={i} className="flex items-start gap-2">
-                        <span className="text-blue-400 flex-shrink-0 mt-0.5">▸</span>
-                        <span className="font-mono-8bit text-[15px] leading-relaxed">{i}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              ))}
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
+              ]}
+            />
+          </div>
 
-      {/* Architecture */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Architecture</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-              {[
-                {
-                  label: 'FRONTEND',
-                  color: 'border-amber-400',
-                  accent: 'text-amber-400',
-                  items: ['React 18 with Vite', 'Tailwind CSS (custom design tokens)', 'Recharts for analytics', 'Axios for API requests', 'React Router v6', 'Sonner toast notifications', 'Lucide React icons'],
-                },
-                {
-                  label: 'BACKEND',
-                  color: 'border-blue-400',
-                  accent: 'text-blue-400',
-                  items: ['Node.js + Express REST API', 'better-sqlite3 (synchronous)', 'Morgan HTTP logging', 'CORS middleware', 'Auto seed on first run', 'Runs on localhost:5000'],
-                },
-                {
-                  label: 'DATABASE',
-                  color: 'border-amber-400',
-                  accent: 'text-amber-400',
-                  items: ['SQLite (uat_tracker.db)', 'users table (4 roles)', 'defects table (full lifecycle)', 'test_cases table (exec tracking)', 'FK: test_cases → defects', 'Timestamps on all records'],
-                },
-              ].map(({ label, color, accent, items }) => (
-                <div key={label} className={`bg-zinc-900 border-t-2 ${color} p-5`}>
-                  <p className={`font-pixel text-xs ${accent} mb-4`}>{label}</p>
-                  <ul className="space-y-2">
-                    {items.map(i => (
-                      <li key={i} className="flex items-start gap-2">
-                        <span className={`${accent} flex-shrink-0`}>▸</span>
-                        <span className="font-mono-8bit text-[15px] leading-relaxed">{i}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </FramerReveal>
+          <div className="space-y-4">
+            <SubHeading>Architecture</SubHeading>
+            <CardGrid
+              cols={3}
+              headingLevel={4}
+              cards={[
+                { title: 'Front end', items: ['React 18 with Vite', 'Tailwind CSS (custom design tokens)', 'Recharts for analytics', 'Axios for API requests', 'React Router v6', 'Sonner toast notifications', 'Lucide React icons'] },
+                { title: 'Back end', items: ['Node.js + Express REST API', 'better-sqlite3 (synchronous)', 'Morgan HTTP logging', 'CORS middleware', 'Auto seed on first run'] },
+                { title: 'Database', items: ['SQLite (uat_tracker.db)', 'users table (4 roles)', 'defects table (full lifecycle)', 'test_cases table (execution tracking)', 'Foreign key: test_cases → defects', 'Timestamps on all records'] },
+              ]}
+            />
+          </div>
         </div>
-      </section>
+      </CaseSection>
 
-      {/* CTA */}
-      <section className="py-16 px-4 sm:px-8 lg:px-16">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <div className="bg-zinc-900 border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">View more projects</h2>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/#projects"
-                  replace
-                  onClick={() => play('back')}
-                  className="min-h-[44px] inline-flex items-center justify-center border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
-                >
-                  <span aria-hidden="true">←</span> Back to portfolio
-                </Link>
-                <button
-                  onClick={() => setLocation('/projects/ai-finance')}
-                  className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
-                >
-                  AI Finance Insights Engine →
-                </button>
-              </div>
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
+      <ScreenGallery shots={SHOTS} />
 
-    </main>
+      <CaseSection id="outcome" heading="Outcome" icon="icon-results" file="outcome.txt">
+        <Prose>
+          <p>
+            A working defect tracker with role-based access, linked tests and defects, and CSV export,
+            shown here on a seeded hospital appointment scenario.
+          </p>
+        </Prose>
+      </CaseSection>
+
+      <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">
+        <TechStack
+          tags={['React 18', 'Vite', 'Tailwind CSS', 'Recharts', 'React Router', 'Node.js', 'Express', 'SQLite']}
+          more={{ label: 'Also', tags: ['Axios', 'Sonner', 'Lucide', 'Morgan'] }}
+        />
+      </CaseSection>
+    </CaseLayout>
   );
 }

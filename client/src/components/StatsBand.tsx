@@ -1,6 +1,5 @@
 import PixelArt from './PixelArt';
-
-type Stat = { value: string; label: string };
+import StatStrip, { type Stat } from './StatStrip';
 
 // Only figures already on the site: internships (Experience), the six projects
 // with case studies (GreenLoopFarms was a pitch, not a build), UWB model
@@ -30,19 +29,7 @@ export default function StatsBand() {
         <PixelArt name="smiley" size={32} lazy />
         HELLO!
       </p>
-      <dl className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-[3px]">
-        {STATS.map(({ value, label }) => (
-          // Label first in the DOM for screen readers; number shown on top
-          <div key={label} className="flex flex-col-reverse justify-end gap-3 bg-[var(--orange)] px-4 py-6 sm:px-6 sm:py-8">
-            <dt className="font-mono text-[15px] sm:text-base leading-snug max-w-[18ch]">
-              {label}
-            </dt>
-            <dd className="font-pixel text-[24px] sm:text-[36px] lg:text-[30px] xl:text-[38px] leading-none tabular-nums">
-              {value}
-            </dd>
-          </div>
-        ))}
-      </dl>
+      <StatStrip stats={STATS} variant="band" className="flex-1" />
     </section>
   );
 }

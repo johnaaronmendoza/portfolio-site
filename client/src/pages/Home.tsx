@@ -15,6 +15,7 @@ import Footer from '@/components/Footer';
 import Ribbon from '@/components/Ribbon';
 import StatsBand from '@/components/StatsBand';
 import SectionNav from '@/components/SectionNav';
+import SkipLink from '@/components/SkipLink';
 import { useHomeAchievements } from '@/hooks/useAchievements';
 import { getLenis } from '@/hooks/useLenis';
 import { saveHomeScroll } from '@/lib/scroll-memory';
@@ -51,12 +52,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen text-[color:var(--cream)]">
-      <a
-        href="#main"
-        className="btn btn-primary sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50"
-      >
-        Skip to content
-      </a>
+      <SkipLink />
       <SectionNav />
       <main id="main" tabIndex={-1}>
         <div id="hero" tabIndex={-1} className={SECTION_CLASS}>

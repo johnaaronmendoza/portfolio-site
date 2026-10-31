@@ -1,283 +1,122 @@
-import FramerReveal from '@/components/FramerReveal';
-import { Link, useLocation } from 'wouter';
-import { useEffect } from 'react';
-import { trackProjectVisit } from '@/hooks/useAchievements';
-import { play } from '@/hooks/useSound';
+import CaseLayout from '@/components/case/CaseLayout';
+import CaseHeader, { GITHUB_PROFILE } from '@/components/case/CaseHeader';
+import { CaseSection, CardGrid, FeatureList, Prose, Quote, TechStack } from '@/components/case/CaseBlocks';
+import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
 import eventsImg from '@assets/silverlink_p19_img0.png';
 import eventDetailImg from '@assets/silverlink_p21_img0.png';
 import livestreamImg from '@assets/silverlink_p22_img0.png';
 import metricsImg from '@assets/silverlink_p23_img0.png';
 import onboardingImg from '@assets/silverlink_p14_img0.png';
 
+const SHOTS: Shot[] = [
+  {
+    file: 'onboarding_flow.png', src: onboardingImg, width: 1172, height: 599, span: 'full',
+    caption: 'Onboarding: a five-step setup for new users.',
+    alt: "SilverLink onboarding, step 1 of 5: a 'Welcome to SilverLink!' card with a progress bar and Back and Next buttons.",
+  },
+  {
+    file: 'events_discovery.png', src: eventsImg, width: 873, height: 560, span: 'full',
+    caption: 'Events: workshops and livestreams, each with region, venue and length.',
+    alt: 'Grid of SilverLink event cards, such as Online Morning Tai Chi (livestream) and Smartphone Basics for Seniors at Yishun Community Centre, with View details and Watch live buttons.',
+  },
+  {
+    file: 'event_detail.png', src: eventDetailImg, width: 640, height: 428, span: 'half',
+    caption: 'Event page: book or cancel a session, with capacity shown for each.',
+    alt: 'Event page for a Traditional Peranakan Cooking Workshop at Toa Payoh Community Centre, listing three sessions with capacity counts and Book or Cancel booking buttons.',
+  },
+  {
+    file: 'livestream_studio.png', src: livestreamImg, width: 700, height: 392, span: 'half',
+    caption: 'Livestream studio: the event owner broadcasts while viewers chat.',
+    alt: 'Livestream Studio page with a live camera preview, Stop broadcast, Mute and Camera off controls, and a live chat panel.',
+  },
+  {
+    file: 'system_metrics.png', src: metricsImg, width: 862, height: 415, span: 'full',
+    caption: 'System metrics: current and forecast load, and the recommended replica count.',
+    alt: 'System Metrics dashboard showing requests per second, queue length, 212 ms average response time, a load forecast and an autoscaling recommendation of 1 replica (min 1, max 10).',
+  },
+];
+
 export default function SilverLinkProject() {
-  const [, setLocation] = useLocation();
-  useEffect(() => {
-    trackProjectVisit('silverlink');
-    document.title = 'SilverLink SG | John Aaron Branzuela';
-    return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
-  }, []);
-
   return (
-    <main className="min-h-screen bg-black text-white">
-      {/* Sticky back nav */}
-      <nav aria-label="Project page" className="sticky top-0 z-30 bg-black border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
-        <Link
-          href="/#projects"
-          replace
-          onClick={() => play('back')}
-          className="min-h-[44px] inline-flex items-center gap-2 px-2 -ml-2 font-pixel text-xs text-amber-400 hover:text-white transition-colors"
-        >
-          <span aria-hidden="true">←</span> Back
-        </Link>
-        <span className="font-pixel text-xs text-zinc-400 truncate">/ SilverLink SG</span>
-      </nav>
+    <CaseLayout slug="silverlink">
+      <CaseHeader
+        slug="silverlink"
+        file="silverlink_sg.exe"
+        meta={[
+          { label: 'Type', value: 'Team project, SIT × University of Glasgow', wide: true },
+          { label: 'Team', value: 'Group 20, 6 people: Danish, John, Thomas, Hanaa, Habib, Joshua', wide: true },
+        ]}
+        links={[GITHUB_PROFILE]}
+        stats={[
+          { value: '4', label: 'gRPC microservices' },
+          { value: '8', label: 'Kubernetes nodes' },
+          { value: '8', label: 'isolated database schemas' },
+          { value: '7', label: 'Agile sprints' },
+        ]}
+      />
 
-      {/* Hero — Sovereign Console bento */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
-              {/* Identity card */}
-              <div className="lg:col-span-8 bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8">
-                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6 break-words text-balance">
-                  SilverLink SG
-                </h1>
-                <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
-                  Cloud-native platform bridging seniors and youth through skill-sharing and live events, backed by 4 gRPC microservices, WebRTC livestreaming, and Kubernetes autoscaling that scales to demand without manual intervention.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {["React", "Next.js", "Node.js", "gRPC", "Docker", "Kubernetes", "PostgreSQL", "Neon", "Cloudflare", "Keycloak", "Prisma_ORM", "WebRTC"].map(t => (
-                    <span key={t} className="bg-[#353535] px-3 py-1 font-mono text-xs text-amber-400 border border-amber-500/20">--{t}</span>
-                  ))}
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-amber-500/10">
-                  <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1">Institution</p>
-                    <p className="font-mono-8bit text-sm leading-relaxed">University of Glasgow &amp; Singapore Institute of Technology</p>
-                  </div>
-                  <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1">Team</p>
-                    <p className="font-mono-8bit text-sm leading-relaxed">Group 20: Danish, John, Thomas, Hanaa, Habib, Joshua</p>
-                  </div>
-                </div>
-              </div>
-              {/* CTA card */}
-              <a
-                href="https://github.com/johnaaronmendoza"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
-              >
-                <div>
-                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GitHub profile</h2>
-                </div>
-                <div className="flex items-center justify-between mt-8">
-                  <span className="font-mono-8bit text-amber-900 text-sm">All repositories</span>
-                  <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
-                </div>
-              </a>
-            </div>
-          </FramerReveal>
+      <CaseSection id="problem" heading="The problem" icon="icon-about" file="problem.txt">
+        <div className="space-y-6">
+          <Prose>
+            <p>
+              By 2030, 1 in 4 Singaporeans will be over 65. Many seniors face isolation and are left
+              out of digital life, while young people miss out on what older generations can teach them.
+            </p>
+          </Prose>
+          <Quote label="The course brief asked:">
+            How might we use technology that is intuitive, culturally sensitive and engaging to build
+            community among seniors?
+          </Quote>
         </div>
-      </section>
+      </CaseSection>
 
-      {/* Key metrics bar */}
-      <section className="border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-16">
-          <FramerReveal>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
-              {[
-                { label: "GRPC MICROSERVICES", value: "4" },
-                { label: "TEAM MEMBERS", value: "6" },
-                { label: "AGILE SPRINTS", value: "7" },
-                { label: "LIVESTREAMING", value: "WebRTC" },
-              ].map(({ label, value }) => (
-                <div key={label} className="bg-zinc-900 p-6 text-center">
-                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-2">{value}</p>
-                  <p className="font-mono text-xs text-amber-400/80 uppercase tracking-widest">{label}</p>
-                </div>
-              ))}
-            </div>
-          </FramerReveal>
+      <CaseSection id="what" heading="What it does" icon="icon-projects" file="what_it_does.md">
+        <div className="space-y-6">
+          <Prose><p>A web platform where seniors and youth can:</p></Prose>
+          <FeatureList
+            columns={2}
+            items={[
+              'Teach and learn skills in workshops and mentoring',
+              'Pick up small volunteering tasks',
+              'Book seats at community events',
+              'Host and watch livestreams (WebRTC)',
+              'Chat live during events (Socket.IO)',
+              'Earn achievement badges',
+            ]}
+          />
         </div>
-      </section>
+      </CaseSection>
 
-      {/* Challenge & Solution */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto space-y-10">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">The challenge</h2>
-            <div className="bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
-              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
-                By 2030, 1 in 4 Singaporeans will be over 65. Many seniors face isolation, loss of purpose,
-                and exclusion from digital society, while youth miss out on cultural wisdom and mentorship
-                from experienced generations.
-              </p>
-              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed text-amber-400 font-bold">
-                "How might we leverage technology in ways that are intuitive, culturally sensitive, and engaging to build community within seniors?" (PB-2)
-              </p>
-            </div>
-          </FramerReveal>
+      <CaseSection id="decisions" heading="Key decisions" icon="icon-skills" file="key_decisions.md">
+        <CardGrid
+          cols={3}
+          cards={[
+            { title: 'No double-booking', body: "A booking saves only if the seat record hasn't changed since it was read (optimistic concurrency). A clash returns 409 Conflict instead of overbooking." },
+            { title: 'Retries book once', body: 'Idempotency keys make a repeated request return the same result, so each request runs exactly once.' },
+            { title: 'Scale before the rush', body: 'An exponential moving average (EMA) forecasts load and sets a recommended replica count per service.' },
+            { title: 'One gateway, four services', body: 'An API gateway turns REST calls into gRPC for the Event, Booking, Volunteer and User services.' },
+            { title: 'Each service owns its data', body: '8 isolated schemas on Neon serverless PostgreSQL, a Prisma client per service, and connection pooling.' },
+            { title: 'Deploy and secure', body: 'Docker Compose locally, Kubernetes in the cluster, Keycloak sign-in with JWT, GitHub Actions CI/CD, Cloudflare Tunnel for HTTPS, one-command deploy scripts, secrets held in CI/CD and Kubernetes.' },
+          ]}
+        />
+      </CaseSection>
 
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">The solution</h2>
-            <div className="bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8">
-              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed mb-6">
-                SilverLink SG transforms potential social fragmentation into meaningful intergenerational
-                exchange through a cloud-native platform.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  "Skill-sharing workshops and mentorship",
-                  "Micro-volunteering task marketplace",
-                  "Event booking with seat management",
-                  "Live video streaming via WebRTC",
-                  "Real-time chat with Socket.IO",
-                  "Achievement badges and recognition system",
-                  "Predictive autoscaling with EMA forecasting",
-                  "Optimistic concurrency for race condition prevention",
-                ].map(f => (
-                  <div key={f} className="flex items-start gap-2">
-                    <span className="text-amber-400 flex-shrink-0 mt-1">▸</span>
-                    <span className="font-mono-8bit text-[15px]">{f}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
+      <ScreenGallery shots={SHOTS} />
 
-      {/* Platform Screenshots */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Platform UI</h2>
-          </FramerReveal>
+      <CaseSection id="outcome" heading="Outcome" icon="icon-results" file="outcome.txt">
+        <Prose>
+          <p>
+            A 6-person team delivered it in 7 Agile sprints: 4 gRPC services on an 8-node Kubernetes
+            cluster, with livestreaming, live chat and double-booking protection.
+          </p>
+        </Prose>
+      </CaseSection>
 
-          <div className="space-y-8">
-            <FramerReveal>
-              <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">ONBOARDING FLOW</p>
-                <img src={onboardingImg} alt="SilverLink onboarding" className="w-full border border-amber-500/20" />
-              </div>
-            </FramerReveal>
-
-            <FramerReveal>
-              <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">EVENTS DISCOVERY</p>
-                <img src={eventsImg} alt="SilverLink events listing" className="w-full border border-amber-500/20" />
-              </div>
-            </FramerReveal>
-
-            <FramerReveal>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <p className="font-pixel text-xs text-blue-400">EVENT DETAIL + BOOKING</p>
-                  <img src={eventDetailImg} alt="SilverLink event detail" className="w-full border border-amber-500/20" />
-                </div>
-                <div className="space-y-3">
-                  <p className="font-pixel text-xs text-blue-400">LIVE STREAMING STUDIO</p>
-                  <img src={livestreamImg} alt="SilverLink livestream" className="w-full border border-amber-500/20" />
-                </div>
-              </div>
-            </FramerReveal>
-
-            <FramerReveal>
-              <div className="space-y-3">
-                <p className="font-pixel text-xs text-blue-400">SYSTEM METRICS + AUTOSCALING DASHBOARD</p>
-                <img src={metricsImg} alt="SilverLink system metrics" className="w-full border border-amber-500/20" />
-              </div>
-            </FramerReveal>
-          </div>
-        </div>
-      </section>
-
-      {/* Architecture */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Architecture</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                {
-                  label: "Cloud layer",
-                  items: ["Neon Serverless PostgreSQL", "Cloudflare Tunnel (HTTPS)", "GitHub Actions CI/CD", "One-command deploy scripts"],
-                },
-                {
-                  label: "Microservices",
-                  items: ["API Gateway (REST → gRPC)", "Event Service (port 50051)", "Booking Service (port 50052)", "Volunteer + User Services"],
-                },
-                {
-                  label: "Database",
-                  items: ["8 isolated schemas", "Prisma ORM (type-safe)", "Per-service Prisma client", "Connection pooling"],
-                },
-                {
-                  label: "DevOps",
-                  items: ["Docker Compose (local)", "Kubernetes orchestration", "Keycloak auth + JWT", "Secrets via CI/CD / K8s"],
-                },
-              ].map(({ label, items }) => (
-                <div key={label} className="bg-zinc-900 border-t border-amber-500/20 p-5">
-                  <p className="font-pixel text-xs text-amber-400 mb-4">{label}</p>
-                  <ul className="space-y-2">
-                    {items.map(i => (
-                      <li key={i} className="flex items-start gap-2">
-                        <span className="text-blue-400 flex-shrink-0">▸</span>
-                        <span className="font-mono-8bit text-[15px]">{i}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </FramerReveal>
-
-          <FramerReveal>
-            <div className="mt-8 bg-zinc-900 border-l-4 border-blue-500 p-6 sm:p-8">
-              <p className="font-pixel text-xs text-blue-400 mb-4">Key algorithms</p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                {[
-                  { name: "Optimistic Concurrency Control", desc: "Version-checked atomic updates prevent double-booking under concurrent traffic (409 on conflict)." },
-                  { name: "Idempotency Keys", desc: "Guarantees exactly-once execution: repeated requests with the same key return the same result." },
-                  { name: "EMA Autoscaling", desc: "Exponential Moving Average forecasts future load and recommends proactive microservice scaling." },
-                ].map(a => (
-                  <div key={a.name}>
-                    <p className="font-pixel text-xs text-amber-400 mb-2">{a.name}</p>
-                    <p className="font-mono-8bit text-[15px] text-gray-300 leading-relaxed">{a.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
-
-      {/* Back CTA */}
-      <section className="py-16 px-4 sm:px-8 lg:px-16">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <div className="bg-zinc-900 border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">View more projects</h2>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/#projects"
-                  replace
-                  onClick={() => play('back')}
-                  className="min-h-[44px] inline-flex items-center justify-center border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
-                >
-                  <span aria-hidden="true">←</span> Back to portfolio
-                </Link>
-                <button
-                  onClick={() => setLocation('/projects/scs')}
-                  className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
-                >
-                  SCS platform →
-                </button>
-              </div>
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
-    </main>
+      <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">
+        <TechStack
+          tags={['React', 'Next.js', 'Node.js', 'gRPC', 'Docker', 'Kubernetes', 'PostgreSQL (Neon)', 'Prisma ORM', 'Keycloak', 'Cloudflare Tunnel', 'WebRTC', 'Socket.IO', 'GitHub Actions']}
+        />
+      </CaseSection>
+    </CaseLayout>
   );
 }

@@ -126,3 +126,6 @@ UAT-Testing-Dashboard-Defect-Tracker-for-Hospital-Appointment-System/
 
 # Cursor / Claude skills install lock (regenerated locally)
 skills-lock.json
+
+__pycache__/
+*.pyc

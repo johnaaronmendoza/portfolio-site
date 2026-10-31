@@ -1,259 +1,125 @@
-import { motion } from 'framer-motion';
-import FramerReveal from '@/components/FramerReveal';
-import { Link, useLocation } from 'wouter';
-import { useEffect } from 'react';
-import { trackProjectVisit } from '@/hooks/useAchievements';
-import { play } from '@/hooks/useSound';
+import CaseLayout from '@/components/case/CaseLayout';
+import CaseHeader, { GITHUB_PROFILE } from '@/components/case/CaseHeader';
+import { CaseSection, CardGrid, FeatureList, Prose, SubHeading, TechStack } from '@/components/case/CaseBlocks';
+
+// A real sequence, so an ordered list. The NLP step follows the load and is
+// badged "AI" instead of a number.
+const STEPS: { badge: string; title: string; desc: string }[] = [
+  { badge: '1', title: 'Extract', desc: 'S&P 500, Brent crude, USD/SGD FX, Maersk shares (a stand-in for logistics stocks) and geopolitical news' },
+  { badge: '2', title: 'Validate (raw gate)', desc: 'Schema checks, row count parity and missing-value detection' },
+  { badge: '3', title: 'Transform', desc: 'Rolling volatility, moving averages, cross-asset correlations and standard deviations' },
+  { badge: '4', title: 'Validate (clean gate)', desc: 'Schema correctness and row parity, checked before the database load' },
+  { badge: '5', title: 'Load', desc: 'Into a SQLite data warehouse, with a pipeline_runs audit table' },
+  { badge: 'AI', title: 'NLP engine', desc: 'Sorts headlines into 9 sectors, scores their sentiment, flags supply-chain risk and writes a daily executive brief' },
+];
+
+/** Pipeline cards joined by 3px ink connectors: a column on phones, 3 + 3 from lg */
+function PipelineSteps() {
+  return (
+    <ol className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {STEPS.map(({ badge, title, desc }, i) => (
+        <li key={title} className="relative border-2 border-black bg-[var(--cream)] p-4 sm:p-5">
+          {i > 0 && (
+            <span aria-hidden="true" className="lg:hidden absolute left-6 -top-[26px] h-6 w-[3px] bg-black" />
+          )}
+          {i % 3 !== 0 && (
+            <span aria-hidden="true" className="hidden lg:block absolute -left-[26px] top-1/2 h-[3px] w-6 bg-black" />
+          )}
+          <div className="flex items-center gap-3 border-b-[3px] border-black pb-3 mb-3">
+            <span
+              className={`flex-shrink-0 border-2 border-black px-2 py-1 font-pixel text-xs text-black tabular-nums ${badge === 'AI' ? 'bg-[var(--teal)]' : 'bg-[var(--orange)]'}`}
+            >
+              {badge === 'AI' ? 'AI' : <><span className="sr-only">Step </span>{badge}</>}
+            </span>
+            <h4 className="font-pixel text-xs sm:text-sm leading-[1.5] text-black">{title}</h4>
+          </div>
+          <p className="font-mono text-[15px] sm:text-base leading-[1.65] text-[color:var(--navy)]">{desc}</p>
+        </li>
+      ))}
+    </ol>
+  );
+}
 
 export default function AIFinanceProject() {
-  const [, setLocation] = useLocation();
-  useEffect(() => {
-    trackProjectVisit('ai-finance');
-    document.title = 'AI Finance Insights Engine | John Aaron Branzuela';
-    return () => { document.title = 'John Aaron Mendoza Branzuela | Computing Science Portfolio'; };
-  }, []);
-
   return (
-    <main className="min-h-screen bg-black text-white">
-      {/* Sticky back nav */}
-      <nav aria-label="Project page" className="sticky top-0 z-30 bg-black border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
-        <Link
-          href="/#projects"
-          replace
-          onClick={() => play('back')}
-          className="min-h-[44px] inline-flex items-center gap-2 px-2 -ml-2 font-pixel text-xs text-amber-400 hover:text-white transition-colors"
-        >
-          <span aria-hidden="true">←</span> Back
-        </Link>
-        <span className="font-pixel text-xs text-zinc-400 truncate hidden sm:block">/ AI Finance Insights Engine</span>
-        <span className="font-pixel text-xs text-zinc-400 sm:hidden">/ AI Finance</span>
-      </nav>
+    <CaseLayout slug="ai-finance">
+      {/* No cover: John hasn't confirmed the tile image is the project's real output */}
+      <CaseHeader
+        slug="ai-finance"
+        file="ai_finance_insights.py"
+        cover={false}
+        meta={[
+          { label: 'Type', value: 'Data pipeline with NLP' },
+          { label: 'Domain', value: 'Shipping and logistics markets' },
+        ]}
+        links={[GITHUB_PROFILE]}
+        stats={[
+          { value: '5', label: 'data sources' },
+          { value: '9', label: 'news sectors' },
+          { value: '2', label: 'data-quality gates' },
+          { value: '100%', label: 'Pytest coverage on extract and transform' },
+        ]}
+      />
 
-      {/* Hero — Sovereign Console bento */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
-              {/* Identity card */}
-              <div className="lg:col-span-8 bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8">
-                <h1 className="font-pixel text-2xl sm:text-3xl text-amber-400 leading-relaxed mb-6 break-words text-balance">
-                  AI Finance Insights Engine
-                </h1>
-                <p className="font-mono-8bit text-base sm:text-lg text-gray-300 leading-relaxed mb-8 max-w-2xl">
-                  An ETL data pipeline that ingests global logistics, commodity, and
-                  financial market data, enriched with an AI NLP summarisation engine, producing
-                  a unified data warehouse ready for Power BI dashboards.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {["Python", "Pandas", "NumPy", "SQLite", "Pytest", "ETL_Pipeline", "NLP", "Power_BI"].map(t => (
-                    <span key={t} className="bg-[#353535] px-3 py-1 font-mono text-xs text-amber-400 border border-amber-500/20">--{t}</span>
-                  ))}
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
-                  <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1">Type</p>
-                    <p className="font-mono-8bit text-sm">ETL + AI Pipeline</p>
-                  </div>
-                  <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1">Domain</p>
-                    <p className="font-mono-8bit text-sm">Shipping & Logistics</p>
-                  </div>
-                  <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1">Data sources</p>
-                    <p className="font-mono-8bit text-sm">5 Market Feeds</p>
-                  </div>
-                  <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1">Test coverage</p>
-                    <p className="font-mono-8bit text-sm">100% (Pytest)</p>
-                  </div>
-                </div>
-              </div>
-              {/* CTA card */}
-              <a
-                href="https://github.com/johnaaronmendoza"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
-              >
-                <div>
-                  <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GitHub profile</h2>
-                </div>
-                <div className="flex items-center justify-between mt-8">
-                  <span className="font-mono-8bit text-amber-900 text-sm">All repositories</span>
-                  <span className="text-2xl text-amber-900 group-hover:translate-x-1 transition-transform duration-75">→</span>
-                </div>
-              </a>
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
+      <CaseSection id="problem" heading="The problem" icon="icon-about" file="problem.txt">
+        <Prose>
+          <p>
+            Shipping and logistics analysts work from scattered data: the S&amp;P 500, Brent crude
+            prices, USD/SGD exchange rates, logistics stocks and geopolitical news each live in a
+            different place, with no single view.
+          </p>
+        </Prose>
+      </CaseSection>
 
-      {/* Key metrics bar */}
-      <section className="border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-16">
-          <FramerReveal>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
-              {[
-                { label: "NEWS SECTORS CLASSIFIED", value: "9" },
-                { label: "DATA VALIDATION GATES", value: "2" },
-                { label: "ETL PIPELINE STAGES", value: "5" },
-                { label: "DB SCHEMA MODEL", value: "Star" },
-              ].map(({ label, value }) => (
-                <div key={label} className="bg-zinc-900 p-6 text-center">
-                  <p className="font-pixel text-amber-400 text-xl sm:text-2xl mb-2">{value}</p>
-                  <p className="font-mono text-xs text-amber-400/80 uppercase tracking-widest leading-tight">{label}</p>
-                </div>
-              ))}
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
+      <CaseSection id="what" heading="What it does" icon="icon-projects" file="what_it_does.md">
+        <FeatureList
+          items={[
+            'Pulls in the S&P 500, Brent crude, USD/SGD FX, Maersk shares (as a stand-in for logistics stocks) and geopolitical news',
+            'Computes rolling volatility, moving averages, cross-asset correlations and standard-deviation outliers',
+            'Sorts headlines into 9 sectors, scores their sentiment and flags supply-chain risk',
+            'Writes a daily executive brief',
+            'Loads everything into a SQLite warehouse, ready for Power BI',
+          ]}
+        />
+      </CaseSection>
 
-      {/* Problem */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto space-y-8">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">The problem</h2>
-            <div className="bg-zinc-900 border-l-4 border-amber-500 p-6 sm:p-8 space-y-4">
-              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
-                Maritime logistics and shipping analysts deal with fragmented market data: Brent crude
-                prices, USD/SGD FX rates, logistics stock performance, and geopolitical news all live
-                in separate sources with no unified view.
+      <CaseSection id="decisions" heading="Key decisions" icon="icon-skills" file="key_decisions.md">
+        <div className="space-y-10">
+          <div className="space-y-6">
+            <SubHeading>Five stages, two gates</SubHeading>
+            <Prose>
+              <p>
+                Extract, validate, transform, validate, load. Each gate checks schema, row counts and
+                missing values, so bad data stops before the database. An NLP step then enriches the
+                news.
               </p>
-              <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed">
-                This pipeline solves that by automatically ingesting and transforming these data
-                sources, computing financial metrics like rolling volatility and cross-asset
-                correlations, and enriching news data with AI-generated sentiment scores and
-                supply chain risk flags, producing a clean, normalised data warehouse ready
-                for high-fidelity Power BI analytics.
-              </p>
-            </div>
-          </FramerReveal>
-
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-6">Pipeline architecture</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 items-stretch">
-              {[
-                { step: "01", label: "EXTRACT", desc: "S&P 500, Brent Oil, USD/SGD FX, Maersk proxy, geopolitical news", color: "border-amber-400 text-amber-400" },
-                { step: "→", label: "", desc: "", color: "border-transparent text-zinc-400", arrow: true },
-                { step: "02", label: "VALIDATE", desc: "Schema checks, row count parity, missing-value detection (raw gate)", color: "border-blue-400 text-blue-400" },
-                { step: "→", label: "", desc: "", color: "border-transparent text-zinc-400", arrow: true },
-                { step: "03", label: "TRANSFORM", desc: "Rolling volatility, moving averages, cross-asset correlations, standard deviations", color: "border-amber-400 text-amber-400" },
-              ].map(({ step, label, desc, color, arrow }) => (
-                arrow ? (
-                  <div key={step} className="flex items-center justify-center text-zinc-400 font-pixel text-lg">→</div>
-                ) : (
-                  <div key={step} className={`bg-zinc-900 border-t-2 ${color} p-4 space-y-2`}>
-                    <p className={`font-pixel text-xs ${color.split(' ')[1]}`}>{step}</p>
-                    <p className="font-pixel text-xs text-white">{label}</p>
-                    <p className="font-mono-8bit text-[15px] text-gray-400 leading-relaxed">{desc}</p>
-                  </div>
-                )
-              ))}
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 items-stretch mt-2">
-              {[
-                { step: "04", label: "VALIDATE", desc: "Clean gate: schema correctness and row parity before database load", color: "border-blue-400 text-blue-400" },
-                { step: "→", label: "", desc: "", color: "border-transparent text-zinc-400", arrow: true },
-                { step: "05", label: "LOAD", desc: "Loads into SQLite data warehouse with pipeline_runs audit table", color: "border-amber-400 text-amber-400" },
-                { step: "→", label: "", desc: "", color: "border-transparent text-zinc-400", arrow: true },
-                { step: "AI", label: "NLP ENGINE", desc: "Classifies 9 sectors, sentiment scores, supply chain risk flags, executive briefs", color: "border-blue-400 text-blue-400" },
-              ].map(({ step, label, desc, color, arrow }) => (
-                arrow ? (
-                  <div key={step} className="flex items-center justify-center text-zinc-400 font-pixel text-lg">→</div>
-                ) : (
-                  <div key={step} className={`bg-zinc-900 border-t-2 ${color} p-4 space-y-2`}>
-                    <p className={`font-pixel text-xs ${color.split(' ')[1]}`}>{step}</p>
-                    <p className="font-pixel text-xs text-white">{label}</p>
-                    <p className="font-mono-8bit text-[15px] text-gray-400 leading-relaxed">{desc}</p>
-                  </div>
-                )
-              ))}
-            </div>
-          </FramerReveal>
+            </Prose>
+            <PipelineSteps />
+          </div>
+          <CardGrid
+            cols={2}
+            cards={[
+              { title: 'Star schema for Power BI', body: 'Fact and dimension tables, with a Dim_Date table for slicing by time.' },
+              { title: 'Every run is traceable', body: 'A pipeline_runs table logs each run, and all settings live in one config.py.' },
+              { title: 'Tested where the maths is', body: 'Pytest covers 100% of extraction and transformation, including schema assignment and the calculations.' },
+              { title: 'Room to grow', body: 'Built with a place to plug in an LLM API.' },
+            ]}
+          />
         </div>
-      </section>
+      </CaseSection>
 
-      {/* Features */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <h2 className="font-pixel text-2xl sm:text-3xl text-amber-400 mb-8">Engineering highlights</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {[
-                {
-                  label: "DATA QUALITY GATES",
-                  items: ["Schema correctness validation", "Row count parity checks", "Missing-value detection", "Runs between every pipeline stage", "Prevents corrupt data reaching the DB"],
-                },
-                {
-                  label: "FINANCIAL ANALYTICS",
-                  items: ["Rolling volatility calculation", "Moving averages (configurable window)", "Cross-asset correlations", "Standard deviation outlier detection", "Brent crude, FX, logistics stocks"],
-                },
-                {
-                  label: "AI NLP ENGINE",
-                  items: ["Classifies headlines across 9 sectors", "Semantic sentiment scoring", "Supply chain risk flagging", "Daily executive brief auto-generation", "LLM API integration path built-in"],
-                },
-                {
-                  label: "AUDITABILITY",
-                  items: ["pipeline_runs table tracks every run", "Central config.py for all settings", "Comprehensive system logging", "All transformations traceable", "Designed for DevOps deployment"],
-                },
-                {
-                  label: "TEST-DRIVEN",
-                  items: ["100% Pytest coverage on extraction", "100% coverage on transformation", "Schema assignment assertions", "Mathematical computation verification", "Run before any production deployment"],
-                },
-                {
-                  label: "POWER BI READY",
-                  items: ["Star Schema data model (Fact + Dim)", "Dim_Date table for time-series slicing", "Market anomalies dashboard-ready", "Shipping and freight variance views", "Sentiment matrix visualisation"],
-                },
-              ].map(({ label, items }) => (
-                <motion.div
-                  key={label}
-                  className="bg-zinc-900 border-t border-amber-500/20 p-5"
-                  whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
-                  whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
-                >
-                  <p className="font-pixel text-xs text-amber-400 mb-4">{label}</p>
-                  <ul className="space-y-2">
-                    {items.map(i => (
-                      <li key={i} className="flex items-start gap-2">
-                        <span className="text-blue-400 flex-shrink-0 mt-0.5">▸</span>
-                        <span className="font-mono-8bit text-[15px] leading-relaxed">{i}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              ))}
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
+      <CaseSection id="outcome" heading="Outcome" icon="icon-results" file="outcome.txt">
+        <Prose>
+          <p>
+            A tested pipeline that loads five sources into one star-schema warehouse, with 100% Pytest
+            coverage on extraction and transformation.
+          </p>
+        </Prose>
+      </CaseSection>
 
-      {/* CTA */}
-      <section className="py-16 px-4 sm:px-8 lg:px-16">
-        <div className="max-w-6xl mx-auto">
-          <FramerReveal>
-            <div className="bg-zinc-900 border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
-              <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">View more projects</h2>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/#projects"
-                  replace
-                  onClick={() => play('back')}
-                  className="min-h-[44px] inline-flex items-center justify-center border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
-                >
-                  <span aria-hidden="true">←</span> Back to portfolio
-                </Link>
-                <button
-                  onClick={() => setLocation('/projects/silverlink')}
-                  className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
-                >
-                  SilverLink SG →
-                </button>
-              </div>
-            </div>
-          </FramerReveal>
-        </div>
-      </section>
-    </main>
+      <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">
+        <TechStack tags={['Python', 'Pandas', 'NumPy', 'SQLite', 'Pytest', 'Power BI']} />
+      </CaseSection>
+    </CaseLayout>
   );
 }

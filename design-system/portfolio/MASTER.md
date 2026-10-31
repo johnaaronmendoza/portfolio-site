@@ -427,6 +427,8 @@ filename: `chat.exe`, `commands.exe`, `terminal.sh`, `shortcuts.txt`. Close
 control is a real 44×44 `<button aria-label="Close …">` in the bar, cream
 text, `--focus: cream` (4.98 on violet).
 
+**Exception (lead decision):** `chat.exe` uses a **cream** body, not black: navy text (16.03), bot bubbles cream with navy text, user bubbles orange with black text, timestamps navy ≥12px, `--focus: ink` inside the body. The palette, terminal and shortcuts windows keep the black body below.
+
 Old class → token (all ratios on the black body unless noted):
 
 | Old | New | Ratio |

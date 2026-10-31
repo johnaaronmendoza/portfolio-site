@@ -56,12 +56,12 @@ export default function SectionNav() {
       type="button"
       onClick={toggleMotion}
       aria-pressed={motionPaused}
-      className={`fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 min-h-[44px] min-w-[44px] inline-flex items-center gap-2 px-3 border-2 border-amber-400 shadow-8bit font-mono text-sm font-bold transition-colors duration-150 ${
+      className={`motion-reduce:hidden fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-2 px-3 border-2 border-amber-400 shadow-8bit font-mono text-sm font-bold transition-colors duration-150 ${
         motionPaused ? 'bg-[var(--lime)] text-black' : 'bg-black text-amber-400 hover:bg-zinc-900'
       }`}
     >
-      <span aria-hidden="true">{motionPaused ? '▶' : '❚❚'}</span>
-      Pause motion
+      <span aria-hidden="true">❚❚</span>
+      <span className="sr-only sm:not-sr-only">Pause motion</span>
     </button>
     <div className="fixed right-4 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-3 items-center">
       {SECTIONS.map(({ id, label }) => (

@@ -63,7 +63,7 @@ export function FeatureList({ items, columns = 1 }: { items: string[]; columns?:
   );
 }
 
-export type Card = { title: string; body?: string; items?: string[] };
+type Card = { title: string; body?: string; items?: string[] };
 
 const LG_COLS = { 2: 'lg:grid-cols-2', 3: 'lg:grid-cols-3', 4: 'lg:grid-cols-4' } as const;
 

@@ -387,7 +387,7 @@
     box-shadow: 8px 8px 0 0 var(--ink); /* large plates */
   }
 
-  /* Still used by the case-study pages; restyle there before removing */
+  /* Still used by the chat components and NotFound; restyle there before removing */
   .border-8bit {
     border: 2px solid #F59E0B;
   }

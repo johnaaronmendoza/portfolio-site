@@ -54,7 +54,7 @@ Each section has a corresponding `id` attribute (`#hero`, `#about`, etc.) used b
 ### Styling
 
 - **Tailwind CSS v4** (via `@tailwindcss/vite` plugin — no `tailwind.config.js`)
-- Design language: **Industrial Retro-Futurism** — true black background, amber/gold (`#F59E0B`) primary accent, electric blue (`#3B82F6`) secondary, `#18181B` zinc for card surfaces
+- Design language: **maximalist 8-bit** — see Design rules below for palette and limits
 - Typography: pixel fonts (`Press Start 2P` / `VT323`) via `font-pixel` class for headings; `font-mono` for body
 - Hard drop shadows use the custom `shadow-8bit` utility; no blur/soft shadows
 - Animations via **Framer Motion** — keep transitions snappy; take values from `client/src/lib/motion-tokens.ts`
@@ -69,11 +69,20 @@ Recruiters for AI, data and software graduate roles (currently the DBS 2027 Mana
 
 ## Design rules (binding)
 
-- **Keep the identity:** black background, amber `#F59E0B` and blue `#3B82F6`, pixel headings, hard shadows. The Skills keyboard is the one deliberate exception, with brand-coloured keycaps.
-- **One orchestrated motion moment per page** (the hero name reveal on Home). Other motion must answer a user action (press, hover, open) or explain something. No scroll-triggered fades, no infinite decorative loops, no particles. Always respect `prefers-reduced-motion`.
-- **No passive pop-ups.** Achievement toasts fire only after deliberate actions.
-- **No self-rated skill levels** (no percentage bars or "Expert" badges). Skills are tied to where they were used.
-- **Readable first:** body 15–16px+ on mobile, lines under 80 characters, WCAG AA contrast, 44px tap targets, visible keyboard focus.
+**Direction: maximalist 8-bit** (chosen by John, Oct 2026). Loud, poster-like and dense, but still an 8-bit arcade identity, and still readable. Inspiration: bold colour bands, slanted scrolling ribbons, sticker tiles, poster collages and big stat numbers.
+
+- **Palette tokens** (defined in `client/src/index.css` as CSS variables and used through Tailwind arbitrary values):
+  - ink `#000000` (base), paper `#FAFAFA`
+  - amber `#F59E0B` (the AI story and primary accent; keep)
+  - lime `#C6FF3D` (loud bands, neon glow, highlights)
+  - cobalt `#2B35FF` (full-width bands)
+  - signal red `#FF3B30` (stickers only)
+  - Approved text pairings only: white or lime or amber on black; black on lime or amber; white on cobalt. Never amber or lime text on cobalt.
+- **Type:** pixel fonts (`Press Start 2P` / `VT323`) for display, set large; `font-mono` for body. Neon glow (lime `text-shadow`) is allowed on the hero name only.
+- **Hard shadows only** (`shadow-8bit` style, offset, no blur), thick black borders, slight rotations (±2–6°) on stickers and ribbons.
+- **Motion:** the hero reveal is the one load-in moment. Scrolling ribbons are allowed as the site's signature texture: CSS transform only, pause on hover, and completely static under `prefers-reduced-motion`. Stickers may wiggle on hover only. Still no scroll-triggered fades, particles or passive pop-ups.
+- **No self-rated skill levels.** Stats must be real figures already on the site or resume.
+- **Readable first, even when loud:** body 15–16px+ on mobile, lines under 80 characters, WCAG AA contrast, 44px tap targets, visible keyboard focus. Decoration never sits on top of body text.
 - **Explicit transitions only;** never `transition: all`.
 
 ## Honesty rules (binding)

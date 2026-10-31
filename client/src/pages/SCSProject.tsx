@@ -53,11 +53,11 @@ export default function SCSProject() {
                 </div>
                 <div className="grid grid-cols-2 gap-px bg-amber-500/10">
                   <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[INSTITUTION]</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1">Institution</p>
                     <p className="font-mono-8bit text-sm leading-relaxed">SIT + University of Glasgow</p>
                   </div>
                   <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[TEAM]</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1">Team</p>
                     <p className="font-mono-8bit text-sm leading-relaxed">Group D2: 4 members, 7 sprints</p>
                   </div>
                 </div>
@@ -70,7 +70,6 @@ export default function SCSProject() {
                 className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
               >
                 <div>
-                  <p className="font-mono text-xs text-amber-900 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
                   <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GitHub profile</h2>
                 </div>
                 <div className="flex items-center justify-between mt-8">

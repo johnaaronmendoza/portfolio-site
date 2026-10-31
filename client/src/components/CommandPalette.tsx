@@ -20,8 +20,7 @@ interface Command {
 
 // Trigger React-controlled input via native value setter
 function triggerChatQuery(query: string) {
-  const chatButton = document.querySelector('button[data-chat-toggle]') as HTMLButtonElement;
-  if (chatButton) chatButton.click();
+  window.dispatchEvent(new Event('open-chat'));
   setTimeout(() => {
     const input = document.querySelector('input[data-chat-input]') as HTMLInputElement;
     if (!input) return;
@@ -152,8 +151,7 @@ export default function CommandPalette() {
       label: 'Open Chat',
       description: 'Open the chat widget',
       action: () => {
-        const chatButton = document.querySelector('button[data-chat-toggle]') as HTMLButtonElement;
-        if (chatButton) chatButton.click();
+        window.dispatchEvent(new Event('open-chat'));
         returnFocusRef.current = null; // let focus stay in the chat
         setIsOpen(false);
       },
@@ -161,12 +159,12 @@ export default function CommandPalette() {
     },
     {
       id: 'chat-experience',
-      label: 'Ask About Experience',
-      description: 'Chat: Sembcorp internship details',
+      label: 'Ask about Desk Assist',
+      description: 'Chat: AI assistant for service desk agents',
       action: () => {
         returnFocusRef.current = null;
         setIsOpen(false);
-        triggerChatQuery('Tell me about your Sembcorp experience');
+        triggerChatQuery('Tell me about Desk Assist');
       },
       category: 'chat',
     },

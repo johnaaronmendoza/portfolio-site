@@ -64,7 +64,7 @@ const RISK_COLOR: Record<string, string> = {
 
 const ROLES = [
   {
-    role: 'Project Manager',
+    role: 'Project manager',
     color: 'text-amber-400',
     responsibilities: [
       'Full dashboard read access and trend analytics',
@@ -74,7 +74,7 @@ const ROLES = [
     ],
   },
   {
-    role: 'QA Lead',
+    role: 'QA lead',
     color: 'text-blue-400',
     responsibilities: [
       'Create and edit test cases with preconditions and steps',
@@ -160,13 +160,13 @@ export default function UATProject() {
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
                   {[
-                    { label: '[TYPE]',   value: 'Full-Stack Web App' },
-                    { label: '[DOMAIN]', value: 'Hospital Appointment' },
-                    { label: '[ROLES]',  value: 'PM / QA Lead / Tester / Dev' },
-                    { label: '[YEAR]',   value: '2024' },
+                    { label: 'Type',     value: 'Full-Stack Web App' },
+                    { label: 'Domain',   value: 'Hospital Appointment' },
+                    { label: 'Roles',    value: 'PM / QA Lead / Tester / Dev' },
+                    { label: 'Year',     value: '2024' },
                   ].map(({ label, value }) => (
                     <div key={label} className="bg-zinc-900 p-4">
-                      <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">{label}</p>
+                      <p className="font-mono text-xs text-amber-400/80 mb-1">{label}</p>
                       <p className="font-mono-8bit text-sm">{value}</p>
                     </div>
                   ))}
@@ -181,7 +181,6 @@ export default function UATProject() {
                 className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
               >
                 <div>
-                  <p className="font-mono text-xs text-amber-900 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
                   <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">View repository</h2>
                 </div>
                 <div className="flex items-center justify-between mt-8">
@@ -297,7 +296,7 @@ export default function UATProject() {
               How the test cycle was scoped, executed, and documented.
             </p>
 
-            <h3 className="font-pixel text-xs text-blue-400 mb-4">[ TEST SCOPE — 8 MODULES ]</h3>
+            <h3 className="font-pixel text-xs text-blue-400 mb-4">Test scope: 8 modules</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-amber-500/10">
               {MODULES.map((m, i) => (
                 <div
@@ -323,7 +322,7 @@ export default function UATProject() {
 
           {/* Severity matrix */}
           <FramerReveal>
-            <h3 className="font-pixel text-xs text-blue-400 mb-4">[ SEVERITY / PRIORITY MATRIX ]</h3>
+            <h3 className="font-pixel text-xs text-blue-400 mb-4">Severity and priority</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-amber-500/10">
               {SEVERITY_MATRIX.map(({ sev, pri, color, desc }) => (
                 <div key={sev} className="bg-zinc-900 p-5">
@@ -339,7 +338,7 @@ export default function UATProject() {
 
           {/* Sample test case */}
           <FramerReveal>
-            <h3 className="font-pixel text-xs text-blue-400 mb-4">[ SAMPLE TEST CASE ARTIFACT — TC-022 ]</h3>
+            <h3 className="font-pixel text-xs text-blue-400 mb-4">Sample test case TC-022</h3>
             <div className="bg-zinc-900 border-2 border-amber-500/20">
               {/* Header */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
@@ -398,7 +397,7 @@ export default function UATProject() {
 
           {/* Stakeholder roles */}
           <FramerReveal>
-            <h3 className="font-pixel text-xs text-blue-400 mb-4">[ STAKEHOLDER ROLES — REQUIREMENTS BY ROLE ]</h3>
+            <h3 className="font-pixel text-xs text-blue-400 mb-4">Requirements by stakeholder role</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {ROLES.map(({ role, color, responsibilities }) => (
                 <motion.div
@@ -406,7 +405,7 @@ export default function UATProject() {
                   className="bg-zinc-900 border-t border-amber-500/20 p-5"
                   whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
                 >
-                  <p className={`font-pixel text-xs ${color} mb-4`}>[ {role.toUpperCase().replace(/ /g, '_')} ]</p>
+                  <p className={`font-pixel text-xs ${color} mb-4`}>{role}</p>
                   <ul className="space-y-2">
                     {responsibilities.map(r => (
                       <li key={r} className="flex items-start gap-2">
@@ -552,7 +551,7 @@ export default function UATProject() {
                   onClick={() => setLocation('/projects/ai-finance')}
                   className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
                 >
-                  AI Finance dashboard →
+                  AI Finance Insights Engine →
                 </button>
               </div>
             </div>

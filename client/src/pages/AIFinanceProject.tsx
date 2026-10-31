@@ -49,19 +49,19 @@ export default function AIFinanceProject() {
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
                   <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[TYPE]</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1">Type</p>
                     <p className="font-mono-8bit text-sm">ETL + AI Pipeline</p>
                   </div>
                   <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[DOMAIN]</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1">Domain</p>
                     <p className="font-mono-8bit text-sm">Shipping & Logistics</p>
                   </div>
                   <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[DATA SOURCES]</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1">Data sources</p>
                     <p className="font-mono-8bit text-sm">5 Market Feeds</p>
                   </div>
                   <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[TEST COVERAGE]</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1">Test coverage</p>
                     <p className="font-mono-8bit text-sm">100% (Pytest)</p>
                   </div>
                 </div>
@@ -74,7 +74,6 @@ export default function AIFinanceProject() {
                 className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
               >
                 <div>
-                  <p className="font-mono text-xs text-amber-900 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
                   <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GitHub profile</h2>
                 </div>
                 <div className="flex items-center justify-between mt-8">

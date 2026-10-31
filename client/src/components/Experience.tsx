@@ -39,7 +39,7 @@ const ENTRIES: Entry[] = [
   {
     org: "Singapore Institute of Technology × University of Glasgow",
     role: "BSc (Hons) Computing Science",
-    period: "2023 – Present",
+    period: "Sep 2024 – Apr 2027",
     tag: "EDUCATION",
     highlights: [
       "Final-year project: SilverLink SG, 8-node Kubernetes cluster, 4 gRPC microservices, WebRTC livestreaming, delivered across 7 Agile sprints",

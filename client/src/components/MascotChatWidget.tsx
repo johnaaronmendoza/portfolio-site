@@ -9,7 +9,6 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useChat } from '@/hooks/useChat';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 // Typing Animation Component
@@ -79,6 +78,7 @@ export default function MascotChatWidget() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const reactionEmojis = ['👍', '❤️', '🤔', '😂', '🔥'];
 
   // Knowledge base for responses
@@ -118,7 +118,7 @@ export default function MascotChatWidget() {
     'defect': 'In my UAT Testing Dashboard, defects go through a full lifecycle: Open → In Progress → Resolved → Closed. Each defect links directly to the test cases that triggered it, creating an auditable chain from failure to fix. Severity levels (Critical, High, Medium, Low) feed into the analytics dashboard.',
 
     // AI Finance Insights Engine
-    'finance': 'The AI Finance Insights and Logistics Analytics Engine is an automated ETL pipeline that ingests 5 global market data sources: Brent crude, USD/SGD FX, S&P 500, logistics stocks, and geopolitical news. It computes rolling volatility, moving averages, and cross-asset correlations. An AI NLP engine classifies headlines across 9 sectors, scores sentiment, and flags supply chain risks. Output is a Star Schema data warehouse ready for Power BI. 100% Pytest coverage on all extraction and transformation logic.',
+    'finance': 'The AI Finance Insights Engine is an automated ETL pipeline that ingests 5 global market data sources: Brent crude, USD/SGD FX, S&P 500, logistics stocks, and geopolitical news. It computes rolling volatility, moving averages, and cross-asset correlations. An AI NLP engine classifies headlines across 9 sectors, scores sentiment, and flags supply chain risks. Output is a Star Schema data warehouse ready for Power BI. 100% Pytest coverage on all extraction and transformation logic.',
     'etl': 'My ETL pipeline (AI Finance Insights) has 5 stages: Extract → Validate (schema + row parity) → Transform (rolling metrics) → Validate again → Load to SQLite. Two validation gates prevent corrupt data from reaching the database at any stage.',
     'pipeline': 'The AI Finance pipeline ingests Brent crude, FX rates, S&P 500, logistics stocks, and geopolitical news. After transformation it produces a Star Schema data warehouse (Fact + Dim tables) consumed directly by Power BI for shipping and market analytics.',
     'nlp': 'My AI NLP engine (in the Finance Insights project) classifies market headlines across 9 sectors, generates sentiment scores, flags supply chain risks, and auto-generates daily executive briefs. Built with an LLM API integration path.',
@@ -155,6 +155,18 @@ export default function MascotChatWidget() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Other components (e.g. the command palette) open the chat with an `open-chat` event
+  useEffect(() => {
+    const open = () => setIsOpen(true);
+    window.addEventListener('open-chat', open);
+    return () => window.removeEventListener('open-chat', open);
+  }, []);
+
+  // Focus the input on open, and again once a reply finishes (it is disabled while typing)
+  useEffect(() => {
+    if (isOpen && !isTyping) inputRef.current?.focus();
+  }, [isOpen, isTyping]);
 
   // Find matching response based on keywords
   const findResponse = (query: string): string => {
@@ -258,7 +270,8 @@ export default function MascotChatWidget() {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="flex-shrink-0 font-pixel text-xs text-gray-500 hover:text-amber-400 transition-colors px-1"
+                aria-label="Close chat"
+                className="flex-shrink-0 inline-flex items-center justify-center min-w-[44px] min-h-[44px] -my-2 -mr-2 font-pixel text-xs text-gray-500 hover:text-amber-400 transition-colors px-1"
               >
                 ✕
               </button>
@@ -344,12 +357,13 @@ export default function MascotChatWidget() {
               <div className="flex-1 flex items-center border-2 border-blue-400 bg-black px-2">
                 <span className="text-blue-400 font-pixel text-xs mr-1">&gt;_</span>
                 <input
+                  ref={inputRef}
                   type="text"
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onInput={e => setInput((e.target as HTMLInputElement).value)}
                   placeholder="Type query..."
-                  className="flex-1 bg-black text-white font-mono text-xs outline-none"
+                  className="flex-1 min-w-0 bg-black text-white font-mono text-base outline-none"
                   disabled={isTyping}
                   data-chat-input
                 />

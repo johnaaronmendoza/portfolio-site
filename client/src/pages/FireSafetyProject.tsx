@@ -66,19 +66,19 @@ export default function FireSafetyProject() {
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-amber-500/10">
                   <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[COURSE]</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1">Course</p>
                     <p className="font-mono-8bit text-sm">INF2007 Mobile App Dev</p>
                   </div>
                   <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[TEAM]</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1">Team</p>
                     <p className="font-mono-8bit text-sm">Group 16, SIT</p>
                   </div>
                   <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[SPRINTS]</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1">Sprints</p>
                     <p className="font-mono-8bit text-sm">3 Agile sprints</p>
                   </div>
                   <div className="bg-zinc-900 p-4">
-                    <p className="font-mono text-xs text-amber-400/80 mb-1 uppercase tracking-widest">[PLATFORM]</p>
+                    <p className="font-mono text-xs text-amber-400/80 mb-1">Platform</p>
                     <p className="font-mono-8bit text-sm">Android (Pixel 6a)</p>
                   </div>
                 </div>
@@ -91,7 +91,6 @@ export default function FireSafetyProject() {
                 className="lg:col-span-4 bg-amber-500 p-6 sm:p-8 flex flex-col justify-between group hover:bg-amber-400 transition-colors duration-75 min-h-[200px]"
               >
                 <div>
-                  <p className="font-mono text-xs text-amber-900 uppercase tracking-[0.2em] mb-2">Access Protocol</p>
                   <h2 className="font-pixel text-lg sm:text-xl text-amber-900 leading-tight">GitHub profile</h2>
                 </div>
                 <div className="flex items-center justify-between mt-8">

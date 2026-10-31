@@ -54,7 +54,7 @@ const PROJECTS: Record<string, string> = {
   'uwb':         'UWB Localization       2025  Python · SVM-RBF · scikit-learn · PCA',
   'uat':         'UAT Testing Dashboard  2024  React 18 · Node.js · SQLite · Recharts',
   'ai-finance':  'AI Finance Engine      2024  Python · Pandas · SQLite · NLP · Power BI',
-  'greenloop':   'GreenLoopFarms         2020  SGD $10k NYP JumpStart Grant winner',
+  'greenloop':   'GreenLoopFarms         2022  SGD $10k NYP JumpStart Grant winner',
 };
 
 function process(raw: string, setLocation: (p: string) => void): string[] {

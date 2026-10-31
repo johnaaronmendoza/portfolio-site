@@ -480,6 +480,61 @@
     flex-shrink: 0;
   }
 
+  /* 16px marker (bullet.svg, chip icon) centred on the first line of its text */
+  .line-mark {
+    margin-top: 5px;
+    margin-top: calc((1lh - 16px) / 2);
+  }
+
+  /* FlowDiagram connectors: 3px ink rule + stepped pixel arrowhead, decorative.
+     Vertical into the node below; horizontal into the next node in a row from lg
+     (the first node of each lg row has none; its step number carries the order). */
+  .flow-link {
+    position: absolute;
+    left: 1.5rem;
+    top: -1.5rem;
+    width: 3px;
+    height: 1.5rem;
+    background-color: var(--ink);
+  }
+
+  .flow-link::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 12px;
+    height: 9px;
+    translate: -50% 0;
+    background-color: var(--ink);
+    clip-path: polygon(0 0, 100% 0, 100% 34%, 75% 34%, 75% 67%, 58% 67%, 58% 100%, 42% 100%, 42% 67%, 25% 67%, 25% 34%, 0 34%);
+  }
+
+  @media (min-width: 1024px) {
+    .flow--row .flow-link {
+      left: -1.5rem;
+      top: 50%;
+      width: 1.5rem;
+      height: 3px;
+      translate: 0 -50%;
+    }
+
+    .flow--row .flow-link::after {
+      left: auto;
+      right: 0;
+      bottom: auto;
+      top: 50%;
+      width: 9px;
+      height: 12px;
+      translate: 0 -50%;
+      clip-path: polygon(0 0, 34% 0, 34% 25%, 67% 25%, 67% 42%, 100% 42%, 100% 58%, 67% 58%, 67% 75%, 34% 75%, 34% 100%, 0 100%);
+    }
+
+    .flow--row .flow-link--row-start {
+      display: none;
+    }
+  }
+
   /* Retro OS window: cream body, thick ink frame, hard offset shadow, violet
      title bar. Kept in the components layer so utilities passed through
      className / bodyClassName override it cleanly. */

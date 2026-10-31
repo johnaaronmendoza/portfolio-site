@@ -64,7 +64,7 @@ export default function Home() {
         <div id="about" tabIndex={-1} className={SECTION_CLASS}>
           <About />
         </div>
-        <Ribbon tone="teal" reverse items={['EXPERIENCE', 'NOW BUILDING DESK ASSIST', 'LGA TELECOM', 'SEMBCORP SOLAR']} />
+        <Ribbon tone="teal" reverse items={['EXPERIENCE', 'BUILDING DESK ASSIST', 'LGA TELECOM', 'SEMBCORP SOLAR']} />
         <div id="experience" tabIndex={-1} className={SECTION_CLASS}>
           <Experience />
         </div>

@@ -1,4 +1,5 @@
 import FramerReveal from './FramerReveal';
+import { KeyText } from './Hierarchy';
 import SectionHeading from './SectionHeading';
 import SkillKeyboard from './SkillKeyboard';
 
@@ -47,10 +48,9 @@ export default function Skills() {
         <div className="max-w-5xl mx-auto">
           <SectionHeading text="SKILLS" icon="icon-skills" className="mb-12" />
 
-          <div className="font-mono text-[15px] sm:text-base leading-relaxed mb-8 max-w-[60ch] space-y-2">
-            <p>What I use and where I used it. The AI keys are amber.</p>
-            <p>Press or hover a key to see what it does. The full list is below the keyboard.</p>
-          </div>
+          <p className="font-mono text-[15px] sm:text-base leading-relaxed mb-8 max-w-[60ch]">
+            <KeyText text="Press or hover a key for details. **AI keys** are amber." />
+          </p>
 
           <SkillKeyboard />
 

@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
 import CaseLayout from '@/components/case/CaseLayout';
 import CaseHeader from '@/components/case/CaseHeader';
-import { CaseSection, CardGrid, FeatureList, Prose, SubHeading, TechStack } from '@/components/case/CaseBlocks';
+import { CaseSection, SubHeading, TechStack } from '@/components/case/CaseBlocks';
 import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
+import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
+import { PixelList } from '@/components/Hierarchy';
 
 import uatDashboardImg  from '@assets/uat_dashboard_full.png';
 import uatDefectsImg    from '@assets/uat_defects.png';
@@ -10,30 +12,31 @@ import uatDetailImg     from '@assets/uat_defect_detail.png';
 import uatTestcasesImg  from '@assets/uat_testcases.png';
 import uatReportsImg    from '@assets/uat_reports_full.png';
 
+const HERO_SHOT: Shot = {
+  file: 'dashboard.png', src: uatDashboardImg, width: 1440, height: 922,
+  caption: 'Dashboard: status, pass rate, severity and monthly trend.',
+  alt: 'UAT Executive Dashboard with sample data: 25 defects (14 open, 5 in progress, 6 resolved), 35 test cases (11 passed, 24 failed), a defects-by-severity bar chart and a monthly trend chart.',
+};
+
 const SHOTS: Shot[] = [
   {
-    file: 'dashboard.png', src: uatDashboardImg, width: 1440, height: 922, span: 'full',
-    caption: 'Dashboard: defect counts by status, test pass rate, defects by severity and a monthly trend.',
-    alt: 'UAT Executive Dashboard with sample data: 25 defects (14 open, 5 in progress, 6 resolved), 35 test cases (11 passed, 24 failed), a defects-by-severity bar chart and a monthly trend chart.',
-  },
-  {
-    file: 'defects.png', src: uatDefectsImg, width: 1440, height: 900, span: 'half',
-    caption: 'Defect register: 25 sample defects across 8 modules, filtered by module, severity and status.',
+    file: 'defects.png', src: uatDefectsImg, width: 1440, height: 900,
+    caption: 'Defect register: 25 sample defects, filterable by module, severity, status.',
     alt: 'Defect Management table listing defects DEF-016 to DEF-025 with title, module, severity, status and assignee, plus search, filters and a Log defect button.',
   },
   {
-    file: 'defect_detail.png', src: uatDetailImg, width: 1440, height: 900, span: 'half',
-    caption: 'DEF-025: severity, priority, expected vs actual result and steps to reproduce.',
+    file: 'defect_detail.png', src: uatDetailImg, width: 1440, height: 900,
+    caption: 'DEF-025: expected vs actual result and steps to reproduce.',
     alt: "Defect detail for DEF-025, 'Notification Service Crashes Under High Load': open, critical, P1. Expected: notifications processed without a crash. Actual: service crashes and pending notifications are lost.",
   },
   {
-    file: 'test_cases.png', src: uatTestcasesImg, width: 1440, height: 900, span: 'half',
-    caption: 'Test cases: 35 sample cases, each failure linked to its defect.',
+    file: 'test_cases.png', src: uatTestcasesImg, width: 1440, height: 900,
+    caption: '35 sample test cases, failures linked to defects.',
     alt: 'Test Case Management table of test cases with module, pass or fail status, linked defect code and who ran each one.',
   },
   {
-    file: 'reports.png', src: uatReportsImg, width: 1440, height: 1146, span: 'half',
-    caption: 'Reports: defects by module and status, results per module, and CSV export.',
+    file: 'reports.png', src: uatReportsImg, width: 1440, height: 1146,
+    caption: 'Reports: breakdowns by module and status, with CSV export.',
     alt: 'Analytics and Reports page with donut charts of defects by module and by status, a stacked bar chart of passed and failed tests per module, and Export defects and Export test cases buttons.',
   },
 ];
@@ -102,10 +105,10 @@ function ModuleTable() {
 }
 
 const SEVERITY: { level: Level; priority: string; desc: string }[] = [
-  { level: 'Critical', priority: 'P1', desc: 'System unusable or data at risk. Blocks go-live.' },
-  { level: 'High',     priority: 'P2', desc: 'Core feature broken. Needs a major workaround.' },
-  { level: 'Medium',   priority: 'P3', desc: 'Feature degraded. A minor workaround exists.' },
-  { level: 'Low',      priority: 'P4', desc: 'Cosmetic or edge case. No effect on the workflow.' },
+  { level: 'Critical', priority: 'P1', desc: 'Unusable or data at risk; blocks go-live.' },
+  { level: 'High',     priority: 'P2', desc: 'Core feature broken; major workaround.' },
+  { level: 'Medium',   priority: 'P3', desc: 'Degraded; minor workaround exists.' },
+  { level: 'Low',      priority: 'P4', desc: 'Cosmetic or edge case.' },
 ];
 
 function SeverityList() {
@@ -130,7 +133,7 @@ const RECORD: { label: string; value: ReactNode }[] = [
   { label: 'Status', value: <span className="inline-block border-2 border-black bg-[var(--orange)] px-2 py-1 font-pixel text-xs text-black">Fail</span> },
   { label: 'Linked defect', value: 'DEF-025' },
   { label: 'Title', value: 'Verify Notification Service Stability Under High Load' },
-  { label: 'Preconditions', value: 'System is running with an active notification queue. User is authenticated as QA Tester. Notification service is operational with 100+ pending items queued.' },
+  { label: 'Preconditions', value: 'Active notification queue, 100+ pending items, signed in as QA Tester.' },
 ];
 
 function TestCaseRecord() {
@@ -147,9 +150,9 @@ function TestCaseRecord() {
       <div>
         <p className="font-bold text-black">Test steps</p>
         <ol className="mt-1 list-decimal pl-6 space-y-1">
-          <li>Queue 100+ notification events simultaneously across all types</li>
-          <li>Monitor notification service health in real time</li>
-          <li>Observe system behaviour under concurrent load</li>
+          <li>Queue 100+ notifications at once</li>
+          <li>Monitor service health</li>
+          <li>Watch behaviour under load</li>
         </ol>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 text-black">
@@ -166,16 +169,26 @@ function TestCaseRecord() {
   );
 }
 
+// From a failed test to a closed defect, using the lifecycle states on the site
+const DEFECT_FLOW: FlowStep[] = [
+  { label: 'Run test case' },
+  { label: 'Fail: log defect', detail: 'Linked to the test' },
+  { label: 'Triage', detail: 'Severity and priority' },
+  { label: 'In progress' },
+  { label: 'Resolved' },
+  { label: 'Closed or reopened' },
+];
+
 export default function UATProject() {
   return (
     <CaseLayout slug="uat">
       <CaseHeader
         slug="uat"
         file="uat_dashboard.exe"
-        meta={[
-          { label: 'Type', value: 'Course project, full-stack web app' },
-          { label: 'Scenario', value: 'Hospital appointment system' },
-          { label: 'User roles', value: 'Project manager, QA lead, tester, developer', wide: true },
+        facts={[
+          { icon: 'chip-school', text: 'Course project' },
+          { icon: 'icon-projects', text: 'Hospital appointment system' },
+          { icon: 'chip-team', text: 'Roles: project manager, QA lead, tester, developer' },
         ]}
         links={[{
           label: 'View source code',
@@ -188,41 +201,52 @@ export default function UATProject() {
           { value: '25', label: 'sample defects' },
           { value: '35', label: 'sample test cases' },
         ]}
+        heroShot={HERO_SHOT}
       />
 
-      <CaseSection id="problem" heading="The problem" icon="icon-about" file="problem.txt">
-        <Prose>
-          <p>
-            UAT on a large healthcare system involves project managers, QA leads, testers and
-            developers. They all need one view of what's broken, what's been tested and what's
-            blocking go-live, and spreadsheets break down fast.
-          </p>
-        </Prose>
-      </CaseSection>
+      <CaseSection
+        id="problem"
+        heading="The problem"
+        icon="icon-about"
+        lead="UAT teams need one view of what **blocks go-live**; spreadsheets break down fast."
+      />
 
-      <CaseSection id="what" heading="What it does" icon="icon-projects" file="what_it_does.md">
-        <FeatureList
+      <CaseSection
+        id="what"
+        heading="What it does"
+        icon="icon-projects"
+        lead="Logs defects and test runs, and links every **failed test** to its defect."
+        file="what_it_does.md"
+      >
+        <PixelList
           items={[
-            'Logs defects with severity (Critical to Low), priority (P1 to P4), expected vs actual result and steps to reproduce',
-            'Tracks each defect from Open to In progress, Resolved, Closed or Reopened',
-            'Records each test run as Pass, Fail, Blocked or Not executed, with who ran it and when',
-            'Links every failed test case to the defect it exposed',
-            'Charts defects by severity, module and status, plus a monthly trend',
-            'Exports the defect register and test case log to CSV in one click',
-            'Gives project managers, QA leads, testers and developers their own access',
+            'Defects carry **severity**, priority, expected vs actual and steps to reproduce.',
+            'Charts defects by severity, module and status, plus a **monthly trend**.',
+            '**One-click CSV** export; separate access for each of the 4 roles.',
           ]}
         />
       </CaseSection>
 
-      <CaseSection id="how" heading="How it works" icon="icon-skills" file="how_it_works.md">
+      <ScreenGallery shots={SHOTS} />
+
+      <CaseSection
+        id="how"
+        heading="How it works"
+        icon="icon-skills"
+        lead="A **foreign key** from test cases to defects keeps every failure traceable."
+        file="how_it_works.md"
+      >
         <div className="space-y-12">
-          <CardGrid
-            cols={2}
-            cards={[
-              { title: 'Failures point to fixes', body: 'A foreign key from test_cases to defects keeps the trail from a failed test to its fix.' },
-              { title: 'Small, simple back end', body: 'Node.js and Express REST API on SQLite (better-sqlite3), Morgan request logging, and a seed script that loads demo data on first run.' },
-            ]}
-          />
+          <div className="space-y-8 lg:space-y-10">
+            <FlowDiagram steps={DEFECT_FLOW} labelledBy="how-heading" lgCols={3} />
+            <PixelList
+              items={[
+                '**Express + SQLite** REST API with request logging.',
+                'React 18 front end; **Recharts** for analytics.',
+                'A seed script loads the **sample data** on first run.',
+              ]}
+            />
+          </div>
 
           <div className="space-y-4">
             <SubHeading>Severity drives priority</SubHeading>
@@ -230,8 +254,7 @@ export default function UATProject() {
           </div>
 
           <div className="space-y-4">
-            <Prose><p>How the sample test cycle is scoped and recorded.</p></Prose>
-            <SubHeading className="pt-2"><span id="test-scope-heading">Test scope: 8 modules (sample data)</span></SubHeading>
+            <SubHeading><span id="test-scope-heading">Test scope: 8 modules (sample data)</span></SubHeading>
             <ModuleTable />
           </div>
 
@@ -239,69 +262,8 @@ export default function UATProject() {
             <SubHeading>Sample test case TC-022</SubHeading>
             <TestCaseRecord />
           </div>
-
-          <div className="space-y-4">
-            <SubHeading>Requirements by role</SubHeading>
-            <CardGrid
-              cols={2}
-              headingLevel={4}
-              cards={[
-                {
-                  title: 'Project manager',
-                  items: [
-                    'Full dashboard read access and trend analytics',
-                    'Export defect register and test case log to CSV',
-                    'View severity distribution for go/no-go decisions',
-                    'Assign defects to team members',
-                  ],
-                },
-                {
-                  title: 'QA lead',
-                  items: [
-                    'Create and edit test cases with preconditions and steps',
-                    'Triage defect severity (Critical to Low) and priority (P1 to P4)',
-                    'Link failed test cases to the defects they exposed',
-                    'Manage execution status across the full test suite',
-                  ],
-                },
-                {
-                  title: 'Tester',
-                  items: [
-                    'Log new defects with expected vs actual results',
-                    'Update execution status on assigned test cases',
-                    'Document steps to reproduce for each logged defect',
-                    'View own defect assignments and status updates',
-                  ],
-                },
-                {
-                  title: 'Developer',
-                  items: [
-                    'View assigned defects with full reproduction steps',
-                    'Update defect status: In progress, Resolved',
-                    'Access expected vs actual result for each bug',
-                    'Track resolution history via timestamps',
-                  ],
-                },
-              ]}
-            />
-          </div>
-
-          <div className="space-y-4">
-            <SubHeading>Architecture</SubHeading>
-            <CardGrid
-              cols={3}
-              headingLevel={4}
-              cards={[
-                { title: 'Front end', items: ['React 18 with Vite', 'Tailwind CSS (custom design tokens)', 'Recharts for analytics', 'Axios for API requests', 'React Router v6', 'Sonner toast notifications', 'Lucide React icons'] },
-                { title: 'Back end', items: ['Node.js + Express REST API', 'better-sqlite3 (synchronous)', 'Morgan HTTP logging', 'CORS middleware', 'Auto seed on first run'] },
-                { title: 'Database', items: ['SQLite (uat_tracker.db)', 'users table (4 roles)', 'defects table (full lifecycle)', 'test_cases table (execution tracking)', 'Foreign key: test_cases → defects', 'Timestamps on all records'] },
-              ]}
-            />
-          </div>
         </div>
       </CaseSection>
-
-      <ScreenGallery shots={SHOTS} />
 
       <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">
         <TechStack

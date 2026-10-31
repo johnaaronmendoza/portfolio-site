@@ -4,12 +4,13 @@ import StatStrip, { type Stat } from './StatStrip';
 // Only figures already on the site: internships (Experience), the six projects
 // with case studies (GreenLoopFarms was a pitch, not a build), UWB model
 // accuracy and the SCS Awareness Platform's languages (EN/CN/Malay/Tamil).
-// Number sizes are capped so "89.6%" fits its cell from 360px to 1366px.
+// Values scale with their cell (StatStrip), so "89.61%" fits from 320px up and
+// matches the UWB tile, case page and resume.
 const STATS: Stat[] = [
-  { value: '2', label: 'industry internships' },
+  { value: '2', label: 'internships' },
   { value: '6', label: 'projects built' },
-  { value: '89.6%', label: 'UWB signal model accuracy' },
-  { value: '4', label: 'languages on the SCS Awareness Platform' },
+  { value: '89.61%', label: 'UWB model accuracy' },
+  { value: '4', label: 'SCS Awareness Platform languages' },
 ];
 
 /**

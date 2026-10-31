@@ -3,6 +3,8 @@ import { useState, type ReactNode, type Ref } from 'react';
 import { Link } from 'wouter';
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
+import PixelArt from './PixelArt';
+import { KeyText, Lead, SpotPlate } from './Hierarchy';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
 import { motionTokens } from '@/lib/motion-tokens';
 import SectionHeading from './SectionHeading';
@@ -99,21 +101,27 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
 
       {/* Project Info */}
       <div className="flex flex-1 flex-col gap-4 p-5">
-        <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
-          <h3 className={`font-pixel leading-snug break-words min-w-0 text-[color:var(--navy)] ${project.featured ? 'text-lg lg:text-2xl' : 'text-[15px]'}`}>
-            {project.name}
-          </h3>
+        {/* Spot sticker straddles the image rule (half of its 102px plate above
+            it, minus the 20px body padding); it covers only the screenshot.
+            The title gets its own full-width row so long words never break. */}
+        <div className="flex items-end justify-between gap-3">
+          <div className="relative z-10 -mt-[72px]">
+            <SpotPlate spot={project.spot} />
+          </div>
           <span className="flex-shrink-0 border-2 border-black bg-[var(--orange)] px-2 py-1 font-pixel text-xs text-black">
             {project.year}
           </span>
         </div>
+        <h3 className={`font-pixel leading-snug break-words min-w-0 text-[color:var(--navy)] ${project.featured ? 'text-lg lg:text-2xl' : 'text-[15px]'}`}>
+          {project.name}
+        </h3>
         <p className="font-mono text-[15px] sm:text-base leading-relaxed">
-          {project.description}
+          <KeyText text={project.description} max={1} />
         </p>
         <ul className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[15px] font-bold text-black">
           {project.facts.map(fact => (
-            <li key={fact} className="flex items-center gap-2">
-              <span aria-hidden="true" className="w-2.5 h-2.5 flex-shrink-0 bg-black" />
+            <li key={fact} className="flex items-start gap-2">
+              <PixelArt name="bullet" size={16} lazy className="line-mark" />
               {fact}
             </li>
           ))}
@@ -210,13 +218,10 @@ export default function Projects() {
       {/* Full-width teal band; all text on it is black or sits on cream */}
       <section className="bg-[var(--teal)] text-black border-y-[3px] border-black px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
-          <SectionHeading text="PROJECTS" tone="ink" icon="icon-projects" className="mb-12" />
+          <SectionHeading text="PROJECTS" tone="ink" icon="icon-projects" className="mb-4 lg:mb-5" />
+          <Lead text="Start with the two **featured** projects." tone="teal" className="mb-6 lg:mb-8" />
 
           <Window title="projects/" bodyClassName="p-4 sm:p-6 lg:p-8">
-            <p className="font-mono text-[15px] sm:text-base leading-relaxed max-w-[65ch] mb-6">
-              Six projects I've built, plus one pitch. Start with SilverLink SG and the SCS Awareness Platform.
-            </p>
-
             {/* Filter chips */}
             <div role="group" aria-label="Filter projects by technology" className="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-10">
               <button

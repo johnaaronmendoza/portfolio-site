@@ -48,7 +48,7 @@ export default function Footer() {
             </h2>
           </div>
           <p className="font-mono-8bit text-[15px] sm:text-base max-w-[40ch] leading-relaxed">
-            Open to AI, data and software graduate roles. I graduate in April 2027.
+            Open to AI, data and software graduate roles. Graduating April 2027.
           </p>
           <a href="mailto:johnaaronmb@gmail.com" className="btn btn-primary">
             <PixelArt name="icon-contact" size={16} lazy />

@@ -1,4 +1,7 @@
+import type { ReactNode } from 'react';
+import FlowDiagram, { type FlowStep } from './FlowDiagram';
 import FramerReveal from './FramerReveal';
+import { Chip, PixelList, SpotPlate } from './Hierarchy';
 import SectionHeading from './SectionHeading';
 import Window from './Window';
 
@@ -8,8 +11,11 @@ type Entry = {
   file: string;
   role: string;
   period: string;
+  /** ≤ 3 bullets, outcome or number first; `**…**` marks the key term */
   highlights: string[];
   badges: Badge[];
+  /** A visual block after the bullets */
+  extra?: ReactNode;
 };
 
 // Black text on orange or teal (approved pairings); sentence case
@@ -21,6 +27,33 @@ const BADGE_FILL: Record<Badge, string> = {
   Education: 'bg-[var(--teal)]',
 };
 
+// From the Desk Assist description already on the site: the AI reads the
+// thread, finds knowledge-base guidance and drafts; an agent reviews every
+// draft before it's sent. The review step is the emphasis.
+const DESK_ASSIST_FLOW: FlowStep[] = [
+  { label: 'Ticket' },
+  { label: 'Reads the thread', actor: 'AI' },
+  { label: 'Finds KB guidance', actor: 'AI' },
+  { label: 'Drafts a reply', actor: 'AI' },
+  { label: 'Agent reviews', actor: 'Agent', emphasis: true },
+  { label: 'Sent' },
+];
+
+/** Desk Assist (in progress, per the window's badge): its program icon and how a reply gets drafted */
+function DeskAssistFlow() {
+  return (
+    <div className="mt-8 lg:mt-10">
+      <div className="flex items-center gap-4 mb-6 lg:mb-8">
+        <SpotPlate spot={{ name: 'spot-desk-assist', tone: 'teal' }} className="size-24 lg:size-36" />
+        <h4 id="desk-assist-flow" className="font-pixel text-[15px] sm:text-base leading-[1.5] text-black">
+          How Desk Assist drafts a reply
+        </h4>
+      </div>
+      <FlowDiagram steps={DESK_ASSIST_FLOW} labelledBy="desk-assist-flow" lgCols={3} />
+    </div>
+  );
+}
+
 const ENTRIES: Entry[] = [
   {
     org: "LGA Telecom",
@@ -30,14 +63,11 @@ const ENTRIES: Entry[] = [
     // Desk Assist is in progress (CLAUDE.md honesty rule); AI work first
     badges: ["Internship", "In progress"],
     highlights: [
-      "Building Desk Assist (in progress), an AI assistant for service desk agents. The Manifest V3 Chrome extension reads the ticket thread, finds matching knowledge-base guidance and drafts a reply. The agent reviews every draft before it's sent.",
-      "Defined enterprise security requirements for the extension: least-privilege permissions, no remote code or unsafe-eval, no broad host access, and data leakage prevention, with AI calls routed through a company-controlled backend aligned with LGA's local AI plans.",
-      "Led the full-stack integration of the FreeSDN network management platform across 4+ equipment manufacturers, and migrated 1,000+ network configurations through REST API integrations and migration scripts.",
-      "Configured Freshservice business rules and workflows for ticket closure and escalation, scoped to the Service Desk so other teams' live tickets stay untouched, cutting manual agent actions by 40%.",
-      "Cut incident resolution time by 15 minutes by integrating Freshservice with Microsoft Teams for automated escalation alerts.",
-      "Automated a weekly PagerDuty incident report with the PagerDuty API and Google Apps Script, emailed as a CSV, saving 4 hours of manual reporting a week.",
-      "Handle Level 1 customer tickets in Freshservice end to end (triage, troubleshooting, escalation and closure) and support customers with Microsoft 365 administration in the admin centre and Microsoft Entra ID.",
+      "Building **Desk Assist**: an AI Chrome extension that drafts ticket replies for **agent review**.",
+      "**1,000+ network configurations** migrated while leading the **FreeSDN** integration across 4+ manufacturers.",
+      "**40%** fewer manual agent actions, **15 minutes** faster incident resolution, via Freshservice automation.",
     ],
+    extra: <DeskAssistFlow />,
   },
   {
     org: "Sembcorp Solar Singapore",
@@ -46,12 +76,9 @@ const ENTRIES: Entry[] = [
     period: "Oct 2020 – Jun 2021",
     badges: ["Internship"],
     highlights: [
-      "Led rollout of Momens CRM across Projects, C&I, and SolarNova divisions for a 240MWp+ portfolio.",
-      "Ran UAT on new CRM features before deployment, checking each against its requirements, rejecting builds that fell short and tracking 50+ defects to resolution.",
-      "Hosted training sessions for 10+ stakeholders per session; gathered UX feedback and liaised with vendors to ship improvements.",
-      "Supported SolarNova 3 (50MWp, 20 MOE schools): milestone tracking, site visits, and documentation.",
-      "Turned operational data from 240MWp+ of solar assets into executive dashboards for leadership.",
-      "Awarded an Internship Distinction and earned a contract extension.",
+      "Led the **Momens CRM** rollout across 3 divisions for a **240MWp+** portfolio.",
+      "**50+ defects** tracked to resolution in **UAT** before the CRM went live.",
+      "Earned an **Internship Distinction** and a contract extension.",
     ],
   },
   {
@@ -61,10 +88,8 @@ const ENTRIES: Entry[] = [
     period: "Sep 2024 – Apr 2027",
     badges: ["Education"],
     highlights: [
-      "Team project: SilverLink SG, 4 gRPC microservices on an 8-node Kubernetes cluster with WebRTC livestreaming, built over 7 Agile sprints.",
       "Core modules: Cloud Computing, Software Engineering, Mobile Development, Data Analytics, Requirements Engineering.",
-      "Certifications: AI4I Literacy in AI (AI Singapore, 2026); Fundamentals of Deep Learning (NVIDIA DLI, 2026).",
-      "Practised UAT, requirements analysis and the full software lifecycle in coursework and on placement.",
+      "Certifications: AI4I Literacy in AI (**AI Singapore**); Fundamentals of Deep Learning (**NVIDIA DLI**), 2026.",
     ],
   },
 ];
@@ -88,7 +113,7 @@ export default function Experience() {
                 </div>
 
                 {/* Header Row */}
-                <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 mb-8 pb-6 border-b-[3px] border-black">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-8 pb-6 border-b-[3px] border-black">
                   <div>
                     <h3 className="font-pixel text-base sm:text-lg text-black mb-2 leading-relaxed">
                       {entry.org}
@@ -97,20 +122,11 @@ export default function Experience() {
                       {entry.role}
                     </p>
                   </div>
-                  <p className="font-mono-8bit text-[15px] sm:text-base whitespace-nowrap flex-shrink-0">
-                    {entry.period}
-                  </p>
+                  <Chip icon="chip-calendar" text={entry.period} className="flex-shrink-0 self-start whitespace-nowrap" />
                 </div>
 
-                {/* Highlights */}
-                <ul className="space-y-3">
-                  {entry.highlights.map((h, i) => (
-                    <li key={i} className="font-mono-8bit text-[15px] sm:text-base leading-relaxed flex items-start gap-3 max-w-[75ch]">
-                      <span aria-hidden="true" className="flex-shrink-0 mt-[0.6em] w-2.5 h-2.5 bg-[var(--orange)] border-2 border-black" />
-                      <span>{h}</span>
-                    </li>
-                  ))}
-                </ul>
+                <PixelList items={entry.highlights} />
+                {entry.extra}
               </Window>
             ))}
           </div>

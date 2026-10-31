@@ -22,6 +22,8 @@ import uwb2             from '@assets/da_p39_img2.png';
 import uwb3             from '@assets/da_p35_img1.png';
 import greenloop2       from '@assets/greenloop_tour.jpg';
 
+import type { Spot } from '@/components/Hierarchy';
+
 /** Route segment of a case-study page: /projects/{slug} */
 export type CaseSlug = 'silverlink' | 'scs' | 'ai-finance' | 'uwb' | 'uat' | 'firesafety';
 
@@ -30,10 +32,11 @@ export type Project = {
   name: string;
   /** Case-study pages only */
   slug?: CaseSlug;
-  /** Home tile text */
+  /** One line, ≤ 14 words: the Home tile text and the lead under the case-study
+   *  h1 (one string, so they can't drift). `**…**` marks a key term. */
   description: string;
-  /** One-line summary under the case-study h1 */
-  summary?: string;
+  /** Program icon: spot illustration and its plate colour (visual-hierarchy §3.1) */
+  spot: Spot;
   /** Short facts shown as a list under the description */
   facts: string[];
   year: string;
@@ -57,9 +60,8 @@ export const PROJECTS: Project[] = [
     name: "SilverLink SG",
     slug: 'silverlink',
     description:
-      "Connects seniors and youth through skill-sharing and live events, and is built to block double-bookings under concurrent traffic. A 6-person team shipped it in 7 Agile sprints: 4 gRPC microservices, WebRTC livestreaming and autoscaling on Kubernetes.",
-    summary:
-      "Connects seniors and youth through skill-sharing and live events, and blocks double-bookings when many people book at once.",
+      "Connects seniors and youth through skill-sharing and live events, built to block **double-bookings**.",
+    spot: { name: 'spot-silverlink', tone: 'orange' },
     facts: ["8-node cluster", "4 services", "6-person team"],
     year: "2025",
     image: silverLinkImg,
@@ -76,9 +78,8 @@ export const PROJECTS: Project[] = [
     name: "SCS Awareness Platform",
     slug: 'scs',
     description:
-      "Teaches cancer awareness through a branching visual novel, used on tablets at Singapore Cancer Society outreach booths in English, Chinese, Malay and Tamil. A no-code admin panel lets SCS staff edit stories and export analytics without a developer.",
-    summary:
-      "Turns Singapore Cancer Society outreach booths into a story visitors play on a tablet, in English, Chinese, Malay or Tamil.",
+      "Teaches cancer awareness through a **branching story** at **Singapore Cancer Society** booths.",
+    spot: { name: 'spot-scs', tone: 'teal' },
     facts: ["4 languages", "4 question types", "4-person team"],
     year: "2025",
     image: scsImg,
@@ -95,9 +96,8 @@ export const PROJECTS: Project[] = [
     name: "AI Finance Insights Engine",
     slug: 'ai-finance',
     description:
-      "Turns five market data sources into a Power BI-ready warehouse, using NLP to score headline sentiment and flag supply-chain risk across 9 sectors. An automated ETL pipeline feeds a star schema, with 100% Pytest coverage on extraction and transformation.",
-    summary:
-      "Pulls five market data sources into one Power BI-ready warehouse, and flags supply-chain risk in the news.",
+      "Pulls market data into one **Power BI**-ready warehouse; NLP flags **supply-chain risk**.",
+    spot: { name: 'spot-ai-finance', tone: 'orange' },
     facts: ["5 data sources", "star schema", "100% Pytest coverage"],
     year: "2024",
     image: aiFinanceImg,
@@ -113,9 +113,8 @@ export const PROJECTS: Project[] = [
     name: "UWB Indoor Localization",
     slug: 'uwb',
     description:
-      "Tells clear UWB signals from blocked (NLOS) ones with 89.61% accuracy and 0.9612 ROC-AUC, using an SVM-RBF model on 41,996 samples from 7 indoor environments. It applies PCA to 1,016 signal dimensions, and a regression model estimates range on both signal paths.",
-    summary:
-      "Tells clear UWB signals from blocked (NLOS) ones with 89.61% accuracy, and estimates range on both signal paths.",
+      "Tells clear UWB signals from **blocked (NLOS)** ones with an **SVM-RBF** model.",
+    spot: { name: 'spot-uwb', tone: 'teal' },
     facts: ["89.61% accuracy", "0.9612 AUC", "41,996 samples"],
     year: "2025",
     image: uwbImg,
@@ -131,9 +130,8 @@ export const PROJECTS: Project[] = [
     name: "UAT Testing Dashboard",
     slug: 'uat',
     description:
-      "Shows a UAT team what's blocking go-live by linking every failed test case to its defect. A course project built around a hospital appointment system UAT scenario: 25 sample defects across 8 modules and 4 user roles, with severity charts and CSV export.",
-    summary:
-      "Shows a test team what's blocking go-live by linking each failed test case to its defect. Built around a hospital appointment system scenario.",
+      "Course project: links each failed test to its defect to show what **blocks go-live**.",
+    spot: { name: 'spot-uat', tone: 'orange' },
     facts: ["25 sample defects", "8 modules", "4 roles"],
     year: "2024",
     image: uatImg,
@@ -149,9 +147,8 @@ export const PROJECTS: Project[] = [
     name: "Fire Safety Drill Companion",
     slug: 'firesafety',
     description:
-      "Guides residents out of a building in augmented reality, with no network connection needed. A Kotlin Android app with ARCore navigation, on-device TFLite, and Dijkstra routing that re-plans around hazards.",
-    summary:
-      "Lets HDB residents rehearse a fire evacuation in their own block, guided by AR arrows. The drill works without internet.",
+      "Lets HDB residents rehearse fire evacuation in their own block with **AR arrows**.",
+    spot: { name: 'spot-firesafety', tone: 'teal' },
     facts: ["SUS 79/100", "~80% test coverage", "drill works offline"],
     year: "2025",
     image: fireSafetyImg,
@@ -166,7 +163,8 @@ export const PROJECTS: Project[] = [
     num: 7,
     name: "GreenLoopFarms",
     description:
-      "Helped shape the idea for a Singapore hydroponic urban farm and prepare the pitch that won a SGD 10,000 NYP JumpStart Grant. We pitched it to an industry investor panel.",
+      "Helped pitch a Singapore **hydroponic urban farm** to an industry investor panel.",
+    spot: { name: 'spot-greenloop', tone: 'orange' },
     facts: ["SGD 10,000 NYP JumpStart Grant"],
     year: "2022",
     image: greenloopImg,

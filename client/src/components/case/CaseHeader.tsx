@@ -1,24 +1,9 @@
-import type { ReactNode } from 'react';
+import { FactChips, Lead, SpotPlate, type Fact } from '@/components/Hierarchy';
 import { PixelGitHub } from '@/components/PixelIcons';
 import StatStrip, { type Stat } from '@/components/StatStrip';
 import { WindowBar } from '@/components/Window';
+import { ScreenFigure, type Shot } from '@/components/case/ScreenGallery';
 import { getCase, type CaseSlug } from '@/data/projects';
-
-export type MetaItem = { label: string; value: ReactNode; wide?: boolean };
-
-/** Label/value pairs: one column on phones, two from sm. `wide` spans both. */
-export function MetaList({ items }: { items: MetaItem[] }) {
-  return (
-    <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-2 font-mono text-[15px] sm:text-base leading-[1.5]">
-      {items.map(({ label, value, wide }) => (
-        <div key={label} className={wide ? 'sm:col-span-2' : undefined}>
-          <dt className="font-bold text-black">{label}</dt>
-          <dd className="mt-1 text-[color:var(--navy)]">{value}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
 
 export type CaseLink = {
   label: string;
@@ -33,44 +18,57 @@ export const GITHUB_PROFILE: CaseLink = {
   kind: 'profile',
 };
 
+const ROW = 'col-span-2 lg:col-span-1';
+
 interface CaseHeaderProps {
   slug: CaseSlug;
   /** Filename-style window title, e.g. "fire_safety_drill.apk" */
   file: string;
-  meta: MetaItem[];
+  /** Fact chips: each self-explanatory without its icon, ≤ 28 characters */
+  facts: Fact[];
+  /** Optional plain line under the chips (e.g. team member names) */
+  note?: string;
   links: CaseLink[];
   /** Exactly four figures, each value at most 6 glyphs */
   stats: [Stat, Stat, Stat, Stat];
-  /** Show the Home tile image beside the title from lg (default true) */
-  cover?: boolean;
+  /** The first screenshot, shown right under the header at every width */
+  heroShot?: Shot;
 }
 
 /**
- * The project opens as a program: cream window with the name, summary, links
- * and facts, and an orange status bar of key figures along its bottom edge.
- * Name, year and summary come from data/projects.ts.
+ * The project opens as a program: its spot "icon" on a colour plate, the
+ * name, a one-line lead, fact chips and links, and an orange status bar of
+ * key figures along the bottom edge. Name, year, summary and spot come from
+ * data/projects.ts. At 375 the plate sits beside the year badge and the h1
+ * gets its own row; from lg the plate takes the right column.
  */
-export default function CaseHeader({ slug, file, meta, links, stats, cover = true }: CaseHeaderProps) {
+export default function CaseHeader({ slug, file, facts, note, links, stats, heroShot }: CaseHeaderProps) {
   const project = getCase(slug);
-  const showCover = cover && project.image !== null;
 
   return (
-    <div className="window">
-      <WindowBar title={file} />
-      <div className="window-body p-6 sm:p-10 lg:p-14">
-        <div className={showCover ? 'lg:grid lg:grid-cols-12 lg:gap-8' : undefined}>
-          <div className="lg:col-span-7">
-            <span className="inline-block border-2 border-black bg-[var(--orange)] px-2 py-1 font-pixel text-xs text-black">
+    <div className="space-y-10">
+      <div className="window">
+        <WindowBar title={file} />
+        <div className="window-body p-6 sm:p-10 lg:p-14">
+          <div className="grid grid-cols-[1fr_auto] gap-x-6 lg:gap-x-10">
+            <span className="col-start-1 row-start-1 self-start justify-self-start border-2 border-black bg-[var(--orange)] px-2 py-1 font-pixel text-xs text-black">
               {project.year}
             </span>
+            <div className="col-start-2 row-start-1 lg:row-span-6">
+              <SpotPlate spot={project.spot} lazy={false} className="size-24 sm:size-36 lg:size-48" />
+            </div>
             {/* Upper case is CSS only, so screen readers get the real name */}
-            <h1 className="mt-4 font-pixel uppercase text-black break-words text-balance leading-[1.3] text-[length:clamp(20px,6vw,24px)] sm:text-[32px] xl:text-[40px]">
+            <h1 className={`${ROW} mt-4 font-pixel uppercase text-black break-words text-balance leading-[1.3] text-[length:clamp(20px,6vw,24px)] sm:text-[32px] xl:text-[40px]`}>
               {project.name}
             </h1>
-            <p className="mt-4 max-w-[52ch] font-mono font-bold text-base lg:text-lg leading-[1.6] text-pretty text-[color:var(--navy)]">
-              {project.summary}
-            </p>
-            <div className="mt-6 flex flex-wrap gap-4">
+            <Lead text={project.description} tone="cream" className={`${ROW} mt-4`} />
+            <FactChips facts={facts} label="Project facts" className={`${ROW} mt-6`} />
+            {note && (
+              <p className={`${ROW} mt-3 max-w-[60ch] font-mono text-[15px] sm:text-base leading-[1.5] text-[color:var(--navy)]`}>
+                {note}
+              </p>
+            )}
+            <div className={`${ROW} mt-6 flex flex-wrap gap-4`}>
               {links.map(({ label, href, kind }) => (
                 <a
                   key={href}
@@ -86,23 +84,10 @@ export default function CaseHeader({ slug, file, meta, links, stats, cover = tru
               ))}
             </div>
           </div>
-          {showCover && project.image && (
-            // Illustrative (the h1 names it). Lazy inside display:none, so phones never fetch it.
-            <img
-              src={project.image}
-              width={project.imageWidth}
-              height={project.imageHeight}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="hidden lg:block lg:col-span-5 self-start justify-self-center h-auto w-auto max-w-full max-h-[440px] border-[3px] border-black"
-            />
-          )}
         </div>
-        <hr aria-hidden="true" className="my-6 border-0 border-t-[3px] border-black" />
-        <MetaList items={meta} />
+        <StatStrip stats={stats} variant="status" />
       </div>
-      <StatStrip stats={stats} variant="status" />
+      {heroShot && <ScreenFigure {...heroShot} hero />}
     </div>
   );
 }

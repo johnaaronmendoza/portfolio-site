@@ -353,6 +353,8 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Keep tabbed-to controls clear of the fixed Pause and chat buttons (WCAG 2.4.11) */
+    scroll-padding-bottom: 88px;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Press Start 2P', cursive;
@@ -517,6 +519,17 @@
     outline-offset: 3px;
   }
 
+  /* Headings and sections focused by script after navigation: no ring */
+  [tabindex="-1"]:focus {
+    outline: none;
+  }
+
+  /* Pixel-art SVGs from /assets/pixel: crisp at integer scales */
+  .pixel-art {
+    image-rendering: pixelated;
+    flex-shrink: 0;
+  }
+
   /* Retro OS window: cream body, thick ink frame, hard offset shadow, violet
      title bar. Kept in the components layer so utilities passed through
      className / bodyClassName override it cleanly. */
@@ -524,6 +537,12 @@
     border: 3px solid var(--ink);
     background-color: var(--cream);
     box-shadow: 6px 6px 0 0 var(--ink);
+  }
+
+  @media (min-width: 1024px) {
+    .window {
+      box-shadow: 8px 8px 0 0 var(--ink);
+    }
   }
 
   .window-bar {
@@ -587,6 +606,13 @@
   }
 
   @media (hover: hover) and (pointer: fine) {
+    /* :not(:active) so a press still sinks the button into its shadow */
+    .btn-primary:hover:not(:active),
+    .btn-secondary:hover:not(:active) {
+      translate: -2px -2px;
+      box-shadow: 6px 6px 0 0 var(--ink);
+    }
+
     .btn-ghost:hover {
       background-color: var(--cream);
       color: var(--navy);

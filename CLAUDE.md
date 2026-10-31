@@ -47,7 +47,7 @@ Each section has a corresponding `id` attribute (`#hero`, `#about`, etc.) used b
 
 - **`MascotChatWidget`** — Floating chat bot (bottom-right corner). Uses a local keyword-based `knowledgeBase` object in the component for responses. No backend API.
 - **`CommandPalette`** — `Ctrl+K` / `Cmd+K` opens an OS-style command menu for section navigation and chat shortcuts.
-- **`useKeyboardNavigation`** hook — Arrow keys scroll between the named sections.
+- Arrow-key section jumping was removed (it fought text inputs and dialogs); a skip link to `#main` and the section nav handle navigation.
 - **`ThemeProvider`** — Theme is currently locked to `"light"` (`switchable` is commented out in `App.tsx`). Dark mode CSS is wired up but not exposed to users.
 - **`FramerReveal`** — now a static wrapper (scroll reveals were removed on purpose). `ScreenTear`, `LoadingBar`, `BootScreen`, `Particles` and similar effect components still exist in the repo but are not used; don't reintroduce them without a reason that serves the recruiter.
 

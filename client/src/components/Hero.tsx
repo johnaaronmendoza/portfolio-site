@@ -1,19 +1,25 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
+import type { ReactNode } from 'react';
 import Particles from './Particles';
 import { unlockAchievement } from '@/hooks/useAchievements';
 import { play } from '@/hooks/useSound';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useCalmMotion } from '@/hooks/useCalmMotion';
 import { useTextScramble } from '@/hooks/useTextScramble';
+import { motionTokens } from '@/lib/motion-tokens';
 import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
+import PixelArt from '@/components/PixelArt';
 import Window from '@/components/Window';
 
-const EASE_OUT = [0.23, 1, 0.32, 1] as const;
+const { hero: HERO, loop: LOOP, easing } = motionTokens;
 
-const ROLE_LINE = 'AI · DATA · FULL-STACK';
+const ROLE_LINE = 'AI, data and full-stack developer';
 
-// Each line of the name animates in separately
-const NAME_LINES = ['JOHN AARON', 'BRANZUELA'];
+// Two-tone name, one colour per line (orange 8.08:1, teal 9.69:1 on black)
+const NAME_LINES = [
+  { text: 'JOHN AARON', color: 'text-[color:var(--orange)]' },
+  { text: 'BRANZUELA', color: 'text-[color:var(--teal)]' },
+];
 
 const ORANGE = 'bg-[var(--orange)]';
 const TEAL = 'bg-[var(--teal)]';
@@ -31,65 +37,63 @@ const PIXELS = [
   { top: '72%',  left: '12%',   size: 4, color: TEAL,   delay: 1.8 },
 ];
 
-// Individual line with its own scramble
+const NEW_TAB = <span className="sr-only"> (opens in a new tab)</span>;
+
+/** Blinking block cursor; solid when motion is calmed */
+function Cursor({ calm, className }: { calm: boolean; className: string }) {
+  return (
+    <motion.span
+      aria-hidden="true"
+      className={`inline-block flex-shrink-0 bg-[var(--orange)] ${className}`}
+      animate={calm ? { opacity: 1 } : { opacity: [1, 0] }}
+      transition={calm ? { duration: 0 } : { duration: LOOP.blink, repeat: Infinity }}
+    />
+  );
+}
+
+// One line of the visual name: clip reveal + scramble on load, re-scramble on hover
 function ScrambleLine({
   text,
+  color,
   delay,
   reduced,
+  calm,
+  children,
 }: {
   text: string;
+  color: string;
   delay: number;
   reduced: boolean;
+  calm: boolean;
+  children?: ReactNode;
 }) {
   const { displayText, scramble } = useTextScramble(text, {
-    delay,
+    delay: delay * 1000,
     frames: 22,
     autoplay: true,
   });
 
   return (
     <motion.span
-      className="block"
+      className={`block whitespace-nowrap ${color}`}
       initial={{ opacity: 0, y: 32, clipPath: 'inset(100% 0 0 0)' }}
       animate={{ opacity: 1, y: 0, clipPath: 'inset(0% 0 0 0)' }}
-      transition={{ duration: 0.55, delay: delay / 1000, ease: EASE_OUT }}
-      onMouseEnter={() => !reduced && scramble()}
+      transition={{ duration: HERO.line, delay, ease: easing.out }}
+      onMouseEnter={() => !calm && scramble()}
     >
       {reduced ? text : displayText}
+      {children}
     </motion.span>
   );
 }
 
 export default function Hero() {
   const reduced = useReducedMotion();
-
-  // M02 — parallax shadow: hero card lifts + shadow grows as user scrolls
-  const { scrollY } = useScroll();
-  const cardShadow = useTransform(scrollY, [0, 600], ['6px 6px 0px 0px #000000', '18px 18px 0px 0px #000000']);
-  const cardY      = useTransform(scrollY, [0, 600], [0, -12]);
-
-  // M01 — magnetic CTA ref
-  const magnetRef = useRef<HTMLAnchorElement>(null);
-  const handleMagnetMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = magnetRef.current;
-    if (!el || reduced) return;
-    const rect = el.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const tx = Math.max(-14, Math.min(14, (e.clientX - cx) * 0.25));
-    const ty = Math.max(-14, Math.min(14, (e.clientY - cy) * 0.25));
-    el.style.transform = `translate(${tx}px, ${ty}px)`;
-    el.style.boxShadow = `${4 - tx * 0.3}px ${4 - ty * 0.3}px 0 0 #000`;
-  };
-  const handleMagnetLeave = () => {
-    if (!magnetRef.current) return;
-    magnetRef.current.style.transform = '';
-    magnetRef.current.style.boxShadow = '';
-  };
+  const calm = useCalmMotion();
 
   return (
-    <section className="min-h-screen text-[color:var(--cream)] flex items-center justify-center px-4 sm:px-8 lg:px-16 py-20 relative overflow-hidden">
-      {/* WebGL particle background */}
+    <section className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--cream)] px-4 sm:px-8 lg:px-16 pt-12 pb-6 sm:pt-20">
+      {/* WebGL particles (skipped with reduced motion, frozen by Pause motion) */}
       {!reduced && (
         <div className="absolute inset-0 z-0 pointer-events-none">
           <Particles
@@ -104,152 +108,168 @@ export default function Hero() {
             particleHoverFactor={0.4}
             cameraDistance={22}
             disableRotation={false}
+            paused={calm}
           />
         </div>
       )}
 
-      {/* Floating pixel decorations (the transparent border keeps their original size) */}
+      {/* Floating pixels: behind the content, and only where the gutters are
+          wide enough that they don't sit on text */}
       {PIXELS.map((p, i) => (
         <motion.div
           key={i}
-          className={`absolute z-10 border-2 border-transparent ${p.color}`}
+          aria-hidden="true"
+          className={`hidden sm:block absolute z-0 ${p.color}`}
           style={{
             top: p.top,
             ...(p.right ? { right: p.right } : { left: p.left }),
             width: `${p.size * 4}px`,
             height: `${p.size * 4}px`,
           }}
-          animate={{ y: [0, -18, 0], opacity: [0.7, 0.3, 0.7] }}
-          transition={{ delay: p.delay, duration: 3 + p.delay * 0.4, repeat: Infinity, ease: 'easeInOut' }}
+          animate={calm ? { y: 0, opacity: 0.7 } : { y: [0, -18, 0], opacity: [0.7, 0.3, 0.7] }}
+          transition={
+            calm
+              ? { duration: 0 }
+              : { delay: p.delay, duration: LOOP.float + p.delay * 0.4, repeat: Infinity, ease: 'easeInOut' }
+          }
         />
       ))}
 
-      <div className="max-w-4xl w-full relative z-10">
-
-        {/* Name — staggered line reveal + scramble */}
-        {/* M02 — parallax: shadow grows + card lifts as user scrolls */}
-        <motion.div
-          className="mb-10"
-          style={{ boxShadow: reduced ? '6px 6px 0px 0px #000000' : cardShadow, y: reduced ? 0 : cardY }}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ opacity: { duration: 0.4, ease: 'easeOut' }, scale: { duration: 0.4, ease: 'easeOut' } }}
-        >
-          {/* Dark body so the name reads; the motion wrapper owns the shadow */}
-          <Window title="welcome.exe" className="shadow-none" bodyClassName="bg-black text-[color:var(--cream)] p-8 sm:p-10 lg:p-12">
-          <h1
-            className="font-pixel text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight glitch overflow-hidden"
-            data-text="JOHN AARON MENDOZA BRANZUELA"
-          >
-            {NAME_LINES.map((line, i) => (
-              <ScrambleLine
-                key={line}
-                text={line}
-                delay={200 + i * 180}
-                reduced={reduced}
-              />
-            ))}
-            <motion.span
-              animate={{ opacity: [1, 0] }}
-              transition={{ duration: 0.5, repeat: Infinity }}
-              className="inline-block w-2 h-8 sm:h-10 lg:h-12 bg-[var(--orange)] ml-1"
-            />
-          </h1>
-          </Window>
-        </motion.div>
-
-        {/* Static role line */}
-        <motion.div
-          className="mb-6 ml-2 flex items-center gap-3"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
-        >
-          <span className="font-mono text-sm text-[color:var(--orange)] flex-shrink-0">{'>'}</span>
-          <p className="font-mono text-sm text-[color:var(--teal)] tracking-wide">{ROLE_LINE}</p>
-          <motion.span
-            animate={{ opacity: [1, 0] }}
-            transition={{ duration: 0.6, repeat: Infinity }}
-            className="inline-block w-2 h-4 bg-[var(--orange)] flex-shrink-0"
-          />
-        </motion.div>
-
-        {/* Positioning sentence */}
-        <motion.p
-          className="mb-12 ml-2 font-mono text-[15px] sm:text-base leading-relaxed max-w-[60ch]"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.0, ease: EASE_OUT }}
-        >
-          I build AI and data tools that people can trust. Right now that means an
-          AI assistant that helps service desk agents at LGA Telecom answer customers
-          faster, with a human reviewing every reply. Finishing BSc Computing Science
-          at SIT × University of Glasgow, graduating April 2027.
-        </motion.p>
-
-        {/* CTAs — Resume primary (M01 magnetic), GitHub + LinkedIn ghost */}
-        <motion.div
-          className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6 ml-2"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.1, ease: EASE_OUT }}
-        >
-          {/* M01 — magnetic zone: slightly larger than the button so cursor "attracts" from nearby */}
-          <div
-            className="p-3 -m-3"
-            onMouseMove={handleMagnetMove}
-            onMouseLeave={handleMagnetLeave}
-          >
-            <a
-              ref={magnetRef}
-              href="/resume.pdf"
-              download="John_Aaron_Branzuela_Resume.pdf"
-              onClick={() => play('click')}
-              onMouseEnter={() => play('blip')}
-              className="btn btn-primary"
-              style={{ transitionProperty: 'translate, transform, box-shadow', transitionDuration: '0.15s', transitionTimingFunction: 'cubic-bezier(.2,.8,.2,1)' }}
+      <div className="relative z-10 flex-1 flex items-center">
+        <div className="w-full max-w-4xl lg:max-w-6xl mx-auto lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-center">
+          <div className="lg:col-span-7">
+            <motion.div
+              className="mb-8 sm:mb-10"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: HERO.window, ease: 'easeOut' }}
             >
-              ↓ RESUME.PDF
-            </a>
+              {/* Terminal variant: black body so the two-tone name reads */}
+              <Window
+                title="welcome.exe"
+                bodyClassName="bg-black text-[color:var(--cream)] [--focus:var(--orange)] p-6 sm:p-10 xl:p-12"
+              >
+                {/* Sized so BRANZUELA plus the cursor fits from 320px up */}
+                <h1 className="font-pixel leading-[1.25] text-[length:clamp(20px,7vw,30px)] sm:text-4xl lg:text-[40px] xl:text-5xl">
+                  <span className="sr-only">John Aaron Mendoza Branzuela</span>
+                  <span aria-hidden="true">
+                    {NAME_LINES.map((line, i) => (
+                      <ScrambleLine
+                        key={line.text}
+                        text={line.text}
+                        color={line.color}
+                        delay={HERO.lineStart + i * HERO.lineStagger}
+                        reduced={reduced}
+                        calm={calm}
+                      >
+                        {i === NAME_LINES.length - 1 && (
+                          <Cursor calm={calm} className="w-2 h-[0.9em] ml-1 align-[-0.05em]" />
+                        )}
+                      </ScrambleLine>
+                    ))}
+                  </span>
+                </h1>
+              </Window>
+            </motion.div>
+
+            {/* Role line */}
+            <motion.div
+              className="mb-4 flex items-center gap-3"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: motionTokens.duration.slow, delay: HERO.role }}
+            >
+              <span aria-hidden="true" className="font-mono text-[15px] sm:text-base text-[color:var(--orange)] flex-shrink-0">{'>'}</span>
+              <p className="font-mono text-[15px] sm:text-base font-bold text-[color:var(--teal)]">{ROLE_LINE}</p>
+              <Cursor calm={calm} className="w-2 h-4" />
+            </motion.div>
+
+            {/* Positioning */}
+            <motion.p
+              className="mb-8 sm:mb-10 font-mono text-[15px] sm:text-base leading-relaxed max-w-[60ch]"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: HERO.line, delay: HERO.body, ease: easing.out }}
+            >
+              I build AI and data tools people can trust. At LGA Telecom I'm
+              building Desk Assist, an AI assistant that drafts replies for
+              service desk agents to review. Computing Science at SIT ×
+              University of Glasgow, graduating April 2027.
+            </motion.p>
+
+            {/* CTAs: resume first; email beside the profiles so contact is above the fold */}
+            <motion.div
+              className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-4"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: HERO.line, delay: HERO.ctas, ease: easing.out }}
+            >
+              <a
+                href="/resume.pdf"
+                download="John_Aaron_Branzuela_Resume.pdf"
+                onClick={() => play('click')}
+                className="btn btn-primary w-full sm:w-auto"
+              >
+                <PixelArt name="floppy" size={16} />
+                Download resume
+              </a>
+              <div className="flex flex-wrap items-center gap-3">
+                <a href="mailto:johnaaronmb@gmail.com" className="btn btn-ghost">
+                  <PixelArt name="icon-contact" size={16} />
+                  Email me
+                </a>
+                <a
+                  href="https://github.com/johnaaronmendoza"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
+                  className="btn btn-ghost"
+                >
+                  <PixelGitHub size={16} />
+                  GitHub{NEW_TAB}
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/john-branzuela/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
+                  className="btn btn-ghost"
+                >
+                  <PixelLinkedIn size={16} />
+                  LinkedIn{NEW_TAB}
+                </a>
+              </div>
+            </motion.div>
           </div>
-          <div className="flex flex-wrap items-center gap-4">
-            <a
-              href="https://github.com/johnaaronmendoza"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
-              className="btn btn-ghost"
-            >
-              <PixelGitHub size={16} fg="currentColor" />
-              GitHub ↗
-            </a>
-            <a
-              href="https://www.linkedin.com/in/john-branzuela/"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
-              className="btn btn-ghost"
-            >
-              <PixelLinkedIn size={16} />
-              LinkedIn ↗
-            </a>
+
+          {/* Art, large screens only so it never sits under text */}
+          <div aria-hidden="true" className="hidden lg:flex lg:col-span-5 items-center justify-center pointer-events-none">
+            <div className="relative flex items-center justify-center w-[336px] h-[336px] xl:w-[384px] xl:h-[384px]">
+              <PixelArt name="starburst" size={384} lazy className="absolute inset-0 w-full h-full" />
+              <PixelArt name="crt-computer" size={256} lazy className="relative" />
+              <PixelArt name="sparkle" size={32} lazy className="absolute -top-2 right-2" />
+              <PixelArt name="sparkle" size={32} lazy className="absolute bottom-2 -left-2" />
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll cue: in the flow so it never covers the buttons on short screens */}
       <motion.button
-        onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-[color:var(--orange)] opacity-70 hover:opacity-100 transition-opacity"
+        type="button"
+        aria-label="Scroll to About"
+        onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' })}
+        className="relative z-10 self-center mt-8 min-h-[44px] min-w-[44px] px-3 flex flex-col items-center justify-center gap-1 text-[color:var(--orange)]"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.7 }}
-        transition={{ delay: 2, duration: 0.6 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: HERO.cue, duration: motionTokens.duration.slow }}
       >
-        <span className="font-mono text-xs tracking-widest">SCROLL</span>
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-4 h-4 border-r-2 border-b-2 border-current rotate-45"
+        <span className="font-mono text-[15px]">Scroll</span>
+        <motion.span
+          aria-hidden="true"
+          className="block w-4 h-4 border-r-[3px] border-b-[3px] border-current rotate-45"
+          animate={calm ? { y: 0 } : { y: [0, 6, 0] }}
+          transition={calm ? { duration: 0 } : { duration: LOOP.bounce, repeat: Infinity, ease: 'easeInOut' }}
         />
       </motion.button>
     </section>

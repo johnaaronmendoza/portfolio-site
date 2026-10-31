@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import FramerReveal from '@/components/FramerReveal';
-import { useLocation } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { useEffect } from 'react';
 import { trackProjectVisit } from '@/hooks/useAchievements';
 import { play } from '@/hooks/useSound';
@@ -19,17 +19,19 @@ export default function UWBProject() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-black text-white">
       {/* Sticky back nav */}
-      <div className="sticky top-0 z-30 bg-black border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
-        <button
-          onClick={() => { play('back'); setLocation('/'); }}
+      <nav aria-label="Project page" className="sticky top-0 z-30 bg-black border-b border-amber-500/10 px-4 sm:px-8 py-3 flex items-center gap-4 overflow-hidden">
+        <Link
+          href="/#projects"
+          replace
+          onClick={() => play('back')}
           className="min-h-[44px] inline-flex items-center gap-2 px-2 -ml-2 font-pixel text-xs text-amber-400 hover:text-white transition-colors"
         >
-          ← Back
-        </button>
+          <span aria-hidden="true">←</span> Back
+        </Link>
         <span className="font-pixel text-xs text-zinc-400 truncate">/ UWB Indoor Localization</span>
-      </div>
+      </nav>
 
       {/* Hero — Sovereign Console bento */}
       <section className="py-16 sm:py-24 px-4 sm:px-8 lg:px-16 border-b border-amber-500/10">
@@ -255,12 +257,14 @@ export default function UWBProject() {
             <div className="bg-zinc-900 border-l-4 border-amber-500 p-8 sm:p-12 text-center space-y-6">
               <h2 className="font-pixel text-xl sm:text-2xl text-amber-400">View more projects</h2>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button
-                  onClick={() => { play('back'); setLocation('/'); }}
+                <Link
+                  href="/#projects"
+                  replace
+                  onClick={() => play('back')}
                   className="min-h-[44px] inline-flex items-center justify-center border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm"
                 >
-                  ← Back to portfolio
-                </button>
+                  <span aria-hidden="true">←</span> Back to portfolio
+                </Link>
                 <button
                   onClick={() => setLocation('/projects/uat')}
                   className="min-h-[44px] inline-flex items-center justify-center border-8bit-blue shadow-8bit-blue px-6 py-3 font-mono-8bit font-bold text-white bg-blue-500 hover:bg-blue-400 transition-colors text-sm"
@@ -272,6 +276,6 @@ export default function UWBProject() {
           </FramerReveal>
         </div>
       </section>
-    </div>
+    </main>
   );
 }

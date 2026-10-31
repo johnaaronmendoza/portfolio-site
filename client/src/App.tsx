@@ -1,7 +1,8 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Route, Switch, useLocation } from "wouter";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { MotionConfig } from "framer-motion";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import CommandPalette from "./components/CommandPalette";
@@ -18,16 +19,45 @@ import KonamiOverlay from "./components/KonamiOverlay";
 import SecretTerminal from "./components/SecretTerminal";
 import KeyboardShortcuts from "./components/KeyboardShortcuts";
 import { useLenis, getLenis } from "./hooks/useLenis";
+import { savedHomeScroll } from "./lib/scroll-memory";
 
-/** Scroll to top whenever the route changes */
+/**
+ * On route change: browser Back to Home restores the saved scroll; a link to
+ * "/#id" is left to Home, which scrolls to that section; anything else starts
+ * at the top. After an in-app navigation, focus moves to the new page's h1 so
+ * keyboard and screen reader users start on the new content.
+ */
 function ScrollToTop() {
   const [location] = useLocation();
+  const popRef = useRef(false);
+  const firstRef = useRef(true);
+
   useEffect(() => {
+    const onPop = () => { popRef.current = true; };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  useEffect(() => {
+    const wasPop = popRef.current;
+    popRef.current = false;
+    const isFirst = firstRef.current;
+    firstRef.current = false;
+    if (window.location.hash) return;
+
+    const y = wasPop && location === "/" ? savedHomeScroll() : 0;
     const lenis = getLenis();
     if (lenis) {
-      lenis.scrollTo(0, { immediate: true });
-    } else {
-      window.scrollTo(0, 0);
+      lenis.resize(); // the new page's height, so a restored position isn't clamped
+      lenis.scrollTo(y, { immediate: true });
+    }
+    else window.scrollTo(0, y);
+
+    if (isFirst || wasPop) return;
+    const heading = document.querySelector<HTMLElement>("main h1");
+    if (heading) {
+      heading.tabIndex = -1;
+      heading.focus({ preventScroll: true });
     }
   }, [location]);
   return null;
@@ -74,7 +104,10 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
-        <AppInner />
+        {/* Framer animations follow the visitor's reduced-motion setting */}
+        <MotionConfig reducedMotion="user">
+          <AppInner />
+        </MotionConfig>
       </ThemeProvider>
     </ErrorBoundary>
   );

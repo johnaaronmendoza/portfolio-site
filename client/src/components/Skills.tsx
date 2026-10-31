@@ -45,11 +45,12 @@ export default function Skills() {
     <FramerReveal>
       <section className="text-[color:var(--cream)] px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-5xl mx-auto">
-          <SectionHeading text="SKILLS" className="mb-12" />
+          <SectionHeading text="SKILLS" icon="icon-skills" className="mb-12" />
 
-          <p className="font-mono text-[15px] sm:text-base mb-8 max-w-[60ch]">
-            Press a key to see what each skill is and where I used it.
-          </p>
+          <div className="font-mono text-[15px] sm:text-base leading-relaxed mb-8 max-w-[60ch] space-y-2">
+            <p>What I use and where I used it. The AI keys are amber.</p>
+            <p>Press or hover a key to see what it does. The full list is below the keyboard.</p>
+          </div>
 
           <SkillKeyboard />
 

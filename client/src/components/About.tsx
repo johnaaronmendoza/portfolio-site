@@ -10,9 +10,10 @@ import Window from './Window';
 import profileImg from '@assets/john_profile.jpg';
 
 const FACTS: { label: string; value: string }[] = [
-  { label: 'Studying', value: 'SIT × University of Glasgow' },
+  { label: 'Studying', value: 'Computing Science, SIT × University of Glasgow' },
   { label: 'Graduating', value: 'April 2027' },
-  { label: 'Now', value: 'LGA Telecom' },
+  { label: 'Now', value: 'Intern, LGA Telecom' },
+  { label: 'Before', value: 'Diploma, Nanyang Polytechnic' },
   { label: 'Based in', value: 'Singapore' },
 ];
 
@@ -20,7 +21,7 @@ export default function About() {
   return (
     <section className="px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
       <div className="max-w-5xl mx-auto">
-        <SectionHeading text="ABOUT ME" className="mb-16" />
+        <SectionHeading text="ABOUT ME" icon="icon-about" className="mb-16" />
 
         <FramerReveal delay={0.1}>
           <Window title="about_me.txt" bodyClassName="flex flex-col md:flex-row gap-8 md:gap-12 items-start p-6 sm:p-10 lg:p-14">
@@ -29,7 +30,7 @@ export default function About() {
               <div className="border-[3px] border-black shadow-[4px_4px_0_0_#000] w-56 h-56 sm:w-72 sm:h-72 overflow-hidden">
                 <PixelatedImage
                   src={profileImg}
-                  alt="John Aaron Mendoza Branzuela"
+                  alt="Portrait of John Aaron Branzuela"
                   className="w-full h-full"
                 />
               </div>
@@ -46,16 +47,16 @@ export default function About() {
             {/* Bio Text */}
             <div className="space-y-5 prose-8bit flex-1">
               <p className="font-mono-8bit font-bold text-base sm:text-lg text-black leading-relaxed max-w-[60ch]">
-                I build technology for the people who have to use it.
+                I build AI and data tools for the people who have to use them.
               </p>
               <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed max-w-[65ch]">
-                Most projects don't fail on the code. They fail in the gap between what a business needs and what gets built. That gap is where I like to work: listening to users, turning their problems into clear requirements, then building and testing until the thing actually helps.
+                Right now I'm building Desk Assist at LGA Telecom. It reads a service desk ticket, finds the matching knowledge-base guidance and drafts a reply. An agent reviews every draft before anything reaches a customer.
               </p>
               <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed max-w-[65ch]">
-                My path started on-site at Sembcorp Solar, testing a CRM before it rolled out across the company. Since then I've built cloud-native microservices, machine learning models and a cancer-awareness platform used at Singapore Cancer Society outreach events. Now I'm building an AI assistant that helps service desk agents at LGA Telecom answer customers.
+                Before that I built cloud-native microservices with my SilverLink SG team, a machine learning model that tells clear UWB signals from blocked ones, and a cancer-awareness platform used at Singapore Cancer Society outreach booths. My first role was at Sembcorp Solar, testing a CRM before it rolled out across the company.
               </p>
               <p className="font-mono-8bit text-[15px] sm:text-base leading-relaxed max-w-[65ch]">
-                I learn fast, speak both engineer and stakeholder, and care about shipping things people actually use.
+                I like the gap between what people need and what gets built: I listen, write clear requirements, then build and test until the tool helps.
               </p>
             </div>
           </Window>

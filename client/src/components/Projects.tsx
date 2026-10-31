@@ -28,14 +28,25 @@ import uwb2             from '@assets/da_p39_img2.png';
 import uwb3             from '@assets/da_p35_img1.png';
 import greenloop2       from '@assets/greenloop_tour.jpg';
 
-const FILTER_TAGS = ['React', 'Python', 'Kotlin', 'K8s', 'TypeScript', 'gRPC', 'ML/AI'];
+// Display label and the key matched against project tags (kept separate so a
+// friendlier label doesn't change which projects match)
+const FILTERS: { label: string; match: string }[] = [
+  { label: 'AI & ML', match: 'ML/AI' },
+  { label: 'Python', match: 'Python' },
+  { label: 'React', match: 'React' },
+  { label: 'TypeScript', match: 'TypeScript' },
+  { label: 'Kubernetes', match: 'K8s' },
+  { label: 'gRPC', match: 'gRPC' },
+  { label: 'Kotlin', match: 'Kotlin' },
+];
 
 // ── Project data ──────────────────────────────────────────────────────────
 type Project = {
   num: number;
   name: string;
   description: string;
-  metric: string;
+  /** Short facts shown as a list under the description */
+  facts: string[];
   year: string;
   image: string | null;
   tags: string[];
@@ -53,8 +64,8 @@ const PROJECTS: Project[] = [
     num: 1,
     name: "SilverLink SG",
     description:
-      "Cloud-native platform bridging seniors and youth through skill-sharing and live events. 4 gRPC microservices, WebRTC livestreaming, and Kubernetes autoscaling, delivered across 7 Agile sprints with a 6-person team.",
-    metric: "8-NODE CLUSTER · 4 SERVICES · WEBRTC",
+      "Connects seniors and youth through skill-sharing and live events, and is built to block double-bookings under concurrent traffic. A 6-person team shipped it in 7 Agile sprints: 4 gRPC microservices, WebRTC livestreaming and autoscaling on Kubernetes.",
+    facts: ["8-node cluster", "4 services", "6-person team"],
     year: "2025",
     image: silverLinkImg,
     tags: ["React", "gRPC", "K8s", "PostgreSQL"],
@@ -67,8 +78,8 @@ const PROJECTS: Project[] = [
     num: 2,
     name: "SCS Awareness Platform",
     description:
-      "Branching visual-novel engine deployed at real Singapore Cancer Society outreach booths. Multilingual (EN/CN/Malay/Tamil), gamified leaderboard, and a no-code admin panel built for non-technical SCS staff.",
-    metric: "4 LANGUAGES · 4 QUESTION TYPES · SUPABASE RLS",
+      "Teaches cancer awareness through a branching visual novel, used on tablets at Singapore Cancer Society outreach booths in English, Chinese, Malay and Tamil. A no-code admin panel lets SCS staff edit stories and export analytics without a developer.",
+    facts: ["4 languages", "4 question types", "4-person team"],
     year: "2025",
     image: scsImg,
     tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
@@ -81,8 +92,8 @@ const PROJECTS: Project[] = [
     num: 3,
     name: "AI Finance Insights Engine",
     description:
-      "Automated ETL ingesting Brent crude, FX, S&P 500, and geopolitical news into a star schema. NLP classifies 9 sectors, scores sentiment, and flags supply chain risks. Output: a Power BI executive dashboard.",
-    metric: "5 DATA SOURCES · STAR SCHEMA · 100% PYTEST COVERAGE",
+      "Turns five market data sources into a Power BI dashboard, using NLP to score headline sentiment and flag supply-chain risk across 9 sectors. An automated ETL pipeline feeds a star schema, with 100% Pytest coverage on extraction and transformation.",
+    facts: ["5 data sources", "star schema", "100% Pytest coverage"],
     year: "2024",
     image: aiFinanceImg,
     tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
@@ -94,8 +105,8 @@ const PROJECTS: Project[] = [
     num: 4,
     name: "UWB Indoor Localization",
     description:
-      "SVM-RBF classifier on 42k UWB samples across 7 indoor environments. PCA on 1,016 CIR dimensions; dual-path range regression compensates for NLOS signal loss.",
-    metric: "89.61% ACCURACY · 0.9612 AUC · 41,996 SAMPLES",
+      "Tells clear UWB signals from blocked (NLOS) ones with 89.61% accuracy and 0.9612 ROC-AUC, using an SVM-RBF model on 41,996 samples from 7 indoor environments. PCA compresses 1,016 signal dimensions, and a regression model estimates range on both signal paths.",
+    facts: ["89.61% accuracy", "0.9612 AUC", "41,996 samples"],
     year: "2025",
     image: uwbImg,
     tags: ["Python", "SVM", "PCA", "scikit-learn"],
@@ -107,8 +118,8 @@ const PROJECTS: Project[] = [
     num: 5,
     name: "UAT Testing Dashboard",
     description:
-      "Full-stack defect tracker built for a real hospital appointment system UAT cycle. Test cases link directly to open defects; severity triage charts helped manage 30+ issues across 4 user roles, from tester to project lead.",
-    metric: "4 ROLES · CSV EXPORT · RECHARTS ANALYTICS",
+      "Shows a UAT team what's blocking go-live by linking every failed test case to its defect. A course project built around a hospital appointment system UAT scenario: 25 issues across 8 modules and 4 user roles, with severity charts and CSV export.",
+    facts: ["25 issues", "8 modules", "4 roles"],
     year: "2024",
     image: uatImg,
     tags: ["React 18", "Node.js", "Express", "SQLite"],
@@ -120,8 +131,8 @@ const PROJECTS: Project[] = [
     num: 6,
     name: "Fire Safety Drill Companion",
     description:
-      "Offline-first Android AR evacuation guide. ARCore navigation, TFLite on-device ML, and Dijkstra pathfinding with live hazard re-routing, independently usable with no network connection.",
-    metric: "SUS 79/100 · ~80% TEST COVERAGE · FULLY OFFLINE",
+      "Guides residents out of a building in augmented reality, with no network connection needed. A Kotlin Android app with ARCore navigation, on-device TFLite, and Dijkstra routing that re-plans around hazards.",
+    facts: ["SUS 79/100", "~80% test coverage", "fully offline"],
     year: "2025",
     image: fireSafetyImg,
     tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
@@ -133,8 +144,8 @@ const PROJECTS: Project[] = [
     num: 7,
     name: "GreenLoopFarms",
     description:
-      "Contributed to the founding idea and digital presence of a Singapore hydroponic urban farm. Helped prepare the pitch deck that secured a competitive NYP grant.",
-    metric: "SGD $10K JUMPSTART GRANT · FURA · NIE · NUS",
+      "Helped shape the idea for a Singapore hydroponic urban farm and prepare the pitch that won a SGD 10,000 NYP JumpStart Grant. We pitched it to an industry investor panel.",
+    facts: ["SGD 10,000 NYP JumpStart Grant"],
     year: "2022",
     image: greenloopImg,
     tags: ["NYP JumpStart", "Urban Farming"],
@@ -174,16 +185,17 @@ function ProjectCard({ project }: { project: Project }) {
     <>
       {/* Project image on top, framed by the tile border and a 3px rule */}
       <div className={`relative overflow-hidden border-b-[3px] border-black bg-[var(--navy)] ${project.featured ? 'h-56 lg:h-72' : 'h-48'}`}>
+        {/* alt="" because the tile's link already names the project */}
         {project.image ? (
           <PixelatedImage
             src={project.image}
-            alt={project.name}
-            className={`w-full h-full transition-[filter,scale] duration-500 ${
+            alt=""
+            className={`w-full h-full transition-[filter,scale] duration-200 ${
               isComingSoon
                 ? 'opacity-50 grayscale'
                 : project.featured
-                  ? '[@media(hover:hover)]:group-hover:scale-105'
-                  : '[@media(hover:hover)]:grayscale [@media(hover:hover)]:group-hover:grayscale-0 [@media(hover:hover)]:group-hover:scale-105'
+                  ? '[@media(hover:hover)]:group-hover:scale-[1.03]'
+                  : '[@media(hover:hover)]:grayscale [@media(hover:hover)]:group-hover:grayscale-0 [@media(hover:hover)]:group-hover:scale-[1.03]'
             }`}
           />
         ) : (
@@ -196,12 +208,15 @@ function ProjectCard({ project }: { project: Project }) {
             </span>
           </div>
         )}
+        {project.featured && (
+          <span className="absolute top-2 left-2 font-pixel text-xs text-black border-2 border-black bg-[var(--orange)] px-2 py-1">
+            Featured
+          </span>
+        )}
         {isExternal && (
-          <div className="absolute top-2 right-2">
-            <span className="font-pixel text-xs text-black border-2 border-black bg-[var(--teal)] px-2 py-1">
-              ↗ LIVE
-            </span>
-          </div>
+          <span className="absolute top-2 right-2 font-pixel text-xs text-black border-2 border-black bg-[var(--teal)] px-2 py-1">
+            Live site
+          </span>
         )}
       </div>
 
@@ -218,19 +233,24 @@ function ProjectCard({ project }: { project: Project }) {
         <p className="font-mono text-[15px] sm:text-base leading-relaxed">
           {project.description}
         </p>
-        <p className="font-mono text-[15px] font-bold text-black tracking-wider">
-          ■ {project.metric}
-        </p>
+        <ul className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[15px] font-bold text-black">
+          {project.facts.map(fact => (
+            <li key={fact} className="flex items-center gap-2">
+              <span aria-hidden="true" className="w-2.5 h-2.5 flex-shrink-0 bg-black" />
+              {fact}
+            </li>
+          ))}
+        </ul>
         <div className="flex flex-wrap gap-1.5">
           {project.tags.map(tag => (
-            <span key={tag} className="border-2 border-black px-2 py-0.5 font-mono text-xs">
+            <span key={tag} className="border-2 border-black px-2 py-0.5 font-mono text-sm font-bold text-black">
               {tag}
             </span>
           ))}
         </div>
         {!isComingSoon && (
-          <div className="mt-auto pt-2 font-mono-8bit text-[15px] text-black font-bold underline underline-offset-4 decoration-2 inline-flex items-center gap-1 translate-x-0 group-hover:translate-x-1.5 transition-[translate] duration-150">
-            {isExternal ? 'Visit site ↗' : 'View work →'}
+          <div className="mt-auto pt-2 font-mono-8bit text-[15px] text-black font-bold underline underline-offset-4 decoration-2">
+            {isExternal ? 'Visit site' : 'Read case study'}
           </div>
         )}
       </div>
@@ -267,10 +287,13 @@ function ProjectCard({ project }: { project: Project }) {
   }
 
   return (
+    // Press sinks the tile into its shadow (translate, not scale); hover lifts it
+    // on pointers that can hover (Tailwind v4 gates hover: on that media query)
     <motion.div
-      className={`group border-[3px] border-black bg-[var(--cream)] shadow-[4px_4px_0_0_#000] ${project.span}`}
-      exit={{ opacity: 0, y: 12, scale: 0.96, transition: { duration: motionTokens.duration.fast } }}
-      whileTap={isComingSoon ? {} : { scale: 0.97, transition: { duration: motionTokens.duration.instant } }}
+      className={`group border-[3px] border-black bg-[var(--cream)] shadow-[4px_4px_0_0_#000] transition-[translate,box-shadow] duration-150 ease-[var(--ease-out)] ${
+        isComingSoon ? '' : 'hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_#000] active:translate-x-1 active:translate-y-1 active:shadow-none'
+      } ${project.span}`}
+      exit={{ opacity: 0, y: 12, transition: { duration: motionTokens.duration.fast } }}
     >
       {card}
     </motion.div>
@@ -289,38 +312,56 @@ function chipClass(active: boolean) {
 
 // ── Projects section ──────────────────────────────────────────────────────
 export default function Projects() {
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null); // a filter label
+  const [touched, setTouched] = useState(false); // announce results only after a change
 
-  const visible = PROJECTS.filter(p => matchesFilter(p, activeFilter));
+  const active = FILTERS.find(f => f.label === activeFilter) ?? null;
+  const visible = PROJECTS.filter(p => matchesFilter(p, active?.match ?? null));
+  const count = `${visible.length} project${visible.length === 1 ? '' : 's'}`;
+  const status = active
+    ? `${count} ${visible.length === 1 ? 'matches' : 'match'} ${active.label}`
+    : `Showing all ${count}`;
+
+  const choose = (label: string | null) => {
+    setActiveFilter(label);
+    setTouched(true);
+  };
 
   return (
     <FramerReveal>
       {/* Full-width teal band; all text on it is black or sits on cream */}
       <section className="bg-[var(--teal)] text-black border-y-[3px] border-black px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
-          <SectionHeading text="PROJECTS" tone="ink" className="mb-12" />
+          <SectionHeading text="PROJECTS" tone="ink" icon="icon-projects" className="mb-12" />
 
-          <Window title="featured_projects" bodyClassName="p-4 sm:p-6 lg:p-8">
+          <Window title="projects/" bodyClassName="p-4 sm:p-6 lg:p-8">
+            <p className="font-mono text-[15px] sm:text-base leading-relaxed max-w-[65ch] mb-6">
+              Six projects I've built, plus one pitch. Start with SilverLink SG and the SCS Awareness Platform.
+            </p>
+
             {/* Filter chips */}
-            <div className="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-10">
+            <div role="group" aria-label="Filter projects by technology" className="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-10">
               <button
-                onClick={() => setActiveFilter(null)}
+                type="button"
+                onClick={() => choose(null)}
                 aria-pressed={activeFilter === null}
                 className={chipClass(activeFilter === null)}
               >
-                ALL
+                All
               </button>
-              {FILTER_TAGS.map(tag => (
+              {FILTERS.map(({ label }) => (
                 <button
-                  key={tag}
-                  onClick={() => setActiveFilter(prev => prev === tag ? null : tag)}
-                  aria-pressed={activeFilter === tag}
-                  className={chipClass(activeFilter === tag)}
+                  type="button"
+                  key={label}
+                  onClick={() => choose(activeFilter === label ? null : label)}
+                  aria-pressed={activeFilter === label}
+                  className={chipClass(activeFilter === label)}
                 >
-                  {tag}
+                  {label}
                 </button>
               ))}
             </div>
+            <p className="sr-only" aria-live="polite">{touched ? status : ''}</p>
 
             {/* Tile grid: rows of 3+3, 2+2+2, 3+3 on large screens; GreenLoop
                 spans both columns at sm so the 7th tile is never orphaned */}
@@ -332,18 +373,19 @@ export default function Projects() {
               </AnimatePresence>
 
               {/* Empty state */}
-              {activeFilter !== null && visible.length === 0 && (
+              {active && visible.length === 0 && (
                 <motion.div
                   className="col-span-full border-[3px] border-black p-10 text-center"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
-                  <p className="font-pixel text-xs">NO_PROJECTS_MATCH [ {activeFilter} ]</p>
+                  <p className="font-mono text-[15px] sm:text-base">No projects match {active.label}.</p>
                   <button
-                    onClick={() => setActiveFilter(null)}
-                    className="btn btn-primary mt-4"
+                    type="button"
+                    onClick={() => choose(null)}
+                    className="btn btn-secondary mt-4"
                   >
-                    CLEAR FILTER →
+                    Show all projects
                   </button>
                 </motion.div>
               )}

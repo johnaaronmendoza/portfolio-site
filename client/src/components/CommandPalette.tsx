@@ -10,6 +10,16 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
 import { hasFinePointer } from '@/lib/utils';
+import PixelArt from './PixelArt';
+
+const SECTIONS = [
+  { id: 'hero', name: 'top' },
+  { id: 'about', name: 'About' },
+  { id: 'experience', name: 'Experience' },
+  { id: 'projects', name: 'Projects' },
+  { id: 'skills', name: 'Skills' },
+  { id: 'footer', name: 'Contact' },
+];
 
 interface Command {
   id: string;
@@ -41,7 +51,7 @@ export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const dialogRef = useRef<HTMLDivElement>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
 
@@ -53,57 +63,45 @@ export default function CommandPalette() {
     if (el && document.contains(el)) el.focus({ preventScroll: true });
   }, [isOpen]);
 
+  // On Home, scroll to the section; elsewhere, go Home and let it scroll to the hash
+  const goToSection = (id: string) => {
+    const el = location === '/' ? document.getElementById(id) : null;
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    else setLocation(`/#${id}`);
+  };
+
   const commands: Command[] = [
-    // Navigation — sections
+    // Navigation — sections (from a case study, go to the Home section instead)
+    ...SECTIONS.map(({ id, name }): Command => ({
+      id: `nav-${id}`,
+      label: `Go to ${name}`,
+      description: id === 'hero' ? 'Jump to the top of the home page' : `Jump to the ${name.toLowerCase()} section`,
+      action: () => { goToSection(id); setIsOpen(false); },
+      category: 'navigation',
+    })),
+    // Actions
     {
-      id: 'nav-hero',
-      label: 'Go to Hero',
-      description: 'Jump to the hero section',
+      id: 'action-resume',
+      label: 'Download resume',
+      description: 'Save John\'s resume as a PDF',
       action: () => {
-        document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
+        const link = document.createElement('a');
+        link.href = '/resume.pdf';
+        link.download = 'John_Aaron_Branzuela_Resume.pdf';
+        link.click();
         setIsOpen(false);
       },
-      category: 'navigation',
+      category: 'action',
     },
     {
-      id: 'nav-about',
-      label: 'Go to About',
-      description: 'Jump to the about section',
+      id: 'action-email',
+      label: 'Email me',
+      description: 'johnaaronmb@gmail.com',
       action: () => {
-        document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+        window.location.href = 'mailto:johnaaronmb@gmail.com';
         setIsOpen(false);
       },
-      category: 'navigation',
-    },
-    {
-      id: 'nav-experience',
-      label: 'Go to Experience',
-      description: 'Jump to the experience section',
-      action: () => {
-        document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' });
-        setIsOpen(false);
-      },
-      category: 'navigation',
-    },
-    {
-      id: 'nav-projects',
-      label: 'Go to Projects',
-      description: 'Jump to the projects section',
-      action: () => {
-        document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-        setIsOpen(false);
-      },
-      category: 'navigation',
-    },
-    {
-      id: 'nav-skills',
-      label: 'Go to Skills',
-      description: 'Jump to the skills section',
-      action: () => {
-        document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' });
-        setIsOpen(false);
-      },
-      category: 'navigation',
+      category: 'action',
     },
     // Navigation — project pages
     {
@@ -336,7 +334,10 @@ export default function CommandPalette() {
                     onMouseEnter={() => setSelectedIndex(idx)}
                     onFocus={() => setSelectedIndex(idx)}
                   >
-                    <div className="font-mono font-bold text-sm">{cmd.label}</div>
+                    <div className="flex items-center gap-2 font-mono font-bold text-sm">
+                      {cmd.id === 'nav-hero' && <PixelArt name="icon-home" size={16} />}
+                      {cmd.label}
+                    </div>
                     <div className="font-mono text-xs text-gray-500 mt-1">{cmd.description}</div>
                   </motion.button>
                 ))

@@ -71,7 +71,7 @@ export default function MascotChatWidget() {
     {
       id: '1',
       role: 'system',
-      content: "Hey! I'm John Aaron. Ask me anything about my projects, experience, skills, or how to get in touch.",
+      content: "Hi! I'm a small bot that knows John's projects, experience and skills. Pick a topic below or type a question.",
       timestamp: new Date(),
       reactions: {}
     }
@@ -81,16 +81,33 @@ export default function MascotChatWidget() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const refocusRef = useRef(false);
+  const launcherRef = useRef<HTMLButtonElement>(null);
+
+  // Close and put focus back on the launcher, so keyboard users aren't stranded
+  const closeChat = () => {
+    setIsOpen(false);
+    launcherRef.current?.focus();
+  };
+
+  // Escape closes the chat (F13)
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeChat();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen]);
   const reactionEmojis = ['👍', '❤️', '🤔', '😂', '🔥'];
 
   // Knowledge base for responses
   const knowledgeBase: Record<string, string> = {
     // Sembcorp / Experience
-    'sembcorp': 'I interned as a Digitization Analyst at Sembcorp Solar Singapore (Oct 2020 – Jun 2021), one of SG\'s largest solar players with 240MWp+ across 1,500+ sites. I led the company-wide rollout of the Momens CRM, hosted Zoom training sessions for 10+ stakeholders at a time, gathered UX feedback to liaise with vendors on new features, and performed QA on all new Momens releases before deployment.',
+    'sembcorp': 'I interned as a Digitization Analyst at Sembcorp Solar Singapore (Oct 2020 – Jun 2021), one of SG\'s largest solar players with a 240MWp+ portfolio. I led the company-wide rollout of the Momens CRM, hosted Zoom training sessions for 10+ stakeholders at a time, gathered UX feedback to liaise with vendors on new features, and performed QA on all new Momens releases before deployment.',
     'experience': 'My experience: Service Desk Operations & AI Integration Intern at LGA Telecom (Aug 2026 – Present), where I handle Freshservice tickets and am building Desk Assist, an AI assistant for service desk agents. Before that, Digitization Analyst Intern at Sembcorp Solar Singapore (Oct 2020 – Jun 2021), where I rolled out Momens CRM across Projects, C&I, and SolarNova divisions.',
     'internship': 'I am currently interning at LGA Telecom (Aug 2026 – Present) in service desk operations and AI integration. Previously I interned at Sembcorp Solar Singapore as a Digitization Analyst, owning the Momens CRM rollout and its UAT.',
     // LGA Telecom
-    'lga': 'I am a Service Desk Operations & AI Integration Intern at LGA Telecom (Aug 2026 – Present). I handle Level 1 tickets in Freshservice and support Microsoft 365 customers. I am designing Desk Assist, a Chrome extension that reads a ticket, pulls relevant Knowledge Base guidance and drafts a reply for the agent to review. I also set up Freshservice closure and escalation automations and am automating a weekly PagerDuty report with Google Apps Script.',
+    'lga': 'I am a Service Desk Operations & AI Integration Intern at LGA Telecom (Aug 2026 – Present). I handle Level 1 tickets in Freshservice and support Microsoft 365 customers. I am building Desk Assist (in progress), a Chrome extension that reads a ticket, pulls relevant Knowledge Base guidance and drafts a reply for the agent to review. I also set up Freshservice closure and escalation automations that cut manual agent actions by 40%, Microsoft Teams escalation alerts that cut incident resolution time by 15 minutes, and an automated weekly PagerDuty incident report (Google Apps Script) that saves 4 hours of manual reporting a week.',
     'desk assist': 'Desk Assist is an AI-assisted service desk tool I am building at LGA Telecom. It is a Manifest V3 Chrome extension: the agent clicks Analyse conversation, it reads the ticket thread, retrieves Knowledge Base guidance and proposes a draft reply. The agent always reviews before anything is sent. Security is designed in: least-privilege permissions, no remote code, and AI calls routed through a company-controlled backend.',
     'momens': 'Momens is a project management CRM used at Sembcorp Solar. I led its company-wide rollout, trained stakeholders across divisions, and acted as a liaison between users and the vendor to implement UI enhancements and fix bugs.',
 
@@ -106,8 +123,8 @@ export default function MascotChatWidget() {
     'supabase': 'In the SCS project, Supabase handles all backend needs: PostgreSQL for story/panel data, Supabase Auth for admin accounts with email verification, RLS (Row-Level Security) for role-based access, and Supabase Storage for character sprites and backgrounds.',
 
     // GreenLoopFarms
-    'greenloop': 'GreenLoopFarms is a Singapore hydroponic urban farm growing pesticide-free vegetables and microgreens. I contributed to the early idea and business strategy, and helped co-prepare the pitch deck that won a SGD $10,000 NYP JumpStart Grant. Partners include FURA (World\'s 50 Best Discovery), East Bistro, NIE, NUS, and NYP. Visit greenloopfarms.com!',
-    'grant': 'GreenLoopFarms won a SGD $10,000 NYP JumpStart Grant, a competitive startup grant from Nanyang Polytechnic for innovative ventures.',
+    'greenloop': 'GreenLoopFarms is a Singapore hydroponic urban farm growing pesticide-free vegetables and microgreens. I contributed to the early idea and business strategy, and helped co-prepare the pitch deck that won a SGD 10,000 NYP JumpStart Grant. Partners include FURA (World\'s 50 Best Discovery), East Bistro, NIE, NUS, and NYP. Visit greenloopfarms.com!',
+    'grant': 'GreenLoopFarms won a SGD 10,000 NYP JumpStart Grant, a competitive startup grant from Nanyang Polytechnic for innovative ventures.',
 
     // Fire Safety
     'fire': 'The Fire Safety Drill Companion is a native Android app I built for HDB residents to rehearse fire evacuation on-demand. My core contributions: Dijkstra shortest-path with dynamic hazard re-routing, full ARCore integration, AR corridor rendering, and PDR sensor fusion optimization. Tech: Kotlin, Jetpack Compose, MVVM+Hilt, ARCore, TFLite, Room DB, Firebase FCM. Stats: 10,984 lines of Kotlin, ~80% test coverage, SUS score 79/100.',
@@ -116,14 +133,14 @@ export default function MascotChatWidget() {
     'dijkstra': 'I implemented Dijkstra\'s shortest-path algorithm for the Fire Safety app, applied to a weighted floor plan graph with a blockedNodes param for dynamic stairwell exclusion. findPathToNearestExit() runs against all exit nodes and picks the minimum-cost route. Thread-safe with @Synchronized.',
 
     // UAT Testing Dashboard
-    'uat': 'The UAT Testing Dashboard is a full-stack defect tracker and UAT management tool I built for a Hospital Appointment System. It tracks defects end-to-end (Open → In Progress → Resolved → Closed), links failed test cases directly to open defects, and has a real-time analytics dashboard with severity breakdown charts and UAT progress trends. Role-based access for PM, QA Lead, Tester, and Developer. CSV export for defect registers and test logs. Tech: React 18, Node.js, Express, SQLite, Recharts.',
-    'defect': 'In my UAT Testing Dashboard, defects go through a full lifecycle: Open → In Progress → Resolved → Closed. Each defect links directly to the test cases that triggered it, creating an auditable chain from failure to fix. Severity levels (Critical, High, Medium, Low) feed into the analytics dashboard.',
+    'uat': 'The UAT Testing Dashboard is a full-stack defect tracker and UAT management tool, a course project built around a hospital appointment system UAT scenario. It tracks defects end-to-end (Open → In Progress → Resolved → Closed), links failed test cases directly to open defects, and has a real-time analytics dashboard with severity breakdown charts and UAT progress trends. Role-based access for PM, QA Lead, Tester, and Developer. CSV export for defect registers and test logs. Tech: React 18, Node.js, Express, SQLite, Recharts.',
+    'defect': 'In the UAT Testing Dashboard, defects go through a full lifecycle: Open → In Progress → Resolved → Closed. Each defect links directly to the test cases that triggered it, creating an auditable chain from failure to fix. Severity levels (Critical, High, Medium, Low) feed into the analytics dashboard.',
 
     // AI Finance Insights Engine
     'finance': 'The AI Finance Insights Engine is an automated ETL pipeline that ingests 5 global market data sources: Brent crude, USD/SGD FX, S&P 500, logistics stocks, and geopolitical news. It computes rolling volatility, moving averages, and cross-asset correlations. An AI NLP engine classifies headlines across 9 sectors, scores sentiment, and flags supply chain risks. Output is a Star Schema data warehouse ready for Power BI. 100% Pytest coverage on all extraction and transformation logic.',
-    'etl': 'My ETL pipeline (AI Finance Insights) has 5 stages: Extract → Validate (schema + row parity) → Transform (rolling metrics) → Validate again → Load to SQLite. Two validation gates prevent corrupt data from reaching the database at any stage.',
+    'etl': 'The AI Finance Insights ETL pipeline has 5 stages: Extract → Validate (schema + row parity) → Transform (rolling metrics) → Validate again → Load to SQLite. Two validation gates prevent corrupt data from reaching the database at any stage.',
     'pipeline': 'The AI Finance pipeline ingests Brent crude, FX rates, S&P 500, logistics stocks, and geopolitical news. After transformation it produces a Star Schema data warehouse (Fact + Dim tables) consumed directly by Power BI for shipping and market analytics.',
-    'nlp': 'My AI NLP engine (in the Finance Insights project) classifies market headlines across 9 sectors, generates sentiment scores, flags supply chain risks, and auto-generates daily executive briefs. Built with an LLM API integration path.',
+    'nlp': 'The AI NLP engine in the Finance Insights project classifies market headlines across 9 sectors, generates sentiment scores, flags supply chain risks, and auto-generates daily executive briefs. Built with an LLM API integration path.',
 
     // UWB / Data Analytics
     'uwb': 'The UWB Indoor Localization project (CSC3105 Data Analytics) classifies LOS/NLOS UWB signal paths using SVM-RBF (89.61% accuracy, 0.9612 ROC-AUC) vs Logistic Regression (85.75%, 0.9195 AUC). Dataset: 41,996 samples across 7 indoor environments (Decawave DWM1000). I handled the data mining methodology: model selection, train/test split, RobustScaler, hyperparameter tuning, and range regression.',
@@ -131,12 +148,12 @@ export default function MascotChatWidget() {
     'data': 'My data analytics work: UWB Indoor Localization (CSC3105): full ML pipeline with PCA on 1,016 CIR dimensions, SVM-RBF (89.61% accuracy), logistic regression baseline (85.75%), and linear regression for dual-path range estimation (RMSE 1.757m). 41,996 samples, 7 environments, perfectly balanced 50/50 LOS/NLOS.',
 
     // Projects overview
-    'projects': 'I have built 6 projects: (1) SilverLink SG: cloud-native gRPC microservices platform with WebRTC; (2) SCS Awareness Platform: visual novel engine with React 19 + Supabase; (3) Fire Safety Drill Companion: Android AR + ML + Dijkstra; (4) UWB Indoor Localization: SVM-RBF ML pipeline at 89.61% accuracy; (5) UAT Testing Dashboard: full-stack defect tracker with real-time analytics; (6) AI Finance Insights Engine: ETL pipeline + NLP engine + Power BI Star Schema. I also co-pitched GreenLoopFarms, which won an SGD $10k NYP JumpStart Grant.',
+    'projects': 'I have built 6 projects: (1) SilverLink SG: cloud-native gRPC microservices platform with WebRTC; (2) SCS Awareness Platform: visual novel engine with React 19 + Supabase; (3) Fire Safety Drill Companion: Android AR + ML + Dijkstra; (4) UWB Indoor Localization: SVM-RBF ML pipeline at 89.61% accuracy; (5) UAT Testing Dashboard: defect tracker for a hospital appointment system UAT scenario (course project); (6) AI Finance Insights Engine: ETL pipeline + NLP engine + Power BI Star Schema. I also co-pitched GreenLoopFarms, which won a SGD 10,000 NYP JumpStart Grant.',
 
     // Skills
     'skills': 'Languages: Java, Python, C++, TypeScript, JavaScript. Frontend: React 19, Next.js, Tailwind CSS, Framer Motion. Backend: Node.js, gRPC, Prisma ORM, Supabase. DevOps: Docker, Kubernetes, GitHub Actions, Cloudflare. Databases: PostgreSQL (Neon serverless), MongoDB, SQL.',
     'tech': 'My stack: React 19 + TypeScript + Vite on the frontend; Node.js, gRPC, Prisma for backends; Docker + Kubernetes + GitHub Actions for DevOps; PostgreSQL (Neon serverless), Supabase, MongoDB for data.',
-    'frontend': 'Frontend: React 19, Next.js, TypeScript, Vite, Tailwind CSS, Framer Motion. I built two full production frontends: SilverLink (skills platform) and the SCS visual novel engine.',
+    'frontend': 'Frontend: React 19, Next.js, TypeScript, Vite, Tailwind CSS, Framer Motion. I built front ends for SilverLink SG and the SCS Awareness Platform.',
     'backend': 'Backend: Node.js, gRPC microservices, Prisma ORM, Supabase BaaS. In SilverLink I designed 4 independent gRPC services with optimistic concurrency control and idempotency keys.',
     'docker': 'I use Docker Compose for local development and Kubernetes for orchestration in production. Every SilverLink microservice runs in its own isolated container.',
     'kubernetes': 'In SilverLink SG, Kubernetes handles container orchestration and horizontal scaling. Combined with EMA-based autoscaling forecasting, the platform can proactively scale microservices under load.',
@@ -148,8 +165,8 @@ export default function MascotChatWidget() {
     'yourself': 'I\'m John Aaron, a Computing Science student at SIT × University of Glasgow. My path into tech started at a Sembcorp internship where UAT testing sparked my curiosity about software. I love building things that solve real problems and help people.',
     'sit': 'I study at Singapore Institute of Technology (SIT) in partnership with the University of Glasgow. My course is Computing Science.',
     'nyp': 'I completed a Diploma in Electrical Engineering with Eco-Design at Nanyang Polytechnic (NYP) before joining SIT for my degree.',
-    'contact': 'You can reach me at johnaaronmb@gmail.com, or connect on LinkedIn at linkedin.com/in/john-branzuela. Always open to internships, collaborations, and interesting projects!',
-    'email': 'Drop me an email at johnaaronmb@gmail.com. I try to respond within a day.',
+    'contact': 'You can reach me at johnaaronmb@gmail.com, or connect on LinkedIn at linkedin.com/in/john-branzuela. Open to AI, data and software graduate roles.',
+    'email': 'Drop me an email at johnaaronmb@gmail.com.',
     'linkedin': 'Connect with me on LinkedIn: linkedin.com/in/john-branzuela',
   };
 
@@ -188,7 +205,7 @@ export default function MascotChatWidget() {
       }
     }
     
-    return "Data not found. Try asking about my [Experience], [Projects], [Skills], or [Background]!";
+    return "I don't have an answer for that yet. Try projects, experience, skills or education, or email johnaaronmb@gmail.com.";
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -241,8 +258,10 @@ export default function MascotChatWidget() {
     <>
       {/* Floating Toggle Button */}
       <button
+        ref={launcherRef}
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
-        aria-label={isOpen ? 'Close chat' : 'Open chat'}
+        aria-label={isOpen ? 'Close chat' : "Chat about John's work"}
         className={`btn outline-offset-0 fixed bottom-4 right-4 sm:bottom-6 z-40 p-0 text-black ${isOpen ? 'bg-[var(--orange)]' : 'bg-[var(--cream)]'}`}
       >
         <div className="flex items-center gap-2 p-1 sm:px-3 sm:py-1.5">
@@ -253,7 +272,7 @@ export default function MascotChatWidget() {
             style={{ imageRendering: 'pixelated' }}
           />
           <span className="hidden sm:inline font-pixel text-xs">
-            {isOpen ? 'CLOSE' : 'CHAT'}
+            {isOpen ? 'Close' : 'Chat'}
           </span>
         </div>
       </button>
@@ -267,7 +286,7 @@ export default function MascotChatWidget() {
             exit={{ opacity: 0, scale: 0.92, y: 12 }}
             transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
             className="fixed bottom-24 right-0 sm:right-4 z-50 w-full sm:w-96 bg-black border-4 border-amber-400 shadow-8bit flex flex-col"
-            style={{ height: '520px' }}
+            style={{ height: 'min(520px, calc(100dvh - 8rem))' }}
           >
             {/* Header */}
             <div className="flex-shrink-0 bg-zinc-900 border-b-2 border-amber-400 px-4 py-3 flex items-center gap-3">
@@ -278,7 +297,8 @@ export default function MascotChatWidget() {
                 </p>
               </div>
               <button
-                onClick={() => setIsOpen(false)}
+                type="button"
+                onClick={closeChat}
                 aria-label="Close chat"
                 className="flex-shrink-0 inline-flex items-center justify-center min-w-[44px] min-h-[44px] -my-2 -mr-2 font-pixel text-xs text-gray-500 hover:text-amber-400 transition-colors px-1"
               >
@@ -301,7 +321,7 @@ export default function MascotChatWidget() {
                     <div className="flex-shrink-0 w-10 h-10">
                       <img
                         src="https://d2xsxph8kpxj0f.cloudfront.net/310519663399162945/5mLLaUiLoCi2BBtUhHeagh/LilJohnny-happycopy_aa6087aa.png"
-                        alt="John Aaron"
+                        alt=""
                         className="w-10 h-10"
                         style={{ imageRendering: 'pixelated' }}
                       />
@@ -324,7 +344,7 @@ export default function MascotChatWidget() {
                   <div className="flex-shrink-0 w-10 h-10">
                     <img
                       src="https://d2xsxph8kpxj0f.cloudfront.net/310519663399162945/5mLLaUiLoCi2BBtUhHeagh/LilJohnny-worrycopy_8d3aee8e.png"
-                      alt="John Aaron"
+                      alt=""
                       className="w-10 h-10"
                       style={{ imageRendering: 'pixelated' }}
                     />
@@ -371,7 +391,8 @@ export default function MascotChatWidget() {
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onInput={e => setInput((e.target as HTMLInputElement).value)}
-                  placeholder="Type query..."
+                  placeholder="Ask about a project or skill"
+                  aria-label="Ask about a project or skill"
                   className="flex-1 min-w-0 bg-black text-white font-mono text-base outline-none"
                   disabled={isTyping}
                   data-chat-input

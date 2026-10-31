@@ -1,9 +1,10 @@
 import type { CSSProperties } from 'react';
+import PixelArt from './PixelArt';
 
 type RibbonTone = 'orange' | 'teal';
 
 interface RibbonProps {
-  /** Phrases on the strip; joined with ★ separators */
+  /** Phrases on the strip; each is followed by a sparkle separator */
   items: string[];
   tone?: RibbonTone;
   reverse?: boolean;
@@ -16,9 +17,10 @@ const TONES: Record<RibbonTone, string> = {
   teal: 'bg-[var(--teal)] text-black',
 };
 
-// Lower-bound glyph advance: Press Start 2P is 1em wide (14px at text-sm) and
-// fallback glyphs like ★ are narrower, so this errs towards extra repeats.
+// Lower-bound glyph advance: Press Start 2P is 1em wide (14px at text-sm), so
+// this errs towards extra repeats.
 const CHAR_PX = 14;
+const SEPARATOR_PX = 16 + 2 * 16; // sparkle plus the gap either side
 const MIN_HALF_PX = 4200; // each half of the loop must be wider than a wide screen
 const SPEED_PX_PER_S = 60; // same scroll speed whatever the text length
 
@@ -32,8 +34,7 @@ export default function Ribbon({
   reverse = false,
   className = '',
 }: RibbonProps) {
-  const phrase = `${items.join(' ★ ')} ★ `;
-  const groupPx = phrase.length * CHAR_PX;
+  const groupPx = items.join('').length * CHAR_PX + items.length * SEPARATOR_PX;
   const repeats = Math.max(2, Math.ceil(MIN_HALF_PX / groupPx));
   const duration = Math.round((repeats * groupPx) / SPEED_PX_PER_S);
 
@@ -47,8 +48,13 @@ export default function Ribbon({
         style={{ '--ribbon-duration': `${duration}s` } as CSSProperties}
       >
         {Array.from({ length: repeats * 2 }, (_, i) => (
-          <span key={i} className="font-pixel text-sm sm:text-base whitespace-pre">
-            {phrase}
+          <span key={i} className="flex items-center">
+            {items.map(item => (
+              <span key={item} className="flex items-center">
+                <span className="font-pixel text-sm sm:text-base whitespace-pre">{item}</span>
+                <PixelArt name="sparkle" size={16} lazy className="mx-4" />
+              </span>
+            ))}
           </span>
         ))}
       </div>

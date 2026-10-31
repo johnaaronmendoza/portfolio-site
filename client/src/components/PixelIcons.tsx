@@ -64,65 +64,28 @@ const GH_ROWS = [
   '0000000000000000',
 ];
 
-// ── Email envelope ────────────────────────────────────────────────────────
-// Border rect: rows 1 & 13 (top/bottom), cols 1 & 14 (sides)
-// V-flap: diagonals from top-left & top-right corners meeting at row 7 center
-const EM_ROWS = [
-  '0000000000000000',
-  '0111111111111110',
-  '0110000000000110',
-  '0101000000001010',
-  '0100100000010010',
-  '0100010000100010',
-  '0100001001000010',
-  '0100000110000010',
-  '0100000000000010',
-  '0100000000000010',
-  '0100000000000010',
-  '0100000000000010',
-  '0100000000000010',
-  '0111111111111110',
-  '0000000000000000',
-  '0000000000000000',
-];
+// Both icons draw in currentColor so they take the text colour of the button
+// or link they sit in (cream on navy, cream on violet, navy on hover).
+const SVG_STYLE = { imageRendering: 'pixelated', display: 'block', flexShrink: 0 } as const;
 
 export function PixelLinkedIn({ size = 40 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 16 16"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ imageRendering: 'pixelated', display: 'block', flexShrink: 0 }}>
-      <rect width="16" height="16" fill="#0A66C2" />
-      <PixelGrid rows={LI_ROWS} fg="white" />
+    <svg width={size} height={size} viewBox="0 0 16 16" aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg" style={SVG_STYLE}>
+      {/* 1px frame, then the monogram shifted to sit centred inside it */}
+      <path d="M0 0h16v16H0zM1 1v14h14V1z" fill="currentColor" fillRule="evenodd" />
+      <g transform="translate(1 1)">
+        <PixelGrid rows={LI_ROWS} fg="currentColor" />
+      </g>
     </svg>
   );
 }
 
-export function PixelGitHub({
-  size = 40,
-  fg = 'white',
-  bg = 'transparent',
-}: {
-  size?: number;
-  fg?: string;
-  bg?: string;
-}) {
+export function PixelGitHub({ size = 40 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 16 16"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ imageRendering: 'pixelated', display: 'block', flexShrink: 0 }}>
-      {bg !== 'transparent' && <rect width="16" height="16" fill={bg} />}
-      <PixelGrid rows={GH_ROWS} fg={fg} />
-    </svg>
-  );
-}
-
-export function PixelEmail({ size = 40 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 16 16"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ imageRendering: 'pixelated', display: 'block', flexShrink: 0 }}>
-      <rect width="16" height="16" fill="#000000" />
-      <PixelGrid rows={EM_ROWS} fg="#F59E0B" />
+    <svg width={size} height={size} viewBox="0 0 16 16" aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg" style={SVG_STYLE}>
+      <PixelGrid rows={GH_ROWS} fg="currentColor" />
     </svg>
   );
 }

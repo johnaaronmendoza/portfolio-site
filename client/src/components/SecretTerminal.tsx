@@ -19,14 +19,11 @@ const BOOT = [
 const FS: Record<string, string> = {
   'about.txt': `NAME     : John Aaron Mendoza Branzuela
 DEGREE   : BSc Computing Science (Hons) | SIT x University of Glasgow
-ROLE     : Computing Science Student | Aspiring Business Analyst
+ROLE     : Computing Science student | AI, data and full-stack
 LOCATION : Singapore
 
-I think in systems but lead with people. Quick learner,
-clear communicator, calm when priorities shift.
-At Sembcorp, that meant leading UAT for a 50MWp solar
-deployment and making sure engineers and stakeholders
-felt heard.`,
+I build AI and data tools for the people who have to use them.
+Now building Desk Assist at LGA Telecom.`,
 
   'skills.txt': `LANGUAGES  : Java · Python · TypeScript · JavaScript · SQL · Kotlin · C++
 FRONTEND   : React 19 · Next.js · Tailwind CSS · Framer Motion
@@ -41,20 +38,20 @@ LINKEDIN : linkedin.com/in/john-branzuela
 GITHUB   : github.com/johnaaronmendoza
 WEB      : https://portfolio-site-lh1v.vercel.app
 
-Open to internships, collaborations, and interesting problems.`,
+Open to AI, data and software graduate roles.`,
 
   'resume.pdf': `[BINARY FILE: cannot display in terminal]
 Use your browser to download from the portfolio.`,
 };
 
 const PROJECTS: Record<string, string> = {
-  'silverlink':  'SilverLink SG          2025  React · gRPC · Docker · Kubernetes · PostgreSQL',
-  'scs':         'SCS Awareness Platform 2025  React 19 · TypeScript · Supabase · Vercel',
-  'firesafety':  'Fire Safety Companion  2025  Kotlin · ARCore · TFLite · Jetpack Compose',
-  'uwb':         'UWB Localization       2025  Python · SVM-RBF · scikit-learn · PCA',
-  'uat':         'UAT Testing Dashboard  2024  React 18 · Node.js · SQLite · Recharts',
-  'ai-finance':  'AI Finance Engine      2024  Python · Pandas · SQLite · NLP · Power BI',
-  'greenloop':   'GreenLoopFarms         2022  SGD $10k NYP JumpStart Grant winner',
+  'silverlink':  'SilverLink SG                2025  React · gRPC · Docker · Kubernetes · PostgreSQL',
+  'scs':         'SCS Awareness Platform       2025  React 19 · TypeScript · Supabase · Vercel',
+  'firesafety':  'Fire Safety Drill Companion  2025  Kotlin · ARCore · TFLite · Jetpack Compose',
+  'uwb':         'UWB Indoor Localization      2025  Python · SVM-RBF · scikit-learn · PCA',
+  'uat':         'UAT Testing Dashboard        2024  React 18 · Node.js · SQLite · Recharts (course project)',
+  'ai-finance':  'AI Finance Insights Engine   2024  Python · Pandas · SQLite · NLP · Power BI',
+  'greenloop':   'GreenLoopFarms               2022  SGD 10,000 NYP JumpStart Grant winner',
 };
 
 function process(raw: string, setLocation: (p: string) => void): string[] {
@@ -150,7 +147,7 @@ function process(raw: string, setLocation: (p: string) => void): string[] {
           'commit 21a0d98  feat: Fire Safety AR corridor navigation (ARCore)',
           'commit 9ff12c3  feat: SilverLink gRPC microservices + WebRTC',
           'commit 7e33b40  feat: UWB LOS/NLOS classification, SVM-RBF 89.61%',
-          'commit 0001337  init: portfolio-8bit, industrial retro-futurism',
+          'commit 0001337  init: portfolio, retro web',
         ];
       }
       return [`git: '${arg}' is not a supported git command.`];

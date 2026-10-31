@@ -121,10 +121,10 @@ function Keycap({ k, pressed, onPress, onPreview }: {
       type="button"
       onClick={onPress}
       onMouseEnter={onPreview}
-      onFocus={onPreview}
       aria-pressed={pressed}
       aria-label={k.name}
-      className="relative aspect-square select-none rounded-[12px] focus-visible:outline-offset-4"
+      // Scroll margin keeps a tabbed-to key clear of the sticky description panel on phones
+      className="relative aspect-square select-none rounded-[12px] focus-visible:outline-offset-4 scroll-mt-[240px] lg:scroll-mt-0"
     >
       <span
         className="absolute inset-0 flex items-center justify-center rounded-[12px] transition-[transform,box-shadow] duration-100 ease-out"

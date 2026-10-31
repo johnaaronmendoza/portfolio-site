@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const SHORTCUTS = [
   { keys: ['Ctrl', 'K'],    desc: 'Open command palette'       },
-  { keys: ['↑', '↓'],       desc: 'Navigate between sections'  },
   { keys: ['`'],             desc: 'Open secret terminal'       },
   { keys: ['?'],             desc: 'Show keyboard shortcuts'    },
   { keys: ['↑↑↓↓←→←→BA'],  desc: 'Konami code easter egg'     },

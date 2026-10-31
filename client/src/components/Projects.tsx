@@ -368,7 +368,7 @@ export default function Projects() {
 
             {/* Tile grid: rows of 3+3, 2+2+2, 3+3 on large screens; GreenLoop
                 spans both columns at sm so the 7th tile is never orphaned */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
+            <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
               <AnimatePresence initial={false} mode="popLayout">
                 {visible.map(project => (
                   <ProjectCard key={project.num} project={project} />

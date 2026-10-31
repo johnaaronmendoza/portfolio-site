@@ -201,7 +201,9 @@ export default function MascotChatWidget() {
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeChat();
+      // Leave Escape to a modal (terminal, palette, shortcuts) open on top
+      if (e.key !== 'Escape' || document.querySelector('[aria-modal="true"]')) return;
+      closeChat();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -218,6 +220,8 @@ export default function MascotChatWidget() {
   useEffect(() => {
     const open = (e: Event) => {
       setIsOpen(true);
+      // If the chat was already open, the open effect won't run again
+      if (hasFinePointer()) requestAnimationFrame(() => inputRef.current?.focus());
       const query = (e as CustomEvent<{ query?: string } | null>).detail?.query;
       if (query) setPendingQuery(query);
     };
@@ -241,11 +245,12 @@ export default function MascotChatWidget() {
     }
   }, [isTyping]);
 
+  // Ask a queued question once the panel is open and the bot has finished replying
   useEffect(() => {
-    if (!pendingQuery || !isOpen) return;
+    if (!pendingQuery || !isOpen || isTyping) return;
     setPendingQuery(null);
     sendMessage(pendingQuery);
-  }, [pendingQuery, isOpen]);
+  }, [pendingQuery, isOpen, isTyping]);
 
   const sendMessage = async (text: string) => {
     if (!text.trim() || isTyping) return;

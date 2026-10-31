@@ -62,7 +62,8 @@ const PROJECTS: Record<string, string> = {
 type Result = string[] | { error: string };
 
 // Runs inside the Enter keypress, so window.open counts as the visitor's own action
-function process(raw: string, setLocation: (p: string) => void): Result {
+// navigate closes the terminal first, so focus never lands behind an open modal
+function process(raw: string, navigate: (p: string) => void): Result {
   const [cmd, ...args] = raw.trim().toLowerCase().split(/\s+/);
   const arg = args.join(' ');
 
@@ -129,7 +130,7 @@ function process(raw: string, setLocation: (p: string) => void): Result {
         'ai_finance': '/projects/ai-finance',
       };
       if (routes[arg]) {
-        setTimeout(() => setLocation(routes[arg]), 400);
+        navigate(routes[arg]);
         return [`Navigating to ${arg}...`];
       }
       return { error: `open: ${arg}: project not found. Try "ls projects" for names.` };
@@ -276,7 +277,7 @@ export default function SecretTerminal() {
     if (!input.trim() && input !== '') { setInput(''); return; }
     play('click');
     const cmd = input.trim();
-    const result = process(cmd, setLocation);
+    const result = process(cmd, (path) => { close(); setLocation(path); });
 
     if (Array.isArray(result) && result[0] === '__CLEAR__') {
       setLines(BOOT.map(t => ({ type: 'system', text: t })));

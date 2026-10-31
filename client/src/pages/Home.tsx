@@ -1,8 +1,7 @@
 /**
- * Home Page - 8-Bit Hardware Engineer Portfolio
- * Design: Industrial Retro-Futurism
- * - Scrollable portfolio with Hero, About, Experience, Projects, Skills sections
- * - Maintains the original layout with all sections visible
+ * Home Page: maximalist 8-bit portfolio.
+ * Hero → key figures → About → Experience → Projects → Skills → Footer,
+ * with slanted ribbon tickers between sections.
  */
 
 import Hero from '@/components/Hero';
@@ -11,7 +10,8 @@ import Experience from '@/components/Experience';
 import Projects from '@/components/Projects';
 import Skills from '@/components/Skills';
 import Footer from '@/components/Footer';
-import PixelDivider from '@/components/PixelDivider';
+import Ribbon from '@/components/Ribbon';
+import StatsBand from '@/components/StatsBand';
 import SectionNav from '@/components/SectionNav';
 import { useKeyboardNavigation } from '@/hooks/useKeyboardNavigation';
 import { useHomeAchievements } from '@/hooks/useAchievements';
@@ -27,21 +27,22 @@ export default function Home() {
       <div id="hero" className="section-transition">
         <Hero />
       </div>
+      <StatsBand />
       <div id="about" className="section-transition">
         <About />
       </div>
-      <PixelDivider variant="wave" />
+      <Ribbon tone="amber" tilt={-2} items={['EXPERIENCE', 'LGA TELECOM', 'SEMBCORP SOLAR']} />
       <div id="experience" className="section-transition">
         <Experience />
       </div>
+      <Ribbon tone="lime" tilt={2} reverse items={['PROJECTS', 'VIEW WORK']} />
       <div id="projects" className="section-transition">
         <Projects />
       </div>
-      <PixelDivider variant="circuit" />
+      <Ribbon tone="cobalt" tilt={-3} items={['SKILLS', 'PRESS A KEY']} />
       <div id="skills" className="section-transition">
         <Skills />
       </div>
-      <PixelDivider variant="wave" />
       </main>
       <div id="footer" className="section-transition">
         <Footer />

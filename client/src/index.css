@@ -136,6 +136,13 @@
   100% { transform: translateX(0); }
 }
 
+/* Sticker wiggle: one shake on hover, layered over the sticker's own rotate */
+@keyframes sticker-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-4deg); }
+  75% { transform: rotate(4deg); }
+}
+
 /* Screen Tear VHS Effect */
 @keyframes screenTear {
   0% {
@@ -201,6 +208,14 @@
 }
 
 :root {
+  /* Maximalist 8-bit palette tokens (see CLAUDE.md Design rules for pairings) */
+  --ink: #000;
+  --paper: #FAFAFA;
+  --amber: #F59E0B;
+  --lime: #C6FF3D;
+  --cobalt: #2B35FF;
+  --signal: #FF3B30;
+
   /* Hardware Engineer 8-Bit Palette */
   --primary: #F59E0B;
   --primary-foreground: #FAFAFA;
@@ -536,6 +551,38 @@
     animation-play-state: paused;
   }
 
+  /* Ribbon tickers: the site's signature texture. Transform only, pauses on
+     hover, fully static under reduced motion (see the end of this file).
+     The track holds two identical halves, so -50% loops seamlessly. */
+  .ribbon-track {
+    display: flex;
+    width: max-content;
+    animation: marquee var(--ribbon-duration, 40s) linear infinite;
+  }
+
+  .ribbon-track--reverse {
+    animation-name: marquee-reverse;
+  }
+
+  .ribbon-track:hover {
+    animation-play-state: paused;
+  }
+
+  /* Neon glow: hero name only (CLAUDE.md design rules) */
+  .neon-lime {
+    text-shadow:
+      0 0 4px var(--lime),
+      0 0 14px var(--lime),
+      0 0 32px rgb(198 255 61 / 0.5);
+  }
+
+  /* Stickers wiggle once on hover, on pointer devices with motion allowed */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .sticker:hover {
+      animation: sticker-wiggle 350ms ease-in-out 1;
+    }
+  }
+
   /* Monospace body font — line-height 1.7 for light text on dark backgrounds (impeccable) */
   .font-mono-8bit {
     font-family: 'Courier Prime', monospace;
@@ -603,5 +650,11 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* Ribbons and stickers stay completely still */
+  .ribbon-track,
+  .sticker {
+    animation: none !important;
   }
 }

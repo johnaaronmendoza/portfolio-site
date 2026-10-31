@@ -4,6 +4,7 @@ import { Link } from 'wouter';
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
+import { motionTokens } from '@/lib/motion-tokens';
 import SectionHeading from './SectionHeading';
 
 // ── Card images (shown in grid) ───────────────────────────────────────────
@@ -40,6 +41,8 @@ type Project = {
   link: string;
   externalUrl?: string;
   preloadImages: string[];
+  /** Big poster: spans 3 of 6 columns on large screens */
+  featured?: boolean;
 };
 
 const PROJECTS: Project[] = [
@@ -54,6 +57,7 @@ const PROJECTS: Project[] = [
     tags: ["React", "gRPC", "K8s", "PostgreSQL"],
     link: "/projects/silverlink",
     preloadImages: [silverLink2, silverLink3],
+    featured: true,
   },
   {
     num: 2,
@@ -66,6 +70,7 @@ const PROJECTS: Project[] = [
     tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
     link: "/projects/scs",
     preloadImages: [scs2, scs3],
+    featured: true,
   },
   {
     num: 3,
@@ -145,25 +150,30 @@ function matchesFilter(p: Project, filter: string | null): boolean {
 }
 
 // ── ProjectCard — own component so hooks are called once per card ─────────
-const CARD_LINK_CLASS = 'block outline-offset-4';
+const CARD_LINK_CLASS = 'flex h-full flex-col outline-offset-4';
+
+// Title blocks rotate through the band colours with their approved text
+// pairing. Signal red is kept for stickers (CLAUDE.md), so it marks the year.
+type Tone = 'lime' | 'amber' | 'cobalt';
+const TONES: Tone[] = ['lime', 'amber', 'cobalt'];
+const TONE_CLASS: Record<Tone, { frame: string; block: string }> = {
+  lime: { frame: 'border-[color:var(--lime)]', block: 'bg-[var(--lime)] text-black' },
+  amber: { frame: 'border-[color:var(--amber)]', block: 'bg-[var(--amber)] text-black' },
+  cobalt: { frame: 'border-[color:var(--cobalt)]', block: 'bg-[var(--cobalt)] text-white' },
+};
 
 function ProjectCard({ project }: { project: Project }) {
   const isComingSoon = project.link === '#';
   const isExternal   = project.link === 'external';
+  const tone = TONE_CLASS[TONES[(project.num - 1) % TONES.length]];
 
   // Smart preload: on 300 ms hover intent, fetch detail-page screenshots.
   const { handlers: preloadHandlers } = useSmartPreload(project.preloadImages);
 
   const body = (
     <>
-      {/* Project Image */}
-      <div className="relative overflow-hidden border-4 border-amber-400 group-hover:border-blue-400 shadow-8bit mb-5 h-44 sm:h-48 bg-zinc-900 transition-[border-color,box-shadow,transform] duration-200 group-hover:[box-shadow:8px_8px_0px_0px_#F59E0B] group-hover:-translate-y-1">
-        {/* Pixel corner accents — animate in on card hover */}
-        <div className="absolute top-0 left-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-[opacity,transform] duration-100 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-[opacity,transform] duration-100 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-[opacity,transform] duration-100 pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-[opacity,transform] duration-100 pointer-events-none" />
-
+      {/* Project Image: full-bleed poster top */}
+      <div className={`relative overflow-hidden border-b-4 border-black bg-zinc-900 ${project.featured ? 'h-56 lg:h-72' : 'h-48'}`}>
         {project.image ? (
           <PixelatedImage
             src={project.image}
@@ -193,38 +203,40 @@ function ProjectCard({ project }: { project: Project }) {
         )}
         {isExternal && (
           <div className="absolute top-2 right-2">
-            <span className="font-pixel text-xs text-blue-400 border border-blue-400 bg-black px-2 py-1">
+            <span className="font-pixel text-xs text-[color:var(--lime)] border-2 border-[color:var(--lime)] bg-black px-2 py-1">
               ↗ LIVE
             </span>
           </div>
         )}
       </div>
 
-      {/* Project Info */}
-      <div className="space-y-3">
-        {/* Index + year */}
-        <div className="font-mono text-xs text-zinc-400 group-hover:text-amber-400 transition-colors duration-150 tracking-widest select-none">
-          {String(project.num).padStart(2, '0')} · {project.year}
-        </div>
-        <h3 className="font-mono font-bold text-base sm:text-lg text-blue-400 leading-snug">
+      {/* Title block; the year sticker overlaps the image edge, not the title */}
+      <div className={`relative px-5 pt-8 pb-5 ${tone.block}`}>
+        <span className="sticker absolute -top-5 right-4 rotate-[5deg] rounded-lg border-4 border-black bg-[var(--signal)] text-black px-2.5 py-1.5 font-pixel text-xs">
+          {project.year}
+        </span>
+        <h3 className={`font-pixel leading-snug ${project.featured ? 'text-lg lg:text-2xl' : 'text-base'}`}>
           {project.name}
         </h3>
-        <p className="font-mono text-sm text-zinc-300 leading-relaxed">
+      </div>
+
+      {/* Project Info */}
+      <div className="flex flex-1 flex-col gap-4 p-5">
+        <p className="font-mono text-[15px] sm:text-base text-zinc-200 leading-relaxed">
           {project.description}
         </p>
-        {/* M03 — metric row slides up on hover (pointer devices only; always visible on touch) */}
-        <p className="font-mono text-xs text-amber-400 tracking-wider transition-[opacity,transform] duration-200 [@media(hover:hover)]:opacity-50 [@media(hover:hover)]:translate-y-1 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:translate-y-0">
+        <p className="font-mono text-sm text-amber-400 tracking-wider">
           ■ {project.metric}
         </p>
         <div className="flex flex-wrap gap-1.5">
           {project.tags.map(tag => (
-            <span key={tag} className="bg-[#353535] px-2 py-0.5 font-mono text-xs text-amber-400 border border-amber-500/20">
+            <span key={tag} className="bg-black px-2 py-0.5 font-mono text-xs text-amber-400 border border-amber-500/40">
               --{tag.replace(/\s+/g, '_')}
             </span>
           ))}
         </div>
         {!isComingSoon && (
-          <div className="font-mono-8bit text-xs text-amber-400 font-bold inline-flex items-center gap-1 translate-x-0 group-hover:translate-x-1.5 transition-transform duration-150">
+          <div className="mt-auto pt-2 font-mono-8bit text-sm text-[color:var(--lime)] font-bold inline-flex items-center gap-1 translate-x-0 group-hover:translate-x-1.5 transition-transform duration-150">
             {isExternal ? 'VISIT SITE ↗' : 'VIEW WORK →'}
           </div>
         )}
@@ -234,7 +246,7 @@ function ProjectCard({ project }: { project: Project }) {
 
   let card: ReactNode;
   if (isComingSoon) {
-    card = <div className="cursor-default">{body}</div>;
+    card = <div className="flex h-full flex-col cursor-default">{body}</div>;
   } else if (isExternal && project.externalUrl) {
     card = (
       <a
@@ -263,9 +275,11 @@ function ProjectCard({ project }: { project: Project }) {
 
   return (
     <motion.div
-      className="group"
-      exit={{ opacity: 0, y: 12, scale: 0.96, transition: { duration: 0.18 } }}
-      whileTap={isComingSoon ? {} : { scale: 0.97, transition: { duration: 0.1 } }}
+      className={`group border-4 bg-black shadow-[6px_6px_0_0_var(--paper)] ${tone.frame} ${
+        project.featured ? 'lg:col-span-3' : 'lg:col-span-2'
+      }`}
+      exit={{ opacity: 0, y: 12, scale: 0.96, transition: { duration: motionTokens.duration.fast } }}
+      whileTap={isComingSoon ? {} : { scale: 0.97, transition: { duration: motionTokens.duration.instant } }}
     >
       {card}
     </motion.div>
@@ -292,7 +306,7 @@ export default function Projects() {
               className={`font-pixel text-xs px-3 py-1.5 min-h-[44px] border-2 transition-colors ${
                 activeFilter === null
                   ? 'border-amber-400 text-black bg-amber-400'
-                  : 'border-zinc-700 text-zinc-500 hover:border-zinc-500 hover:text-zinc-300'
+                  : 'border-zinc-600 text-zinc-300 hover:border-zinc-400 hover:text-white'
               }`}
             >
               ALL
@@ -304,8 +318,8 @@ export default function Projects() {
                 aria-pressed={activeFilter === tag}
                 className={`font-pixel text-xs px-3 py-1.5 min-h-[44px] border-2 transition-colors ${
                   activeFilter === tag
-                    ? 'border-blue-400 text-black bg-blue-400'
-                    : 'border-zinc-700 text-zinc-500 hover:border-blue-400 hover:text-blue-400'
+                    ? 'border-[color:var(--lime)] text-black bg-[var(--lime)]'
+                    : 'border-zinc-600 text-zinc-300 hover:border-[color:var(--lime)] hover:text-[color:var(--lime)]'
                 }`}
               >
                 {tag}
@@ -313,7 +327,8 @@ export default function Projects() {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {/* Poster collage: 6 columns on large screens, featured posters span 3 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 sm:gap-8">
             <AnimatePresence initial={false}>
               {visible.map(project => (
                 <ProjectCard key={project.num} project={project} />

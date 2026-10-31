@@ -38,7 +38,7 @@ Uses **wouter** (not React Router). Routes are defined in `client/src/App.tsx`:
 
 ### Home page structure
 
-`pages/Home.tsx` composes sections in order with `PixelDivider` separators:
+`pages/Home.tsx` composes sections in order, separated by scrolling `Ribbon` bands (plus a `StatsBand` after the hero):
 `Hero → About → Experience → Projects → Skills → Footer`
 
 Each section has a corresponding `id` attribute (`#hero`, `#about`, etc.) used by keyboard navigation and the command palette.

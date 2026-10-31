@@ -112,13 +112,14 @@ Purpose: the one loud moment. Name, positioning line, Resume.
 - Role line: existing `AI · DATA · FULL-STACK` with `>` prompt and block
   cursor. Raise to 15/16px (currently 14px).
 - Positioning paragraph: existing copy, `body` step, `max-w-[60ch]`, cream.
-- CTAs:
-  - Primary: label "Resume (PDF)", `floppy.svg` 16px left (`aria-hidden`),
+- CTAs (lead decision, Oct 2026: Email me joins the hero; labels per
+  `copy.md`):
+  - Primary: label "Download resume", `floppy.svg` 16px left (`aria-hidden`),
     same href and `download` name as today. Full width at 375, auto from
     `sm`.
-  - Ghost: "GitHub ↗", "LinkedIn ↗" with existing pixel icons recoloured to
-    `currentColor` (they currently hard-code amber/black, an old-palette
-    leftover), plus sr-only "(opens in a new tab)".
+  - Ghost: "Email me" (`icon-contact.svg` 16px), "GitHub", "LinkedIn" with
+    the pixel icons in `currentColor`, plus sr-only "(opens in a new tab)" on
+    the two external links. No visible ↗ (copy.md).
 - Art (≥ `lg` only, `aria-hidden`, `pointer-events: none`):
   `starburst.svg` at 384px (48×48 × 8) behind `crt-computer.svg` at 256px
   (64×64 × 4), CRT offset so the starburst shows on all sides. Two
@@ -127,8 +128,7 @@ Purpose: the one loud moment. Name, positioning line, Resume.
   at 375 and avoids art sitting under text).
 - Keep: particles (skipped with reduced motion), scramble, floating pixels,
   blinking cursors, the load-in sequence.
-- **Recommend removing** (flag to lead; not in John's list of kept effects
-  and they conflict with MASTER):
+- **Removed** (lead confirmed; CLAUDE.md now records it):
   1. the scroll-linked shadow growth and lift on the hero window
      (`useScroll`/`useTransform`): it is scroll-driven motion and makes the
      window shadow inconsistent with every other window. Use a static

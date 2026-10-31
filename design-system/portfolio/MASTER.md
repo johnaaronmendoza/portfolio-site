@@ -40,6 +40,14 @@ it never sits on top of a window or band (they are opaque).
 
 No gradients, no tints, no `#111`-style near-blacks, no greys. `bg-zinc-*`
 and `text-zinc-*` are off-palette and should be replaced with tokens.
+One functional alpha exception: the modal scrim behind the command palette,
+terminal and shortcuts overlay is `bg-black/70` (never `bg-opacity-*`, which
+Tailwind v4 removed).
+
+The shadcn variables in `index.css` (`--primary`, `--ring`, `--border`,
+`--card`...) and the `.shadow-8bit*` utilities alias these tokens; they never
+hold their own hex: `--background: var(--navy)`, `--foreground` /
+`--primary-foreground`... see section 2.10 for the full map.
 
 ### 1.2 Contrast: every text pairing (WCAG 2.x relative luminance, computed)
 
@@ -112,7 +120,7 @@ noted. `sm` (640) and `md` (768) values sit between; pick the nearest step.
 
 | Step | Family | 375 | 1366 | Line height | Use |
 |---|---|---|---|---|---|
-| `display-xl` | pixel | 30 | 48 | 1.25 | Hero name (h1) |
+| `display-xl` | pixel | `clamp(20px,7vw,30px)` (26 at 375) | 48 | 1.25 | Hero name (h1). 30px at 375 overflows: 9 glyphs + cursor ≈ 296px vs 289px body |
 | `display-l` | pixel | 26 | 48 | 1.2 | Section headings (h2) |
 | `display-m` | pixel | 18 | 24 | 1.35 | Featured tile titles, footer h2 (22/28 ok) |
 | `display-s` | pixel | 15 | 18 | 1.5 | Org names, tile titles, footer h3 (14) |
@@ -244,10 +252,10 @@ the bottom-left Pause button or bottom-right chat launcher.
 - Shadow: `shadow-window`.
 - Variants:
   - `default`: as above.
-  - `terminal` (hero `welcome.exe` only): black body, cream text, `--focus:
-    orange`. This is the one sanctioned exception to "cream body", because the
-    two-tone orange/teal name needs a dark surface (orange on cream is 2.18).
-    **Lead: confirm with John**, since CLAUDE.md says cream body.
+  - `terminal`: black body, cream text, `--focus: orange`. Used by the hero
+    `welcome.exe` (confirmed in CLAUDE.md, Oct 2026) and by the overlays in
+    2.10, because orange/teal text needs a dark surface (orange on cream is
+    2.18).
   - `wide`: Projects `featured_projects`, padding 16/24/32 so the tile grid
     gets the width.
 - States: windows are not interactive. No hover lift, no reveal on scroll.
@@ -410,6 +418,52 @@ by a flexible 6px rule (`aria-hidden`). Optional 32px section icon (from
 Existing `SectionNav` button. Keep: fixed bottom-left, cream fill / orange
 when paused, `aria-pressed`, visible text "Pause motion" from `sm`, 44px min.
 Hidden under `prefers-reduced-motion` (nothing moves to pause).
+
+### 2.10 Overlays: chat panel, command palette, terminal, shortcuts
+
+Each is a `terminal`-variant Window (`.window` + `.window-bar` + black body),
+so it inherits the 3px ink frame, ink shadow and violet title bar. Title is a
+filename: `chat.exe`, `commands.exe`, `terminal.sh`, `shortcuts.txt`. Close
+control is a real 44×44 `<button aria-label="Close …">` in the bar, cream
+text, `--focus: cream` (4.98 on violet).
+
+Old class → token (all ratios on the black body unless noted):
+
+| Old | New | Ratio |
+|---|---|---|
+| `bg-zinc-900` (bars, input rows) | bar: `.window-bar`; rows: `bg-black` | |
+| `border-4 border-amber-400`, `shadow-8bit`, inline `#F59E0B` shadow | `.window` | |
+| `border-amber-400` / `border-blue-400` / `border-zinc-800` (inner rules) | `border-[color:var(--cream)]` 2px, or drop the rule | 17.58 non-text |
+| `text-white`, `text-gray-300` | `text-[color:var(--cream)]` | 17.58 |
+| `text-gray-500/600`, `text-zinc-500/600` (meta, timestamps, hints) | `text-[color:var(--cream)]` | 17.58 |
+| `text-amber-400` (prompts `>` `$`, typed input echo) | `text-[color:var(--orange)]` | 8.08 |
+| `text-blue-400` (status, system lines) | `text-[color:var(--teal)]` | 9.69 |
+| `text-red-400` (errors) | `bg-[var(--orange)] text-black px-1` + "error:" prefix | 8.08 |
+| `caret-amber-400` | `caret-[var(--orange)]` | |
+| selected row `bg-amber-400 text-black` | `bg-[var(--orange)] text-black` (description inherits) | 8.08 |
+| row hover `hover:bg-zinc-900` | `hover:bg-[var(--teal)] hover:text-black` | 9.69 |
+| user bubble | `bg-[var(--orange)] text-black` | 8.08 |
+| bot bubble | `bg-[var(--cream)] text-[color:var(--navy)]` | 14.40 |
+| quick-action buttons | `btn btn-ghost` (cream on black; hover cream fill, navy text) | 17.58 / 14.40 |
+| SEND / submit | `btn btn-primary`, label "Send"; disabled = cream fill, no shadow, never `opacity-50` | 8.08 |
+| input `outline-none` | keep it on the `<input>`, add to its row `focus-within:outline focus-within:outline-[3px] focus-within:outline-[var(--orange)] focus-within:outline-offset-2` | 8.08 |
+| backdrop | `bg-black/70` | |
+
+Sizes: message and output text 15px mono (`text-[15px]`), inputs 16px
+(`text-base`, also stops iOS zoom), timestamps, shortcut hints and
+descriptions 14px (`text-sm`, `fine` step). Nothing below 12px; no
+`text-[9px]`/`text-[10px]`.
+
+Shadcn alias map (`index.css` `:root` and `.dark`): `--background: navy`,
+`--foreground: cream`, `--card`/`--popover`/`--muted`/`--input: cream`,
+`--card-foreground`/`--popover-foreground`/`--muted-foreground: navy`,
+`--primary: orange`, `--primary-foreground: ink`, `--secondary`/`--accent:
+teal`, `--secondary-foreground`/`--accent-foreground: ink`, `--border: ink`,
+`--ring: orange`, `--sidebar*` the same. `.shadow-8bit-sm/-/-lg` keep their
+offsets with `var(--ink)`; delete `.shadow-8bit-blue`, `.shadow-8bit-dark`,
+`.scroll-progress-glow`, `.border-8bit*`, `.hover-8bit*`.
+
+Motion: open 150–200ms opacity + translate only; no white CRT flash.
 
 ---
 

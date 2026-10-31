@@ -1,36 +1,33 @@
 # Pixel assets
 
-Original pixel art for the neo-brutalist retro web design. Every file is an SVG
-with a `viewBox` only (no width/height), `shape-rendering="crispEdges"`, 1-cell
-black outlines and only the palette tokens from CLAUDE.md (navy, ink, cream,
-orange, teal, violet, amber, plus white highlights and beige `#D9CBA8` plastic).
-No text is baked in. Scale in whole multiples of the grid (for example 16px
-icons at 16, 32 or 48px) and add `image-rendering: pixelated` if rasterised.
+Original pixel art for the neo-brutalist retro web design, drawn to the brief
+in `design-system/portfolio/assets.md` (placement: `pages/home.md` §9).
+
+Every file is a hand-authored SVG: `viewBox` = `width` = `height` = grid,
+`shape-rendering="crispEdges"`, integer coordinates, one `<path>` per colour,
+1-unit ink outlines, shading only by ink checkerboard dither (light from top
+left). Colours are only ink `#000000`, cream `#F4EAD5`, orange `#FF7A2F`,
+teal `#2EC4B6` and navy `#16163F`. No amber, white or greys, and no text,
+letters or numerals.
+
+Use at integer multiples of the grid with `image-rendering: pixelated`.
+All twelve are **decorative**: `<img alt="">` or inline with
+`aria-hidden="true"`. If one is ever the only content of a link or button,
+put an `aria-label` on the control, not on the image.
 
 Served from `/assets/pixel/<file>`.
 
-| File | Grid | Depicts | Intended placement | Decorative or meaningful |
+| File | Grid | Depicts | Placement (size) | Accessibility |
 |---|---|---|---|---|
-| `retro-computer.svg` | 64×64 | Beige CRT monitor with a teal screen showing an orange folder and a white arrow cursor, keyboard in front | Hero main illustration | Decorative next to the hero heading (`alt=""`). If used alone: alt "Pixel-art retro computer" |
-| `starburst.svg` | 32×32 | Violet eight-point starburst badge | Behind the retro computer or behind a short label | Decorative (`alt=""` / `aria-hidden="true"`) |
-| `icon-home.svg` | 16×16 | House with orange roof, cream walls, teal door and window | Nav / command palette item for the hero section | Decorative when next to the "Home" label (`alt=""`); otherwise alt "Home" |
-| `icon-about.svg` | 16×16 | Cream document page with folded corner, orange title line, teal text lines | Nav item and `about_me.txt` window title bar | Decorative beside a label; otherwise alt "About" |
-| `icon-experience.svg` | 16×16 | Orange briefcase with teal clasp | Nav item and Experience window title bar | Decorative beside a label; otherwise alt "Experience" |
-| `icon-projects.svg` | 16×16 | Folder: amber back tab, orange front | Nav item and Projects window title bar | Decorative beside a label; otherwise alt "Projects" |
-| `icon-skills.svg` | 16×16 | Single bevelled keyboard keycap, cream top with an orange home-row nub | Nav item and Skills window title bar | Decorative beside a label; otherwise alt "Skills" |
-| `icon-contact.svg` | 16×16 | Cream envelope with orange flap | Nav item, footer / contact links | Decorative beside a label; otherwise alt "Contact" |
-| `icon-smiley.svg` | 24×24 | Amber smiley with orange shading and white shine | HELLO strip / marquee | Decorative (`alt=""`) |
-| `icon-sparkle.svg` | 12×12 | Amber four-point sparkle | Accent beside headings or in marquee strips | Decorative (`alt=""`) |
-| `icon-planet.svg` | 24×24 | Teal planet with an orange ring passing in front | Marquee strips or section accents | Decorative (`alt=""`) |
-
-Notes for wiring:
-
-- Nav and title-bar icons always sit next to visible text, so use `alt=""`
-  (or `aria-hidden="true"` on inline SVG) and let the label carry the meaning.
-- Black outlines are low contrast on navy by design; the filled shapes carry the
-  silhouette. On navy, place icons on a cream window or chip if they need to
-  read at 16px.
-- Amber appears in the smiley, the sparkle, the folder back tabs (icon and
-  screen), the planet ring highlight and the shade of the orange computer key,
-  because the brief asked for amber there. CLAUDE.md limits amber in the UI to
-  the AI story, so the reviewer may want some of it swapped for orange.
+| `crt-computer.svg` | 64×64 | Generic cream desktop computer: monitor with a navy screen showing four teal output bars and a teal block cursor, orange 2×2 power light, base unit with vents and a floppy slot, keyboard slab of 2×2 keys; right and bottom faces dithered | Hero art column over the starburst (256px, `lg`+) | Decorative, `alt=""` |
+| `starburst.svg` | 48×48 | Orange 16-point burst with slightly uneven points and an empty cream centre disc | Behind the CRT (384px, `lg`+); footer sign-off sticker (96px, `md`+) | Decorative, `alt=""` |
+| `sparkle.svg` | 16×16 | Cream four-point sparkle with stepped, pinched centre | Marquee separator (16px); two in the hero art (32px) | Decorative, `alt=""` |
+| `smiley.svg` | 16×16 | Orange face, 1×2 eyes, slightly tilted smile, one cream highlight | Above "HELLO!" in the stats strip (32px, `md`+) | Decorative, `alt=""` |
+| `floppy.svg` | 16×16 | Teal diskette with clipped corner, cream shutter with ink slot, blank cream label | Left of "Resume (PDF)" in the hero button (16px) | Decorative, `alt=""` |
+| `icon-home.svg` | 16×16 | House: orange roof with cream highlight, cream walls, ink window frame and ink door | Command palette "Hero" row; dot-nav tooltip (16px) | Decorative, `alt=""` |
+| `icon-about.svg` | 16×16 | Cream page with a dithered folded corner and three teal content bars | Left of the About heading (32px) | Decorative, `alt=""` |
+| `icon-experience.svg` | 16×16 | Orange briefcase, ink handle and seam, cream clasp and highlight | Left of the Experience heading (32px) | Decorative, `alt=""` |
+| `icon-projects.svg` | 16×16 | Cream folder with tab and an orange sheet sticking out of the top | Left of the Projects heading on the teal band (32px) | Decorative, `alt=""` |
+| `icon-skills.svg` | 16×16 | Single blank keycap: cream top, teal bevels, dithered front face | Left of the Skills heading (32px) | Decorative, `alt=""` |
+| `icon-contact.svg` | 16×16 | Cream envelope, ink V flap, orange 2×2 seal where the flap meets | Footer "Let's build something" (32px); beside the email link and in the Email me button (16px) | Decorative, `alt=""` |
+| `globe.svg` | 24×24 | Teal globe with made-up cream land blobs, ink equator and one curved meridian | Before the SGT clock in the footer (24px) | Decorative, `alt=""` |

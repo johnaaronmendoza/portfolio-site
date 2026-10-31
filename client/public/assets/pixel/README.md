@@ -1,17 +1,17 @@
 # Pixel assets
 
 Original pixel art for the neo-brutalist retro web design, drawn to the brief
-in `design-system/portfolio/assets.md` (placement: `pages/home.md` §9).
+in `design-system/portfolio/assets.md` (placement: `pages/home.md` §9; case-study icons: `pages/case-study.md` §4).
 
 Every file is a hand-authored SVG: `viewBox` = `width` = `height` = grid,
 `shape-rendering="crispEdges"`, integer coordinates, one `<path>` per colour,
 1-unit ink outlines, shading only by ink checkerboard dither (light from top
 left). Colours are only ink `#000000`, cream `#F4EAD5`, orange `#FF7A2F`,
-teal `#2EC4B6` and navy `#16163F`. No amber, white or greys, and no text,
+teal `#2EC4B6`, violet `#6C4AD0` (only the title strip in `icon-screens.svg`) and navy `#16163F`. No amber, white or greys, and no text,
 letters or numerals.
 
 Use at integer multiples of the grid with `image-rendering: pixelated`.
-All twelve are **decorative**: `<img alt="">` or inline with
+All fourteen are **decorative**: `<img alt="">` or inline with
 `aria-hidden="true"`. If one is ever the only content of a link or button,
 put an `aria-label` on the control, not on the image.
 
@@ -31,3 +31,5 @@ Served from `/assets/pixel/<file>`.
 | `icon-skills.svg` | 16×16 | Single blank keycap: cream top, teal bevels, dithered front face | Left of the Skills heading (32px) | Decorative, `alt=""` |
 | `icon-contact.svg` | 16×16 | Cream envelope, ink V flap, orange 2×2 seal where the flap meets | Footer "Let's build something" (32px); beside the email link and in the Email me button (16px) | Decorative, `alt=""` |
 | `globe.svg` | 24×24 | Teal globe with made-up cream land blobs, ink equator and one curved meridian | Before the SGT clock in the footer (24px) | Decorative, `alt=""` |
+| `icon-screens.svg` | 16×16 | Tiny app window: cream frame, violet title strip, navy pane with two teal content bars of different lengths, no control glyphs | Left of the Screens / Charts h2 on case pages (32px) | Decorative, `alt=""` |
+| `icon-results.svg` | 16×16 | Cream card with three touching bars on an ink baseline, tall orange, short teal, medium orange (uneven, not rising) | Left of the Results h2 on case pages (32px) | Decorative, `alt=""` |

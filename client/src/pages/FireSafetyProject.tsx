@@ -264,7 +264,7 @@ export default function FireSafetyProject() {
                   whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
                   transition={{ duration: 0.2 }}
                 >
-                  <p className="font-pixel text-xs text-amber-400 mb-3">[ {label} ]</p>
+                  <p className="font-pixel text-xs text-amber-400 mb-3">{label}</p>
                   <p className="font-mono-8bit text-[15px] text-gray-300 leading-relaxed">{desc}</p>
                 </motion.div>
               ))}

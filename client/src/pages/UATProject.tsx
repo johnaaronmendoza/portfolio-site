@@ -475,7 +475,7 @@ export default function UATProject() {
                   whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
                   whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
                 >
-                  <p className="font-pixel text-xs text-amber-400 mb-4">[ {label} ]</p>
+                  <p className="font-pixel text-xs text-amber-400 mb-4">{label}</p>
                   <ul className="space-y-2">
                     {items.map(i => (
                       <li key={i} className="flex items-start gap-2">
@@ -518,7 +518,7 @@ export default function UATProject() {
                 },
               ].map(({ label, color, accent, items }) => (
                 <div key={label} className={`bg-zinc-900 border-t-2 ${color} p-5`}>
-                  <p className={`font-pixel text-xs ${accent} mb-4`}>[ {label} ]</p>
+                  <p className={`font-pixel text-xs ${accent} mb-4`}>{label}</p>
                   <ul className="space-y-2">
                     {items.map(i => (
                       <li key={i} className="flex items-start gap-2">

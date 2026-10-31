@@ -216,7 +216,7 @@ export default function SilverLinkProject() {
                 },
               ].map(({ label, items }) => (
                 <div key={label} className="bg-zinc-900 border-t border-amber-500/20 p-5">
-                  <p className="font-pixel text-xs text-amber-400 mb-4">[ {label} ]</p>
+                  <p className="font-pixel text-xs text-amber-400 mb-4">{label}</p>
                   <ul className="space-y-2">
                     {items.map(i => (
                       <li key={i} className="flex items-start gap-2">

@@ -248,7 +248,7 @@ export default function SCSProject() {
                   whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
                   transition={{ duration: 0.2 }}
                 >
-                  <p className="font-pixel text-xs text-amber-400 mb-4">[ {label} ]</p>
+                  <p className="font-pixel text-xs text-amber-400 mb-4">{label}</p>
                   <ul className="space-y-2">
                     {items.map(i => (
                       <li key={i} className="flex items-start gap-2">

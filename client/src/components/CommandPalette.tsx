@@ -9,6 +9,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
+import { hasFinePointer } from '@/lib/utils';
 
 interface Command {
   id: string;
@@ -27,6 +28,8 @@ function triggerChatQuery(query: string) {
     const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
     nativeSetter?.call(input, query);
     input.dispatchEvent(new Event('input', { bubbles: true }));
+    // Focus before submit so the chat hands focus back to the input after the reply (desktop only)
+    if (hasFinePointer()) input.focus();
     setTimeout(() => {
       const form = document.querySelector('form[data-chat-form]') as HTMLFormElement;
       if (form) form.dispatchEvent(new Event('submit', { bubbles: true }));

@@ -10,6 +10,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { hasFinePointer } from '@/lib/utils';
 
 // Typing Animation Component
 function TypingMessage({ content, role }: { content: string; role: 'user' | 'system' }) {
@@ -79,6 +80,7 @@ export default function MascotChatWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const refocusRef = useRef(false);
   const reactionEmojis = ['👍', '❤️', '🤔', '😂', '🔥'];
 
   // Knowledge base for responses
@@ -163,10 +165,18 @@ export default function MascotChatWidget() {
     return () => window.removeEventListener('open-chat', open);
   }, []);
 
-  // Focus the input on open, and again once a reply finishes (it is disabled while typing)
+  // Focus the input on open, but only where that won't pop an on-screen keyboard
   useEffect(() => {
-    if (isOpen && !isTyping) inputRef.current?.focus();
-  }, [isOpen, isTyping]);
+    if (isOpen && hasFinePointer()) inputRef.current?.focus();
+  }, [isOpen]);
+
+  // The input is disabled while typing; give focus back if it had focus when the message was sent
+  useEffect(() => {
+    if (!isTyping && refocusRef.current) {
+      refocusRef.current = false;
+      inputRef.current?.focus();
+    }
+  }, [isTyping]);
 
   // Find matching response based on keywords
   const findResponse = (query: string): string => {
@@ -197,6 +207,7 @@ export default function MascotChatWidget() {
     setInput('');
 
     // Simulate typing delay
+    refocusRef.current = document.activeElement === inputRef.current;
     setIsTyping(true);
     await new Promise(resolve => setTimeout(resolve, 800));
 
@@ -354,7 +365,7 @@ export default function MascotChatWidget() {
               data-chat-form
               className="border-t-2 border-amber-400 bg-zinc-900 p-3 flex gap-2"
             >
-              <div className="flex-1 flex items-center border-2 border-blue-400 bg-black px-2">
+              <div className="flex-1 flex items-center border-2 border-blue-400 focus-within:border-amber-400 transition-colors bg-black px-2">
                 <span className="text-blue-400 font-pixel text-xs mr-1">&gt;_</span>
                 <input
                   ref={inputRef}

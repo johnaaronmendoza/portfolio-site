@@ -142,7 +142,7 @@ export default function AIFinanceProject() {
                   <div key={step} className="flex items-center justify-center text-zinc-400 font-pixel text-lg">→</div>
                 ) : (
                   <div key={step} className={`bg-zinc-900 border-t-2 ${color} p-4 space-y-2`}>
-                    <p className={`font-pixel text-xs ${color.split(' ')[1]}`}>[ {step} ]</p>
+                    <p className={`font-pixel text-xs ${color.split(' ')[1]}`}>{step}</p>
                     <p className="font-pixel text-xs text-white">{label}</p>
                     <p className="font-mono-8bit text-[15px] text-gray-400 leading-relaxed">{desc}</p>
                   </div>
@@ -161,7 +161,7 @@ export default function AIFinanceProject() {
                   <div key={step} className="flex items-center justify-center text-zinc-400 font-pixel text-lg">→</div>
                 ) : (
                   <div key={step} className={`bg-zinc-900 border-t-2 ${color} p-4 space-y-2`}>
-                    <p className={`font-pixel text-xs ${color.split(' ')[1]}`}>[ {step} ]</p>
+                    <p className={`font-pixel text-xs ${color.split(' ')[1]}`}>{step}</p>
                     <p className="font-pixel text-xs text-white">{label}</p>
                     <p className="font-mono-8bit text-[15px] text-gray-400 leading-relaxed">{desc}</p>
                   </div>
@@ -210,7 +210,7 @@ export default function AIFinanceProject() {
                   whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.23, 1, 0.32, 1] } }}
                   whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
                 >
-                  <p className="font-pixel text-xs text-amber-400 mb-4">[ {label} ]</p>
+                  <p className="font-pixel text-xs text-amber-400 mb-4">{label}</p>
                   <ul className="space-y-2">
                     {items.map(i => (
                       <li key={i} className="flex items-start gap-2">

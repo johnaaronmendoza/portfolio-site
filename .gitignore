@@ -121,6 +121,7 @@ UAT-Testing-Dashboard-Defect-Tracker-for-Hospital-Appointment-System/
 # Claude Code / Cursor — local skills, symlinks, machine-specific permissions
 .claude/*
 !.claude/agents/
+!.claude/skills/
 .agents/
 
 # Cursor / Claude skills install lock (regenerated locally)

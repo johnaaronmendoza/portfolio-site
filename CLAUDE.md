@@ -97,4 +97,5 @@ Recruiters for AI, data and software graduate roles (currently the DBS 2027 Mana
 - Work on a feature branch; never commit or push to `main` without John's explicit approval.
 - Before handing work over: `pnpm check` and `pnpm build` must pass.
 - Check every visual change at 375px and 1366px.
-- Agent team: `portfolio-lead` (manager), `coder` (only agent that edits), `design-reviewer` (read-only, scores against a rubric). Definitions are in `.claude/agents/`.
+- Agent team (definitions in `.claude/agents/`): `portfolio-lead` (manager), `frontend-designer` (design specs in `design-system/portfolio/`, uses the ui-ux-pro-max skill), `asset-artist` (original pixel-art SVGs in `client/public/assets/pixel/`), `coder` (the only agent that edits `client/src/`), `design-reviewer` (read-only, scores against a rubric).
+- The ui-ux-pro-max skill (MIT, nextlevelbuilder/ui-ux-pro-max-skill) is vendored in `.claude/skills/ui-ux-pro-max/`; run its search with `python3 .claude/skills/ui-ux-pro-max/scripts/search.py`.

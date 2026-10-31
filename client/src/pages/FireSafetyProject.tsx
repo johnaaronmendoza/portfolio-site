@@ -120,7 +120,7 @@ export default function FireSafetyProject() {
         </div>
       </CaseSection>
 
-      <CaseSection id="decisions" heading="Key decisions" icon="icon-skills" file="key_decisions.md">
+      <CaseSection id="how" heading="How it works" icon="icon-skills" file="how_it_works.md">
         <CardGrid
           cols={3}
           cards={[
@@ -137,23 +137,15 @@ export default function FireSafetyProject() {
 
       <ScreenGallery shots={SHOTS} />
 
-      <CaseSection id="outcome" heading="Outcome" icon="icon-results" file="outcome.txt">
-        <div className="space-y-6">
-          <Prose>
-            <p>
-              Delivered all 9 backlog items plus 6 extra in 3 Agile sprints, with a SUS usability
-              score of 79/100 and about 80% test coverage.
-            </p>
-          </Prose>
-          <FigureList
-            items={[
-              { value: '10,984', label: 'lines of Kotlin' },
-              { value: '5,458', label: 'lines of tests' },
-              { value: '26', label: 'test files' },
-              { value: '120', label: 'commits' },
-            ]}
-          />
-        </div>
+      <CaseSection id="results" heading="Results" icon="icon-results" file="results.txt">
+        <FigureList
+          items={[
+            { value: '10,984', label: 'lines of Kotlin' },
+            { value: '5,458', label: 'lines of tests' },
+            { value: '26', label: 'test files' },
+            { value: '120', label: 'commits' },
+          ]}
+        />
       </CaseSection>
 
       <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">

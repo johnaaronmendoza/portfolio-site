@@ -123,9 +123,9 @@ export default function SCSProject() {
         </div>
       </CaseSection>
 
-      <CaseSection id="decisions" heading="Key decisions" icon="icon-skills" file="key_decisions.md">
+      <CaseSection id="how" heading="How it works" icon="icon-skills" file="how_it_works.md">
         <CardGrid
-          cols={3}
+          cols={2}
           cards={[
             { title: 'One app, two audiences', body: 'A single React 19 app serves visitors and admins, deployed together on Vercel from GitHub.' },
             { title: 'Access enforced in the database', body: 'Supabase Row-Level Security applies the admin and super admin roles at the database, not only in the UI.' },
@@ -137,15 +137,6 @@ export default function SCSProject() {
       </CaseSection>
 
       <ScreenGallery shots={SHOTS} />
-
-      <CaseSection id="outcome" heading="Outcome" icon="icon-results" file="outcome.txt">
-        <Prose>
-          <p>
-            Deployed on tablets at SCS community outreach booths, with an admin panel that lets
-            non-technical SCS staff run the stories without a developer.
-          </p>
-        </Prose>
-      </CaseSection>
 
       <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">
         <TechStack

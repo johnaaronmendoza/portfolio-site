@@ -3,7 +3,6 @@ import { PixelGitHub } from '@/components/PixelIcons';
 import StatStrip, { type Stat } from '@/components/StatStrip';
 import { WindowBar } from '@/components/Window';
 import { getCase, type CaseSlug } from '@/data/projects';
-import { TagList } from './CaseBlocks';
 
 export type MetaItem = { label: string; value: ReactNode; wide?: boolean };
 
@@ -34,11 +33,6 @@ export const GITHUB_PROFILE: CaseLink = {
   kind: 'profile',
 };
 
-/** Home tile tags with the abbreviations spelled out for the header */
-function stackTags(tags: string[]) {
-  return tags.map(t => (t === 'K8s' ? 'Kubernetes' : t));
-}
-
 interface CaseHeaderProps {
   slug: CaseSlug;
   /** Filename-style window title, e.g. "fire_safety_drill.apk" */
@@ -54,7 +48,7 @@ interface CaseHeaderProps {
 /**
  * The project opens as a program: cream window with the name, summary, links
  * and facts, and an orange status bar of key figures along its bottom edge.
- * Name, year, summary and stack come from data/projects.ts.
+ * Name, year and summary come from data/projects.ts.
  */
 export default function CaseHeader({ slug, file, meta, links, stats, cover = true }: CaseHeaderProps) {
   const project = getCase(slug);
@@ -106,12 +100,7 @@ export default function CaseHeader({ slug, file, meta, links, stats, cover = tru
           )}
         </div>
         <hr aria-hidden="true" className="my-6 border-0 border-t-[3px] border-black" />
-        <MetaList
-          items={[
-            ...meta,
-            { label: 'Stack', value: <TagList tags={stackTags(project.tags)} />, wide: true },
-          ]}
-        />
+        <MetaList items={meta} />
       </div>
       <StatStrip stats={stats} variant="status" />
     </div>

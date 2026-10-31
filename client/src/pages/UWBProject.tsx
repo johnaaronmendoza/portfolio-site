@@ -1,6 +1,6 @@
 import CaseLayout from '@/components/case/CaseLayout';
 import CaseHeader, { GITHUB_PROFILE } from '@/components/case/CaseHeader';
-import { CaseSection, CardGrid, FeatureList, Prose, TechStack } from '@/components/case/CaseBlocks';
+import { CaseSection, CardGrid, FeatureList, FigureList, Prose, TechStack } from '@/components/case/CaseBlocks';
 import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
 import confusionImg from '@assets/da_p40_img1.png';
 import decisionBoundaryImg from '@assets/da_p39_img2.png';
@@ -41,7 +41,7 @@ export default function UWBProject() {
     <CaseLayout slug="uwb">
       <CaseHeader
         slug="uwb"
-        file="uwb_localization.ipynb"
+        file="uwb_localization.py"
         meta={[
           { label: 'Type', value: 'Course project, CSC3105 Data Analytics, SIT', wide: true },
           { label: 'Team', value: 'Group CS05' },
@@ -99,7 +99,7 @@ export default function UWBProject() {
         </div>
       </CaseSection>
 
-      <CaseSection id="decisions" heading="Key decisions" icon="icon-skills" file="key_decisions.md">
+      <CaseSection id="how" heading="How it works" icon="icon-skills" file="how_it_works.md">
         <CardGrid
           cols={3}
           cards={[
@@ -112,14 +112,16 @@ export default function UWBProject() {
 
       <ScreenGallery heading="Charts" shots={SHOTS} />
 
-      <CaseSection id="outcome" heading="Outcome" icon="icon-results" file="outcome.txt">
-        <Prose>
-          <p>
-            SVM-RBF reached 89.61% accuracy and 0.9612 ROC-AUC, ahead of logistic regression at
-            85.75% and 0.9195. Range regression scored an RMSE of 1.757 m, with R² of 0.458 on path 1
-            and 0.681 on path 2.
-          </p>
-        </Prose>
+      <CaseSection id="results" heading="Results" icon="icon-results" file="results.txt">
+        <FigureList
+          items={[
+            { value: '85.75%', label: 'logistic regression accuracy' },
+            { value: '0.9195', label: 'logistic regression ROC-AUC' },
+            { value: '1.757 m', label: 'range RMSE' },
+            { value: '0.458', label: 'path 1 R²' },
+            { value: '0.6809', label: 'path 2 R²' },
+          ]}
+        />
       </CaseSection>
 
       <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">

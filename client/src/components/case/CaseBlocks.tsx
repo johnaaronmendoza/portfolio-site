@@ -66,17 +66,32 @@ export function FeatureList({ items, columns = 1 }: { items: string[]; columns?:
 type Card = { title: string; body?: string; items?: string[] };
 
 const LG_COLS = { 2: 'lg:grid-cols-2', 3: 'lg:grid-cols-3', 4: 'lg:grid-cols-4' } as const;
+const LG_SPAN = { 2: 'lg:col-span-2', 3: 'lg:col-span-3', 4: 'lg:col-span-4' } as const;
+
+/** A last card that would sit alone in its row spans the row instead */
+function lastCardSpan(count: number, cols: 2 | 3 | 4) {
+  const smAlone = count % 2 === 1;
+  const lgAlone = count % cols === 1;
+  return [
+    smAlone ? 'sm:col-span-2' : '',
+    lgAlone ? LG_SPAN[cols] : smAlone ? 'lg:col-span-1' : '',
+  ].join(' ');
+}
 
 /**
  * Static cards inside a window: 2px ink frame, no shadow, no hover or press
- * (they are not links). 1 column, 2 from sm, `cols` from lg.
+ * (they are not links). 1 column, 2 from sm, `cols` from lg; a lone last
+ * card spans its row.
  */
 export function CardGrid({ cards, cols, headingLevel = 3 }: { cards: Card[]; cols: 2 | 3 | 4; headingLevel?: 3 | 4 }) {
   const Heading = headingLevel === 3 ? 'h3' : 'h4';
   return (
     <ul className={`grid grid-cols-1 sm:grid-cols-2 ${LG_COLS[cols]} gap-4 lg:gap-6`}>
-      {cards.map(({ title, body, items }) => (
-        <li key={title} className="border-2 border-black bg-[var(--cream)] p-4 sm:p-5">
+      {cards.map(({ title, body, items }, i) => (
+        <li
+          key={title}
+          className={`border-2 border-black bg-[var(--cream)] p-4 sm:p-5 ${i === cards.length - 1 ? lastCardSpan(cards.length, cols) : ''}`}
+        >
           <Heading className="font-pixel text-xs sm:text-sm leading-[1.5] text-black break-words border-b-[3px] border-black pb-3 mb-3">
             {title}
           </Heading>

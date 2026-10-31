@@ -83,7 +83,7 @@ export default function AIFinanceProject() {
         />
       </CaseSection>
 
-      <CaseSection id="decisions" heading="Key decisions" icon="icon-skills" file="key_decisions.md">
+      <CaseSection id="how" heading="How it works" icon="icon-skills" file="how_it_works.md">
         <div className="space-y-10">
           <div className="space-y-6">
             <SubHeading>Five stages, two gates</SubHeading>
@@ -106,15 +106,6 @@ export default function AIFinanceProject() {
             ]}
           />
         </div>
-      </CaseSection>
-
-      <CaseSection id="outcome" heading="Outcome" icon="icon-results" file="outcome.txt">
-        <Prose>
-          <p>
-            A tested pipeline that loads five sources into one star-schema warehouse, with 100% Pytest
-            coverage on extraction and transformation.
-          </p>
-        </Prose>
       </CaseSection>
 
       <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">

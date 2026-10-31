@@ -64,8 +64,8 @@ export default function SilverLinkProject() {
             </p>
           </Prose>
           <Quote label="The course brief asked:">
-            How might we use technology that is intuitive, culturally sensitive and engaging to build
-            community among seniors?
+            How might we leverage technology in ways that are intuitive, culturally sensitive, and
+            engaging to build community within seniors? (PB-2)
           </Quote>
         </div>
       </CaseSection>
@@ -87,7 +87,7 @@ export default function SilverLinkProject() {
         </div>
       </CaseSection>
 
-      <CaseSection id="decisions" heading="Key decisions" icon="icon-skills" file="key_decisions.md">
+      <CaseSection id="how" heading="How it works" icon="icon-skills" file="how_it_works.md">
         <CardGrid
           cols={3}
           cards={[
@@ -102,15 +102,6 @@ export default function SilverLinkProject() {
       </CaseSection>
 
       <ScreenGallery shots={SHOTS} />
-
-      <CaseSection id="outcome" heading="Outcome" icon="icon-results" file="outcome.txt">
-        <Prose>
-          <p>
-            A 6-person team delivered it in 7 Agile sprints: 4 gRPC services on an 8-node Kubernetes
-            cluster, with livestreaming, live chat and double-booking protection.
-          </p>
-        </Prose>
-      </CaseSection>
 
       <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">
         <TechStack

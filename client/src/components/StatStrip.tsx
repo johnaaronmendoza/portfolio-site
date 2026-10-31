@@ -1,3 +1,5 @@
+import { useId } from 'react';
+
 export type Stat = { value: string; label: string };
 
 interface StatStripProps {
@@ -23,11 +25,9 @@ const VALUE = {
  * DOM for screen readers, number shown on top. Values render final (no count-up).
  */
 export default function StatStrip({ stats, variant, className = '' }: StatStripProps) {
-  return (
-    <dl
-      aria-label={variant === 'status' ? 'Key figures' : undefined}
-      className={`grid grid-cols-2 lg:grid-cols-4 gap-[3px] bg-black text-black ${variant === 'status' ? 'border-t-[3px] border-black' : ''} ${className}`}
-    >
+  const headingId = useId();
+  const list = (
+    <dl className={`grid grid-cols-2 lg:grid-cols-4 gap-[3px] bg-black text-black ${variant === 'status' ? 'border-t-[3px] border-black' : ''} ${className}`}>
       {stats.map(({ value, label }) => (
         <div key={label} className={`flex flex-col-reverse justify-end gap-3 bg-[var(--orange)] ${CELL[variant]}`}>
           <dt className="font-mono text-[15px] sm:text-base leading-snug max-w-[18ch]">
@@ -39,5 +39,15 @@ export default function StatStrip({ stats, variant, className = '' }: StatStripP
         </div>
       ))}
     </dl>
+  );
+
+  // Home's band is already a labelled section; the case header's strip gets
+  // its own (hidden) h2, after the page h1
+  if (variant === 'band') return list;
+  return (
+    <section aria-labelledby={headingId}>
+      <h2 id={headingId} className="sr-only">Key figures</h2>
+      {list}
+    </section>
   );
 }

@@ -60,7 +60,7 @@ function NextProject({ slug }: { slug: CaseSlug }) {
       <div className="max-w-5xl mx-auto">
         <SectionHeading text="Next project" tone="ink" size="case" className="mb-6" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:items-end">
-          <ProjectTile project={next} span="lg:col-span-8" imageHeight="h-48 lg:h-72" />
+          <ProjectTile project={{ ...next, featured: false }} span="lg:col-span-8" imageHeight="h-48 lg:h-72" />
           <div className="lg:col-span-4">
             <Link href="/#projects" replace onClick={() => play('back')} className="btn btn-primary w-full">
               <span aria-hidden="true">←</span>

@@ -69,26 +69,35 @@ const MODULES: { name: string; defects: number; risk: Level }[] = [
 
 const CELL = 'border-b-2 border-black py-3 align-middle';
 
+// Below sm the risk badge sits under the module name, so three columns never
+// squeeze a 289px body; the scrolling region is only a safety net.
 function ModuleTable() {
   return (
-    <table aria-labelledby="test-scope-heading" className="w-full max-w-[65ch] border-collapse font-mono text-[15px] sm:text-base text-[color:var(--navy)]">
-      <thead>
-        <tr className="text-left text-black">
-          <th scope="col" className={`${CELL} border-b-[3px] pr-4`}>Module</th>
-          <th scope="col" className={`${CELL} border-b-[3px] px-4 text-right`}>Defects</th>
-          <th scope="col" className={`${CELL} border-b-[3px] pl-4`}>Risk</th>
-        </tr>
-      </thead>
-      <tbody>
-        {MODULES.map(m => (
-          <tr key={m.name}>
-            <th scope="row" className={`${CELL} pr-4 text-left font-normal break-words`}>{m.name}</th>
-            <td className={`${CELL} px-4 text-right tabular-nums`}>{m.defects}</td>
-            <td className={`${CELL} pl-4`}><LevelBadge level={m.risk} /></td>
+    <div role="region" aria-labelledby="test-scope-heading" tabIndex={0} className="overflow-x-auto max-w-[65ch]">
+      <table aria-labelledby="test-scope-heading" className="w-full border-collapse font-mono text-[15px] sm:text-base text-[color:var(--navy)]">
+        <thead>
+          <tr className="text-left text-black">
+            <th scope="col" className={`${CELL} border-b-[3px] pr-4`}>
+              Module<span className="sm:hidden"> and risk</span>
+            </th>
+            <th scope="col" className={`${CELL} border-b-[3px] pl-4 sm:px-4 text-right`}>Defects</th>
+            <th scope="col" className={`${CELL} border-b-[3px] pl-4 hidden sm:table-cell`}>Risk</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {MODULES.map(m => (
+            <tr key={m.name}>
+              <th scope="row" className={`${CELL} pr-4 text-left font-normal break-words`}>
+                {m.name}
+                <span className="block mt-2 sm:hidden"><LevelBadge level={m.risk} /></span>
+              </th>
+              <td className={`${CELL} pl-4 sm:px-4 text-right tabular-nums`}>{m.defects}</td>
+              <td className={`${CELL} pl-4 hidden sm:table-cell`}><LevelBadge level={m.risk} /></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -164,7 +173,7 @@ export default function UATProject() {
         slug="uat"
         file="uat_dashboard.exe"
         meta={[
-          { label: 'Type', value: 'Full-stack web app' },
+          { label: 'Type', value: 'Course project, full-stack web app' },
           { label: 'Scenario', value: 'Hospital appointment system' },
           { label: 'User roles', value: 'Project manager, QA lead, tester, developer', wide: true },
         ]}
@@ -205,7 +214,7 @@ export default function UATProject() {
         />
       </CaseSection>
 
-      <CaseSection id="decisions" heading="Key decisions" icon="icon-skills" file="key_decisions.md">
+      <CaseSection id="how" heading="How it works" icon="icon-skills" file="how_it_works.md">
         <div className="space-y-12">
           <CardGrid
             cols={2}
@@ -232,7 +241,7 @@ export default function UATProject() {
           </div>
 
           <div className="space-y-4">
-            <SubHeading>What each role can do</SubHeading>
+            <SubHeading>Requirements by role</SubHeading>
             <CardGrid
               cols={2}
               headingLevel={4}
@@ -293,15 +302,6 @@ export default function UATProject() {
       </CaseSection>
 
       <ScreenGallery shots={SHOTS} />
-
-      <CaseSection id="outcome" heading="Outcome" icon="icon-results" file="outcome.txt">
-        <Prose>
-          <p>
-            A working defect tracker with role-based access, linked tests and defects, and CSV export,
-            shown here on a seeded hospital appointment scenario.
-          </p>
-        </Prose>
-      </CaseSection>
 
       <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">
         <TechStack

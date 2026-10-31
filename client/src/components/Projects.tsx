@@ -85,7 +85,7 @@ const PROJECTS: Project[] = [
     description:
       "SVM-RBF classifier on 42k UWB samples across 7 indoor environments. PCA on 1,016 CIR dimensions; dual-path range regression compensates for NLOS signal loss.",
     metric: "89.61% ACCURACY · 0.9612 AUC · 41,996 SAMPLES",
-    year: "2024",
+    year: "2025",
     image: uwbImg,
     tags: ["Python", "SVM", "PCA", "scikit-learn"],
     link: "/projects/uwb",
@@ -109,7 +109,7 @@ const PROJECTS: Project[] = [
     description:
       "Offline-first Android AR evacuation guide. ARCore navigation, TFLite on-device ML, and Dijkstra pathfinding with live hazard re-routing, independently usable with no network connection.",
     metric: "SUS 79/100 · ~80% TEST COVERAGE · FULLY OFFLINE",
-    year: "2024",
+    year: "2025",
     image: fireSafetyImg,
     tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
     link: "/projects/firesafety",

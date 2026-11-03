@@ -49,24 +49,31 @@ export default function Skills() {
           <SectionHeading text="SKILLS" icon="icon-skills" className="mb-12" />
 
           <p className="font-mono text-[15px] sm:text-base leading-relaxed mb-8 max-w-[60ch]">
-            <KeyText text="Press or hover a key for details. **AI keys** are amber." />
+            <KeyText text="Press or hover a key for details. Keys **01–05** are the AI & LLM skills." />
           </p>
 
           <SkillKeyboard />
 
-          {/* Plain list: for skimmers, screen readers and search engines */}
-          <dl className="mt-14 border-t-[3px] border-[color:var(--teal)] pt-6 space-y-3">
-            {GROUPS.map(group => (
-              <div key={group.label} className="grid grid-cols-1 sm:grid-cols-[11rem_1fr] gap-1 sm:gap-6">
-                <dt className={`font-mono text-[15px] sm:text-base font-bold ${group.highlight ? 'text-[color:var(--orange)]' : 'text-[color:var(--teal)]'}`}>
-                  {group.label}
-                </dt>
-                <dd className="font-mono text-[15px] sm:text-base leading-relaxed">
-                  {group.skills.join(', ')}
-                </dd>
-              </div>
-            ))}
-          </dl>
+          {/* Plain list: for skimmers, screen readers and search engines. Collapsed,
+              since the keyboard and its panel already say this. */}
+          <details className="mt-14 border-t-[3px] border-[color:var(--teal)] pt-4">
+            <summary className="cursor-pointer py-2.5 leading-6 font-mono text-[15px] sm:text-base font-bold text-[color:var(--teal)]">
+              All skills as a list
+            </summary>
+            <dl className="mt-4 space-y-4">
+              {GROUPS.map(group => (
+                <div key={group.label} className="grid grid-cols-1 sm:grid-cols-[11rem_1fr] gap-1 sm:gap-6">
+                  <dt className={`font-mono text-[15px] sm:text-base font-bold ${group.highlight ? 'text-[color:var(--orange)]' : 'text-[color:var(--teal)]'}`}>
+                    {group.label}
+                  </dt>
+                  <dd className="font-mono text-[15px] sm:text-base leading-relaxed">
+                    {group.skills.join(', ')}
+                    <span className="block text-sm text-[color:var(--orange)] mt-1">Used in: {group.usedIn}</span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </details>
         </div>
       </section>
     </FramerReveal>

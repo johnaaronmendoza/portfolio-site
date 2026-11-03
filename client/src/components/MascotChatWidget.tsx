@@ -8,6 +8,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { hasFinePointer } from '@/lib/utils';
+import { MASCOT, preloadMascot } from '@/lib/mascot';
 import { motionTokens } from '@/lib/motion-tokens';
 import { WindowBar } from './Window';
 
@@ -116,8 +117,8 @@ const QUICK_ACTIONS = [
   { label: 'Contact', query: 'How can I contact you' },
 ];
 
-const MASCOT_HAPPY = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663399162945/5mLLaUiLoCi2BBtUhHeagh/LilJohnny-happycopy_aa6087aa.png';
-const MASCOT_WORRY = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663399162945/5mLLaUiLoCi2BBtUhHeagh/LilJohnny-worrycopy_8d3aee8e.png';
+const MASCOT_HAPPY = MASCOT.happy;
+const MASCOT_WORRY = MASCOT.worry;
 
 // User: orange + ink (8.08). Bot: cream + navy (14.40), framed so it reads on the cream body.
 const BUBBLE = {
@@ -173,6 +174,8 @@ interface Message {
 export default function MascotChatWidget() {
   const reduced = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
+  // The launcher swaps happy/worry while the bot types: have both frames ready
+  useEffect(preloadMascot, []);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -286,7 +289,7 @@ export default function MascotChatWidget() {
           <img
             src={isTyping ? MASCOT_WORRY : MASCOT_HAPPY}
             alt=""
-            className="w-8 h-8 sm:w-10 sm:h-10"
+            className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
             style={{ imageRendering: 'pixelated' }}
           />
           <span className="hidden sm:inline font-pixel text-xs">
@@ -332,7 +335,7 @@ export default function MascotChatWidget() {
                   className={`flex items-start gap-2 ${msg.role === 'system' ? 'justify-start' : 'justify-end'}`}
                 >
                   {msg.role === 'system' && (
-                    <img src={MASCOT_HAPPY} alt="" className="flex-shrink-0 w-10 h-10" style={{ imageRendering: 'pixelated' }} />
+                    <img src={MASCOT_HAPPY} alt="" className="flex-shrink-0 w-10 h-10 object-contain" style={{ imageRendering: 'pixelated' }} />
                   )}
                   <div className="max-w-[80%]">
                     <TypingMessage content={msg.content} role={msg.role} />
@@ -344,7 +347,7 @@ export default function MascotChatWidget() {
               ))}
               {isTyping && (
                 <div className="flex items-start gap-2 justify-start">
-                  <img src={MASCOT_WORRY} alt="" className="flex-shrink-0 w-10 h-10" style={{ imageRendering: 'pixelated' }} />
+                  <img src={MASCOT_WORRY} alt="" className="flex-shrink-0 w-10 h-10 object-contain" style={{ imageRendering: 'pixelated' }} />
                   <div className={`border-2 border-black px-4 py-3 font-mono text-[15px] ${BUBBLE.system}`}>
                     <span className="sr-only">Typing</span>
                     <span aria-hidden="true" className="animate-pulse">▌▌▌</span>

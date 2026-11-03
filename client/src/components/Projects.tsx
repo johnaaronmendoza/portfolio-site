@@ -188,7 +188,8 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
 
 // Retro filter chip: cream with an ink frame; the active chip turns orange and
 // sits pressed into its shadow.
-function chipClass(active: boolean) {
+/** Filter chip style, shared with the Skills keyboard filters */
+export function chipClass(active: boolean) {
   return `font-pixel text-xs text-black px-3 py-1.5 min-h-[44px] border-[3px] border-black transition-[translate,box-shadow,background-color] duration-150 ${
     active
       ? 'bg-[var(--orange)] translate-x-[3px] translate-y-[3px] shadow-none'

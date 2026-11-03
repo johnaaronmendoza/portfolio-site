@@ -55,7 +55,7 @@ export default function Skills() {
           <SkillKeyboard />
 
           {/* Plain list: for skimmers, screen readers and search engines. Collapsed,
-              since the keyboard and its panel already say this. */}
+              since the keyboard's tooltips and detail windows already say this. */}
           <details className="mt-14 border-t-[3px] border-[color:var(--teal)] pt-4">
             <summary className="cursor-pointer py-2.5 leading-6 font-mono text-[15px] sm:text-base font-bold text-[color:var(--teal)]">
               All skills as a list

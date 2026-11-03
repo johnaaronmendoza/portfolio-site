@@ -1,18 +1,35 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { Component, lazy, Suspense, useEffect, useRef, useState, type FocusEvent, type ReactNode } from 'react';
+import { AnimatePresence, motion, useMotionValue } from 'framer-motion';
+import {
+  Component, lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState,
+  type FocusEvent, type PointerEvent, type ReactNode, type RefObject,
+} from 'react';
+import { Link } from 'wouter';
+import { useModalFocus } from '@/hooks/useModalFocus';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { play } from '@/hooks/useSound';
+import { MASCOT, MASCOT_PX, preloadMascot, type Pose } from '@/lib/mascot';
 import { motionTokens } from '@/lib/motion-tokens';
-import { GROUP_NAME, KEYS, capFor, iconUrl, keyName, type Cap } from './skills3d/keys';
-import type { Perch } from './skills3d/Keyboard3D';
+import { chipClass } from './Projects';
+import { WindowBar } from './Window';
+import {
+  FILTERS, GROUP_NAME, KEYS, capFor, fileName, iconUrl, inFilter, keyName, muteHex, projectsFor,
+  type Cap, type Filter,
+} from './skills3d/keys';
+import type { KeyLocator, KeyRect } from './skills3d/Keyboard3D';
 
 // three.js lives in this chunk; it loads only when the Skills section nears the viewport
 const Keyboard3D = lazy(() => import('./skills3d/Keyboard3D'));
 
-const MASCOT = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663399162945/5mLLaUiLoCi2BBtUhHeagh/LilJohnny-happycopy_aa6087aa.png';
-const GROUP_LABEL = 'Skills keyboard. Press a key to see what the skill is and where I used it.';
+const GROUP_LABEL = 'Skills keyboard. Press a key to open what the skill is and where I used it.';
 const CAPS: Cap[] = KEYS.map(capFor);
 const NAMES = KEYS.map((k, i) => keyName(k, CAPS[i]));
+const KB = motionTokens.keyboard;
+const GAP = 10; // px between a key and its tooltip or window
+const EDGE = 8; // px kept clear of the viewport edge
+const TIP_ID = 'skill-tip';
+
+// The entrance plays once per page load, not on every return to Home
+let enteredThisLoad = false;
 
 function hasWebGL() {
   try {
@@ -51,13 +68,24 @@ class Boundary extends Component<{ onError: () => void; children: ReactNode }, {
 }
 
 type KeyHandlers = {
-  selected: number;
-  onSelect: (i: number) => void;
+  filter: Filter;
+  open: number | null;
+  tip: number | null;
+  btnRefs: RefObject<(HTMLButtonElement | null)[]>;
+  onOpen: (i: number) => void;
   onHover: (i: number | null) => void;
   onFocusKey: (i: number | null, visible: boolean) => void;
 };
 
-const focusHandlers = (i: number, onFocusKey: KeyHandlers['onFocusKey']) => ({
+/** Props shared by the hidden 3D controls and the flat keys: a dialog opener
+ *  that reports focus (and whether it is keyboard focus) for the tooltip. */
+const keyButton = (i: number, { open, tip, btnRefs, onOpen, onFocusKey }: KeyHandlers) => ({
+  type: 'button' as const,
+  ref: (el: HTMLButtonElement | null) => { btnRefs.current[i] = el; },
+  'aria-haspopup': 'dialog' as const,
+  'aria-expanded': open === i,
+  'aria-describedby': tip === i ? TIP_ID : undefined,
+  onClick: () => onOpen(i),
   onFocus: (e: FocusEvent<HTMLButtonElement>) => onFocusKey(i, e.currentTarget.matches(':focus-visible')),
   onBlur: () => onFocusKey(null, false),
 });
@@ -79,30 +107,28 @@ function FlatIcon({ src, dark }: { src: string; dark: boolean }) {
 }
 
 /** Flat 2D keyboard: no WebGL, reduced motion, or the 3D chunk failed. */
-function FlatKeys({ selected, onSelect, onHover, onFocusKey }: KeyHandlers) {
+function FlatKeys(handlers: KeyHandlers) {
+  const { filter, onHover } = handlers;
+  const hoverOn = (i: number | null) => (e: PointerEvent) => {
+    if (e.pointerType !== 'touch') onHover(i);
+  };
   return (
-    <div
-      role="group"
-      aria-label={GROUP_LABEL}
-      className="grid grid-cols-4 sm:grid-cols-7 gap-2.5 sm:gap-3 pr-1 pb-1"
-    >
+    <div role="group" aria-label={GROUP_LABEL} className="grid grid-cols-4 sm:grid-cols-7 gap-2.5 sm:gap-3 pr-1 pb-1">
       {KEYS.map((k, i) => {
         const cap = CAPS[i];
+        // Outside the filter: the same muted colourway as the 3D caps (AA contrast kept)
+        const muted = !inFilter(k, filter);
+        const tone = (c: string) => (muted ? muteHex(c) : c);
         return (
           <button
             key={k.label}
-            type="button"
-            aria-pressed={i === selected}
+            {...keyButton(i, handlers)}
             aria-label={NAMES[i]}
-            onClick={() => onSelect(i)}
-            onMouseEnter={() => onHover(i)}
-            onMouseLeave={() => onHover(null)}
-            {...focusHandlers(i, onFocusKey)}
-            // Scroll margin keeps a tabbed-to key clear of the sticky description panel on phones
-            // Keycap from John's sheet: number, icon, caps label on a darker strip.
-            // Scroll margin keeps a tabbed-to key clear of the sticky panel on phones.
-            className="relative flex aspect-square flex-col overflow-hidden rounded-[6px] border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-[translate,box-shadow] duration-100 ease-out aria-pressed:translate-x-[4px] aria-pressed:translate-y-[4px] aria-pressed:shadow-none scroll-mt-[240px] lg:scroll-mt-0"
-            style={{ backgroundColor: cap.face, color: cap.ink }}
+            onPointerEnter={hoverOn(i)}
+            onPointerLeave={hoverOn(null)}
+            // Keycap from John's sheet: number, icon, caps label on a darker strip
+            className="relative flex aspect-square flex-col overflow-hidden rounded-[6px] border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-[translate,box-shadow,background-color,color] duration-150 ease-out active:translate-x-[4px] active:translate-y-[4px] active:shadow-none aria-expanded:translate-x-[4px] aria-expanded:translate-y-[4px] aria-expanded:shadow-none"
+            style={{ backgroundColor: tone(cap.face), color: tone(cap.ink) }}
           >
             <span aria-hidden="true" className="absolute left-1.5 top-1 font-mono text-xs font-bold leading-none">{cap.no}</span>
             <span className="flex min-h-0 flex-1 items-center justify-center pt-3">
@@ -110,8 +136,8 @@ function FlatKeys({ selected, onSelect, onHover, onFocusKey }: KeyHandlers) {
             </span>
             <span
               aria-hidden="true"
-              className="block border-t-2 border-black/35 py-1 sm:py-1.5 font-mono text-xs sm:text-sm lg:text-base font-bold leading-none tracking-wide"
-              style={{ backgroundColor: cap.bar }}
+              className="block border-t-2 border-black/35 py-1 sm:py-1.5 font-mono text-xs sm:text-sm lg:text-base font-bold leading-none tracking-wide transition-[background-color] duration-150 ease-out"
+              style={{ backgroundColor: tone(cap.bar) }}
             >
               {cap.text}
             </span>
@@ -122,18 +148,170 @@ function FlatKeys({ selected, onSelect, onHover, onFocusKey }: KeyHandlers) {
   );
 }
 
+/** Category filters: toggle buttons in the Projects chip style (press-down, hard shadow). */
+function Filters({ value, onChange }: { value: Filter; onChange: (f: Filter) => void }) {
+  return (
+    <div role="group" aria-label="Highlight skills by category" className="flex flex-wrap gap-2 sm:gap-3">
+      {FILTERS.map(f => (
+        <button
+          key={f.id}
+          type="button"
+          aria-pressed={value === f.id}
+          onClick={() => onChange(f.id)}
+          className={chipClass(value === f.id)}
+        >
+          {f.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** Hover / keyboard-focus preview: a small python.info window. Positioned by
+ *  the parent (it follows the 3D board frame by frame). */
+function KeyTip({ index, tipRef, reduced }: { index: number; tipRef: RefObject<HTMLDivElement | null>; reduced: boolean }) {
+  const k = KEYS[index];
+  return (
+    <div ref={tipRef} id={TIP_ID} role="tooltip" className="pointer-events-none absolute left-0 top-0 z-30 w-64" style={{ visibility: 'hidden' }}>
+      <motion.div
+        initial={{ opacity: 0, y: reduced ? 0 : motionTokens.distance.xs }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: motionTokens.duration.instant, ease: motionTokens.easing.out }}
+        className="border-[3px] border-black bg-[var(--cream)] text-[color:var(--navy)] shadow-[4px_4px_0_0_#000]"
+      >
+        <WindowBar title={fileName(CAPS[index])} />
+        <div className="px-3 py-2.5 font-mono">
+          <p className="text-[15px] font-bold leading-snug text-balance">{k.name}</p>
+          <p className="mt-1 text-sm leading-snug text-pretty">{k.blurb}</p>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+type WindowProps = {
+  index: number;
+  reduced: boolean;
+  boardRef: RefObject<HTMLDivElement | null>;
+  locate: (i: number) => KeyRect | null;
+  onClose: () => void;
+};
+
+/** Detail window for one skill: modal, placed beside its key and kept on screen. */
+function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const k = KEYS[index];
+  const links = projectsFor(k);
+  const titleId = `skill-window-${k.label.toLowerCase()}`;
+  // Focus moves into the window, Tab stays inside, and focus returns to the key on close
+  const keepFocus = useModalFocus(true, ref);
+
+  // Below the key if it fits on screen, else above, else as low as fits. Set on
+  // the element before the first paint, so no hidden state is needed (a hidden
+  // window couldn't take focus).
+  useLayoutEffect(() => {
+    const el = ref.current;
+    const box = boardRef.current;
+    if (!el || !box) return;
+    const b = box.getBoundingClientRect();
+    const vw = document.documentElement.clientWidth;
+    const vh = window.innerHeight;
+    const r = locate(index) ?? { x: b.left + b.width / 2, top: b.top, bottom: b.top };
+    const [w, hgt] = [el.offsetWidth, el.offsetHeight];
+    const left = Math.max(Math.max(EDGE, b.left), Math.min(Math.min(vw - EDGE, b.right) - w, r.x - w / 2));
+    let top = r.bottom + GAP;
+    if (top + hgt > vh - EDGE) top = r.top - GAP - hgt;
+    if (top < EDGE) top = Math.max(EDGE, vh - EDGE - hgt);
+    el.style.left = `${Math.round(left - b.left)}px`;
+    el.style.top = `${Math.round(top - b.top)}px`;
+  }, [index, boardRef, locate]);
+
+  const fade = { opacity: 0, y: reduced ? 0 : motionTokens.distance.sm };
+  return (
+    <>
+      {/* Click outside to close; transparent so the pressed key stays in view */}
+      <motion.div key="scrim" aria-hidden="true" className="fixed inset-0 z-[64]" onClick={onClose} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
+      <motion.div
+        key="window"
+        ref={ref}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
+        onKeyDown={e => {
+          if (e.key !== 'Escape') return;
+          e.stopPropagation();
+          onClose();
+        }}
+        className="window absolute z-[65] w-[min(22rem,100%)]"
+        initial={fade}
+        animate={{ opacity: 1, y: 0 }}
+        exit={fade}
+        transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
+      >
+        <WindowBar title={fileName(CAPS[index])} onClose={onClose} closeLabel={`Close ${k.name}`} />
+        <div className="window-body p-4 sm:p-5 font-mono">
+          <p className="text-sm font-bold">{GROUP_NAME[k.group]}</p>
+          <h3 id={titleId} className="font-pixel text-base sm:text-lg leading-snug mt-2 mb-3 text-balance">{k.name}</h3>
+          <p className="text-[15px] leading-relaxed text-pretty">{k.blurb}</p>
+          <p className="text-[15px] leading-relaxed mt-3"><span className="font-bold">Used in:</span> {k.usedIn}</p>
+          {links.length > 0 && (
+            <>
+              <p className="text-[15px] font-bold mt-3">{links.length > 1 ? 'Case studies:' : 'Case study:'}</p>
+              <ul>
+                {links.map(p => (
+                  <li key={p.link}>
+                    <Link href={p.link} onClick={keepFocus} className="inline-block py-2.5 text-[15px] font-bold underline underline-offset-4 decoration-2">
+                      {p.name}<span aria-hidden="true"> →</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      </motion.div>
+    </>
+  );
+}
+
 export default function SkillKeyboard() {
   const reduced = useReducedMotion();
   const wide = useWide();
+  const cols = wide ? 7 : 4;
   const boardRef = useRef<HTMLDivElement>(null);
+  const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const locatorRef = useRef<KeyLocator | null>(null);
+  const tipRef = useRef<HTMLDivElement>(null);
+  const mascotRef = useRef<HTMLImageElement>(null);
   const [stage, setStage] = useState<'wait' | '3d' | '2d'>('wait');
-  const [selected, setSelected] = useState(1); // start on RAG: the AI story first
-  const [hover, setHover] = useState<number | null>(null);
+  const [filter, setFilter] = useState<Filter>('all');
+  const [announce, setAnnounce] = useState('');
+  const [hover, setHover] = useState<number | null>(null); // mouse or pen only
   const [focus, setFocus] = useState<{ i: number; visible: boolean } | null>(null);
-  const [pulse, setPulse] = useState<{ i: number; n: number } | null>(null);
+  const [open, setOpen] = useState<number | null>(null);
+  const [selected, setSelected] = useState<number | null>(null); // last opened: the mascot stands on it
   const [taps, setTaps] = useState(0); // drives the mascot's hop
-  const [perch, setPerch] = useState<Perch | null>(null);
+  const [pulse, setPulse] = useState<{ i: number; n: number } | null>(null);
+  const [entrance] = useState(() => !enteredThisLoad);
+  const [entered, setEntered] = useState(!entrance);
+  const [dir, setDir] = useState(0); // which way the mascot leans: -1 left, 0 upright, 1 right
+  // The latest hop, relative to where it lands: start offset and scale, duration
+  const [hop, setHop] = useState<{ dx: number; dy: number; s: number; d: number } | null>(null);
+  const [seq, setSeq] = useState<Pose | null>(null); // frame of the press sequence, if one is playing
   const flat = reduced || stage === '2d';
+  const tip = open === null ? hover ?? (focus?.visible ? focus.i : null) : null;
+  // Mascot frame. 3D: the press sequence, else lean (or happy, if the key is
+  // straight below) toward the hovered or focused key, else idle. Flat / reduced
+  // motion: no hop, a thumbs-up while a window is open.
+  const leanPose: Pose | null = tip === null ? null : dir === 0 ? 'happy' : dir < 0 ? 'lean-left' : 'lean-right';
+  const frame: Pose = flat
+    ? open !== null ? 'thumbs-up' : tip !== null ? 'happy' : 'idle'
+    : seq ?? leanPose ?? 'idle';
+  // Integer scales of the pixel grid: x1 on phones and when standing on a key, x2 above the board
+  const mascotStyle = { width: MASCOT_PX.w * (wide ? 2 : 1), height: MASCOT_PX.h * (wide ? 2 : 1), imageRendering: 'pixelated' as const };
+
+  useEffect(preloadMascot, []);
 
   // Load the 3D board when the section nears the viewport (loading, not a scroll effect)
   useEffect(() => {
@@ -149,47 +327,128 @@ export default function SkillKeyboard() {
     return () => io.disconnect();
   }, [flat, stage]);
 
-  const current = KEYS[hover ?? focus?.i ?? selected];
+  // Where a key is on screen: projected from the 3D board, or the flat button's box
+  const locate = useCallback((i: number): KeyRect | null => {
+    if (!flat) return locatorRef.current?.(i) ?? null;
+    const r = btnRefs.current[i]?.getBoundingClientRect();
+    return r ? { x: r.left + r.width / 2, top: r.top, face: r.top + r.height / 2, bottom: r.bottom, w: r.width } : null;
+  }, [flat]);
 
-  const select = (i: number) => {
+  // Latest values for the per-frame callbacks below
+  const live = useRef({ tip, selected, cols, locate });
+  live.current = { tip, selected, cols, locate };
+
+  // Tooltip: centred above the key (below when there's no room), inside the viewport
+  const placeTip = useCallback(() => {
+    const { tip: i, locate: find } = live.current;
+    const el = tipRef.current;
+    const box = boardRef.current;
+    const r = i === null ? null : find(i);
+    if (!el || !box || !r) return;
+    const b = box.getBoundingClientRect();
+    const vw = document.documentElement.clientWidth;
+    const [w, hgt] = [el.offsetWidth, el.offsetHeight];
+    const left = Math.max(EDGE, Math.min(vw - EDGE - w, r.x - w / 2));
+    const top = r.top - GAP - hgt >= EDGE ? r.top - GAP - hgt : r.bottom + GAP;
+    el.style.transform = `translate(${Math.round(left - b.left)}px, ${Math.round(top - b.top)}px)`;
+    el.style.visibility = 'visible';
+  }, []);
+  useLayoutEffect(placeTip, [tip, placeTip]);
+
+  // Mascot: stands behind the top-right key, or on the last opened key
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const ms = useMotionValue(1);
+  const perch = useCallback((sel: number | null) => {
+    const { cols: c, locate: find } = live.current;
+    const box = boardRef.current;
+    const r = find(sel ?? c - 1);
+    if (!box || !r) return null;
+    const b = box.getBoundingClientRect();
+    // On a key he stands at the front of its top face, at x1 so the row behind stays readable
+    const w = mascotRef.current?.offsetWidth || MASCOT_PX.w;
+    const scale = sel === null ? 1 : Math.min(1, MASCOT_PX.w / w);
+    return { x: r.x - b.left, y: (sel === null ? r.top : r.face) - b.top, scale };
+  }, []);
+  // Every frame: the mascot's outer layer tracks its perch; the hop is a separate layer
+  const followMascot = useCallback(() => {
+    const p = perch(live.current.selected);
+    if (!p) return;
+    mx.set(p.x);
+    my.set(p.y);
+    ms.set(p.scale);
+  }, [perch, mx, my, ms]);
+
+  const onFrame = useCallback(() => {
+    placeTip();
+    followMascot();
+  }, [placeTip, followMascot]);
+
+  // Turn and lean toward the hovered or focused key; upright again when it ends
+  useEffect(() => {
+    if (flat) return;
+    const r = tip === null ? null : live.current.locate(tip);
+    const box = boardRef.current;
+    if (!r || !box) {
+      setDir(0);
+      return;
+    }
+    const dx = r.x - box.getBoundingClientRect().left - mx.get();
+    setDir(Math.abs(dx) < 8 ? 0 : Math.sign(dx));
+  }, [tip, flat, mx]);
+
+  // Press sequence: crouch, jump for the hop, land, celebrate, then back to idle
+  useEffect(() => {
+    if (taps === 0 || flat) return;
+    const M = motionTokens.mascot;
+    const air = M.crouch + (hop?.d ?? 0);
+    const steps: [Pose | null, number][] = [['jump', M.crouch], ['land', air], ['celebrate', air + M.land], [null, air + M.land + M.celebrate]];
+    setSeq('crouch');
+    const timers = steps.map(([p, t]) => setTimeout(() => setSeq(p), t * 1000));
+    return () => timers.forEach(clearTimeout);
+  }, [taps, hop, flat]);
+
+  const openKey = (i: number) => {
+    // Focus the key's control first, so the window hands focus back to it on close
+    btnRefs.current[i]?.focus({ preventScroll: true });
+    // Mascot: jump the perch to the key now and play the hop from the old spot
+    const to = flat ? null : perch(i);
+    if (to) {
+      const from = { x: mx.get(), y: my.get(), s: ms.get() };
+      const far = Math.abs(from.x - to.x) > 160;
+      setHop({ dx: from.x - to.x, dy: from.y - to.y, s: from.s / to.scale, d: far ? motionTokens.duration.slow : motionTokens.duration.normal });
+      mx.set(to.x);
+      my.set(to.y);
+      ms.set(to.scale);
+    }
     setSelected(i);
+    setOpen(i);
     setTaps(t => t + 1);
     play('click');
   };
+  const closeWindow = useCallback(() => setOpen(null), []);
+
+  const chooseFilter = (f: Filter) => {
+    setFilter(f);
+    const n = KEYS.filter(k => inFilter(k, f)).length;
+    const label = FILTERS.find(x => x.id === f)?.label;
+    setAnnounce(f === 'all' ? `All ${KEYS.length} skills shown` : `${n} of ${KEYS.length} skills highlighted: ${label}`);
+  };
+
   const handlers: KeyHandlers = {
-    selected,
-    onSelect: select,
+    filter,
+    open,
+    tip,
+    btnRefs,
+    onOpen: openKey,
     onHover: setHover,
     onFocusKey: (i, visible) => setFocus(i === null ? null : { i, visible }),
   };
 
   return (
-    <div className="space-y-6 lg:space-y-4">
-      {/* Description: what the selected (or hovered, or focused) key means */}
-      <div
-        className="sticky top-0 z-20 bg-[var(--navy)] text-[color:var(--cream)] py-4 lg:static min-h-[200px] sm:min-h-[150px] border-l-[3px] border-[color:var(--orange)] pl-5"
-        aria-live="polite"
-      >
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={current.label}
-            initial={reduced ? false : { opacity: 0, x: -motionTokens.distance.sm }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={reduced ? undefined : { opacity: 0 }}
-            transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.smooth }}
-            className="lg:grid lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-x-10"
-          >
-            <div>
-              <p className="font-mono text-sm text-[color:var(--teal)] mb-3">{GROUP_NAME[current.group]}</p>
-              <h3 className="font-pixel text-lg sm:text-xl leading-snug mb-4 text-balance">{current.name}</h3>
-            </div>
-            <div className="max-w-[62ch]">
-              <p className="font-mono text-[15px] leading-relaxed text-pretty">{current.blurb}</p>
-              <p className="font-mono text-sm text-[color:var(--orange)] mt-4">Used in: {current.usedIn}</p>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+    <div className="space-y-6">
+      <Filters value={filter} onChange={chooseFilter} />
+      <p className="sr-only" aria-live="polite">{announce}</p>
 
       <div ref={boardRef} className="relative pt-14 sm:pt-16 lg:pt-20">
         {flat ? (
@@ -202,13 +461,11 @@ export default function SkillKeyboard() {
               {KEYS.map((k, i) => (
                 <button
                   key={k.label}
-                  type="button"
-                  aria-pressed={i === selected}
+                  {...keyButton(i, handlers)}
                   onClick={() => {
-                    select(i);
+                    openKey(i);
                     setPulse(p => ({ i, n: (p?.n ?? 0) + 1 }));
                   }}
-                  {...focusHandlers(i, handlers.onFocusKey)}
                 >
                   {NAMES[i]}
                 </button>
@@ -221,45 +478,74 @@ export default function SkillKeyboard() {
                 <Boundary onError={() => setStage('2d')}>
                   <Suspense fallback={null}>
                     <Keyboard3D
-                      cols={wide ? 7 : 4}
-                      selected={selected}
+                      cols={cols}
                       focused={focus?.visible ? focus.i : null}
+                      open={open}
                       pulse={pulse}
+                      filter={filter}
+                      entrance={entrance}
+                      locator={locatorRef}
                       onHover={setHover}
-                      onSelect={select}
-                      onPerch={setPerch}
+                      onSelect={openKey}
+                      onFrame={onFrame}
+                      onEntered={() => {
+                        enteredThisLoad = true;
+                        setEntered(true);
+                      }}
                     />
                   </Suspense>
                 </Boundary>
               )}
-              {/* Mascot stands behind the top-right key and hops when a key is pressed */}
-              {perch && stage === '3d' && (
-                <motion.img
-                  key={taps}
-                  src={MASCOT}
-                  alt=""
-                  aria-hidden="true"
-                  draggable={false}
-                  className="absolute w-14 sm:w-16 lg:w-20 -translate-x-1/2 -translate-y-full pointer-events-none"
-                  style={{ left: perch.x, top: perch.y, imageRendering: 'pixelated' }}
-                  initial={false}
-                  animate={taps === 0 ? undefined : { y: [0, -14, 0] }}
-                  transition={{ duration: motionTokens.duration.normal, ease: motionTokens.easing.smooth }}
-                />
-              )}
             </div>
+            {/* Mascot: stands on the board, leans toward the key in focus, hops
+                onto a pressed key. Frames swap by src; movement is transforms. */}
+            {stage === '3d' && (
+              <motion.div
+                aria-hidden="true"
+                className="pointer-events-none absolute left-0 top-0 z-20"
+                style={{ x: mx, y: my }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: entered ? 1 : 0 }}
+                transition={{ duration: motionTokens.duration.fast }}
+              >
+                <motion.div
+                  key={taps}
+                  className="absolute bottom-0 left-0 origin-bottom"
+                  // Starts at the old spot, holds through the crouch, then arcs onto the key
+                  initial={hop ? { x: hop.dx, y: hop.dy, scale: hop.s } : false}
+                  animate={hop ? { x: [hop.dx, 0], y: [hop.dy, Math.min(hop.dy, 0) - KB.hop, 0], scale: [hop.s, 1] } : undefined}
+                  transition={{ duration: hop?.d, delay: motionTokens.mascot.crouch, times: [0, 0.45, 1], ease: [motionTokens.easing.out, motionTokens.easing.sharp] }}
+                >
+                  <motion.img
+                    ref={mascotRef}
+                    src={MASCOT[frame]}
+                    alt=""
+                    draggable={false}
+                    className="absolute bottom-0 left-0 max-w-none -translate-x-1/2 origin-bottom"
+                    style={{ ...mascotStyle, scale: ms }}
+                  />
+                </motion.div>
+              </motion.div>
+            )}
           </>
         )}
         {flat && (
           <img
-            src={MASCOT}
+            src={MASCOT[frame]}
             alt=""
             aria-hidden="true"
             draggable={false}
-            className="absolute right-4 top-14 sm:top-16 lg:top-20 w-14 sm:w-16 lg:w-20 -translate-y-full pointer-events-none"
-            style={{ imageRendering: 'pixelated' }}
+            className="absolute right-4 top-14 sm:top-16 lg:top-20 max-w-none -translate-y-full pointer-events-none"
+            style={mascotStyle}
           />
         )}
+
+        {tip !== null && <KeyTip key={tip} index={tip} tipRef={tipRef} reduced={flat} />}
+        <AnimatePresence>
+          {open !== null && (
+            <SkillWindow key={open} index={open} reduced={flat} boardRef={boardRef} locate={locate} onClose={closeWindow} />
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

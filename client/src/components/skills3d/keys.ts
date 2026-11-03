@@ -1,5 +1,8 @@
-// Skills keyboard content and keycap colours, shared by the 3D board (lazy
-// chunk) and the flat 2D fallback. Content is unchanged from the CSS keyboard.
+// Skills keyboard content, filter categories and keycap colours, shared by the
+// 3D board (lazy chunk) and the flat 2D fallback. Content is unchanged from the
+// CSS keyboard.
+
+import { PROJECTS } from '@/data/projects';
 
 export type GroupId = 'ai' | 'data' | 'backend' | 'frontend' | 'ways';
 
@@ -78,6 +81,39 @@ export const KEYS: Key[] = [
   { label: 'REQS', name: 'Requirements gathering', group: 'ways', blurb: 'Turning what stakeholders say into changes a team can build.', usedIn: 'Sembcorp Solar, LGA Telecom' },
 ];
 
+// ── Filters ──────────────────────────────────────────────────────────────
+
+export type Category = 'ai' | 'data' | 'frontend' | 'backend' | 'infra' | 'workflow';
+export type Filter = Category | 'all';
+
+export const FILTERS: { id: Filter; label: string }[] = [
+  { id: 'all', label: 'All' },
+  { id: 'ai', label: 'AI' },
+  { id: 'data', label: 'Data' },
+  { id: 'frontend', label: 'Frontend' },
+  { id: 'backend', label: 'Backend' },
+  { id: 'infra', label: 'Infrastructure' },
+  { id: 'workflow', label: 'Workflow' },
+];
+
+const CATEGORY: Record<string, Category> = {
+  PROMPT: 'ai', RAG: 'ai', LLM: 'ai', GUARD: 'ai', HUMAN: 'ai',
+  PYTHON: 'data', PANDAS: 'data', SKLRN: 'data', NUMPY: 'data', SQL: 'data', ETL: 'data', BI: 'data',
+  NODE: 'backend', GRPC: 'backend', PGSQL: 'backend', SUPA: 'backend',
+  DOCKER: 'infra', KUBE: 'infra', GIT: 'infra',
+  TS: 'frontend', REACT: 'frontend', NEXT: 'frontend', TWIND: 'frontend', KOTLIN: 'frontend', ARCORE: 'frontend',
+  AGILE: 'workflow', UAT: 'workflow', REQS: 'workflow',
+};
+
+export const inFilter = (k: Key, f: Filter) => f === 'all' || CATEGORY[k.label] === f;
+
+/** Case studies named in a key's "used in" line. Only exact project names with
+ *  a case-study page count, so Desk Assist, Sembcorp and "every project" get none. */
+export function projectsFor(k: Key) {
+  const named = k.usedIn.split(',').map(s => s.trim());
+  return PROJECTS.filter(p => p.link.startsWith('/projects/') && named.includes(p.name));
+}
+
 export const iconUrl = (k: Key) => `/assets/skills/${k.label.toLowerCase()}.svg`;
 
 export type Cap = {
@@ -92,6 +128,25 @@ export type Cap = {
 export function capFor(k: Key, i: number): Cap {
   const { way, text } = CAP[k.label] ?? { way: 'cream' };
   return { ...WAYS[way], text: text ?? k.label, no: String(i + 1).padStart(2, '0') };
+}
+
+/** Retro filename for the tooltip and detail window, e.g. python.info */
+export const fileName = (cap: Cap) => `${cap.text.toLowerCase()}.info`;
+
+// Muted caps (filter mismatch): desaturated at constant luminance, then dimmed,
+// both in linear light, so legend contrast stays at or above 4.5:1 (lowest:
+// amber bar/black 4.8:1). The 3D board applies the same maths in its shader.
+export const MUTE = { desaturate: 0.85, dim: 0.7 };
+
+const toLinear = (c: number) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+const toSrgb = (c: number) => (c <= 0.0031308 ? c * 12.92 : 1.055 * c ** (1 / 2.4) - 0.055);
+
+export function muteHex(hex: string) {
+  const rgb = [1, 3, 5].map(n => toLinear(parseInt(hex.slice(n, n + 2), 16) / 255));
+  const lum = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+  return '#' + rgb
+    .map(c => Math.round(toSrgb((c + (lum - c) * MUTE.desaturate) * MUTE.dim) * 255).toString(16).padStart(2, '0'))
+    .join('');
 }
 
 /** Accessible name: the full name, plus the printed label when it isn't part of it

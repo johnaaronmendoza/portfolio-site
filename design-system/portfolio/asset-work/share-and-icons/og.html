@@ -1,0 +1,146 @@
+<!doctype html>
+<!--
+  Share image (Open Graph / Twitter), 1200x630.
+  Concept: the site's own hero, shown. The welcome.exe window with the two-tone pixel name,
+  the hero lead line under it on the navy grid, and four AI-story keycaps from the Skills
+  keyboard with Lil Johnny standing on 01 PROMPT.
+
+  Layout (absolute, px on the 1200x630 frame; safe area 50..1150 x 35..595):
+    window   x 64..760,  y 88..374 (+10px hard shadow)  name 60px Press Start 2P
+    lead     x 64,       y 426..530  Courier Prime Bold 40px, cream on navy, 2 lines
+    keycaps  2x2, 128px, gap 24: x 852..1132, y 266..546 (+6px shadow)
+    mascot   39x64 at x3 = 117x192, feet on the PROMPT cap top edge (y 266)
+  Words: only site copy (Hero.tsx NAME_LINES, Lead text, Skills keyboard labels).
+  Render: node .claude/skills/asset-toolkit/scripts/html2png.mjs <this> --out renders --name og
+          --size 1200x630 --require-font "Press Start 2P" --require-font "Courier Prime"
+          --require-font "JetBrains Mono"
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: "Press Start 2P"; src: url("../../../../client/public/fonts/PressStart2P.woff2") format("woff2"); }
+  @font-face { font-family: "Courier Prime"; font-weight: 700; src: url("fonts/CourierPrime-Bold.woff2") format("woff2"); }
+  @font-face { font-family: "JetBrains Mono"; font-weight: 700; src: url("fonts/JetBrainsMono-Bold.ttf") format("truetype"); }
+
+  :root {
+    --navy: #16163F; --ink: #000; --cream: #F4EAD5; --orange: #FF7A2F; --teal: #2EC4B6; --violet: #6C4AD0;
+    /* Skills keyboard keycap colourways (client/src/components/skills3d/keys.ts) */
+    --blue-face: #1B67BA; --blue-bar: #0A3F78;
+    --amber-face: #FFA502; --amber-bar: #CC7A00;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    position: relative;
+    background-color: var(--navy);
+    /* the site's faint 24px pixel grid (index.css body::before): hard 1px lines, not a fade */
+    background-image:
+      linear-gradient(0deg, rgb(46 196 182 / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(108 74 208 / 0.12) 1px, transparent 1px);
+    background-size: 24px 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- welcome.exe window ---- */
+  .window {
+    position: absolute; left: 64px; top: 88px; width: 696px;
+    border: 4px solid var(--ink);
+    background: var(--ink);
+    box-shadow: 10px 10px 0 0 var(--ink);
+  }
+  .bar {
+    height: 52px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 18px 0 20px;
+    background: var(--violet); color: var(--cream);
+    border-bottom: 4px solid var(--ink);
+  }
+  .bar .title { font: 18px/1 "Press Start 2P"; }
+  .bar .ctrl { display: flex; gap: 10px; }
+  .bar .ctrl i { display: block; width: 16px; height: 16px; border: 3px solid var(--cream); }
+  .bar .ctrl i:first-child { border-radius: 50%; }
+  .bar .ctrl i:last-child { border: 0; position: relative; }
+  .bar .ctrl i:last-child::before, .bar .ctrl i:last-child::after {
+    content: ""; position: absolute; left: -2px; top: 6px; width: 20px; height: 4px; background: var(--cream);
+    transform: rotate(45deg);
+  }
+  .bar .ctrl i:last-child::after { transform: rotate(-45deg); }
+  .body { padding: 42px 44px 40px; }
+  h1 { font: 60px/1.3 "Press Start 2P"; letter-spacing: 0; white-space: nowrap; }
+  h1 .a { color: var(--orange); display: block; }
+  h1 .b { color: var(--teal); display: block; }
+  .cursor { display: inline-block; width: 16px; height: 52px; background: var(--cream); margin-left: 8px; vertical-align: -6px; }
+
+  /* ---- lead line on the navy page ---- */
+  .lead {
+    position: absolute; left: 64px; top: 426px;
+    font: 700 40px/1.3 "Courier Prime", monospace; color: var(--cream);
+  }
+  .lead { display: grid; grid-template-columns: auto auto; column-gap: 0.5em; }
+  .lead .p { color: var(--orange); }
+
+  /* ---- keycaps ---- */
+  .cap {
+    position: absolute; width: 128px; height: 128px;
+    border: 4px solid var(--ink); border-radius: 14px;
+    box-shadow: 6px 6px 0 0 var(--ink);
+  }
+  .cap .face {
+    position: absolute; left: 6px; right: 6px; top: 3px; height: 86px;
+    border: 3px solid var(--ink); border-radius: 10px;
+  }
+  .cap .num { position: absolute; left: 10px; top: 8px; font: 700 15px/1 "JetBrains Mono"; }
+  .cap svg { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; transform: translate(-50%, -36%); }
+  .cap .label {
+    position: absolute; left: 0; right: 0; bottom: 8px; text-align: center;
+    font: 700 16px/1 "JetBrains Mono"; letter-spacing: 1px;
+  }
+  .blue  { background: var(--blue-bar); color: #fff; }
+  .blue .face { background: var(--blue-face); }
+  .blue svg path { fill: #fff; }
+  .amber { background: var(--amber-bar); color: #000; }
+  .amber .face { background: var(--amber-face); }
+  .amber svg path { fill: #000; }
+
+  .mascot { position: absolute; width: 117px; height: 192px; image-rendering: pixelated; }
+</style>
+</head>
+<body>
+  <div class="window">
+    <div class="bar"><span class="title">welcome.exe</span><span class="ctrl" aria-hidden="true"><i></i><i></i><i></i></span></div>
+    <div class="body">
+      <h1><span class="a">JOHN AARON</span><span class="b">BRANZUELA<span class="cursor"></span></span></h1>
+    </div>
+  </div>
+
+  <p class="lead"><span class="p" aria-hidden="true">&gt;</span><span>I build AI and data tools<br>people can trust</span></p>
+
+  <!-- 01 PROMPT (blue) -->
+  <div class="cap blue" style="left:852px; top:266px">
+    <div class="face"><span class="num">01</span>
+      <svg viewBox="0 0 128 128"><path d="M12 20H28V28H36V36H44V44H52V52H60V60H68V68H60V76H52V84H44V92H36V100H28V108H12V92H20V84H28V76H36V68H44V60H36V52H28V44H20V36H12ZM68 92H116V108H68Z"/></svg>
+    </div><span class="label">PROMPT</span>
+  </div>
+  <!-- 02 RAG (amber) -->
+  <div class="cap amber" style="left:1004px; top:266px">
+    <div class="face"><span class="num">02</span>
+      <svg viewBox="0 0 128 128"><path d="M12 12H68V20H76V28H84V44H60V52H20V60H44V68H20V76H44V100H52V108H60V116H12ZM20 36V44H60V36ZM68 52H92V60H100V68H108V92H100V100H108V108H116V116H100V108H68V100H60V92H52V68H60V60H68ZM68 68V92H92V68Z"/></svg>
+    </div><span class="label">RAG</span>
+  </div>
+  <!-- 04 GUARD (blue) -->
+  <div class="cap blue" style="left:852px; top:418px">
+    <div class="face"><span class="num">04</span>
+      <svg viewBox="0 0 128 128"><path d="M12 12H116V68H108V84H100V92H92V100H84V108H68V116H60V108H68V28H28V68H36V84H44V92H52V100H60V108H44V100H36V92H28V84H20V68H12Z"/></svg>
+    </div><span class="label">GUARD</span>
+  </div>
+  <!-- 05 HUMAN (amber) -->
+  <div class="cap amber" style="left:1004px; top:418px">
+    <div class="face"><span class="num">05</span>
+      <svg viewBox="0 0 128 128"><path d="M52 12H76V20H84V52H76V60H52V52H44V20H52ZM36 68H92V76H100V84H108V116H20V84H28V76H36Z"/></svg>
+    </div><span class="label">HUMAN</span>
+  </div>
+
+  <!-- Lil Johnny, 39x64 native, x3 nearest-neighbour; feet on the PROMPT cap -->
+  <img class="mascot" src="../../../../client/public/assets/mascot/lil-johnny-happy.png" alt="" style="left:858px; top:74px">
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!--
+  For the lead to put into client/index.html <head>. Replaces these existing lines:
+    <link rel="icon" type="image/png" sizes="32x32" href="/og-image.jpg" />   (pointed at the photo)
+    og:image, og:image:width (800), og:image:height (800), og:image:alt, twitter:image, twitter:image:alt
+  Keep the existing <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> (file replaced, same path).
+  JSON-LD "image" still points at /og-image.jpg, which is now the share card, not a photo of John.
+  John's photo is preserved at /assets/john-photo.jpg; point JSON-LD "image" there if a person photo is wanted.
+-->
+
+<!-- Icons -->
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+<meta name="theme-color" content="#16163F" />
+
+<!-- Open Graph image (1200x630; PNG is 17.6 KB, the JPG is the same card at q85) -->
+<meta property="og:image" content="https://portfolio-site-lh1v.vercel.app/og-image.png" />
+<meta property="og:image:secure_url" content="https://portfolio-site-lh1v.vercel.app/og-image.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="John Aaron Branzuela: I build AI and data tools people can trust. A retro welcome.exe window with his name, beside Prompt, RAG, Guard and Human keycaps and his pixel mascot." />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://portfolio-site-lh1v.vercel.app/og-image.png" />
+<meta name="twitter:image:alt" content="John Aaron Branzuela: I build AI and data tools people can trust. A retro welcome.exe window with his name, beside Prompt, RAG, Guard and Human keycaps and his pixel mascot." />

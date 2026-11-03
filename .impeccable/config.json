@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "design-system/portfolio/asset-work/share-and-icons/og.html"
+        ],
+        "createdAt": "2026-11-03T09:27:26.914Z",
+        "reason": "lead (Claude): false positive on div.bar, the welcome.exe title bar in the share-image source; it is 52px tall with 18px text centred by flex (about 17px clear above and below), so vertical padding is 0 by design; render checked visually"
+      }
+    ]
+  }
+}

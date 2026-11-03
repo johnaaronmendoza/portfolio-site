@@ -129,3 +129,6 @@ skills-lock.json
 
 __pycache__/
 *.pyc
+
+# Graphify knowledge graph output (regenerate with `graphify update .`)
+graphify-out/

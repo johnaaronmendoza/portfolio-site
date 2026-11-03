@@ -1,14 +1,27 @@
 /**
- * CommandPalette - Ctrl+K Command Menu
- * Design: Industrial Retro-Futurism
- * - Quick navigation to portfolio sections
- * - Chat actions and shortcuts
- * - Authentic OS-style command interface
+ * CommandPalette: Ctrl+K / Cmd+K command menu.
+ * A `commands.exe` terminal-variant window (MASTER 2.10): section and project
+ * navigation, resume and email, and chat shortcuts.
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
+import { scrollToSection } from '@/lib/utils';
+import { motionTokens } from '@/lib/motion-tokens';
+import { useModalFocus } from '@/hooks/useModalFocus';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import PixelArt from './PixelArt';
+import { WindowBar } from './Window';
+
+const SECTIONS = [
+  { id: 'hero', name: 'top' },
+  { id: 'about', name: 'About' },
+  { id: 'experience', name: 'Experience' },
+  { id: 'projects', name: 'Projects' },
+  { id: 'skills', name: 'Skills' },
+  { id: 'footer', name: 'Contact' },
+];
 
 interface Command {
   id: string;
@@ -18,80 +31,72 @@ interface Command {
   category: 'navigation' | 'chat' | 'action';
 }
 
-// Trigger React-controlled input via native value setter
-function triggerChatQuery(query: string) {
-  const chatButton = document.querySelector('button[data-chat-toggle]') as HTMLButtonElement;
-  if (chatButton) chatButton.click();
-  setTimeout(() => {
-    const input = document.querySelector('input[data-chat-input]') as HTMLInputElement;
-    if (!input) return;
-    const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
-    nativeSetter?.call(input, query);
-    input.dispatchEvent(new Event('input', { bubbles: true }));
-    setTimeout(() => {
-      const form = document.querySelector('form[data-chat-form]') as HTMLFormElement;
-      if (form) form.dispatchEvent(new Event('submit', { bubbles: true }));
-    }, 50);
-  }, 350);
+// Opens the chat and asks it a question (MascotChatWidget listens for this)
+function askChat(query?: string) {
+  window.dispatchEvent(new CustomEvent('open-chat', { detail: { query } }));
 }
 
 export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
+  const reduced = useReducedMotion();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Focus the search on open, trap Tab, give focus back to the opener on close
+  const keepFocus = useModalFocus(isOpen, dialogRef, inputRef);
+
+  // On Home, scroll to the section and focus it; elsewhere, go Home and let it scroll to the hash
+  const goToSection = (id: string) => {
+    if (location === '/' && document.getElementById(id)) {
+      keepFocus();
+      scrollToSection(id, reduced);
+    } else {
+      setLocation(`/#${id}`);
+    }
+  };
+
+  // Focus moves into the chat, so the palette doesn't hand it back
+  const chat = (query?: string) => {
+    keepFocus();
+    setIsOpen(false);
+    askChat(query);
+  };
 
   const commands: Command[] = [
-    // Navigation — sections
+    // Navigation — sections (from a case study, go to the Home section instead)
+    ...SECTIONS.map(({ id, name }): Command => ({
+      id: `nav-${id}`,
+      label: `Go to ${name}`,
+      description: id === 'hero' ? 'Jump to the top of the home page' : `Jump to the ${name.toLowerCase()} section`,
+      action: () => { goToSection(id); setIsOpen(false); },
+      category: 'navigation',
+    })),
+    // Actions
     {
-      id: 'nav-hero',
-      label: 'Go to Hero',
-      description: 'Jump to the hero section',
+      id: 'action-resume',
+      label: 'Download resume',
+      description: 'Save John\'s resume as a PDF',
       action: () => {
-        document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
+        const link = document.createElement('a');
+        link.href = '/resume.pdf';
+        link.download = 'John_Aaron_Branzuela_Resume.pdf';
+        link.click();
         setIsOpen(false);
       },
-      category: 'navigation',
+      category: 'action',
     },
     {
-      id: 'nav-about',
-      label: 'Go to About',
-      description: 'Jump to the about section',
+      id: 'action-email',
+      label: 'Email me',
+      description: 'johnaaronmb@gmail.com',
       action: () => {
-        document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+        window.location.href = 'mailto:johnaaronmb@gmail.com';
         setIsOpen(false);
       },
-      category: 'navigation',
-    },
-    {
-      id: 'nav-experience',
-      label: 'Go to Experience',
-      description: 'Jump to the experience section',
-      action: () => {
-        document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' });
-        setIsOpen(false);
-      },
-      category: 'navigation',
-    },
-    {
-      id: 'nav-projects',
-      label: 'Go to Projects',
-      description: 'Jump to the projects section',
-      action: () => {
-        document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-        setIsOpen(false);
-      },
-      category: 'navigation',
-    },
-    {
-      id: 'nav-skills',
-      label: 'Go to Skills',
-      description: 'Jump to the skills section',
-      action: () => {
-        document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' });
-        setIsOpen(false);
-      },
-      category: 'navigation',
+      category: 'action',
     },
     // Navigation — project pages
     {
@@ -141,41 +146,28 @@ export default function CommandPalette() {
       id: 'chat-open',
       label: 'Open Chat',
       description: 'Open the chat widget',
-      action: () => {
-        const chatButton = document.querySelector('button[data-chat-toggle]') as HTMLButtonElement;
-        if (chatButton) chatButton.click();
-        setIsOpen(false);
-      },
+      action: () => chat(),
       category: 'chat',
     },
     {
       id: 'chat-experience',
-      label: 'Ask About Experience',
-      description: 'Chat: Sembcorp internship details',
-      action: () => {
-        setIsOpen(false);
-        triggerChatQuery('Tell me about your Sembcorp experience');
-      },
+      label: 'Ask about Desk Assist',
+      description: 'Chat: AI assistant for service desk agents',
+      action: () => chat('Tell me about Desk Assist'),
       category: 'chat',
     },
     {
       id: 'chat-projects',
       label: 'Ask About Projects',
       description: 'Chat: overview of all projects',
-      action: () => {
-        setIsOpen(false);
-        triggerChatQuery('What are your projects');
-      },
+      action: () => chat('What are your projects'),
       category: 'chat',
     },
     {
       id: 'chat-skills',
       label: 'Ask About Skills',
       description: 'Chat: tech stack and tools',
-      action: () => {
-        setIsOpen(false);
-        triggerChatQuery('What are your skills');
-      },
+      action: () => chat('What are your skills'),
       category: 'chat',
     },
   ];
@@ -211,6 +203,8 @@ export default function CommandPalette() {
           setSelectedIndex(prev => (prev - 1 + filteredCommands.length) % filteredCommands.length);
           break;
         case 'Enter':
+          // Buttons (rows, Close) activate natively; this handles Enter in the search box
+          if (e.target instanceof HTMLButtonElement) break;
           e.preventDefault();
           if (filteredCommands[selectedIndex]) {
             filteredCommands[selectedIndex].action();
@@ -229,35 +223,36 @@ export default function CommandPalette() {
         <>
           {/* Backdrop */}
           <motion.div
+            key="palette-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            className="fixed inset-0 bg-black/70 z-40"
           />
 
-          {/* Command Palette — M06 CRT boot sequence */}
+          {/* commands.exe: terminal-variant window */}
           <motion.div
-            initial={{ opacity: 0, scaleY: 0.04 }}
-            animate={{ opacity: 1, scaleY: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0 } }}
-            transition={{ duration: 0.12, ease: [0.23, 1, 0.32, 1] }}
-            className="fixed top-1/4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-2xl bg-black border-4 border-amber-400 shadow-8bit overflow-hidden"
-            style={{ transformOrigin: 'top' }}
+            key="palette"
+            initial={{ opacity: 0, y: -motionTokens.distance.sm }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -motionTokens.distance.sm }}
+            transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
+            ref={dialogRef}
+            tabIndex={-1}
+            className="window fixed top-1/4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-2xl overflow-hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Command menu"
           >
-            {/* CRT flash — 1-frame white flash on open */}
-            <motion.div
-              className="absolute inset-0 bg-white pointer-events-none z-10"
-              initial={{ opacity: 0.9 }}
-              animate={{ opacity: 0 }}
-              transition={{ duration: 0.08 }}
-            />
-            {/* Search Input */}
-            <div className="border-b-2 border-amber-400 p-4 bg-zinc-900">
-              <div className="flex items-center gap-2">
-                <span className="font-pixel text-amber-400 text-sm">&gt;</span>
+            <WindowBar title="commands.exe" onClose={() => setIsOpen(false)} closeLabel="Close command menu" />
+
+            <div className="bg-black text-[color:var(--cream)] [--focus:var(--orange)]">
+              {/* Search: the ring sits on the row; the input itself has no outline */}
+              <div className="border-b-2 border-[color:var(--cream)] p-4 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--orange)] focus-within:outline-offset-[-6px]">
+                <span aria-hidden="true" className="font-mono text-base font-bold text-[color:var(--orange)]">&gt;</span>
                 <input
-                  autoFocus
+                  ref={inputRef}
                   type="text"
                   value={search}
                   onChange={e => {
@@ -265,46 +260,46 @@ export default function CommandPalette() {
                     setSelectedIndex(0);
                   }}
                   placeholder="Search commands..."
-                  className="flex-1 bg-black text-white font-mono text-sm outline-none"
+                  aria-label="Search commands"
+                  className="flex-1 min-w-0 bg-transparent text-[color:var(--cream)] placeholder:text-[color:var(--cream)] placeholder:italic font-mono text-base outline-none caret-[var(--orange)]"
                 />
               </div>
-            </div>
 
-            {/* Commands List */}
-            <div className="max-h-96 overflow-y-auto bg-black">
-              {filteredCommands.length === 0 ? (
-                <div className="p-4 text-center font-mono text-xs text-gray-500">
-                  No commands found
-                </div>
-              ) : (
-                filteredCommands.map((cmd, idx) => (
-                  <motion.button
-                    key={cmd.id}
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.15, delay: idx * 0.04, ease: [0.23, 1, 0.32, 1] }}
-                    onClick={() => {
-                      cmd.action();
-                      setIsOpen(false);
-                    }}
-                    className={`w-full text-left px-4 py-3 border-b border-zinc-800 transition-colors ${
-                      idx === selectedIndex
-                        ? 'bg-amber-400 text-black'
-                        : 'bg-black text-white hover:bg-zinc-900'
-                    }`}
-                    onMouseEnter={() => setSelectedIndex(idx)}
-                  >
-                    <div className="font-mono font-bold text-sm">{cmd.label}</div>
-                    <div className="font-mono text-xs text-gray-500 mt-1">{cmd.description}</div>
-                  </motion.button>
-                ))
-              )}
-            </div>
+              {/* Commands: selected row orange, hover teal; the description inherits the row colour */}
+              <div className="max-h-96 overflow-y-auto" data-lenis-prevent>
+                {filteredCommands.length === 0 ? (
+                  <p className="p-4 text-center font-mono text-sm">No commands found</p>
+                ) : (
+                  filteredCommands.map((cmd, idx) => (
+                    <button
+                      type="button"
+                      key={cmd.id}
+                      onClick={() => {
+                        cmd.action();
+                        setIsOpen(false);
+                      }}
+                      className={`block w-full min-h-[44px] text-left px-4 py-3 outline-offset-[-6px] [--focus:var(--ink)] transition-colors duration-150 ${
+                        idx === selectedIndex
+                          ? 'bg-[var(--orange)] text-black'
+                          : 'hover:bg-[var(--teal)] hover:text-black'
+                      }`}
+                      onFocus={() => setSelectedIndex(idx)}
+                    >
+                      <span className="flex items-center gap-2 font-mono font-bold text-[15px]">
+                        {cmd.id === 'nav-hero' && <PixelArt name="icon-home" size={16} />}
+                        {cmd.label}
+                      </span>
+                      <span className="block font-mono text-sm mt-1">{cmd.description}</span>
+                    </button>
+                  ))
+                )}
+              </div>
 
-            {/* Footer */}
-            <div className="border-t-2 border-amber-400 p-3 bg-zinc-900 flex justify-between text-xs font-mono text-gray-500">
-              <span>↑↓ Navigate | Enter Select | Esc Close</span>
-              <span>Ctrl+K Toggle</span>
+              {/* Footer hints */}
+              <div className="border-t-2 border-[color:var(--cream)] p-3 flex flex-wrap justify-between gap-x-4 gap-y-1 text-sm font-mono">
+                <span>↑↓ Navigate | Enter Select | Esc Close</span>
+                <span>Ctrl+K Toggle</span>
+              </div>
             </div>
           </motion.div>
         </>

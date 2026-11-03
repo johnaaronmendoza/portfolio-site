@@ -1,25 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useModalFocus } from '@/hooks/useModalFocus';
+import { motionTokens } from '@/lib/motion-tokens';
+import { WindowBar } from './Window';
 
 const SHORTCUTS = [
   { keys: ['Ctrl', 'K'],    desc: 'Open command palette'       },
-  { keys: ['↑', '↓'],       desc: 'Navigate between sections'  },
   { keys: ['`'],             desc: 'Open secret terminal'       },
   { keys: ['?'],             desc: 'Show keyboard shortcuts'    },
   { keys: ['↑↑↓↓←→←→BA'],  desc: 'Konami code easter egg'     },
   { keys: ['Esc'],           desc: 'Close any overlay'          },
 ];
 
-const SECTIONS = [
-  { key: '1', label: 'Hero'       },
-  { key: '2', label: 'About'      },
-  { key: '3', label: 'Experience' },
-  { key: '4', label: 'Projects'   },
-  { key: '5', label: 'Skills'     },
-];
-
+/** shortcuts.txt: terminal-variant window opened with "?" (MASTER 2.10) */
 export default function KeyboardShortcuts() {
   const [open, setOpen] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  // Focus the dialog on open, trap Tab, return focus to the opener on close
+  useModalFocus(open, dialogRef);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -37,6 +36,7 @@ export default function KeyboardShortcuts() {
       {open && (
         <>
           <motion.div
+            key="shortcuts-backdrop"
             className="fixed inset-0 bg-black/70 z-[80]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -44,41 +44,39 @@ export default function KeyboardShortcuts() {
             onClick={() => setOpen(false)}
           />
           <motion.div
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[90] w-full max-w-md bg-black border-4 border-amber-400 shadow-8bit"
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.94 }}
-            transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
+            key="shortcuts"
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Keyboard shortcuts"
+            tabIndex={-1}
+            className="window fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[90] w-[calc(100%-2rem)] max-w-md"
+            initial={{ opacity: 0, y: motionTokens.distance.sm }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: motionTokens.distance.sm }}
+            transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
           >
-            {/* Header */}
-            <div className="border-b-2 border-amber-400 bg-zinc-900 px-4 py-3 flex items-center justify-between">
-              <span className="font-pixel text-[10px] text-amber-400">KEYBOARD SHORTCUTS</span>
-              <button
-                onClick={() => setOpen(false)}
-                className="font-mono text-xs text-zinc-500 hover:text-amber-400 transition-colors"
-              >
-                [ESC]
-              </button>
-            </div>
+            <WindowBar title="shortcuts.txt" onClose={() => setOpen(false)} closeLabel="Close keyboard shortcuts" />
 
-            {/* Shortcuts */}
-            <div className="p-4 space-y-1">
-              {SHORTCUTS.map(({ keys, desc }) => (
-                <div key={desc} className="flex items-center justify-between py-2 border-b border-zinc-800 last:border-0">
-                  <span className="font-mono text-xs text-zinc-400">{desc}</span>
-                  <div className="flex items-center gap-1">
-                    {keys.map((k, i) => (
-                      <span key={i} className="font-mono text-[10px] text-black bg-amber-400 px-1.5 py-0.5 leading-none">
-                        {k}
-                      </span>
-                    ))}
+            <div className="bg-black text-[color:var(--cream)] [--focus:var(--orange)]">
+              <dl className="p-4 space-y-1">
+                {SHORTCUTS.map(({ keys, desc }) => (
+                  <div key={desc} className="flex items-center justify-between gap-4 py-2">
+                    <dt className="font-mono text-[15px]">{desc}</dt>
+                    <dd className="flex flex-shrink-0 items-center gap-1">
+                      {keys.map((k) => (
+                        <kbd key={k} className="font-mono text-sm font-bold text-black bg-[var(--orange)] border-2 border-[color:var(--cream)] px-1.5 py-0.5 leading-none">
+                          {k}
+                        </kbd>
+                      ))}
+                    </dd>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </dl>
 
-            <div className="border-t-2 border-amber-400 px-4 py-2 bg-zinc-900">
-              <p className="font-mono text-[10px] text-zinc-600 text-center">Press <span className="text-amber-400">?</span> to toggle</p>
+              <p className="border-t-2 border-[color:var(--cream)] px-4 py-2 font-mono text-sm text-center">
+                Press <kbd className="font-bold text-[color:var(--orange)]">?</kbd> to toggle
+              </p>
             </div>
           </motion.div>
         </>

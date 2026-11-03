@@ -95,6 +95,8 @@ interface ParticlesProps {
   disableRotation?: boolean;
   pixelRatio?: number;
   className?: string;
+  /** Freeze on the current frame (the viewer's "Pause motion" toggle) */
+  paused?: boolean;
 }
 
 const Particles = ({
@@ -111,9 +113,13 @@ const Particles = ({
   disableRotation = false,
   pixelRatio = 1,
   className = '',
+  paused = false,
 }: ParticlesProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
+  // Read inside the render loop so pausing doesn't rebuild the WebGL scene
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
 
   useEffect(() => {
     const container = containerRef.current;
@@ -198,6 +204,7 @@ const Particles = ({
       animationFrameId = requestAnimationFrame(update);
       const delta = t - lastTime;
       lastTime = t;
+      if (pausedRef.current) return;
       elapsed += delta * speed;
 
       program.uniforms.uTime.value = elapsed * 0.001;

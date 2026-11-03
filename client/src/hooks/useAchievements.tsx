@@ -1,5 +1,5 @@
-import React from 'react';
 import { toast } from 'sonner';
+import { WindowBar } from '@/components/Window';
 import { play } from './useSound';
 
 // ── Achievement definitions ───────────────────────────────────────────────
@@ -33,33 +33,29 @@ function saveVisited(list: string[]) {
 }
 
 // ── Fire a toast ──────────────────────────────────────────────────────────
+// A small achievement.txt window (MASTER 2.1): violet bar, cream body, navy
+// text, ink frame and hard shadow. Sonner keeps it non-blocking, pauses it on
+// hover and lets it be dismissed; reduced motion is handled by the global
+// prefers-reduced-motion rule in index.css.
 function showToast(id: string) {
   const ach = ACHIEVEMENTS[id];
   if (!ach) return;
   play('achievement');
   toast.custom(
-    () => (
-      <div style={{
-        border: '3px solid #F59E0B',
-        background: '#000',
-        padding: '10px 14px',
-        boxShadow: '4px 4px 0px 0px #F59E0B',
-        fontFamily: '"Press Start 2P", monospace',
-        minWidth: '240px',
-        maxWidth: '300px',
-      }}>
-        <div style={{ color: '#F59E0B', fontSize: '8px', marginBottom: '6px', letterSpacing: '0.5px' }}>
-          {ach.icon} ACHIEVEMENT UNLOCKED
-        </div>
-        <div style={{ color: '#ffffff', fontSize: '9px', marginBottom: '3px' }}>
-          {ach.title}
-        </div>
-        <div style={{ color: '#6b7280', fontSize: '8px', lineHeight: '1.5' }}>
-          {ach.desc}
+    (toastId) => (
+      <div role="status" className="window w-72 max-w-[calc(100vw-2rem)] shadow-[4px_4px_0_0_var(--ink)]">
+        <WindowBar title="achievement.txt" onClose={() => toast.dismiss(toastId)} closeLabel="Dismiss achievement" />
+        <div className="window-body px-4 py-3 font-mono text-[15px] leading-snug">
+          <p className="font-bold text-black">
+            <span aria-hidden="true">{ach.icon} </span>Achievement unlocked: {ach.title}
+          </p>
+          <p className="mt-1">{ach.desc}</p>
         </div>
       </div>
     ),
-    { duration: 3500, position: 'top-right' }
+    // Shrink to the card on phones too (Sonner stretches toasts full width
+    // under 600px), so it sits top-right instead of across the page
+    { duration: 3500, position: 'top-right', style: { width: 'auto', left: 'auto' } }
   );
 }
 

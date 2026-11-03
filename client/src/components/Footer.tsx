@@ -1,163 +1,119 @@
 /**
- * Footer - 8-Bit Hardware Engineer Portfolio
- * Design: Industrial Retro-Futurism
- * - Minimal footer with gold border
- * - Monospace text
- * - Links to GitHub and LinkedIn
+ * Footer: violet band in three columns, like a retro site footer. Contact CTA
+ * with the email button, places to find me, and the SGT clock + terminal hint.
+ * Cream text on violet only.
  */
 
-import { motion } from 'framer-motion';
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { PixelGitHub, PixelLinkedIn, PixelEmail } from '@/components/PixelIcons';
+import { useState, useEffect } from 'react';
+import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
+import PixelArt from '@/components/PixelArt';
+
+const LINK_CLASS =
+  'min-h-[44px] inline-flex items-center gap-3 font-mono text-[15px] sm:text-base font-bold underline-offset-4 decoration-2 hover:underline';
+
+const NEW_TAB = <span className="sr-only"> (opens in a new tab)</span>;
 
 function useSGTClock() {
   const [time, setTime] = useState('');
   useEffect(() => {
+    let id: ReturnType<typeof setTimeout>;
+    // Update once a minute, aligned to the minute boundary
     const tick = () => {
       setTime(new Date().toLocaleTimeString('en-SG', {
         timeZone: 'Asia/Singapore',
-        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+        hour: '2-digit', minute: '2-digit', hour12: false,
       }));
+      id = setTimeout(tick, 60_000 - (Date.now() % 60_000));
     };
     tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
+    return () => clearTimeout(id);
   }, []);
   return time;
-}
-
-function spawnConfetti(origin: { x: number; y: number }) {
-  const COLORS = ['#F59E0B', '#3B82F6', '#FFFFFF', '#10B981', '#F87171'];
-  const canvas = document.createElement('canvas');
-  canvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999';
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  document.body.appendChild(canvas);
-  const ctx = canvas.getContext('2d')!;
-
-  const particles = Array.from({ length: 40 }, () => ({
-    x: origin.x,
-    y: origin.y,
-    vx: (Math.random() - 0.5) * 14,
-    vy: Math.random() * -12 - 4,
-    size: Math.floor(Math.random() * 6) + 4,
-    color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    life: 1,
-    decay: Math.random() * 0.02 + 0.018,
-  }));
-
-  let raf: number;
-  const frame = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    let alive = false;
-    for (const p of particles) {
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vy += 0.45; // gravity
-      p.life -= p.decay;
-      if (p.life <= 0) continue;
-      alive = true;
-      ctx.globalAlpha = p.life;
-      ctx.fillStyle = p.color;
-      ctx.fillRect(Math.round(p.x), Math.round(p.y), p.size, p.size);
-    }
-    ctx.globalAlpha = 1;
-    if (alive) { raf = requestAnimationFrame(frame); }
-    else { cancelAnimationFrame(raf); canvas.remove(); }
-  };
-  raf = requestAnimationFrame(frame);
 }
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const sgtTime = useSGTClock();
-  const sendBtnRef = useRef<HTMLAnchorElement>(null);
-
-  const handleSendClick = useCallback((e: React.MouseEvent) => {
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    spawnConfetti({ x: rect.left + rect.width / 2, y: rect.top });
-  }, []);
 
   return (
-    <footer className="bg-black text-white px-4 sm:px-8 lg:px-16 py-12 sm:py-16 border-t-2 border-amber-400">
-      <div className="max-w-5xl mx-auto space-y-10">
+    // Extra bottom padding so the fixed Pause and chat buttons never cover the last row
+    <footer className="bg-[var(--violet)] text-[color:var(--cream)] border-t-[3px] border-black px-4 sm:px-8 lg:px-16 pt-16 pb-28 sm:pt-20 [--focus:var(--cream)]">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr] gap-12 md:gap-10">
         {/* Contact CTA */}
-        <div className="text-center space-y-4">
-          {/* Availability indicator */}
-          <div className="flex items-center justify-center gap-2">
-            <div className="w-1.5 h-1.5 bg-green-400" aria-hidden="true" />
-            <span className="font-mono text-xs text-zinc-400 tracking-wide">Graduating April 2027</span>
+        <div className="space-y-5">
+          <div className="flex items-start gap-4">
+            <PixelArt name="icon-contact" size={32} lazy className="mt-1" />
+            <h2 className="font-pixel text-[22px] sm:text-[28px] leading-snug">
+              Hiring for 2027? Let's talk.
+            </h2>
           </div>
-
-          <motion.h2
-            className="font-pixel text-xl sm:text-2xl text-amber-400"
-          >
-            GET IN TOUCH
-          </motion.h2>
-          <p className="font-mono-8bit text-sm text-gray-400 max-w-md mx-auto leading-relaxed">
-            Open to graduate roles, collaborations and interesting projects.
+          <p className="font-mono-8bit text-[15px] sm:text-base max-w-[40ch] leading-relaxed">
+            Open to AI, data and software graduate roles. Graduating April 2027.
           </p>
-          <motion.a
-            ref={sendBtnRef}
-            href="mailto:johnaaronmb@gmail.com"
-            onClick={handleSendClick}
-            className="inline-flex items-center gap-3 border-8bit shadow-8bit px-6 py-3 font-mono-8bit font-bold text-black bg-amber-400 hover:bg-amber-300 transition-colors text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-            whileHover={{ y: 4, boxShadow: '0px 0px 0px 0px #F59E0B', transition: { duration: 0.1 } }}
-          >
-            <PixelEmail size={20} />
-            SEND MESSAGE →
-          </motion.a>
+          <a href="mailto:johnaaronmb@gmail.com" className="btn btn-primary">
+            <PixelArt name="icon-contact" size={16} lazy />
+            Email me
+          </a>
+        </div>
 
-          {/* Terminal Easter egg hint */}
-          <p className="font-mono text-[10px] text-zinc-600">
-            or open the terminal and try{' '}
+        {/* Socials */}
+        <div className="space-y-4">
+          <h3 className="font-pixel text-sm leading-snug">Find me on</h3>
+          <ul className="space-y-1">
+            <li>
+              <a
+                href="https://github.com/johnaaronmendoza"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={LINK_CLASS}
+              >
+                <PixelGitHub size={16} />
+                GitHub{NEW_TAB}
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.linkedin.com/in/john-branzuela/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={LINK_CLASS}
+              >
+                <PixelLinkedIn size={16} />
+                LinkedIn{NEW_TAB}
+              </a>
+            </li>
+            <li>
+              <a href="mailto:johnaaronmb@gmail.com" className={`${LINK_CLASS} break-all`}>
+                <PixelArt name="icon-contact" size={16} lazy />
+                johnaaronmb@gmail.com
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Clock + terminal Easter egg hint */}
+        <div className="space-y-4">
+          {sgtTime && (
+            <p className="flex items-center gap-3 font-pixel text-sm leading-snug tabular-nums">
+              <PixelArt name="globe" size={24} lazy />
+              <span>SGT {sgtTime}<span className="sr-only"> Singapore time</span></span>
+            </p>
+          )}
+          <p className="font-mono text-[15px] sm:text-base leading-relaxed">
+            Open the terminal and try{' '}
             <button
-              className="text-amber-400 hover:text-white transition-colors"
+              type="button"
+              className="min-h-[44px] inline-flex items-center px-1 font-bold underline underline-offset-4 decoration-2 transition-[background-color,color] duration-150 hover:bg-[var(--cream)] hover:text-[color:var(--violet)]"
               onClick={() => window.dispatchEvent(new Event('toggle-terminal'))}
             >
               {'>'} sudo hire-me
             </button>
           </p>
-        </div>
-
-        {/* Divider */}
-        <div className="border-t border-zinc-800" />
-
-        {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-4">
-            <p className="font-mono-8bit text-xs text-gray-600">
-              © {currentYear} John Aaron Mendoza Branzuela
-            </p>
-            {sgtTime && (
-              <span className="font-mono text-[10px] text-zinc-700">
-                SGT {sgtTime}
-              </span>
-            )}
-          </div>
-
-          <div className="flex gap-5 items-center">
-            <a
-              href="https://github.com/johnaaronmendoza"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-mono-8bit text-sm text-zinc-400 hover:text-white transition-colors"
-              title="GitHub"
-            >
-              <PixelGitHub size={28} fg="#F59E0B" />
-              <span>GitHub</span>
-            </a>
-            <a
-              href="https://www.linkedin.com/in/john-branzuela/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-mono-8bit text-sm text-zinc-400 hover:text-white transition-colors"
-              title="LinkedIn"
-            >
-              <PixelLinkedIn size={28} />
-              <span>LinkedIn</span>
-            </a>
-          </div>
+          <p className="font-mono-8bit text-sm">
+            © {currentYear} John Aaron Mendoza Branzuela
+          </p>
+          {/* Sign-off sticker, in the flow below the copyright (not over text) */}
+          <PixelArt name="starburst" size={96} lazy className="hidden md:block" />
         </div>
       </div>
     </footer>

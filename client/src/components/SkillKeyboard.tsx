@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { play } from '@/hooks/useSound';
@@ -79,7 +79,7 @@ export const KEYS: Key[] = [
   { label: 'PANDAS', name: 'Pandas', group: 'data', blurb: 'Wrangling tens of thousands of rows into features a model can learn from.', usedIn: 'UWB Indoor Localization, AI Finance Insights Engine' },
 
   // Row 2
-  { label: 'SKLRN', name: 'scikit-learn', group: 'data', blurb: 'Training and comparing models, including an SVM that reached 89.6% accuracy.', usedIn: 'UWB Indoor Localization' },
+  { label: 'SKLRN', name: 'scikit-learn', group: 'data', blurb: 'Training and comparing models, including an SVM that reached 89.61% accuracy.', usedIn: 'UWB Indoor Localization' },
   { label: 'NUMPY', name: 'NumPy', group: 'data', blurb: 'Fast array maths behind feature engineering and PCA.', usedIn: 'UWB Indoor Localization' },
   { label: 'SQL', name: 'SQL', group: 'data', blurb: 'Querying and modelling data, including a star schema for reporting.', usedIn: 'AI Finance Insights Engine, SilverLink SG' },
   { label: 'ETL', name: 'ETL pipelines', group: 'data', blurb: 'Pulling five market data sources into one validated, fully tested pipeline.', usedIn: 'AI Finance Insights Engine' },
@@ -108,9 +108,8 @@ export const KEYS: Key[] = [
 
 const COLS = 7;
 
-function Keycap({ k, pressed, onPress, onPreview, delay, show, reduced }: {
+function Keycap({ k, pressed, onPress, onPreview }: {
   k: Key; pressed: boolean; onPress: () => void; onPreview: () => void;
-  delay: number; show: boolean; reduced: boolean;
 }) {
   const cap = CAP[k.label] ?? { color: '#52525B' };
   const [iconFailed, setIconFailed] = useState(false);
@@ -118,17 +117,14 @@ function Keycap({ k, pressed, onPress, onPreview, delay, show, reduced }: {
   const showIcon = cap.icon && !iconFailed;
 
   return (
-    <motion.button
+    <button
       type="button"
       onClick={onPress}
       onMouseEnter={onPreview}
-      onFocus={onPreview}
       aria-pressed={pressed}
       aria-label={k.name}
-      initial={reduced ? false : { opacity: 0, y: -motionTokens.distance.md }}
-      animate={show || reduced ? { opacity: 1, y: 0 } : undefined}
-      transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.smooth, delay: reduced ? 0 : delay }}
-      className="relative aspect-square select-none rounded-[12px] focus-visible:outline-offset-4"
+      // Scroll margin keeps a tabbed-to key clear of the sticky description panel on phones
+      className="relative aspect-square select-none rounded-[12px] focus-visible:outline-offset-4 scroll-mt-[240px] lg:scroll-mt-0"
     >
       <span
         className="absolute inset-0 flex items-center justify-center rounded-[12px] transition-[transform,box-shadow] duration-100 ease-out"
@@ -154,21 +150,22 @@ function Keycap({ k, pressed, onPress, onPreview, delay, show, reduced }: {
           />
         ) : (
           <span
-            className="font-pixel text-[7px] sm:text-[8px] leading-none"
+            // 12px minimum (CLAUDE.md keyboard exception); mono fits 6 letters on
+            // the 48px keys at sm, 14px where keys are wider (base 4 cols, lg)
+            className="font-mono font-bold text-sm sm:text-xs lg:text-sm leading-none"
             style={{ color: cap.dark ? '#18181B' : '#FFFFFF' }}
           >
             {k.label}
           </span>
         )}
       </span>
-    </motion.button>
+    </button>
   );
 }
 
 export default function SkillKeyboard() {
   const reduced = useReducedMotion();
   const boardRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(boardRef, { once: true, amount: 0.25 });
   const [active, setActive] = useState(1); // start on RAG: the AI story first
   const [taps, setTaps] = useState(0);     // drives the mascot's hop
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -197,13 +194,6 @@ export default function SkillKeyboard() {
     return () => { ro.disconnect(); window.removeEventListener('resize', measure); };
   }, []);
 
-  // Keys slide into place on first view; re-measure once they've settled.
-  useEffect(() => {
-    if (!inView) return;
-    const t = setTimeout(() => window.dispatchEvent(new Event('resize')), 900);
-    return () => clearTimeout(t);
-  }, [inView]);
-
   const current = KEYS[active];
 
   const press = (i: number) => {
@@ -215,7 +205,7 @@ export default function SkillKeyboard() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,22rem)_1fr] gap-10 lg:gap-6 items-center">
       {/* Description: what the pressed key means */}
-      <div className="sticky top-0 z-20 bg-black py-4 lg:static lg:py-0 min-h-[200px] lg:min-h-[260px] border-l-4 border-amber-400 pl-5" aria-live="polite">
+      <div className="sticky top-0 z-20 bg-[var(--navy)] text-[color:var(--cream)] py-4 lg:static lg:py-0 min-h-[200px] lg:min-h-[260px] border-l-[3px] border-[color:var(--orange)] pl-5" aria-live="polite">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={active}
@@ -224,10 +214,10 @@ export default function SkillKeyboard() {
             exit={reduced ? undefined : { opacity: 0 }}
             transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.smooth }}
           >
-            <p className="font-mono text-xs text-zinc-500 mb-3">{GROUP_NAME[current.group]}</p>
-            <h3 className="font-pixel text-lg sm:text-xl text-white leading-snug mb-4">{current.name}</h3>
-            <p className="font-mono text-[15px] text-zinc-200 leading-relaxed">{current.blurb}</p>
-            <p className="font-mono text-xs text-amber-400/80 mt-4">Used in: {current.usedIn}</p>
+            <p className="font-mono text-sm text-[color:var(--teal)] mb-3">{GROUP_NAME[current.group]}</p>
+            <h3 className="font-pixel text-lg sm:text-xl leading-snug mb-4">{current.name}</h3>
+            <p className="font-mono text-[15px] leading-relaxed">{current.blurb}</p>
+            <p className="font-mono text-sm text-[color:var(--orange)] mt-4">Used in: {current.usedIn}</p>
           </motion.div>
         </AnimatePresence>
       </div>
@@ -255,9 +245,6 @@ export default function SkillKeyboard() {
                 pressed={i === active}
                 onPress={() => press(i)}
                 onPreview={() => setActive(i)}
-                delay={(Math.floor(i / COLS) + (i % COLS)) * motionTokens.stagger.keycap}
-                show={inView}
-                reduced={reduced}
               />
             ))}
           </div>

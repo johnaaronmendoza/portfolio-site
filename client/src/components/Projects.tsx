@@ -1,134 +1,26 @@
-import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { useRef, useState } from 'react';
-import { useLocation } from 'wouter';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, type ReactNode, type Ref } from 'react';
+import { Link } from 'wouter';
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
+import PixelArt from './PixelArt';
+import { Lead, SpotPlate } from './Hierarchy';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
-import { useTilt } from '@/hooks/useTilt';
+import { motionTokens } from '@/lib/motion-tokens';
 import SectionHeading from './SectionHeading';
+import Window from './Window';
+import { PROJECTS, type Project } from '@/data/projects';
 
-// ── Card images (shown in grid) ───────────────────────────────────────────
-import silverLinkImg    from '@assets/silverlink_p19_img0.png';
-import scsImg           from '@assets/scs_p65_img0.png';
-import fireSafetyImg    from '@assets/firesafety_p29_img2.png';
-import uwbImg           from '@assets/da_p40_img1.png';
-import greenloopImg     from '@assets/greenloop_hero.jpg';
-import uatImg           from '@assets/uat_dashboard.jpg';
-import aiFinanceImg     from '@assets/aifinance_dashboard.jpg';
-
-// ── Secondary images to preload on hover (detail-page screenshots) ─────────
-import silverLink2      from '@assets/silverlink_p21_img0.png';
-import silverLink3      from '@assets/silverlink_p22_img0.png';
-import scs2             from '@assets/scs_p71_img1.png';
-import scs3             from '@assets/scs_p72_img0.png';
-import fireSafety2      from '@assets/firesafety_p29_img1.png';
-import fireSafety3      from '@assets/firesafety_p29_img3.png';
-import uwb2             from '@assets/da_p39_img2.png';
-import uwb3             from '@assets/da_p35_img1.png';
-import greenloop2       from '@assets/greenloop_tour.jpg';
-
-const FILTER_TAGS = ['React', 'Python', 'Kotlin', 'K8s', 'TypeScript', 'gRPC', 'ML/AI'];
-
-// ── Project data ──────────────────────────────────────────────────────────
-type Project = {
-  num: number;
-  name: string;
-  description: string;
-  metric: string;
-  year: string;
-  image: string | null;
-  tags: string[];
-  link: string;
-  externalUrl?: string;
-  preloadImages: string[];
-};
-
-const PROJECTS: Project[] = [
-  {
-    num: 1,
-    name: "SilverLink SG",
-    description:
-      "Cloud-native platform bridging seniors and youth through skill-sharing and live events. 4 gRPC microservices, WebRTC livestreaming, and Kubernetes autoscaling, delivered across 7 Agile sprints with a 6-person team.",
-    metric: "8-NODE CLUSTER · 4 SERVICES · WEBRTC",
-    year: "2025",
-    image: silverLinkImg,
-    tags: ["React", "gRPC", "K8s", "PostgreSQL"],
-    link: "/projects/silverlink",
-    preloadImages: [silverLink2, silverLink3],
-  },
-  {
-    num: 2,
-    name: "SCS Awareness Platform",
-    description:
-      "Branching visual-novel engine deployed at real Singapore Cancer Society outreach booths. Multilingual (EN/CN/Malay/Tamil), gamified leaderboard, and a no-code admin panel built for non-technical SCS staff.",
-    metric: "4 LANGUAGES · 4 QUESTION TYPES · SUPABASE RLS",
-    year: "2025",
-    image: scsImg,
-    tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
-    link: "/projects/scs",
-    preloadImages: [scs2, scs3],
-  },
-  {
-    num: 3,
-    name: "AI Finance Insights Engine",
-    description:
-      "Automated ETL ingesting Brent crude, FX, S&P 500, and geopolitical news into a star schema. NLP classifies 9 sectors, scores sentiment, and flags supply chain risks. Output: a Power BI executive dashboard.",
-    metric: "5 DATA SOURCES · STAR SCHEMA · 100% PYTEST COVERAGE",
-    year: "2024",
-    image: aiFinanceImg,
-    tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
-    link: "/projects/ai-finance",
-    preloadImages: [],
-  },
-  {
-    num: 4,
-    name: "UWB Indoor Localization",
-    description:
-      "SVM-RBF classifier on 42k UWB samples across 7 indoor environments. PCA on 1,016 CIR dimensions; dual-path range regression compensates for NLOS signal loss.",
-    metric: "89.61% ACCURACY · 0.9612 AUC · 41,996 SAMPLES",
-    year: "2024",
-    image: uwbImg,
-    tags: ["Python", "SVM", "PCA", "scikit-learn"],
-    link: "/projects/uwb",
-    preloadImages: [uwb2, uwb3],
-  },
-  {
-    num: 5,
-    name: "UAT Testing Dashboard",
-    description:
-      "Full-stack defect tracker built for a real hospital appointment system UAT cycle. Test cases link directly to open defects; severity triage charts helped manage 30+ issues across 4 user roles, from tester to project lead.",
-    metric: "4 ROLES · CSV EXPORT · RECHARTS ANALYTICS",
-    year: "2024",
-    image: uatImg,
-    tags: ["React 18", "Node.js", "Express", "SQLite"],
-    link: "/projects/uat",
-    preloadImages: [],
-  },
-  {
-    num: 6,
-    name: "Fire Safety Drill Companion",
-    description:
-      "Offline-first Android AR evacuation guide. ARCore navigation, TFLite on-device ML, and Dijkstra pathfinding with live hazard re-routing, independently usable with no network connection.",
-    metric: "SUS 79/100 · ~80% TEST COVERAGE · FULLY OFFLINE",
-    year: "2024",
-    image: fireSafetyImg,
-    tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
-    link: "/projects/firesafety",
-    preloadImages: [fireSafety2, fireSafety3],
-  },
-  {
-    num: 7,
-    name: "GreenLoopFarms",
-    description:
-      "Contributed to the founding idea and digital presence of a Singapore hydroponic urban farm. Helped prepare the pitch deck that secured a competitive NYP grant.",
-    metric: "SGD $10K JUMPSTART GRANT · FURA · NIE · NUS",
-    year: "2022",
-    image: greenloopImg,
-    tags: ["NYP JumpStart", "Urban Farming"],
-    link: "external",
-    externalUrl: "https://greenloopfarms.com/",
-    preloadImages: [greenloop2],
-  },
+// Display label and the key matched against project tags (kept separate so a
+// friendlier label doesn't change which projects match)
+const FILTERS: { label: string; match: string }[] = [
+  { label: 'AI & ML', match: 'ML/AI' },
+  { label: 'Python', match: 'Python' },
+  { label: 'React', match: 'React' },
+  { label: 'TypeScript', match: 'TypeScript' },
+  { label: 'Kubernetes', match: 'K8s' },
+  { label: 'gRPC', match: 'gRPC' },
+  { label: 'Kotlin', match: 'Kotlin' },
 ];
 
 function matchesFilter(p: Project, filter: string | null): boolean {
@@ -145,202 +37,243 @@ function matchesFilter(p: Project, filter: string | null): boolean {
   );
 }
 
-// ── ProjectCard — own component so hooks are called once per card ─────────
-function ProjectCard({
-  project,
-  idx,
-  isInView,
-}: {
+// ── ProjectTile — own component so hooks are called once per card ─────────
+// Wide outline offset leaves a cream gap outside the tile's border and shadow
+const CARD_LINK_CLASS = 'flex h-full flex-col outline-offset-[10px]';
+
+interface ProjectTileProps {
   project: Project;
-  idx: number;
-  isInView: boolean;
-}) {
-  const [, setLocation] = useLocation();
+  ref?: Ref<HTMLDivElement>;
+  /** Grid span; defaults to the project's Home span */
+  span?: string;
+  /** Image box height; defaults to the Home sizes (featured taller) */
+  imageHeight?: string;
+}
+
+// `ref` is a plain prop in React 19; AnimatePresence popLayout needs it on the
+// motion element to measure the exiting tile. Also used by the case-study
+// "Next project" band.
+export function ProjectTile({ project, ref, span = project.span, imageHeight }: ProjectTileProps) {
   const isComingSoon = project.link === '#';
   const isExternal   = project.link === 'external';
 
   // Smart preload: on 300 ms hover intent, fetch detail-page screenshots.
   const { handlers: preloadHandlers } = useSmartPreload(project.preloadImages);
-  // 3D tilt on hover
-  const { ref: tiltRef, handlers: tiltHandlers } = useTilt(5);
 
-  const handleClick = () => {
-    if (isComingSoon) return;
-    if (isExternal && project.externalUrl) {
-      window.open(project.externalUrl, '_blank', 'noopener noreferrer');
-    } else {
-      setLocation(project.link);
-    }
-  };
-
-  return (
-    <motion.div
-      ref={tiltRef}
-      className={`group ${isComingSoon ? 'cursor-default' : 'cursor-pointer'}`}
-      onClick={handleClick}
-      role={isComingSoon ? undefined : 'link'}
-      tabIndex={isComingSoon ? undefined : 0}
-      aria-label={isComingSoon ? undefined : `${project.name}: ${isExternal ? 'visit site' : 'view case study'}`}
-      onKeyDown={(e) => {
-        if (!isComingSoon && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); handleClick(); }
-      }}
-      initial={{ opacity: 0, y: 24, scale: 0.98 }}
-      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      exit={{ opacity: 0, y: 12, scale: 0.96, transition: { duration: 0.18 } }}
-      transition={{ duration: 0.4, delay: idx * 0.06, ease: [0.23, 1, 0.32, 1] }}
-      whileTap={isComingSoon ? {} : { scale: 0.97, transition: { duration: 0.1 } }}
-      {...preloadHandlers}
-      {...(isComingSoon ? {} : tiltHandlers)}
-    >
-      {/* Project Image */}
-      <div className="relative overflow-hidden border-4 border-amber-400 group-hover:border-blue-400 shadow-8bit mb-5 h-44 sm:h-48 bg-zinc-900 transition-[border-color,box-shadow,transform] duration-200 group-hover:[box-shadow:8px_8px_0px_0px_#F59E0B] group-hover:-translate-y-1">
-        {/* Pixel corner accents — animate in on card hover */}
-        <div className="absolute top-0 left-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-[opacity,transform] duration-100 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-[opacity,transform] duration-100 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-[opacity,transform] duration-100 pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-2 h-2 bg-blue-400 z-10 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-[opacity,transform] duration-100 pointer-events-none" />
-
+  const body = (
+    <>
+      {/* Project image on top, framed by the tile border and a 3px rule */}
+      <div className={`relative overflow-hidden border-b-[3px] border-black bg-[var(--navy)] ${imageHeight ?? (project.featured ? 'h-56 lg:h-72' : 'h-48')}`}>
+        {/* alt="" because the tile's link already names the project */}
         {project.image ? (
           <PixelatedImage
             src={project.image}
-            alt={project.name}
-            className={`w-full h-full transition-[filter,transform] duration-500 ${
+            alt=""
+            className={`w-full h-full transition-[filter,scale] duration-200 ${
               isComingSoon
                 ? 'opacity-50 grayscale'
-                : 'grayscale group-hover:grayscale-0 group-hover:scale-105'
+                : project.featured
+                  ? '[@media(hover:hover)]:group-hover:scale-[1.03]'
+                  : '[@media(hover:hover)]:grayscale [@media(hover:hover)]:group-hover:grayscale-0 [@media(hover:hover)]:group-hover:scale-[1.03]'
             }`}
           />
         ) : (
-          <div
-            className="w-full h-full flex items-center justify-center relative overflow-hidden"
-            style={{
-              backgroundImage:
-                'repeating-linear-gradient(0deg,transparent,transparent 18px,rgba(245,158,11,0.06) 18px,rgba(245,158,11,0.06) 19px),' +
-                'repeating-linear-gradient(90deg,transparent,transparent 18px,rgba(245,158,11,0.06) 18px,rgba(245,158,11,0.06) 19px)',
-            }}
-          />
+          <div className="w-full h-full" />
         )}
         {isComingSoon && (
           <div className="absolute inset-0 flex items-end justify-end p-3">
-            <span className="font-pixel text-[10px] text-amber-400 border border-amber-400 bg-black px-2 py-1">
+            <span className="font-pixel text-xs text-black border-2 border-black bg-[var(--cream)] px-2 py-1">
               COMING SOON
             </span>
           </div>
         )}
+        {project.featured && (
+          <span className="absolute top-2 left-2 font-pixel text-xs text-black border-2 border-black bg-[var(--orange)] px-2 py-1">
+            Featured
+          </span>
+        )}
         {isExternal && (
-          <div className="absolute top-2 right-2">
-            <span className="font-pixel text-[10px] text-blue-400 border border-blue-400 bg-black px-2 py-1">
-              ↗ LIVE
-            </span>
-          </div>
+          <span className="absolute top-2 right-2 font-pixel text-xs text-black border-2 border-black bg-[var(--teal)] px-2 py-1">
+            Live site
+          </span>
         )}
       </div>
 
       {/* Project Info */}
-      <div className="space-y-3">
-        {/* Index + year */}
-        <div className="font-mono text-[11px] text-zinc-600 group-hover:text-amber-400 transition-colors duration-150 tracking-widest select-none">
-          {String(project.num).padStart(2, '0')} · {project.year}
+      <div className="flex flex-1 flex-col gap-4 p-5">
+        {/* Spot sticker straddles the image rule (half of its 102px plate above
+            it, minus the 20px body padding); it covers only the screenshot.
+            The title gets its own full-width row so long words never break. */}
+        <div className="flex items-end justify-between gap-3">
+          <div className="relative z-10 -mt-[72px]">
+            <SpotPlate spot={project.spot} />
+          </div>
+          <span className="flex-shrink-0 border-2 border-black bg-[var(--orange)] px-2 py-1 font-pixel text-xs text-black">
+            {project.year}
+          </span>
         </div>
-        <h3 className="font-mono font-bold text-base sm:text-lg text-blue-400 leading-snug">
+        <h3 className={`font-pixel leading-snug break-words min-w-0 text-[color:var(--navy)] ${project.featured ? 'text-lg lg:text-2xl' : 'text-[15px]'}`}>
           {project.name}
         </h3>
-        <p className="font-mono text-sm text-zinc-300 leading-relaxed">
+        <p className="font-mono text-[15px] sm:text-base leading-relaxed">
           {project.description}
         </p>
-        {/* M03 — metric row slides up on hover */}
-        <p className="font-mono text-[10px] text-amber-400 tracking-wider transition-[opacity,transform] duration-200 opacity-50 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0">
-          ■ {project.metric}
-        </p>
+        <ul className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[15px] font-bold text-black">
+          {project.facts.map(fact => (
+            <li key={fact} className="flex items-start gap-2">
+              <PixelArt name="bullet" size={16} lazy className="line-mark" />
+              {fact}
+            </li>
+          ))}
+        </ul>
         <div className="flex flex-wrap gap-1.5">
           {project.tags.map(tag => (
-            <span key={tag} className="bg-[#353535] px-2 py-0.5 font-mono text-[10px] text-amber-400 border border-amber-500/20">
-              --{tag.replace(/\s+/g, '_')}
+            <span key={tag} className="border-2 border-black px-2 py-0.5 font-mono text-sm font-bold text-black">
+              {tag}
             </span>
           ))}
         </div>
         {!isComingSoon && (
-          <div className="font-mono-8bit text-xs text-amber-400 font-bold inline-flex items-center gap-1 translate-x-0 group-hover:translate-x-1.5 transition-transform duration-150">
-            {isExternal ? 'VISIT SITE ↗' : 'VIEW WORK →'}
+          <div className="mt-auto pt-2 font-mono-8bit text-[15px] text-black font-bold underline underline-offset-4 decoration-2">
+            {isExternal ? 'Visit site' : 'Read case study'}
           </div>
         )}
       </div>
+    </>
+  );
+
+  let card: ReactNode;
+  if (isComingSoon) {
+    card = <div className="flex h-full flex-col cursor-default">{body}</div>;
+  } else if (isExternal && project.externalUrl) {
+    card = (
+      <a
+        href={project.externalUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={CARD_LINK_CLASS}
+        aria-label={`${project.name}: visit site (opens in a new tab)`}
+        {...preloadHandlers}
+      >
+        {body}
+      </a>
+    );
+  } else {
+    card = (
+      <Link
+        href={project.link}
+        className={CARD_LINK_CLASS}
+        aria-label={`${project.name}: view case study`}
+        {...preloadHandlers}
+      >
+        {body}
+      </Link>
+    );
+  }
+
+  return (
+    // Press sinks the tile into its shadow (translate, not scale); hover lifts it
+    // on pointers that can hover (Tailwind v4 gates hover: on that media query)
+    <motion.div
+      ref={ref}
+      className={`group border-[3px] border-black bg-[var(--cream)] shadow-[4px_4px_0_0_var(--ink)] transition-[translate,box-shadow] duration-150 ease-[var(--ease-out)] ${
+        isComingSoon ? '' : 'hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--ink)] active:translate-x-1 active:translate-y-1 active:shadow-none'
+      } ${span}`}
+      exit={{ opacity: 0, y: motionTokens.distance.sm, transition: { duration: motionTokens.duration.fast } }}
+    >
+      {card}
     </motion.div>
   );
 }
 
+// Retro filter chip: cream with an ink frame; the active chip turns orange and
+// sits pressed into its shadow.
+function chipClass(active: boolean) {
+  return `font-pixel text-xs text-black px-3 py-1.5 min-h-[44px] border-[3px] border-black transition-[translate,box-shadow,background-color] duration-150 ${
+    active
+      ? 'bg-[var(--orange)] translate-x-[3px] translate-y-[3px] shadow-none'
+      : 'bg-[var(--cream)] hover:bg-[var(--teal)] shadow-[3px_3px_0_0_var(--ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none'
+  }`;
+}
+
 // ── Projects section ──────────────────────────────────────────────────────
 export default function Projects() {
-  const gridRef = useRef(null);
-  const isInView = useInView(gridRef, { once: true, amount: 0.1 });
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null); // a filter label
+  const [touched, setTouched] = useState(false); // announce results only after a change
 
-  const visible = PROJECTS.filter(p => matchesFilter(p, activeFilter));
+  const active = FILTERS.find(f => f.label === activeFilter) ?? null;
+  const visible = PROJECTS.filter(p => matchesFilter(p, active?.match ?? null));
+  const count = `${visible.length} project${visible.length === 1 ? '' : 's'}`;
+  const status = active
+    ? `${count} ${visible.length === 1 ? 'matches' : 'match'} ${active.label}`
+    : `Showing all ${count}`;
+
+  const choose = (label: string | null) => {
+    setActiveFilter(label);
+    setTouched(true);
+  };
 
   return (
     <FramerReveal>
-      <section className="bg-black text-white px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
+      {/* Full-width teal band; all text on it is black or sits on cream */}
+      <section className="bg-[var(--teal)] text-black border-y-[3px] border-black px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
-          <SectionHeading index="03" text="PROJECTS" className="mb-8" />
+          <SectionHeading text="PROJECTS" tone="ink" icon="icon-projects" className="mb-4 lg:mb-5" />
+          <Lead text="Start with **SilverLink SG** and the SCS Awareness Platform." tone="teal" className="mb-6 lg:mb-8" />
 
-          {/* Filter chips */}
-          <div className="flex flex-wrap gap-2 mb-10">
-            <button
-              onClick={() => setActiveFilter(null)}
-              aria-pressed={activeFilter === null}
-              className={`font-pixel text-[10px] px-3 py-1.5 min-h-[40px] border-2 transition-colors ${
-                activeFilter === null
-                  ? 'border-amber-400 text-black bg-amber-400'
-                  : 'border-zinc-700 text-zinc-500 hover:border-zinc-500 hover:text-zinc-300'
-              }`}
-            >
-              ALL
-            </button>
-            {FILTER_TAGS.map(tag => (
+          <Window title="projects/" bodyClassName="p-4 sm:p-6 lg:p-8">
+            {/* Filter chips */}
+            <div role="group" aria-label="Filter projects by technology" className="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-10">
               <button
-                key={tag}
-                onClick={() => setActiveFilter(prev => prev === tag ? null : tag)}
-                aria-pressed={activeFilter === tag}
-                className={`font-pixel text-[10px] px-3 py-1.5 min-h-[40px] border-2 transition-colors ${
-                  activeFilter === tag
-                    ? 'border-blue-400 text-black bg-blue-400'
-                    : 'border-zinc-700 text-zinc-500 hover:border-blue-400 hover:text-blue-400'
-                }`}
+                type="button"
+                onClick={() => choose(null)}
+                aria-pressed={activeFilter === null}
+                className={chipClass(activeFilter === null)}
               >
-                {tag}
+                All
               </button>
-            ))}
-          </div>
-
-          <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <AnimatePresence initial={false}>
-              {visible.map((project, idx) => (
-                <ProjectCard
-                  key={project.num}
-                  project={project}
-                  idx={idx}
-                  isInView={isInView}
-                />
-              ))}
-            </AnimatePresence>
-
-            {/* Empty state */}
-            {activeFilter !== null && visible.length === 0 && (
-              <motion.div
-                className="col-span-full border-2 border-zinc-800 bg-zinc-900 p-10 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <p className="font-pixel text-xs text-zinc-600">NO_PROJECTS_MATCH [ {activeFilter} ]</p>
+              {FILTERS.map(({ label }) => (
                 <button
-                  onClick={() => setActiveFilter(null)}
-                  className="font-mono-8bit text-xs text-amber-400 mt-4 hover:text-white transition-colors"
+                  type="button"
+                  key={label}
+                  onClick={() => choose(activeFilter === label ? null : label)}
+                  aria-pressed={activeFilter === label}
+                  className={chipClass(activeFilter === label)}
                 >
-                  CLEAR FILTER →
+                  {label}
                 </button>
-              </motion.div>
-            )}
-          </div>
+              ))}
+            </div>
+            <p className="sr-only" aria-live="polite">{touched ? status : ''}</p>
+
+            {/* Tile grid: rows of 3+3, 2+2+2, 3+3 on large screens; GreenLoop
+                spans both columns at sm so the 7th tile is never orphaned */}
+            <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
+              <AnimatePresence initial={false} mode="popLayout">
+                {visible.map(project => (
+                  <ProjectTile key={project.num} project={project} />
+                ))}
+              </AnimatePresence>
+
+              {/* Empty state */}
+              {active && visible.length === 0 && (
+                <motion.div
+                  className="col-span-full border-[3px] border-black p-10 text-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <p className="font-mono text-[15px] sm:text-base">No projects match {active.label}.</p>
+                  <button
+                    type="button"
+                    onClick={() => choose(null)}
+                    className="btn btn-secondary mt-4"
+                  >
+                    Show all projects
+                  </button>
+                </motion.div>
+              )}
+            </div>
+          </Window>
         </div>
       </section>
     </FramerReveal>

@@ -18,7 +18,6 @@ This is the personal portfolio site of John Aaron Mendoza Branzuela, a Computing
 
 - **`client/`** — React 19 + TypeScript SPA (Vite root)
 - **`server/`** — Minimal Express server that only serves static files from `dist/public`
-- **`shared/`** — Shared constants (cookie name, session duration)
 
 The server has no API routes; all content is static/client-side.
 
@@ -27,14 +26,13 @@ The server has no API routes; all content is static/client-side.
 | Alias | Resolves to |
 |---|---|
 | `@/` | `client/src/` |
-| `@shared` | `shared/` |
 | `@assets` | `attached_assets/` |
 
 ### Routing
 
 Uses **wouter** (not React Router). Routes are defined in `client/src/App.tsx`:
 - `/` → `Home` (scrollable single-page portfolio)
-- `/projects/silverlink`, `/projects/scs`, `/projects/ai-finance`, `/projects/uwb`, `/projects/uat`, `/projects/firesafety` → case-study pages in `client/src/pages/`
+- `/projects/silverlink`, `/projects/scs`, `/projects/ai-finance`, `/projects/uwb`, `/projects/uat`, `/projects/firesafety` → case-study pages in `client/src/pages/`, lazy-loaded with `React.lazy` inside one `<Suspense>` so each ships as its own chunk
 
 ### Home page structure
 
@@ -49,7 +47,7 @@ Each section has a corresponding `id` attribute (`#hero`, `#about`, etc.) used b
 - **`CommandPalette`** — `Ctrl+K` / `Cmd+K` opens an OS-style command menu for section navigation and chat shortcuts.
 - Arrow-key section jumping was removed (it fought text inputs and dialogs); a skip link to `#main` and the section nav handle navigation.
 - **`ThemeProvider`** — Theme is currently locked to `"light"` (`switchable` is commented out in `App.tsx`). Dark mode CSS is wired up but not exposed to users.
-- **`FramerReveal`** — now a static wrapper (scroll reveals were removed on purpose). `ScreenTear`, `LoadingBar`, `BootScreen`, `Particles` and similar effect components still exist in the repo but are not used; don't reintroduce them without a reason that serves the recruiter.
+- **`FramerReveal`** — now a static wrapper (scroll reveals were removed on purpose). Unused effect components (`ScreenTear`, `LoadingBar`, `BootScreen` and others) were deleted in the Nov 2026 cleanup; they are recoverable from the `design-retro-v1` branch. Don't reintroduce them without a reason that serves the recruiter. `Particles` stays (the hero uses it).
 
 ### Styling
 
@@ -61,7 +59,7 @@ Each section has a corresponding `id` attribute (`#hero`, `#about`, etc.) used b
 
 ### UI components
 
-shadcn/ui component config is in `components.json`. Pre-built Radix UI components live in `client/src/components/ui/`.
+Only `client/src/components/ui/sonner.tsx` remains (achievement toasts); the unused shadcn/Radix kit and its dependencies were removed in Nov 2026. `components.json` still holds the shadcn config, so `npx shadcn add <component>` can bring one back if a feature needs it. Build UI from the house components (`Window`, `SectionHeading`, `Hierarchy`, `PixelArt`) first.
 
 ## Who the site is for
 

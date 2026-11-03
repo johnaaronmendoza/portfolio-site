@@ -1,24 +1,25 @@
 import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { Route, Switch, useLocation } from "wouter";
-import { useEffect, useRef } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { MotionConfig } from "framer-motion";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import CommandPalette from "./components/CommandPalette";
 import Home from "./pages/Home";
-import SilverLinkProject from "./pages/SilverLinkProject";
-import SCSProject from "./pages/SCSProject";
-import FireSafetyProject from "./pages/FireSafetyProject";
-import UWBProject from "./pages/UWBProject";
-import UATProject from "./pages/UATProject";
-import AIFinanceProject from "./pages/AIFinanceProject";
 import MascotChatWidget from "./components/MascotChatWidget";
 import KonamiOverlay from "./components/KonamiOverlay";
 import SecretTerminal from "./components/SecretTerminal";
 import KeyboardShortcuts from "./components/KeyboardShortcuts";
 import { useLenis, getLenis } from "./hooks/useLenis";
 import { savedHomeScroll } from "./lib/scroll-memory";
+
+// Case studies load on demand so the home page ships less JavaScript.
+const SilverLinkProject = lazy(() => import("./pages/SilverLinkProject"));
+const SCSProject = lazy(() => import("./pages/SCSProject"));
+const FireSafetyProject = lazy(() => import("./pages/FireSafetyProject"));
+const UWBProject = lazy(() => import("./pages/UWBProject"));
+const UATProject = lazy(() => import("./pages/UATProject"));
+const AIFinanceProject = lazy(() => import("./pages/AIFinanceProject"));
 
 /**
  * On route change: browser Back to Home restores the saved scroll; a link to
@@ -69,8 +70,10 @@ function ScrollToTop() {
 }
 
 function Router() {
+  // ScrollToTop shares the Suspense boundary with the routes, so its effect
+  // only runs once a lazy page has rendered (its h1 exists to take focus).
   return (
-    <>
+    <Suspense fallback={null}>
       <ScrollToTop />
       <Switch>
         <Route path={"/"} component={Home} />
@@ -83,7 +86,7 @@ function Router() {
         {/* Final fallback route */}
         <Route component={Home} />
       </Switch>
-    </>
+    </Suspense>
   );
 }
 
@@ -92,7 +95,7 @@ function AppInner() {
   useLenis();
 
   return (
-    <TooltipProvider>
+    <>
       <CommandPalette />
       <KeyboardShortcuts />
       <Toaster />
@@ -100,7 +103,7 @@ function AppInner() {
       <SecretTerminal />
       <Router />
       <MascotChatWidget />
-    </TooltipProvider>
+    </>
   );
 }
 

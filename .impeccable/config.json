@@ -11,6 +11,51 @@
         ],
         "createdAt": "2026-11-03T09:27:26.914Z",
         "reason": "lead (Claude): false positive on div.bar, the welcome.exe title bar in the share-image source; it is 52px tall with 18px text centred by flex (about 17px clear above and below), so vertical padding is 0 by design; render checked visually"
+      },
+      {
+        "rule": "wide-tracking",
+        "value": "*",
+        "files": [
+          "design-system/portfolio/ui/hero-1-name-first.html"
+        ],
+        "createdAt": "2026-11-07T10:51:46.848Z",
+        "reason": "lead (Claude): only tracking above 0.05em is the decorative aria-hidden window-control glyphs (.window-bar span 0.35em, ui/tokens.css:76); pixel labels use 0.05em as on the live site"
+      },
+      {
+        "rule": "wide-tracking",
+        "value": "*",
+        "files": [
+          "design-system/portfolio/ui/hero-2-proof-first.html"
+        ],
+        "createdAt": "2026-11-07T10:51:46.859Z",
+        "reason": "lead (Claude): only tracking above 0.05em is the decorative aria-hidden window-control glyphs (.window-bar span 0.35em, ui/tokens.css:76); pixel labels use 0.05em as on the live site"
+      },
+      {
+        "rule": "wide-tracking",
+        "value": "*",
+        "files": [
+          "design-system/portfolio/ui/project-card.html"
+        ],
+        "createdAt": "2026-11-07T10:51:46.872Z",
+        "reason": "lead (Claude): only tracking above 0.05em is the decorative aria-hidden window-control glyphs (.window-bar span 0.35em, ui/tokens.css:76); pixel labels use 0.05em as on the live site"
+      },
+      {
+        "rule": "wide-tracking",
+        "value": "*",
+        "files": [
+          "design-system/portfolio/ui/case-study.html"
+        ],
+        "createdAt": "2026-11-07T10:51:46.883Z",
+        "reason": "lead (Claude): only tracking above 0.05em is the decorative aria-hidden window-control glyphs (.window-bar span 0.35em, ui/tokens.css:76); pixel labels use 0.05em as on the live site"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "design-system/portfolio/asset-work/storyboards/silverlink/metrics-annotated.html"
+        ],
+        "createdAt": "2026-11-07T10:51:46.895Z",
+        "reason": "lead (Claude): cream #F4EAD5 is the house window-body token in CLAUDE.md, not a default off-white"
       }
     ]
   }

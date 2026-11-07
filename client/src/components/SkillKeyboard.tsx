@@ -1,270 +1,551 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useMotionValue } from 'framer-motion';
+import {
+  Component, lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState,
+  type FocusEvent, type PointerEvent, type ReactNode, type RefObject,
+} from 'react';
+import { Link } from 'wouter';
+import { useModalFocus } from '@/hooks/useModalFocus';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { play } from '@/hooks/useSound';
+import { MASCOT, MASCOT_PX, preloadMascot, type Pose } from '@/lib/mascot';
 import { motionTokens } from '@/lib/motion-tokens';
+import { chipClass } from './Projects';
+import { WindowBar } from './Window';
+import {
+  FILTERS, GROUP_NAME, KEYS, capFor, fileName, iconUrl, inFilter, keyName, muteHex, projectsFor,
+  type Cap, type Filter,
+} from './skills3d/keys';
+import type { KeyLocator, KeyRect } from './skills3d/Keyboard3D';
 
-type GroupId = 'ai' | 'data' | 'backend' | 'frontend' | 'ways';
+// three.js lives in this chunk; it loads only when the Skills section nears the viewport
+const Keyboard3D = lazy(() => import('./skills3d/Keyboard3D'));
 
-type Key = {
-  label: string;   // fallback text on the keycap (6 chars max)
-  name: string;    // full skill name shown beside the board
-  group: GroupId;
-  blurb: string;   // what it is / how I use it
-  usedIn: string;  // where it was used
-};
+const GROUP_LABEL = 'Skills keyboard. Press a key to open what the skill is and where I used it.';
+const CAPS: Cap[] = KEYS.map(capFor);
+const NAMES = KEYS.map((k, i) => keyName(k, CAPS[i]));
+const KB = motionTokens.keyboard;
+const GAP = 10; // px between a key and its tooltip or window
+const EDGE = 8; // px kept clear of the viewport edge
+const TIP_ID = 'skill-tip';
 
-const GROUP_NAME: Record<GroupId, string> = {
-  ai: 'AI & LLMs',
-  data: 'Data & ML',
-  backend: 'Backend & Cloud',
-  frontend: 'Frontend & Mobile',
-  ways: 'Ways of working',
-};
+// The entrance plays once per page load, not on every return to Home
+let enteredThisLoad = false;
 
-const DEVICON = 'https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons';
-
-// Keycap colour + logo. Brand colours where a brand exists; AI keys stay amber,
-// the site's own colour, because they're the story this portfolio leads with.
-const CAP: Record<string, { color: string; icon?: string; dark?: boolean }> = {
-  PROMPT: { color: '#F59E0B', dark: true },
-  RAG:    { color: '#F59E0B', dark: true },
-  LLM:    { color: '#F59E0B', dark: true },
-  GUARD:  { color: '#F59E0B', dark: true },
-  HUMAN:  { color: '#F59E0B', dark: true },
-  PYTHON: { color: '#3776AB', icon: 'python/python-plain' },
-  PANDAS: { color: '#2A1F7A', icon: 'pandas/pandas-plain' },
-  SKLRN:  { color: '#F7931E', icon: 'scikitlearn/scikitlearn-plain' },
-  NUMPY:  { color: '#4DABCF', icon: 'numpy/numpy-plain' },
-  SQL:    { color: '#0078D4', icon: 'azuresqldatabase/azuresqldatabase-plain' },
-  ETL:    { color: '#0EA5E9' },
-  BI:     { color: '#F2C811', dark: true },
-  NODE:   { color: '#3C873A', icon: 'nodejs/nodejs-plain' },
-  GRPC:   { color: '#2DA6B0', icon: 'grpc/grpc-plain' },
-  PGSQL:  { color: '#336791', icon: 'postgresql/postgresql-plain' },
-  SUPA:   { color: '#2FB67C', icon: 'supabase/supabase-plain' },
-  DOCKER: { color: '#2496ED', icon: 'docker/docker-plain' },
-  KUBE:   { color: '#326CE5', icon: 'kubernetes/kubernetes-plain' },
-  GIT:    { color: '#F05032', icon: 'git/git-plain' },
-  TS:     { color: '#3178C6', icon: 'typescript/typescript-plain' },
-  REACT:  { color: '#149ECA', icon: 'react/react-original' },
-  NEXT:   { color: '#27272A', icon: 'nextjs/nextjs-plain' },
-  TWIND:  { color: '#06B6D4', icon: 'tailwindcss/tailwindcss-original' },
-  KOTLIN: { color: '#7F52FF', icon: 'kotlin/kotlin-plain' },
-  ARCORE: { color: '#34A853' },
-  AGILE:  { color: '#52525B' },
-  UAT:    { color: '#E11D48' },
-  REQS:   { color: '#6D28D9' },
-};
-
-/** Mix a hex colour toward black (amt < 0) or white (amt > 0). */
-function tint(hex: string, amt: number) {
-  const n = parseInt(hex.slice(1), 16);
-  const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(c =>
-    Math.round(amt < 0 ? c * (1 + amt) : c + (255 - c) * amt),
-  );
-  return `rgb(${ch[0]}, ${ch[1]}, ${ch[2]})`;
+function hasWebGL() {
+  try {
+    const gl = document.createElement('canvas').getContext('webgl2');
+    gl?.getExtension('WEBGL_lose_context')?.loseContext();
+    return !!gl;
+  } catch {
+    return false;
+  }
 }
 
-const MASCOT = 'https://d2xsxph8kpxj0f.cloudfront.net/310519663399162945/5mLLaUiLoCi2BBtUhHeagh/LilJohnny-happycopy_aa6087aa.png';
+function useWide() {
+  const query = '(min-width: 640px)';
+  const [wide, setWide] = useState(() => typeof window !== 'undefined' && window.matchMedia(query).matches);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const fn = (e: MediaQueryListEvent) => setWide(e.matches);
+    mq.addEventListener('change', fn);
+    return () => mq.removeEventListener('change', fn);
+  }, []);
+  return wide;
+}
 
-export const KEYS: Key[] = [
-  // Row 1 — AI first: the story this portfolio leads with
-  { label: 'PROMPT', name: 'Prompt engineering', group: 'ai', blurb: 'Designing prompts that turn a messy ticket thread into a clear, on-policy draft reply.', usedIn: 'Desk Assist at LGA Telecom' },
-  { label: 'RAG', name: 'Retrieval-augmented generation', group: 'ai', blurb: 'Grounding AI answers in the company knowledge base instead of letting the model guess.', usedIn: 'Desk Assist at LGA Telecom' },
-  { label: 'LLM', name: 'LLM-assisted workflows', group: 'ai', blurb: 'Fitting a language model into a real support workflow, alongside Freshservice.', usedIn: 'Desk Assist at LGA Telecom' },
-  { label: 'GUARD', name: 'AI guardrails', group: 'ai', blurb: 'Least-privilege access, no remote code, and keeping customer data inside company systems.', usedIn: 'Desk Assist at LGA Telecom' },
-  { label: 'HUMAN', name: 'Human-in-the-loop design', group: 'ai', blurb: 'The AI drafts, a person decides. Every customer reply is reviewed before it is sent.', usedIn: 'Desk Assist at LGA Telecom' },
-  { label: 'PYTHON', name: 'Python', group: 'data', blurb: 'My main language for data work, from cleaning datasets to training models.', usedIn: 'UWB Indoor Localization, AI Finance Insights Engine' },
-  { label: 'PANDAS', name: 'Pandas', group: 'data', blurb: 'Wrangling tens of thousands of rows into features a model can learn from.', usedIn: 'UWB Indoor Localization, AI Finance Insights Engine' },
+/** Falls back to the flat keyboard if the 3D chunk fails to load or WebGL errors. */
+class Boundary extends Component<{ onError: () => void; children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch() {
+    this.props.onError();
+  }
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
 
-  // Row 2
-  { label: 'SKLRN', name: 'scikit-learn', group: 'data', blurb: 'Training and comparing models, including an SVM that reached 89.61% accuracy.', usedIn: 'UWB Indoor Localization' },
-  { label: 'NUMPY', name: 'NumPy', group: 'data', blurb: 'Fast array maths behind feature engineering and PCA.', usedIn: 'UWB Indoor Localization' },
-  { label: 'SQL', name: 'SQL', group: 'data', blurb: 'Querying and modelling data, including a star schema for reporting.', usedIn: 'AI Finance Insights Engine, SilverLink SG' },
-  { label: 'ETL', name: 'ETL pipelines', group: 'data', blurb: 'Pulling five market data sources into one validated, fully tested pipeline.', usedIn: 'AI Finance Insights Engine' },
-  { label: 'BI', name: 'Power BI', group: 'data', blurb: 'Turning a cleaned data warehouse into dashboards people can act on.', usedIn: 'AI Finance Insights Engine' },
-  { label: 'NODE', name: 'Node.js', group: 'backend', blurb: 'Building the services and API gateway behind a live events platform.', usedIn: 'SilverLink SG' },
-  { label: 'GRPC', name: 'gRPC', group: 'backend', blurb: 'Fast, typed communication between four microservices.', usedIn: 'SilverLink SG' },
+type KeyHandlers = {
+  filter: Filter;
+  open: number | null;
+  tip: number | null;
+  btnRefs: RefObject<(HTMLButtonElement | null)[]>;
+  onOpen: (i: number) => void;
+  onHover: (i: number | null) => void;
+  onFocusKey: (i: number | null, visible: boolean) => void;
+};
 
-  // Row 3
-  { label: 'PGSQL', name: 'PostgreSQL', group: 'backend', blurb: 'Relational data with eight isolated schemas, one per service.', usedIn: 'SilverLink SG, SCS Awareness Platform' },
-  { label: 'SUPA', name: 'Supabase', group: 'backend', blurb: 'Auth, storage and row-level security for a public-facing app.', usedIn: 'SCS Awareness Platform' },
-  { label: 'DOCKER', name: 'Docker', group: 'backend', blurb: 'Packaging services so they run the same everywhere.', usedIn: 'SilverLink SG' },
-  { label: 'KUBE', name: 'Kubernetes', group: 'backend', blurb: 'Running services on an 8-node cluster that scales ahead of demand.', usedIn: 'SilverLink SG' },
-  { label: 'GIT', name: 'Git', group: 'backend', blurb: 'Branching, reviews and clean history across every team project.', usedIn: 'Every project' },
-  { label: 'TS', name: 'TypeScript', group: 'frontend', blurb: 'Typed front ends that catch mistakes before users do.', usedIn: 'SCS Awareness Platform, this portfolio' },
-  { label: 'REACT', name: 'React', group: 'frontend', blurb: 'Interactive interfaces, from a branching story engine to an admin panel.', usedIn: 'SCS Awareness Platform, SilverLink SG' },
+/** Props shared by the hidden 3D controls and the flat keys: a dialog opener
+ *  that reports focus (and whether it is keyboard focus) for the tooltip. */
+const keyButton = (i: number, { open, tip, btnRefs, onOpen, onFocusKey }: KeyHandlers) => ({
+  type: 'button' as const,
+  ref: (el: HTMLButtonElement | null) => { btnRefs.current[i] = el; },
+  'aria-haspopup': 'dialog' as const,
+  'aria-expanded': open === i,
+  'aria-describedby': tip === i ? TIP_ID : undefined,
+  onClick: () => onOpen(i),
+  onFocus: (e: FocusEvent<HTMLButtonElement>) => onFocusKey(i, e.currentTarget.matches(':focus-visible')),
+  onBlur: () => onFocusKey(null, false),
+});
 
-  // Row 4
-  { label: 'NEXT', name: 'Next.js', group: 'frontend', blurb: 'Server-rendered pages for a fast first load.', usedIn: 'SilverLink SG' },
-  { label: 'TWIND', name: 'Tailwind CSS', group: 'frontend', blurb: 'Consistent, responsive styling without fighting the stylesheet.', usedIn: 'SCS Awareness Platform, this portfolio' },
-  { label: 'KOTLIN', name: 'Kotlin', group: 'frontend', blurb: 'Native Android with Jetpack Compose and on-device ML.', usedIn: 'Fire Safety Drill Companion' },
-  { label: 'ARCORE', name: 'ARCore', group: 'frontend', blurb: 'Augmented-reality navigation that works fully offline.', usedIn: 'Fire Safety Drill Companion' },
-  { label: 'AGILE', name: 'Agile / Scrum', group: 'ways', blurb: 'Seven-sprint team projects with planning, reviews and burndown charts.', usedIn: 'SilverLink SG, SCS Awareness Platform' },
-  { label: 'UAT', name: 'User acceptance testing', group: 'ways', blurb: 'Testing with real users before go-live and tracking 50+ defects to resolution.', usedIn: 'Sembcorp Solar' },
-  { label: 'REQS', name: 'Requirements gathering', group: 'ways', blurb: 'Turning what stakeholders say into changes a team can build.', usedIn: 'Sembcorp Solar, LGA Telecom' },
-];
-
-const COLS = 7;
-
-function Keycap({ k, pressed, onPress, onPreview }: {
-  k: Key; pressed: boolean; onPress: () => void; onPreview: () => void;
-}) {
-  const cap = CAP[k.label] ?? { color: '#52525B' };
-  const [iconFailed, setIconFailed] = useState(false);
-  const depth = pressed ? 3 : 9;
-  const showIcon = cap.icon && !iconFailed;
-
+function FlatIcon({ src, dark }: { src: string; dark: boolean }) {
+  const [missing, setMissing] = useState(false);
+  if (missing) return null;
   return (
-    <button
-      type="button"
-      onClick={onPress}
-      onMouseEnter={onPreview}
-      aria-pressed={pressed}
-      aria-label={k.name}
-      // Scroll margin keeps a tabbed-to key clear of the sticky description panel on phones
-      className="relative aspect-square select-none rounded-[12px] focus-visible:outline-offset-4 scroll-mt-[240px] lg:scroll-mt-0"
-    >
-      <span
-        className="absolute inset-0 flex items-center justify-center rounded-[12px] transition-[transform,box-shadow] duration-100 ease-out"
-        style={{
-          background: `linear-gradient(150deg, ${tint(cap.color, 0.28)} 0%, ${cap.color} 45%, ${tint(cap.color, -0.12)} 100%)`,
-          transform: `translateY(${pressed ? 6 : 0}px)`,
-          boxShadow: [
-            'inset 0 2px 0 rgba(255,255,255,0.35)',
-            'inset 0 -3px 0 rgba(0,0,0,0.18)',
-            `0 ${depth}px 0 ${tint(cap.color, -0.45)}`,
-            `0 ${depth + 8}px 14px rgba(0,0,0,0.6)`,
-          ].join(', '),
-        }}
-      >
-        {showIcon ? (
-          <img
-            src={`${DEVICON}/${cap.icon}.svg`}
-            alt=""
-            draggable={false}
-            onError={() => setIconFailed(true)}
-            className="w-[46%] h-[46%] object-contain"
-            style={{ filter: 'brightness(0) invert(1) drop-shadow(0 1px 0 rgba(0,0,0,0.25))' }}
-          />
-        ) : (
-          <span
-            // 12px minimum (CLAUDE.md keyboard exception); mono fits 6 letters on
-            // the 48px keys at sm, 14px where keys are wider (base 4 cols, lg)
-            className="font-mono font-bold text-sm sm:text-xs lg:text-sm leading-none"
-            style={{ color: cap.dark ? '#18181B' : '#FFFFFF' }}
+    <img
+      src={src}
+      alt=""
+      draggable={false}
+      onError={() => setMissing(true)}
+      className="w-[44%] aspect-square"
+      // Icons are white; on amber and cream caps they turn black, like the sheet
+      style={dark ? { filter: 'brightness(0)' } : undefined}
+    />
+  );
+}
+
+/** Flat 2D keyboard: no WebGL, reduced motion, or the 3D chunk failed. */
+function FlatKeys(handlers: KeyHandlers) {
+  const { filter, onHover } = handlers;
+  const hoverOn = (i: number | null) => (e: PointerEvent) => {
+    if (e.pointerType !== 'touch') onHover(i);
+  };
+  return (
+    <div role="group" aria-label={GROUP_LABEL} className="grid grid-cols-4 sm:grid-cols-7 gap-2.5 sm:gap-3 pr-1 pb-1">
+      {KEYS.map((k, i) => {
+        const cap = CAPS[i];
+        // Outside the filter: the same muted colourway as the 3D caps (AA contrast kept)
+        const muted = !inFilter(k, filter);
+        const tone = (c: string) => (muted ? muteHex(c) : c);
+        return (
+          <button
+            key={k.label}
+            {...keyButton(i, handlers)}
+            aria-label={NAMES[i]}
+            onPointerEnter={hoverOn(i)}
+            onPointerLeave={hoverOn(null)}
+            // Keycap from John's sheet: number, icon, caps label on a darker strip
+            className="relative flex aspect-square flex-col overflow-hidden rounded-[6px] border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-[translate,box-shadow,background-color,color] duration-150 ease-out active:translate-x-[4px] active:translate-y-[4px] active:shadow-none aria-expanded:translate-x-[4px] aria-expanded:translate-y-[4px] aria-expanded:shadow-none"
+            style={{ backgroundColor: tone(cap.face), color: tone(cap.ink) }}
           >
-            {k.label}
-          </span>
-        )}
-      </span>
-    </button>
+            <span aria-hidden="true" className="absolute left-1.5 top-1 font-mono text-xs font-bold leading-none">{cap.no}</span>
+            <span className="flex min-h-0 flex-1 items-center justify-center pt-3">
+              <FlatIcon src={iconUrl(k)} dark={cap.ink !== '#FFFFFF'} />
+            </span>
+            <span
+              aria-hidden="true"
+              className="block border-t-2 border-black/35 py-1 sm:py-1.5 font-mono text-xs sm:text-sm lg:text-base font-bold leading-none tracking-wide transition-[background-color] duration-150 ease-out"
+              style={{ backgroundColor: tone(cap.bar) }}
+            >
+              {cap.text}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Category filters: toggle buttons in the Projects chip style (press-down, hard shadow). */
+function Filters({ value, onChange }: { value: Filter; onChange: (f: Filter) => void }) {
+  return (
+    <div role="group" aria-label="Highlight skills by category" className="flex flex-wrap gap-2 sm:gap-3">
+      {FILTERS.map(f => (
+        <button
+          key={f.id}
+          type="button"
+          aria-pressed={value === f.id}
+          onClick={() => onChange(f.id)}
+          className={chipClass(value === f.id)}
+        >
+          {f.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** Hover / keyboard-focus preview: a small python.info window. Positioned by
+ *  the parent (it follows the 3D board frame by frame). */
+function KeyTip({ index, tipRef, reduced }: { index: number; tipRef: RefObject<HTMLDivElement | null>; reduced: boolean }) {
+  const k = KEYS[index];
+  return (
+    <div ref={tipRef} id={TIP_ID} role="tooltip" className="pointer-events-none absolute left-0 top-0 z-30 w-64" style={{ visibility: 'hidden' }}>
+      <motion.div
+        initial={{ opacity: 0, y: reduced ? 0 : motionTokens.distance.xs }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: motionTokens.duration.instant, ease: motionTokens.easing.out }}
+        className="border-[3px] border-black bg-[var(--cream)] text-[color:var(--navy)] shadow-[4px_4px_0_0_#000]"
+      >
+        <WindowBar title={fileName(CAPS[index])} />
+        <div className="px-3 py-2.5 font-mono">
+          <p className="text-[15px] font-bold leading-snug text-balance">{k.name}</p>
+          <p className="mt-1 text-sm leading-snug text-pretty">{k.blurb}</p>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+type WindowProps = {
+  index: number;
+  reduced: boolean;
+  boardRef: RefObject<HTMLDivElement | null>;
+  locate: (i: number) => KeyRect | null;
+  onClose: () => void;
+};
+
+/** Detail window for one skill: modal, placed beside its key and kept on screen. */
+function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const k = KEYS[index];
+  const links = projectsFor(k);
+  const titleId = `skill-window-${k.label.toLowerCase()}`;
+  // Focus moves into the window, Tab stays inside, and focus returns to the key on close
+  const keepFocus = useModalFocus(true, ref);
+
+  // Below the key if it fits on screen, else above, else as low as fits. Set on
+  // the element before the first paint, so no hidden state is needed (a hidden
+  // window couldn't take focus).
+  useLayoutEffect(() => {
+    const el = ref.current;
+    const box = boardRef.current;
+    if (!el || !box) return;
+    const b = box.getBoundingClientRect();
+    const vw = document.documentElement.clientWidth;
+    const vh = window.innerHeight;
+    const r = locate(index) ?? { x: b.left + b.width / 2, top: b.top, bottom: b.top };
+    const [w, hgt] = [el.offsetWidth, el.offsetHeight];
+    const left = Math.max(Math.max(EDGE, b.left), Math.min(Math.min(vw - EDGE, b.right) - w, r.x - w / 2));
+    let top = r.bottom + GAP;
+    if (top + hgt > vh - EDGE) top = r.top - GAP - hgt;
+    if (top < EDGE) top = Math.max(EDGE, vh - EDGE - hgt);
+    el.style.left = `${Math.round(left - b.left)}px`;
+    el.style.top = `${Math.round(top - b.top)}px`;
+  }, [index, boardRef, locate]);
+
+  const fade = { opacity: 0, y: reduced ? 0 : motionTokens.distance.sm };
+  return (
+    <>
+      {/* Click outside to close; transparent so the pressed key stays in view */}
+      <motion.div key="scrim" aria-hidden="true" className="fixed inset-0 z-[64]" onClick={onClose} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
+      <motion.div
+        key="window"
+        ref={ref}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
+        onKeyDown={e => {
+          if (e.key !== 'Escape') return;
+          e.stopPropagation();
+          onClose();
+        }}
+        className="window absolute z-[65] w-[min(22rem,100%)]"
+        initial={fade}
+        animate={{ opacity: 1, y: 0 }}
+        exit={fade}
+        transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
+      >
+        <WindowBar title={fileName(CAPS[index])} onClose={onClose} closeLabel={`Close ${k.name}`} />
+        <div className="window-body p-4 sm:p-5 font-mono">
+          <p className="text-sm font-bold">{GROUP_NAME[k.group]}</p>
+          <h3 id={titleId} className="font-pixel text-base sm:text-lg leading-snug mt-2 mb-3 text-balance">{k.name}</h3>
+          <p className="text-[15px] leading-relaxed text-pretty">{k.blurb}</p>
+          <p className="text-[15px] leading-relaxed mt-3"><span className="font-bold">Used in:</span> {k.usedIn}</p>
+          {links.length > 0 && (
+            <>
+              <p className="text-[15px] font-bold mt-3">{links.length > 1 ? 'Case studies:' : 'Case study:'}</p>
+              <ul>
+                {links.map(p => (
+                  <li key={p.link}>
+                    <Link href={p.link} onClick={keepFocus} className="inline-block py-2.5 text-[15px] font-bold underline underline-offset-4 decoration-2">
+                      {p.name}<span aria-hidden="true"> →</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      </motion.div>
+    </>
   );
 }
 
 export default function SkillKeyboard() {
   const reduced = useReducedMotion();
+  const wide = useWide();
+  const cols = wide ? 7 : 4;
   const boardRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(1); // start on RAG: the AI story first
-  const [taps, setTaps] = useState(0);     // drives the mascot's hop
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const [perch, setPerch] = useState<{ x: number; y: number } | null>(null);
+  const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const locatorRef = useRef<KeyLocator | null>(null);
+  const tipRef = useRef<HTMLDivElement>(null);
+  const mascotRef = useRef<HTMLImageElement>(null);
+  const [stage, setStage] = useState<'wait' | '3d' | '2d'>('wait');
+  const [filter, setFilter] = useState<Filter>('all');
+  const [announce, setAnnounce] = useState('');
+  const [hover, setHover] = useState<number | null>(null); // mouse or pen only
+  const [focus, setFocus] = useState<{ i: number; visible: boolean } | null>(null);
+  const [open, setOpen] = useState<number | null>(null);
+  const [selected, setSelected] = useState<number | null>(null); // last opened: the mascot stands on it
+  const [taps, setTaps] = useState(0); // drives the mascot's hop
+  const [pulse, setPulse] = useState<{ i: number; n: number } | null>(null);
+  const [entrance] = useState(() => !enteredThisLoad);
+  const [entered, setEntered] = useState(!entrance);
+  const [dir, setDir] = useState(0); // which way the mascot leans: -1 left, 0 upright, 1 right
+  // The latest hop, relative to where it lands: start offset and scale, duration
+  const [hop, setHop] = useState<{ dx: number; dy: number; s: number; d: number } | null>(null);
+  const [seq, setSeq] = useState<Pose | null>(null); // frame of the press sequence, if one is playing
+  const flat = reduced || stage === '2d';
+  const tip = open === null ? hover ?? (focus?.visible ? focus.i : null) : null;
+  // Mascot frame. 3D: the press sequence, else lean (or happy, if the key is
+  // straight below) toward the hovered or focused key, else idle. Flat / reduced
+  // motion: no hop, a thumbs-up while a window is open.
+  const leanPose: Pose | null = tip === null ? null : dir === 0 ? 'happy' : dir < 0 ? 'lean-left' : 'lean-right';
+  const frame: Pose = flat
+    ? open !== null ? 'thumbs-up' : tip !== null ? 'happy' : 'idle'
+    : seq ?? leanPose ?? 'idle';
+  // Integer scales of the pixel grid: x1 on phones and when standing on a key, x2 above the board
+  const mascotStyle = { width: MASCOT_PX.w * (wide ? 2 : 1), height: MASCOT_PX.h * (wide ? 2 : 1), imageRendering: 'pixelated' as const };
 
-  // The board is tilted in 3D, so measure where its top-right key actually lands
-  // on screen and stand the mascot there. Re-measure on resize.
+  useEffect(preloadMascot, []);
+
+  // Load the 3D board when the section nears the viewport (loading, not a scroll effect)
   useEffect(() => {
-    const measure = () => {
-      const wrap = wrapRef.current;
-      const board = boardRef.current;
-      if (!wrap || !board) return;
-      const keys = board.querySelectorAll('button');
-      const cols = window.matchMedia('(min-width: 640px)').matches ? COLS : 4;
-      const corner = keys[cols - 1] as HTMLElement | undefined;
-      if (!corner) return;
-      const w = wrap.getBoundingClientRect();
-      const k = corner.getBoundingClientRect();
-      const size = window.matchMedia('(min-width: 1024px)').matches ? 80 : window.matchMedia('(min-width: 640px)').matches ? 64 : 56;
-      setPerch({ x: k.left - w.left + k.width / 2 - size / 2, y: k.top - w.top - size * 0.72 });
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    if (wrapRef.current) ro.observe(wrapRef.current);
-    window.addEventListener('resize', measure);
-    return () => { ro.disconnect(); window.removeEventListener('resize', measure); };
+    if (flat || stage !== 'wait') return;
+    const el = boardRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      setStage(hasWebGL() ? '3d' : '2d');
+    }, { rootMargin: '600px 0px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [flat, stage]);
+
+  // Where a key is on screen: projected from the 3D board, or the flat button's box
+  const locate = useCallback((i: number): KeyRect | null => {
+    if (!flat) return locatorRef.current?.(i) ?? null;
+    const r = btnRefs.current[i]?.getBoundingClientRect();
+    return r ? { x: r.left + r.width / 2, top: r.top, face: r.top + r.height / 2, bottom: r.bottom, w: r.width } : null;
+  }, [flat]);
+
+  // Latest values for the per-frame callbacks below
+  const live = useRef({ tip, selected, cols, locate });
+  live.current = { tip, selected, cols, locate };
+
+  // Tooltip: centred above the key (below when there's no room), inside the viewport
+  const placeTip = useCallback(() => {
+    const { tip: i, locate: find } = live.current;
+    const el = tipRef.current;
+    const box = boardRef.current;
+    const r = i === null ? null : find(i);
+    if (!el || !box || !r) return;
+    const b = box.getBoundingClientRect();
+    const vw = document.documentElement.clientWidth;
+    const [w, hgt] = [el.offsetWidth, el.offsetHeight];
+    const left = Math.max(EDGE, Math.min(vw - EDGE - w, r.x - w / 2));
+    const top = r.top - GAP - hgt >= EDGE ? r.top - GAP - hgt : r.bottom + GAP;
+    el.style.transform = `translate(${Math.round(left - b.left)}px, ${Math.round(top - b.top)}px)`;
+    el.style.visibility = 'visible';
   }, []);
+  useLayoutEffect(placeTip, [tip, placeTip]);
 
-  const current = KEYS[active];
+  // Mascot: stands behind the top-right key, or on the last opened key
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const ms = useMotionValue(1);
+  const perch = useCallback((sel: number | null) => {
+    const { cols: c, locate: find } = live.current;
+    const box = boardRef.current;
+    const r = find(sel ?? c - 1);
+    if (!box || !r) return null;
+    const b = box.getBoundingClientRect();
+    // On a key he stands at the front of its top face, at x1 so the row behind stays readable
+    const w = mascotRef.current?.offsetWidth || MASCOT_PX.w;
+    const scale = sel === null ? 1 : Math.min(1, MASCOT_PX.w / w);
+    return { x: r.x - b.left, y: (sel === null ? r.top : r.face) - b.top, scale };
+  }, []);
+  // Every frame: the mascot's outer layer tracks its perch; the hop is a separate layer
+  const followMascot = useCallback(() => {
+    const p = perch(live.current.selected);
+    if (!p) return;
+    mx.set(p.x);
+    my.set(p.y);
+    ms.set(p.scale);
+  }, [perch, mx, my, ms]);
 
-  const press = (i: number) => {
-    setActive(i);
+  const onFrame = useCallback(() => {
+    placeTip();
+    followMascot();
+  }, [placeTip, followMascot]);
+
+  // Turn and lean toward the hovered or focused key; upright again when it ends
+  useEffect(() => {
+    if (flat) return;
+    const r = tip === null ? null : live.current.locate(tip);
+    const box = boardRef.current;
+    if (!r || !box) {
+      setDir(0);
+      return;
+    }
+    const dx = r.x - box.getBoundingClientRect().left - mx.get();
+    setDir(Math.abs(dx) < 8 ? 0 : Math.sign(dx));
+  }, [tip, flat, mx]);
+
+  // Press sequence: crouch, jump for the hop, land, celebrate, then back to idle
+  useEffect(() => {
+    if (taps === 0 || flat) return;
+    const M = motionTokens.mascot;
+    const air = M.crouch + (hop?.d ?? 0);
+    const steps: [Pose | null, number][] = [['jump', M.crouch], ['land', air], ['celebrate', air + M.land], [null, air + M.land + M.celebrate]];
+    setSeq('crouch');
+    const timers = steps.map(([p, t]) => setTimeout(() => setSeq(p), t * 1000));
+    return () => timers.forEach(clearTimeout);
+  }, [taps, hop, flat]);
+
+  const openKey = (i: number) => {
+    // Focus the key's control first, so the window hands focus back to it on close
+    btnRefs.current[i]?.focus({ preventScroll: true });
+    // Mascot: jump the perch to the key now and play the hop from the old spot
+    const to = flat ? null : perch(i);
+    if (to) {
+      const from = { x: mx.get(), y: my.get(), s: ms.get() };
+      const far = Math.abs(from.x - to.x) > 160;
+      setHop({ dx: from.x - to.x, dy: from.y - to.y, s: from.s / to.scale, d: far ? motionTokens.duration.slow : motionTokens.duration.normal });
+      mx.set(to.x);
+      my.set(to.y);
+      ms.set(to.scale);
+    }
+    setSelected(i);
+    setOpen(i);
     setTaps(t => t + 1);
     play('click');
   };
+  const closeWindow = useCallback(() => setOpen(null), []);
+
+  const chooseFilter = (f: Filter) => {
+    setFilter(f);
+    const n = KEYS.filter(k => inFilter(k, f)).length;
+    const label = FILTERS.find(x => x.id === f)?.label;
+    setAnnounce(f === 'all' ? `All ${KEYS.length} skills shown` : `${n} of ${KEYS.length} skills highlighted: ${label}`);
+  };
+
+  const handlers: KeyHandlers = {
+    filter,
+    open,
+    tip,
+    btnRefs,
+    onOpen: openKey,
+    onHover: setHover,
+    onFocusKey: (i, visible) => setFocus(i === null ? null : { i, visible }),
+  };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,22rem)_1fr] gap-10 lg:gap-6 items-center">
-      {/* Description: what the pressed key means */}
-      <div className="sticky top-0 z-20 bg-[var(--navy)] text-[color:var(--cream)] py-4 lg:static lg:py-0 min-h-[200px] lg:min-h-[260px] border-l-[3px] border-[color:var(--orange)] pl-5" aria-live="polite">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={active}
-            initial={reduced ? false : { opacity: 0, x: -motionTokens.distance.sm }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={reduced ? undefined : { opacity: 0 }}
-            transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.smooth }}
-          >
-            <p className="font-mono text-sm text-[color:var(--teal)] mb-3">{GROUP_NAME[current.group]}</p>
-            <h3 className="font-pixel text-lg sm:text-xl leading-snug mb-4">{current.name}</h3>
-            <p className="font-mono text-[15px] leading-relaxed">{current.blurb}</p>
-            <p className="font-mono text-sm text-[color:var(--orange)] mt-4">Used in: {current.usedIn}</p>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+    <div className="space-y-6">
+      <Filters value={filter} onChange={chooseFilter} />
+      <p className="sr-only" aria-live="polite">{announce}</p>
 
-      {/* Keyboard: isometric on large screens, gently tilted on phones.
-          --rx/--rz drive the board tilt; the mascot applies the inverse so it
-          stands upright on the board's corner at every breakpoint. */}
-      <div ref={wrapRef} className="relative flex justify-center [perspective:1600px] pt-10 pb-4 lg:py-10">
-        <div
-          ref={boardRef}
-          role="group"
-          aria-label="Skills keyboard. Press a key to see what the skill is and where I used it."
-          className="relative w-full max-w-[440px] lg:max-w-[560px] rounded-[22px] p-3 sm:p-4 [--rx:16deg] [--rz:0deg] lg:[--rx:42deg] lg:[--rz:-24deg]"
-          style={{
-            transform: 'rotateX(var(--rx)) rotateZ(var(--rz))',
-            background: 'linear-gradient(160deg, #2a2a2e 0%, #141416 100%)',
-            boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.08), 0 14px 0 #0a0a0b, 0 30px 50px rgba(0,0,0,0.7)',
-          }}
-        >
-          <div className="grid grid-cols-4 sm:grid-cols-7 gap-2.5 sm:gap-3 pb-2">
-            {KEYS.map((k, i) => (
-              <Keycap
-                key={k.label}
-                k={k}
-                pressed={i === active}
-                onPress={() => press(i)}
-                onPreview={() => setActive(i)}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Mascot perches on the board's top-right key and hops when a key is pressed */}
-        {perch && (
-          <motion.img
-            key={taps}
-            src={MASCOT}
+      <div ref={boardRef} className="relative pt-14 sm:pt-16 lg:pt-20">
+        {flat ? (
+          <FlatKeys {...handlers} />
+        ) : (
+          <>
+            {/* The real controls for the 3D board: keyboard and screen readers.
+                Focus shows on the board (outline) and on the key (orange ring). */}
+            <div role="group" aria-label={GROUP_LABEL} className="sr-only">
+              {KEYS.map((k, i) => (
+                <button
+                  key={k.label}
+                  {...keyButton(i, handlers)}
+                  onClick={() => {
+                    openKey(i);
+                    setPulse(p => ({ i, n: (p?.n ?? 0) + 1 }));
+                  }}
+                >
+                  {NAMES[i]}
+                </button>
+              ))}
+            </div>
+            <div
+              className={`relative aspect-[2/3] sm:aspect-[2/1] lg:aspect-[16/9] rounded-[10px] outline-offset-4 outline-[color:var(--orange)] ${focus?.visible ? 'outline-3' : ''}`}
+            >
+              {stage === '3d' && (
+                <Boundary onError={() => setStage('2d')}>
+                  <Suspense fallback={null}>
+                    <Keyboard3D
+                      cols={cols}
+                      focused={focus?.visible ? focus.i : null}
+                      open={open}
+                      pulse={pulse}
+                      filter={filter}
+                      entrance={entrance}
+                      locator={locatorRef}
+                      onHover={setHover}
+                      onSelect={openKey}
+                      onFrame={onFrame}
+                      onEntered={() => {
+                        enteredThisLoad = true;
+                        setEntered(true);
+                      }}
+                    />
+                  </Suspense>
+                </Boundary>
+              )}
+            </div>
+            {/* Mascot: stands on the board, leans toward the key in focus, hops
+                onto a pressed key. Frames swap by src; movement is transforms. */}
+            {stage === '3d' && (
+              <motion.div
+                aria-hidden="true"
+                className="pointer-events-none absolute left-0 top-0 z-20"
+                style={{ x: mx, y: my }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: entered ? 1 : 0 }}
+                transition={{ duration: motionTokens.duration.fast }}
+              >
+                <motion.div
+                  key={taps}
+                  className="absolute bottom-0 left-0 origin-bottom"
+                  // Starts at the old spot, holds through the crouch, then arcs onto the key
+                  initial={hop ? { x: hop.dx, y: hop.dy, scale: hop.s } : false}
+                  animate={hop ? { x: [hop.dx, 0], y: [hop.dy, Math.min(hop.dy, 0) - KB.hop, 0], scale: [hop.s, 1] } : undefined}
+                  transition={{ duration: hop?.d, delay: motionTokens.mascot.crouch, times: [0, 0.45, 1], ease: [motionTokens.easing.out, motionTokens.easing.sharp] }}
+                >
+                  <motion.img
+                    ref={mascotRef}
+                    src={MASCOT[frame]}
+                    alt=""
+                    draggable={false}
+                    className="absolute bottom-0 left-0 max-w-none -translate-x-1/2 origin-bottom"
+                    style={{ ...mascotStyle, scale: ms }}
+                  />
+                </motion.div>
+              </motion.div>
+            )}
+          </>
+        )}
+        {flat && (
+          <img
+            src={MASCOT[frame]}
             alt=""
             aria-hidden="true"
             draggable={false}
-            className="absolute w-14 sm:w-16 lg:w-20 pointer-events-none"
-            style={{ left: perch.x, top: perch.y, imageRendering: 'pixelated' }}
-            initial={false}
-            animate={reduced || taps === 0 ? undefined : { y: [0, -14, 0] }}
-            transition={{ duration: motionTokens.duration.normal, ease: motionTokens.easing.smooth }}
+            className="absolute right-4 top-14 sm:top-16 lg:top-20 max-w-none -translate-y-full pointer-events-none"
+            style={mascotStyle}
           />
         )}
+
+        {tip !== null && <KeyTip key={tip} index={tip} tipRef={tipRef} reduced={flat} />}
+        <AnimatePresence>
+          {open !== null && (
+            <SkillWindow key={open} index={open} reduced={flat} boardRef={boardRef} locate={locate} onClose={closeWindow} />
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

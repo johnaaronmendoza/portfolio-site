@@ -36,6 +36,31 @@ export const motionTokens = {
     sm: 8,
     md: 16,
   },
+  // Skills keyboard (owner-approved, Nov 2026): entrance once per page load,
+  // pointer tilt, scroll-linked perspective, key lift/press, mascot reactions.
+  // Distances in CSS px, angles in degrees.
+  keyboard: {
+    enter: 0.7,       // board fades in, rises and rotates into its resting angle
+    enterDelay: 0.05, // first row starts settling
+    rowStagger: 0.07, // at most; shortened so the 7-row phone layout ends by `enterEnd`
+    settle: 0.4,      // each row's drop into place
+    enterEnd: 0.85,
+    rise: 24,
+    enterTilt: 6,
+    tilt: 3,          // pointer tilt cap
+    tiltFollow: 0.12, // time constant of the tilt's smoothing, seconds
+    scrollTilt: 5,    // extra top-down rotation across the section
+    lift: 5,          // hover
+    press: 3.5,
+    hop: 28,          // mascot hop height
+  },
+  // Mascot frame timing for a key press: crouch, jump (for the hop), land,
+  // celebrate, then idle. Seconds.
+  mascot: {
+    crouch: 0.08,
+    land: 0.08,
+    celebrate: 0.6,
+  },
 };
 
 export const springs = {

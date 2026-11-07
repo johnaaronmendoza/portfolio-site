@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import PixelArt from '@/components/PixelArt';
 import SectionHeading from '@/components/SectionHeading';
 import SkipLink from '@/components/SkipLink';
+import SoundToggle, { FLOAT_DOCK } from '@/components/SoundToggle';
 import { ProjectTile } from '@/components/Projects';
 import { getCase, getNextCase, type CaseSlug } from '@/data/projects';
 import { trackProjectVisit } from '@/hooks/useAchievements';
@@ -111,6 +112,9 @@ export default function CaseLayout({ slug, children }: CaseLayoutProps) {
         <NextProject slug={slug} />
       </main>
       <Footer />
+      <div className={FLOAT_DOCK}>
+        <SoundToggle />
+      </div>
     </div>
   );
 }

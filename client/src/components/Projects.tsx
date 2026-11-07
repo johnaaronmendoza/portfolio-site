@@ -6,6 +6,7 @@ import PixelatedImage from './PixelatedImage';
 import PixelArt from './PixelArt';
 import { Lead, SpotPlate } from './Hierarchy';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
+import { noteProjectOpen } from '@/hooks/useAchievements';
 import { motionTokens } from '@/lib/motion-tokens';
 import SectionHeading from './SectionHeading';
 import Window from './Window';
@@ -165,6 +166,7 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
         className={CARD_LINK_CLASS}
         aria-label={`${project.name}: view case study`}
         {...preloadHandlers}
+        onClick={() => { if (project.slug) noteProjectOpen(project.slug); }}
       >
         {body}
       </Link>

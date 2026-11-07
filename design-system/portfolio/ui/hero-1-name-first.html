@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hero 1, name first</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  .hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; padding: 48px var(--gutter) 96px; overflow: hidden; }
+  @media (min-width: 640px) { .hero { padding-top: 72px; } }
+  .grid { position: relative; z-index: 1; width: 100%; max-width: 1152px; margin: auto; display: grid; gap: 40px; }
+  @media (min-width: 1024px) { .grid { grid-template-columns: 7fr 5fr; column-gap: 48px; align-items: start; } }
+
+  /* Name window: the one loud thing */
+  .name { font-size: var(--px-hero); line-height: 1.25; }
+  .name span { display: block; white-space: nowrap; }
+  .name .o { color: var(--orange); } .name .t { color: var(--teal); }
+  .cursor { display: inline-block; width: 0.18em; height: 0.9em; margin-left: 0.12em; vertical-align: -0.05em; background: var(--orange); animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+  .window--term .window-body { padding: 24px; }
+  @media (min-width: 640px) { .window--term .window-body { padding: 40px; } }
+
+  .role { margin-top: 32px; display: flex; gap: 12px; font: 700 var(--mono-body)/1.5 'Courier Prime', monospace; color: var(--teal); }
+  .role b { color: var(--orange); font-weight: 700; }
+  .lead { margin-top: 16px; max-width: 34ch; font: 700 var(--mono-lead)/1.4 'Courier Prime', monospace; color: var(--cream); text-wrap: balance; }
+  .chips { margin-top: 20px; display: flex; flex-wrap: wrap; gap: var(--s-in); }
+  .ctas { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 16px; }
+  @media (max-width: 639px) { .ctas .btn { width: 100%; } }
+  .contact { margin-top: 16px; display: flex; flex-wrap: wrap; align-items: center; column-gap: 16px; font: 400 var(--mono-meta)/1.5 'Courier Prime', monospace; color: var(--cream); }
+  .contact a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  .contact a img, .contact a svg { width: 16px; height: 16px; image-rendering: pixelated; }
+
+  /* desk_assist.exe */
+  .da .window-body { padding: 20px; }
+  @media (min-width: 640px) { .da .window-body { padding: 24px 28px 20px; } }
+  .da-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .da-head img { width: 48px; height: 48px; image-rendering: pixelated; border: 3px solid var(--ink); background: var(--orange); flex-shrink: 0; }
+  .da-head h2 { font: 700 17px/1.35 'Courier Prime', monospace; color: #000; text-wrap: balance; }
+  .da-meta { margin-top: 6px; display: flex; align-items: center; gap: 8px; font: 400 15px/1.4 'Courier Prime', monospace; color: var(--navy); }
+  .da-foot { margin-top: 8px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; font: 400 15px/1.5 'Courier Prime', monospace; color: var(--navy); }
+  .da-foot a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; color: #000; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+  .scroll { text-decoration: none; position: absolute; left: 50%; bottom: 24px; translate: -50% 0; display: none; flex-direction: column; align-items: center; min-height: 44px; min-width: 44px; color: var(--orange); font: 400 15px/1.2 'Courier Prime', monospace; }
+  .scroll i { width: 14px; height: 14px; border-right: 3px solid currentColor; border-bottom: 3px solid currentColor; rotate: 45deg; margin-top: 4px; }
+  @media (min-width: 1024px) and (min-height: 820px) { .scroll { display: flex; } }
+
+  .px-dot { position: absolute; z-index: 0; display: none; }
+  @media (min-width: 640px) { .px-dot { display: block; } }
+</style>
+</head>
+<body>
+<main>
+<section class="hero" aria-label="Introduction">
+  <!-- Static stand-ins for John's floating pixels (particles render behind these on the live site) -->
+  <i class="px-dot" aria-hidden="true" style="top:9%;right:6%;width:16px;height:16px;background:var(--orange)"></i>
+  <i class="px-dot" aria-hidden="true" style="top:34%;left:3%;width:12px;height:12px;background:var(--orange)"></i>
+  <i class="px-dot" aria-hidden="true" style="top:70%;left:5%;width:8px;height:8px;background:var(--teal)"></i>
+  <i class="px-dot" aria-hidden="true" style="top:86%;right:9%;width:8px;height:8px;background:var(--cream)"></i>
+
+  <div class="grid">
+    <div>
+      <div class="window window--term">
+        <div class="window-bar"><p>welcome.exe</p><span aria-hidden="true">○□✕</span></div>
+        <div class="window-body">
+          <h1 class="px name">
+            <span class="sr-only">John Aaron Mendoza Branzuela</span>
+            <span aria-hidden="true"><span class="o">JOHN AARON</span><span class="t">BRANZUELA<i class="cursor"></i></span></span>
+          </h1>
+        </div>
+      </div>
+
+      <p class="role"><b aria-hidden="true">&gt;</b>AI, data and full-stack developer</p>
+      <p class="lead">I build AI and data tools people can trust, now building Desk Assist at LGA Telecom.</p>
+      <ul class="chips" aria-label="Study">
+        <li class="chip"><img src="../../../client/public/assets/pixel/chip-school.svg" alt="">SIT × University of Glasgow</li>
+        <li class="chip"><img src="../../../client/public/assets/pixel/chip-calendar.svg" alt="">Graduating April 2027</li>
+      </ul>
+
+      <div class="ctas">
+        <a class="btn btn-primary" href="#"><img src="../../../client/public/assets/pixel/floppy.svg" alt="">Download resume</a>
+        <a class="btn btn-secondary" href="#">See projects</a>
+      </div>
+      <p class="contact">
+        <span>Reach me:</span>
+        <a href="#"><img src="../../../client/public/assets/pixel/icon-contact.svg" alt="">Email</a>
+        <a href="#">GitHub<span class="sr-only"> (opens in a new tab)</span></a>
+        <a href="#">LinkedIn<span class="sr-only"> (opens in a new tab)</span></a>
+      </p>
+    </div>
+
+    <figure class="window da" aria-labelledby="da-h">
+      <div class="window-bar"><p>desk_assist.exe</p><span aria-hidden="true">○□✕</span></div>
+      <div class="window-body">
+        <div class="da-head">
+          <img src="../../../client/public/assets/pixel/spot-desk-assist.svg" alt="">
+          <div>
+            <h2 id="da-h">How Desk Assist will draft a reply</h2>
+            <p class="da-meta"><span class="badge badge--build">In progress</span></p>
+          </div>
+        </div>
+        <ol class="flow">
+          <li><span class="n">1</span><span class="label">Ticket</span><span></span></li>
+          <li><span class="n">2</span><span class="label">Reads the thread</span><span class="actor actor--ai">AI</span></li>
+          <li><span class="n">3</span><span class="label">Finds KB guidance</span><span class="actor actor--ai">AI</span></li>
+          <li><span class="n">4</span><span class="label">Drafts a reply</span><span class="actor actor--ai">AI</span></li>
+          <li class="lit"><span class="n">5</span><span class="label">Agent reviews</span><span class="actor actor--agent">Agent</span><span class="detail">Every draft, before it's sent</span></li>
+          <li><span class="n">6</span><span class="label">Sent</span><span></span></li>
+        </ol>
+        <p class="da-foot"><a href="#">More in Experience</a></p>
+      </div>
+    </figure>
+  </div>
+
+  <a class="scroll" href="#"><span>Scroll</span><i aria-hidden="true"></i></a>
+</section>
+</main>
+
+<div class="dock dock--l"><span class="fbtn">❚❚ <span class="lbl">Pause motion</span></span><span class="fbtn">♪ <span class="lbl">Sound off</span></span></div>
+<div class="dock dock--r"><span class="fbtn"><img src="../../../client/public/assets/mascot/lil-johnny-idle.png" alt="" width="20" style="image-rendering:pixelated"> <span class="lbl">Chat</span></span></div>
+</body>
+</html>

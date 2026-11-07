@@ -37,6 +37,8 @@ not tell a screen reader that a new tab opens, so the sr-only text does.
 
 ## 2. Key figures strip: `client/src/components/StatsBand.tsx`
 
+> Superseded by **2026-11-07: Key figures band redraft** at the end of this file.
+
 | Element | Current | Proposed |
 |---|---|---|
 | Left cell | `HELLO!` | `HELLO!` (keep; it's aria-hidden) |
@@ -366,3 +368,114 @@ Fix the knowledge base (`MascotChatWidget.tsx`) and the terminal
 - **Q5.** Do you want the chat bot to promise a reply "within a day"?
 - **Q6.** Do you use Java, C++, AWS, GitHub Actions, MongoDB, Cloudflare, JIRA
   and Confluence enough to list them? None of them are on the resume.
+
+---
+
+## 2026-11-07: Key figures band redraft (supersedes §2)
+
+File: `client/src/components/StatsBand.tsx` (cells render through
+`client/src/components/StatStrip.tsx`, variant `band`). Fixes critique issue
+"[P1] StatsBand undersells" (`.impeccable/critique/2026-11-03T05-47-01Z__client-src-pages-home-tsx.md`).
+
+Goal: a recruiter who reads only this band sees evidence from real work first
+(automation, migration, testing), then one data-science result. No Desk Assist
+figure: it is in progress and no source gives it a metric.
+
+### Recommended band
+
+| # | Value | Label (`dt`) | Source tag | What the figure measured | Source |
+|---|---|---|---|---|---|
+| 1 | `40%` | `fewer manual agent actions` | `LGA Telecom` | Drop in manual service desk agent actions after John designed Freshservice business rules and workflow automations for ticket closure, escalation routing and response tracking. | `client/src/components/Experience.tsx:68`; resume p.1, LGA Telecom > Process Automation, "Reduced manual agent actions by 40%…"; chat `client/src/components/MascotChatWidget.tsx:32` |
+| 2 | `1,000+` | `network configurations migrated` | `LGA Telecom` | Network configurations (resume adds "and monitoring baselines") moved via REST API integrations and migration scripts while John led the FreeSDN integration across 4+ equipment manufacturers. | `client/src/components/Experience.tsx:67`; resume p.1, LGA Telecom > FreeSDN, "Migrated 1,000+ network configurations and monitoring baselines…" |
+| 3 | `50+` | `UAT defects tracked to resolution` | `Sembcorp Solar` | Defects found in the UAT John designed and ran for the Momens CRM, each tracked until resolved, before go-live across SolarNova 3 and several divisions. | `client/src/components/Experience.tsx:80`; `client/src/components/skills3d/keys.ts:80`; resume p.1, Sembcorp, "…executing UAT, tracking 50+ defects to resolution"; chat `MascotChatWidget.tsx:28` |
+| 4 | `89.61%` | `ML classifier accuracy, 41,996 samples` | `UWB project (SIT)` | Accuracy of the SVM-RBF model telling clear (LOS) from blocked (NLOS) UWB signals, on 41,996 samples from 7 indoor environments. CSC3105 Data Analytics team project; John's part was the data mining method (model choice, leak-free split). | `client/src/data/projects.ts:119` (`89.61% accuracy`, `41,996 samples`); `client/src/pages/UWBProject.tsx:78`, `:109-114`; resume p.1, UWB Indoor Localization, "Achieved 89.61% accuracy… on 41,996 samples" |
+
+Labels are 26 to 37 characters, so each one wraps to two or three lines at
+`max-w-[18ch]` and the cells line up. Values are 3 to 6 glyphs. `1,000+` is 6
+glyphs, the same as `89.61%`, so it fits the existing `15cqi` sizing.
+
+Dropped:
+
+- `2 internships`: a count, not evidence. Experience shows both internships
+  just below.
+- `6 projects built`: the grid shows 7 tiles (6 case studies plus the
+  GreenLoopFarms pitch), so the number looks wrong at a glance. Changing it to
+  `7` would count a pitch as a build. Dropping it removes the conflict.
+- `4 SCS Awareness Platform languages`: "SCS" means nothing in a skim, and
+  a language count doesn't show trustworthy AI or data work. The SCS project
+  is featured in the Projects section, which explains it properly.
+
+### Source tag: coder note
+
+`Stat` has only `value` and `label`. Add an optional `source?: string` to
+`Stat` in `StatStrip.tsx` and render it inside the `dt`, after the label, as
+its own line (for example a `<span class="block">`). The `dt` stays first in
+the DOM, so a screen reader hears "fewer manual agent actions, LGA Telecom,
+40%". Keep the tag 15px or larger (readable-first rule) and black on orange
+(an approved pairing). Only the `band` variant needs it, so the case-study
+strips don't change.
+
+Replace the `STATS` comment and array in `StatsBand.tsx` with:
+
+```ts
+// Only figures already on the site and the resume: LGA Telecom and Sembcorp
+// (Experience), and the UWB model (projects.ts, UWB case page). Real work leads;
+// Desk Assist has no figure because it is in progress.
+const STATS: Stat[] = [
+  { value: '40%', label: 'fewer manual agent actions', source: 'LGA Telecom' },
+  { value: '1,000+', label: 'network configurations migrated', source: 'LGA Telecom' },
+  { value: '50+', label: 'UAT defects tracked to resolution', source: 'Sembcorp Solar' },
+  { value: '89.61%', label: 'ML classifier accuracy, 41,996 samples', source: 'UWB project (SIT)' },
+];
+```
+
+`StatStrip` uses `label` as the React key. The labels stay unique, so that
+still works.
+
+### Alternative band (more automation, less scale)
+
+| # | Value | Label | Source tag | Source |
+|---|---|---|---|---|
+| 1 | `40%` | `fewer manual agent actions` | `LGA Telecom` | as above |
+| 2 | `4 hrs` | `of manual reporting saved a week` | `LGA Telecom` | Resume p.1, LGA Telecom > Process Automation, "Eliminated 4 hours of manual reporting per week by automating PagerDuty incident log extraction… with Google Apps Script"; chat `MascotChatWidget.tsx:32` |
+| 3 | `50+` | `UAT defects tracked to resolution` | `Sembcorp Solar` | as above |
+| 4 | `89.61%` | `ML classifier accuracy, 41,996 samples` | `UWB project (SIT)` | as above |
+
+Use this band only if the PagerDuty line also goes into Experience
+(`Experience.tsx`, LGA entry). Today it appears only in the resume and the chat
+bot, so the band would show a figure that the Experience section doesn't back
+up. Cell 2 swaps migration scale for time saved through automation.
+
+Not used, and why: `15 min` faster incident resolution
+(`Experience.tsx:68`) needs a qualifier (per incident? on average?) that won't
+fit in a label. `0.9612 AUC` repeats the UWB cell. `20+` vendor enhancements
+(resume, Sembcorp) isn't on the site.
+
+### Small consistency fix (optional, for the coder)
+
+`Experience.tsx:68` credits both figures to "Freshservice automation". The
+resume credits the 40% to Freshservice business rules and the 15 minutes to
+Freshservice–Microsoft Teams escalation alerts. Proposed:
+`**40%** fewer manual agent actions via Freshservice rules; Teams escalation alerts cut incident resolution by 15 minutes.`
+
+### Status of earlier NEEDS JOHN items touched here
+
+- Q1 (Desk Assist deployed?): the resume now says "in progress" (p.1), which
+  matches the site. It looks resolved, so no Desk Assist figure goes in the band.
+- Q3 (FreeSDN 1,000+ and 40% on the site?): both are now in `Experience.tsx:67-68`
+  and on the resume. It looks resolved.
+
+### NEEDS JOHN (band)
+
+- **B1.** "1,000+ network configurations": is that configurations alone, or
+  configurations plus monitoring baselines counted together (the resume's
+  wording)? If they are counted together, the label becomes
+  `network configs and baselines migrated`.
+- **B2.** "40% fewer manual agent actions": what was the baseline and period
+  (for example manual steps per ticket, before and after, over which weeks)?
+  The band doesn't need it, but a recruiter may ask.
+- **B3.** (Alternative band only) Is the PagerDuty weekly report live and
+  saving 4 hours a week today? If so, can it go into Experience too?
+- **B4.** UWB was a team project (Group CS05). Are you happy for the band to
+  show the team model's 89.61% with the tag `UWB project (SIT)`? The tag
+  doesn't claim you built the model alone.

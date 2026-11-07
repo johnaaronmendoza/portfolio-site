@@ -1,0 +1,128 @@
+/* Shared mockup stylesheet for design-system/portfolio/ui/*.html.
+   Tokens copied from client/src/index.css (palette, .window, .btn, focus);
+   the type and spacing roles are the consolidated scale in README.md §4.
+   Mockup only: the coder ports the roles, not this file. */
+
+@font-face { font-family: 'Press Start 2P'; src: url('fonts/PressStart2P.woff2') format('woff2'); font-display: block; }
+@font-face { font-family: 'Courier Prime'; src: url('fonts/CourierPrime-400.woff2') format('woff2'); font-weight: 400; font-display: block; }
+@font-face { font-family: 'Courier Prime'; src: url('fonts/CourierPrime-700.woff2') format('woff2'); font-weight: 700; font-display: block; }
+
+:root {
+  --navy: #16163F; --ink: #000; --cream: #F4EAD5;
+  --orange: #FF7A2F; --teal: #2EC4B6; --violet: #6C4AD0;
+  --focus: var(--orange);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* Type roles (README §4). 375 values; the lg block below swaps them. */
+  --px-hero: clamp(20px, 7vw, 30px);
+  --px-h2: clamp(20px, 6.5vw, 26px);
+  --px-h1-case: clamp(20px, 6vw, 24px);
+  --px-h2-case: clamp(18px, 5.3vw, 22px);
+  --px-h3: 16px;
+  --px-h3-feature: 18px;
+  --px-stat: 24px;
+  --px-label: 12px;
+  --mono-lead: 18px;
+  --mono-body: 16px;
+  --mono-meta: 15px;
+
+  /* Spacing roles (4px base) */
+  --s-in: 8px;      /* inside a group: chip↔chip, tag↔tag */
+  --s-item: 12px;   /* item↔item: bullet, flow node */
+  --s-group: 24px;  /* group↔group inside a block */
+  --s-block: 32px;  /* block↔block inside a window */
+  --s-pad: 24px;    /* window body padding */
+  --gutter: 16px;
+}
+@media (min-width: 640px) { :root { --gutter: 32px; --s-pad: 32px; } }
+@media (min-width: 1024px) {
+  :root {
+    --px-hero: 48px; --px-h2: 48px; --px-h1-case: 40px; --px-h2-case: 32px;
+    --px-h3-feature: 24px; --px-stat: 32px;
+    --mono-lead: 22px;
+    --s-item: 12px; --s-group: 32px; --s-block: 40px; --s-pad: 40px; --gutter: 64px;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-padding-bottom: 88px; }
+body {
+  margin: 0; background-color: var(--navy); color: var(--cream);
+  font-family: 'Courier Prime', ui-monospace, monospace; font-size: var(--mono-body); line-height: 1.7;
+  /* Faint grid, as body::before in index.css (allowed texture) */
+  background-image:
+    linear-gradient(0deg, rgb(46 196 182 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(108 74 208 / 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+h1, h2, h3, p, ol, ul, dl, dd, figure { margin: 0; padding: 0; }
+ol, ul { list-style: none; }
+a { color: inherit; }
+.px { font-family: 'Press Start 2P', monospace; letter-spacing: 0.05em; line-height: 1.25; font-weight: 400; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.wrap-balance { text-wrap: balance; }
+.wrap-pretty { text-wrap: pretty; }
+
+/* ── Window ─────────────────────────────────────────── */
+.window { border: 3px solid var(--ink); background: var(--cream); color: var(--navy); box-shadow: 6px 6px 0 0 var(--ink); --focus: var(--ink); }
+@media (min-width: 1024px) { .window { box-shadow: 8px 8px 0 0 var(--ink); } }
+.window-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: 36px; padding: 6px 12px; background: var(--violet); color: var(--cream);
+  border-bottom: 3px solid var(--ink);
+}
+.window-bar p { font-family: 'Press Start 2P', monospace; font-size: 12px; letter-spacing: 0.05em; line-height: 1.5; }
+.window-bar span { font-size: 14px; letter-spacing: 0.35em; line-height: 1; }
+.window-body { padding: var(--s-pad); }
+.window--term .window-body { background: #000; color: var(--cream); --focus: var(--orange); }
+
+/* ── Buttons ────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 10px 20px; border: 3px solid var(--ink); box-shadow: 4px 4px 0 0 var(--ink);
+  font: 700 16px/1.2 'Courier Prime', monospace; letter-spacing: 0.02em; text-decoration: none; cursor: pointer;
+  transition-property: translate, box-shadow, background-color, color; transition-duration: 150ms; transition-timing-function: var(--ease-out);
+}
+.btn:active { translate: 4px 4px; box-shadow: 0 0 0 0 var(--ink); }
+.btn-primary { background: var(--orange); color: #000; }
+.btn-secondary { background: var(--teal); color: #000; }
+.btn-ghost { background: transparent; color: var(--cream); border-color: var(--cream); }
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover:not(:active), .btn-secondary:hover:not(:active) { translate: -2px -2px; box-shadow: 6px 6px 0 0 var(--ink); }
+}
+.btn img { width: 16px; height: 16px; image-rendering: pixelated; }
+
+/* ── Static labels: no shadow (a shadow means pressable) ── */
+.badge { display: inline-flex; align-items: center; gap: 6px; border: 2px solid var(--ink); padding: 3px 8px; font-family: 'Press Start 2P', monospace; font-size: 12px; line-height: 1.4; letter-spacing: 0.04em; color: #000; white-space: nowrap; }
+.badge--ai { background: var(--orange); }
+.badge--data { background: var(--teal); }
+.badge--build { background: var(--cream); }
+.chip { display: inline-flex; align-items: flex-start; gap: 8px; border: 2px solid var(--ink); background: var(--cream); color: #000; padding: 6px 10px; font: 700 var(--mono-meta)/1.4 'Courier Prime', monospace; }
+.chip img { width: 16px; height: 16px; margin-top: 2px; image-rendering: pixelated; }
+.tag { display: inline-block; border: 2px solid var(--ink); padding: 1px 8px; font: 700 15px/1.5 'Courier Prime', monospace; color: #000; }
+.pending { display: inline-block; border: 2px dashed currentColor; padding: 0 6px; font: 700 15px/1.5 'Courier Prime', monospace; }
+
+/* ── Flow: compact vertical (hero) ───────────────────── */
+.flow { display: grid; gap: 10px; }
+.flow li { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; min-height: 40px; padding: 6px 10px; border: 2px solid var(--ink); background: var(--cream); color: #000; }
+.flow li + li::before { /* 3px ink connector + stepped arrowhead, decorative */
+  content: ''; position: absolute; left: 22px; top: -12px; width: 3px; height: 10px; background: var(--ink);
+}
+.flow .n { grid-row: 1; font-family: 'Press Start 2P', monospace; font-size: 12px; line-height: 1; border: 2px solid var(--ink); background: var(--cream); padding: 4px 5px; min-width: 26px; text-align: center; font-variant-numeric: tabular-nums; }
+.flow .label { font: 700 16px/1.3 'Courier Prime', monospace; }
+.flow .detail { grid-column: 2 / -1; margin-top: -6px; text-wrap: balance; font: 400 15px/1.4 'Courier Prime', monospace; color: #000; }
+.flow .actor { font-family: 'Press Start 2P', monospace; font-size: 12px; line-height: 1; border: 2px solid var(--ink); padding: 4px 6px; }
+.flow .actor--ai { background: var(--orange); }
+.flow .actor--agent { background: var(--cream); }
+.flow li.lit { background: var(--orange); border-width: 3px; padding: 9px 9px; }
+.flow li.lit .n { background: var(--cream); }
+
+/* ── Fixed chrome present on the live site (to check overlap) ── */
+.dock { position: fixed; bottom: 16px; z-index: 50; display: flex; gap: 12px; }
+.dock--l { left: 16px; } .dock--r { right: 16px; }
+.dock .fbtn { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; min-width: 48px; justify-content: center; padding: 8px 14px; background: var(--cream); color: #000; border: 3px solid var(--ink); box-shadow: 4px 4px 0 0 var(--ink); font: 700 15px/1 'Courier Prime', monospace; }
+@media (max-width: 639px) { .dock .fbtn .lbl { display: none; } .dock .fbtn { padding: 8px; } }
+
+/* Mockup annotations (not part of the design) */
+.note { font: 400 13px/1.4 'Courier Prime', monospace; color: var(--cream); opacity: .85; }

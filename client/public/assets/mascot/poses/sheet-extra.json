@@ -1,0 +1,32 @@
+{
+  "frameWidth": 47,
+  "frameHeight": 72,
+  "baselineRow": 71,
+  "note": "Own canvas: 47x72 = the 47x64 pose canvas plus 8 rows of headroom on top. Same scale, baseline row and feet-centring as sheet.json, so a frame from either sheet lines up when both are bottom-aligned.",
+  "frames": {
+    "wave": {
+      "x": 0,
+      "y": 0,
+      "w": 47,
+      "h": 72
+    },
+    "point-right": {
+      "x": 47,
+      "y": 0,
+      "w": 47,
+      "h": 72
+    },
+    "think": {
+      "x": 94,
+      "y": 0,
+      "w": 47,
+      "h": 72
+    },
+    "typing": {
+      "x": 141,
+      "y": 0,
+      "w": 47,
+      "h": 72
+    }
+  }
+}

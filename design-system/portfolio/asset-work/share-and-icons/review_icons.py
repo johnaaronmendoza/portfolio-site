@@ -15,11 +15,12 @@ rev, icons = Path(sys.argv[1]), Path(sys.argv[2])
 FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 
 CANDS = [
-    ("keycap (ship)", icons / "favicon-16x16.png", icons / "favicon-32x32.png"),
-    ("keycap svg in chromium", rev / "new-favicon-chromium-16x16.png", rev / "new-favicon-chromium-32x32.png"),
-    ("keycap via LANCZOS", rev / "wag-lanczos/favicon-16x16.png", rev / "wag-lanczos/favicon-32x32.png"),
-    ("Lil Johnny head", rev / "cand-johnny-16.png", rev / "cand-johnny-32.png"),
-    ("current favicon.svg", rev / "old-favicon-16x16.png", rev / "old-favicon-32x32.png"),
+    ("orange, seam (ship)", icons / "favicon-16x16.png", icons / "favicon-32x32.png"),
+    ("ship svg in chromium", rev / "new-favicon-chromium-16x16.png", rev / "new-favicon-chromium-32x32.png"),
+    ("orange, ink strip", rev / "cand-ink-16.png", rev / "cand-ink-32.png"),
+    ("orange, dark strip", rev / "cand-shade-16.png", rev / "cand-shade-32.png"),
+    ("black cap, orange >_", rev / "cand-blackcap-16.png", rev / "cand-blackcap-32.png"),
+    ("before: blue", rev / "before/favicon-16x16.png", rev / "before/favicon-32x32.png"),
 ]
 THEMES = [("light", "#DEE1E6", "#FFFFFF", "#202124"), ("dark", "#202124", "#35363A", "#E8EAED")]
 

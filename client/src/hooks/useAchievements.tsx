@@ -36,7 +36,9 @@ function saveVisited(list: string[]) {
 // A small achievement.txt window (MASTER 2.1): violet bar, cream body, navy
 // text, ink frame and hard shadow. Sonner keeps it non-blocking, pauses it on
 // hover and lets it be dismissed; reduced motion is handled by the global
-// prefers-reduced-motion rule in index.css.
+// prefers-reduced-motion rule in index.css. Position (bottom-left, above the
+// floating controls) is set once on the Toaster in App.tsx. The chime only
+// plays when the visitor has turned sound on.
 function showToast(id: string) {
   const ach = ACHIEVEMENTS[id];
   if (!ach) return;
@@ -54,8 +56,8 @@ function showToast(id: string) {
       </div>
     ),
     // Shrink to the card on phones too (Sonner stretches toasts full width
-    // under 600px), so it sits top-right instead of across the page
-    { duration: 3500, position: 'top-right', style: { width: 'auto', left: 'auto' } }
+    // under 600px), so it sits bottom-left instead of across the page
+    { duration: 3500, style: { width: 'auto', right: 'auto' } }
   );
 }
 
@@ -68,14 +70,25 @@ export function unlockAchievement(id: string) {
   showToast(id);
 }
 
-// ── Public: record project visit + check DEEP_DIVE / COMPLETIONIST ───────
+// ── Public: project visits ───────────────────────────────────────────────
+// Achievements only follow a deliberate action. A project link click arms the
+// unlock; the case page fires it once it has rendered (after navigation).
+// Landing on a case-study URL directly records the visit but unlocks nothing.
+let armedProject: string | null = null;
+
+export function noteProjectOpen(projectId: string) {
+  armedProject = projectId;
+}
+
 export function trackProjectVisit(projectId: string) {
   const visited = getVisited();
   if (!visited.includes(projectId)) {
     visited.push(projectId);
     saveVisited(visited);
   }
-  if (visited.length === 1) unlockAchievement('DEEP_DIVE');
+  if (armedProject !== projectId) return;
+  armedProject = null;
+  unlockAchievement('DEEP_DIVE');
   if (ALL_PROJECTS.every(k => visited.includes(k))) unlockAchievement('COMPLETIONIST');
 }
 

@@ -7,6 +7,8 @@
 import { useState, useEffect } from 'react';
 import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 import PixelArt from '@/components/PixelArt';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { scrollToSection } from '@/lib/utils';
 
 const LINK_CLASS =
   'min-h-[44px] inline-flex items-center gap-3 font-mono text-[15px] sm:text-base font-bold underline-offset-4 decoration-2 hover:underline';
@@ -34,9 +36,10 @@ function useSGTClock() {
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const sgtTime = useSGTClock();
+  const reduced = useReducedMotion();
 
   return (
-    // Extra bottom padding so the fixed Pause and chat buttons never cover the last row
+    // Extra bottom padding so the floating controls and chat button never cover the last row
     <footer className="bg-[var(--violet)] text-[color:var(--cream)] border-t-[3px] border-black px-4 sm:px-8 lg:px-16 pt-16 pb-28 sm:pt-20 [--focus:var(--cream)]">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr] gap-12 md:gap-10">
         {/* Contact CTA */}
@@ -112,6 +115,15 @@ export default function Footer() {
           <p className="font-mono-8bit text-sm">
             © {currentYear} John Aaron Mendoza Branzuela
           </p>
+          {/* Back to the top of the page; focus moves to <main> so Tab starts there */}
+          <a
+            href="#main"
+            onClick={(e) => { e.preventDefault(); scrollToSection('main', reduced); }}
+            className={LINK_CLASS}
+          >
+            <span aria-hidden="true">↑</span>
+            Back to top
+          </a>
           {/* Sign-off sticker, in the flow below the copyright (not over text) */}
           <PixelArt name="starburst" size={96} lazy className="hidden md:block" />
         </div>

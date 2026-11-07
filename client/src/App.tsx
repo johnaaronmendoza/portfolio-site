@@ -98,7 +98,10 @@ function AppInner() {
     <>
       <CommandPalette />
       <KeyboardShortcuts />
-      <Toaster />
+      {/* Achievement toasts: bottom-left, stacked just above the floating
+          controls (44px buttons 16px / 24px from the edge), clear of the
+          taskbar, breadcrumb and section navigation */}
+      <Toaster position="bottom-left" offset={{ bottom: 84, left: 24 }} mobileOffset={{ bottom: 72, left: 16 }} />
       <KonamiOverlay />
       <SecretTerminal />
       <Router />

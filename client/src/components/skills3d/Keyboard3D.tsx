@@ -18,7 +18,7 @@ import { use, useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObj
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { motionTokens, springs } from '@/lib/motion-tokens';
-import { KEYS, MUTE, capFor, iconUrl, inFilter, muteHex, type Cap, type Filter } from './keys';
+import { KEYS, capFor, iconUrl, inFilter, mutedCap, type Cap, type Filter } from './keys';
 
 /** A key's landmarks in viewport px: centre x, back of the top face (top),
  *  front of the top face (face), front of the base (bottom), top-face width. */
@@ -33,7 +33,7 @@ export type Keyboard3DProps = {
   open: number | null;
   /** Changes on every keyboard-triggered press, to play the press on that key */
   pulse: { i: number; n: number } | null;
-  /** Category filter: keys outside it are muted, never hidden */
+  /** Category filter: keys outside it sit flush and muted, never hidden */
   filter: Filter;
   /** Entrance still to play this page load: the board starts hidden and plays
    *  it when a third of it is in view */
@@ -151,20 +151,6 @@ function plateGeometry(w: number, d: number, r: number) {
   shape.lineTo(x, y + r);
   shape.quadraticCurveTo(x, y, x + r, y);
   return new THREE.ShapeGeometry(shape, 4).rotateX(Math.PI / 2);
-}
-
-/** Muting for the unlit legend materials: desaturate at constant luminance,
- *  then dim (same maths as muteHex in keys.ts, so contrast stays AA). */
-function muteable(mat: THREE.MeshBasicMaterial, mute: { value: number }) {
-  mat.onBeforeCompile = shader => {
-    shader.uniforms.uMute = mute;
-    shader.fragmentShader = shader.fragmentShader
-      .replace('void main() {', 'uniform float uMute;\nvoid main() {')
-      .replace('#include <map_fragment>', `#include <map_fragment>
-  diffuseColor.rgb = mix(diffuseColor.rgb, vec3(dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722))), uMute * ${MUTE.desaturate.toFixed(3)})
-    * (1.0 - uMute * ${(1 - MUTE.dim).toFixed(3)});`);
-  };
-  return mat;
 }
 
 /** Orange frame laid over the focused key's top face (keyboard focus). */
@@ -326,18 +312,21 @@ function Scene({ cols, icons, wrap, play, focused, open, pulse, filter, entrance
   const { gl, camera, size, invalidate } = useThree();
   const compact = cols < 7;
   const rows = Math.ceil(KEYS.length / cols);
-  const caps = useMemo(() => KEYS.map(capFor), []);
+  // Every key twice: lit (0-27), then muted for a filter mismatch (28-55)
+  const caps = useMemo(() => {
+    const lit = KEYS.map(capFor);
+    return [...lit, ...lit.map(mutedCap)];
+  }, []);
   const [unitPx, setUnitPx] = useState(0);
 
   // Latest props for the frame loop and pointer handlers
   const live = useRef({ open, filter, onHover, onSelect, onFrame, onEntered });
   live.current = { open, filter, onHover, onSelect, onFrame, onEntered };
 
-  // Per-key state: spring offset and velocity, mute amount, pointer held, press end time
+  // Per-key state: spring offset and velocity, pointer held, press end time
   const anim = useRef({
     y: new Float32Array(KEYS.length),
     v: new Float32Array(KEYS.length),
-    mute: new Float32Array(KEYS.length),
     down: new Uint8Array(KEYS.length),
     until: new Float64Array(KEYS.length),
   });
@@ -366,11 +355,9 @@ function Scene({ cols, icons, wrap, play, focused, open, pulse, filter, entrance
     };
     const topMaps = caps.map(() => texture(TOP_TEX_H));
     const frontMaps = caps.map(() => texture(FRONT_TEX_H));
-    const mutes = caps.map(() => ({ value: 0 }));
     return {
       topMaps,
       frontMaps,
-      mutes,
       sides: quads(SIDES),
       front: quads(FRONT),
       shell: quads(SHELL),
@@ -378,10 +365,8 @@ function Scene({ cols, icons, wrap, play, focused, open, pulse, filter, entrance
       keyShadow: new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2),
       // Lit sides; the unlit top and front keep the legends' checked contrast exact
       sideMats: caps.map(c => new THREE.MeshStandardMaterial({ color: c.side, roughness: 0.5 })),
-      sideBase: caps.map(c => new THREE.Color(c.side)),
-      sideMuted: caps.map(c => new THREE.Color(muteHex(c.side))),
-      topMats: topMaps.map((map, i) => muteable(new THREE.MeshBasicMaterial({ map, toneMapped: false }), mutes[i])),
-      frontMats: frontMaps.map((map, i) => muteable(new THREE.MeshBasicMaterial({ map, toneMapped: false }), mutes[i])),
+      topMats: topMaps.map(map => new THREE.MeshBasicMaterial({ map, toneMapped: false })),
+      frontMats: frontMaps.map(map => new THREE.MeshBasicMaterial({ map, toneMapped: false })),
       inkMat: new THREE.MeshBasicMaterial({ color: '#000000', side: THREE.BackSide }),
       // Hard shadows: flat ink, drawn just above the surface they fall on
       shadowMat: new THREE.MeshBasicMaterial({ color: '#000000', polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
@@ -459,7 +444,7 @@ function Scene({ cols, icons, wrap, play, focused, open, pulse, filter, entrance
   // Top faces don't depend on layout: draw once
   useEffect(() => {
     caps.forEach((cap, i) => {
-      drawTop(res.topMaps[i].image as HTMLCanvasElement, cap, icons[i]);
+      drawTop(res.topMaps[i].image as HTMLCanvasElement, cap, icons[i % KEYS.length]);
       res.topMaps[i].needsUpdate = true;
     });
     invalidate();
@@ -590,15 +575,17 @@ function Scene({ cols, icons, wrap, play, focused, open, pulse, filter, entrance
     else [tl.x, tl.z] = [tl.tx, tl.tz];
     tiltG.current?.rotation.set(tl.x, 0, tl.z);
 
-    // Layer 4, keys: row-by-row settle, then each key's own spring, shadow and mute
+    // Layer 4, keys: row-by-row settle, then each key's own spring and shadow
     const stagger = Math.min(KB.rowStagger, (KB.enterEnd - KB.enterDelay - KB.settle) / Math.max(1, rows - 1));
     const { lift, travel } = units.current;
     const step = dt / 4;
     const { stiffness: k, damping: c } = springs.snappy;
-    const muteFollow = 1 - Math.exp((-3 * dt) / motionTokens.duration.fast);
     for (let i = 0; i < KEYS.length; i++) {
       const pressed = a.down[i] === 1 || now < a.until[i];
-      const target = pressed ? -travel : (i === openKey ? -travel / 2 : 0) + (hover.current === i ? lift : 0);
+      // Outside the filter a key sits flush (fully down, no shadow) in its dark
+      // muted skin, so the state reads without colour; matches stay raised
+      const rest = !inFilter(KEYS[i], f) ? -travel : i === openKey ? -travel / 2 : 0;
+      const target = pressed ? -travel : rest + (hover.current === i ? lift : 0);
       for (let n = 0; n < 4; n++) {
         a.v[i] += (-k * (a.y[i] - target) - c * a.v[i]) * step;
         a.y[i] += a.v[i] * step;
@@ -616,13 +603,6 @@ function Scene({ cols, icons, wrap, play, focused, open, pulse, filter, entrance
       // Hard offset shadow: grows as the key lifts, tucks under it as it presses
       const off = a.y[i] >= 0 ? SHADOW + (a.y[i] / lift) * SHADOW_GROW : SHADOW * Math.max(0, 1 + a.y[i] / travel);
       shadows.current[i]?.position.set(off, -h + 0.004, off);
-
-      const muteTo = inFilter(KEYS[i], f) ? 0 : 1;
-      a.mute[i] += (muteTo - a.mute[i]) * muteFollow;
-      if (Math.abs(a.mute[i] - muteTo) < 0.004) a.mute[i] = muteTo;
-      else moving = true;
-      res.mutes[i].value = a.mute[i];
-      res.sideMats[i].color.lerpColors(res.sideBase[i], res.sideMuted[i], a.mute[i]);
     }
     if (moving) invalidate();
     live.current.onFrame();
@@ -682,13 +662,14 @@ function Scene({ cols, icons, wrap, play, focused, open, pulse, filter, entrance
 
             {KEYS.map((k, i) => {
               const [x, z] = slot(i, cols);
+              const m = inFilter(k, filter) ? i : i + KEYS.length; // lit or muted skin
               return (
                 <group key={k.label} position={[x, KEY_H / 2, z]}>
                   <mesh ref={el => { shadows.current[i] = el; }} geometry={res.keyShadow} material={res.shadowMat} position={[SHADOW, -h + 0.004, SHADOW]} raycast={noHit} />
                   <group ref={el => { lifts.current[i] = el; }} position-y={entrance ? SETTLE : 0}>
-                    <mesh geometry={res.sides} material={res.sideMats[i]} raycast={noHit} />
-                    <mesh geometry={res.front} material={res.frontMats[i]} raycast={noHit} />
-                    <mesh geometry={res.top} material={res.topMats[i]} position={[0, h + 0.002, TOP_Z]} raycast={noHit} />
+                    <mesh geometry={res.sides} material={res.sideMats[m]} raycast={noHit} />
+                    <mesh geometry={res.front} material={res.frontMats[m]} raycast={noHit} />
+                    <mesh geometry={res.top} material={res.topMats[m]} position={[0, h + 0.002, TOP_Z]} raycast={noHit} />
                     {/* Keyboard focus: orange outline and an orange frame on the top face */}
                     <mesh geometry={res.shell} material={i === focused ? res.focusMat : res.inkMat} scale={[OUTLINE, 1.05, OUTLINE]} {...pointer(i)} />
                     {i === focused && <mesh geometry={res.top} material={res.frameMat} position={[0, h + 0.004, TOP_Z]} raycast={noHit} />}

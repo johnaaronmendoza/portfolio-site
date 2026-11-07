@@ -4,7 +4,9 @@
 
 import { PROJECTS } from '@/data/projects';
 
-export type GroupId = 'ai' | 'data' | 'backend' | 'frontend' | 'ways';
+// One taxonomy: a key's group is its filter, its window label and its colour.
+export type GroupId = 'ai' | 'data' | 'frontend' | 'backend' | 'infra' | 'workflow';
+export type Filter = GroupId | 'all';
 
 export type Key = {
   label: string;   // short id; also names the icon file /assets/skills/<label>.svg
@@ -15,33 +17,43 @@ export type Key = {
 };
 
 export const GROUP_NAME: Record<GroupId, string> = {
-  ai: 'AI & LLMs',
-  data: 'Data & ML',
-  backend: 'Backend & Cloud',
-  frontend: 'Frontend & Mobile',
-  ways: 'Ways of working',
+  ai: 'AI',
+  data: 'Data',
+  frontend: 'Frontend',
+  backend: 'Backend',
+  infra: 'Infrastructure',
+  workflow: 'Workflow',
 };
 
-// Keycap colourways from John's keycap sheet (KEYCAPS_28 / RETRO SYSTEM).
-// WCAG contrast, checked: blue face/white 5.7:1, blue bar/white 10.5:1,
-// amber face/black 10.6:1, amber bar/black 6.4:1, cream face/#111 16.7:1,
-// cream bar/#111 10.0:1.
-const WAYS = {
-  blue:  { face: '#1B67BA', bar: '#0A3F78', side: '#0A3F78', ink: '#FFFFFF' },
-  amber: { face: '#FFA502', bar: '#CC7A00', side: '#A76505', ink: '#000000' },
-  cream: { face: '#FBF0DD', bar: '#C6BCA8', side: '#C6BCA8', ink: '#111111' },
+export const FILTERS: { id: Filter; label: string }[] = [
+  { id: 'all', label: 'All' },
+  ...(Object.keys(GROUP_NAME) as GroupId[]).map(id => ({ id, label: GROUP_NAME[id] })),
+];
+
+// Keycap colourways in the house palette, with meaning (John, 7 Nov 2026):
+// AI orange, Data teal, build (Frontend, Backend, Infrastructure) cream,
+// Workflow violet. Cream is the --cream token, not the old sheet's #FBF0DD,
+// so the board shares one palette with the windows. WCAG contrast of the ink:
+// orange face 8.08, bar 6.65; teal face 9.69, bar 7.23; cream face 15.80,
+// bar 10.25; violet face 4.98, bar 8.02. Muted keys use MUTED below.
+export const WAYS = {
+  orange: { face: '#FF7A2F', bar: '#EC6A22', side: '#B5521A', ink: '#000000' },
+  teal:   { face: '#2EC4B6', bar: '#23A99C', side: '#17847A', ink: '#000000' },
+  cream:  { face: '#F4EAD5', bar: '#C9BEA6', side: '#ADA28B', ink: '#111111' },
+  violet: { face: '#6C4AD0', bar: '#4A2F9E', side: '#3E2788', ink: '#F4EAD5' },
 } as const;
 
-// Colourway and printed label per key, by label (the sheet's names)
-const CAP: Record<string, { way: keyof typeof WAYS; text?: string }> = {
-  PROMPT: { way: 'blue' },  RAG:   { way: 'amber' }, LLM:    { way: 'cream' }, GUARD:  { way: 'blue' },
-  HUMAN:  { way: 'amber' }, PYTHON: { way: 'blue' }, PANDAS: { way: 'amber' }, SKLRN:  { way: 'cream', text: 'SKLEARN' },
-  NUMPY:  { way: 'blue' },  SQL:   { way: 'amber' }, ETL:    { way: 'cream' }, BI:     { way: 'blue' },
-  NODE:   { way: 'amber' }, GRPC:  { way: 'blue' },  PGSQL:  { way: 'blue' },  SUPA:   { way: 'amber' },
-  DOCKER: { way: 'blue' },  KUBE:  { way: 'amber' }, GIT:    { way: 'cream' }, TS:     { way: 'blue' },
-  REACT:  { way: 'amber' }, NEXT:  { way: 'cream' }, TWIND:  { way: 'blue' },  KOTLIN: { way: 'amber' },
-  ARCORE: { way: 'blue' },  AGILE: { way: 'amber' }, UAT:    { way: 'blue' },  REQS:   { way: 'cream' },
+export const GROUP_WAY: Record<GroupId, keyof typeof WAYS> = {
+  ai: 'orange',
+  data: 'teal',
+  frontend: 'cream',
+  backend: 'cream',
+  infra: 'cream',
+  workflow: 'violet',
 };
+
+// Printed labels that differ from the key's id
+const TEXT: Record<string, string> = { SKLRN: 'SKLEARN' };
 
 export const KEYS: Key[] = [
   // Row 1 — AI first: the story this portfolio leads with
@@ -65,9 +77,9 @@ export const KEYS: Key[] = [
   // Row 3
   { label: 'PGSQL', name: 'PostgreSQL', group: 'backend', blurb: 'Relational data with eight isolated schemas, one per service.', usedIn: 'SilverLink SG, SCS Awareness Platform' },
   { label: 'SUPA', name: 'Supabase', group: 'backend', blurb: 'Auth, storage and row-level security for a public-facing app.', usedIn: 'SCS Awareness Platform' },
-  { label: 'DOCKER', name: 'Docker', group: 'backend', blurb: 'Packaging services so they run the same everywhere.', usedIn: 'SilverLink SG' },
-  { label: 'KUBE', name: 'Kubernetes', group: 'backend', blurb: 'Running services on an 8-node cluster that scales ahead of demand.', usedIn: 'SilverLink SG' },
-  { label: 'GIT', name: 'Git', group: 'backend', blurb: 'Branching, reviews and clean history across every team project.', usedIn: 'Every project' },
+  { label: 'DOCKER', name: 'Docker', group: 'infra', blurb: 'Packaging services so they run the same everywhere.', usedIn: 'SilverLink SG' },
+  { label: 'KUBE', name: 'Kubernetes', group: 'infra', blurb: 'Running services on an 8-node cluster that scales ahead of demand.', usedIn: 'SilverLink SG' },
+  { label: 'GIT', name: 'Git', group: 'infra', blurb: 'Branching, reviews and clean history across every team project.', usedIn: 'Every project' },
   { label: 'TS', name: 'TypeScript', group: 'frontend', blurb: 'Typed front ends that catch mistakes before users do.', usedIn: 'SCS Awareness Platform, this portfolio' },
   { label: 'REACT', name: 'React', group: 'frontend', blurb: 'Interactive interfaces, from a branching story engine to an admin panel.', usedIn: 'SCS Awareness Platform, SilverLink SG' },
 
@@ -76,36 +88,12 @@ export const KEYS: Key[] = [
   { label: 'TWIND', name: 'Tailwind CSS', group: 'frontend', blurb: 'Consistent, responsive styling without fighting the stylesheet.', usedIn: 'SCS Awareness Platform, this portfolio' },
   { label: 'KOTLIN', name: 'Kotlin', group: 'frontend', blurb: 'Native Android with Jetpack Compose and on-device ML.', usedIn: 'Fire Safety Drill Companion' },
   { label: 'ARCORE', name: 'ARCore', group: 'frontend', blurb: 'Augmented-reality navigation that works fully offline.', usedIn: 'Fire Safety Drill Companion' },
-  { label: 'AGILE', name: 'Agile / Scrum', group: 'ways', blurb: 'Seven-sprint team projects with planning, reviews and burndown charts.', usedIn: 'SilverLink SG, SCS Awareness Platform' },
-  { label: 'UAT', name: 'User acceptance testing', group: 'ways', blurb: 'Testing with real users before go-live and tracking 50+ defects to resolution.', usedIn: 'Sembcorp Solar' },
-  { label: 'REQS', name: 'Requirements gathering', group: 'ways', blurb: 'Turning what stakeholders say into changes a team can build.', usedIn: 'Sembcorp Solar, LGA Telecom' },
+  { label: 'AGILE', name: 'Agile / Scrum', group: 'workflow', blurb: 'Seven-sprint team projects with planning, reviews and burndown charts.', usedIn: 'SilverLink SG, SCS Awareness Platform' },
+  { label: 'UAT', name: 'User acceptance testing', group: 'workflow', blurb: 'Testing with real users before go-live and tracking 50+ defects to resolution.', usedIn: 'Sembcorp Solar' },
+  { label: 'REQS', name: 'Requirements gathering', group: 'workflow', blurb: 'Turning what stakeholders say into changes a team can build.', usedIn: 'Sembcorp Solar, LGA Telecom' },
 ];
 
-// ── Filters ──────────────────────────────────────────────────────────────
-
-export type Category = 'ai' | 'data' | 'frontend' | 'backend' | 'infra' | 'workflow';
-export type Filter = Category | 'all';
-
-export const FILTERS: { id: Filter; label: string }[] = [
-  { id: 'all', label: 'All' },
-  { id: 'ai', label: 'AI' },
-  { id: 'data', label: 'Data' },
-  { id: 'frontend', label: 'Frontend' },
-  { id: 'backend', label: 'Backend' },
-  { id: 'infra', label: 'Infrastructure' },
-  { id: 'workflow', label: 'Workflow' },
-];
-
-const CATEGORY: Record<string, Category> = {
-  PROMPT: 'ai', RAG: 'ai', LLM: 'ai', GUARD: 'ai', HUMAN: 'ai',
-  PYTHON: 'data', PANDAS: 'data', SKLRN: 'data', NUMPY: 'data', SQL: 'data', ETL: 'data', BI: 'data',
-  NODE: 'backend', GRPC: 'backend', PGSQL: 'backend', SUPA: 'backend',
-  DOCKER: 'infra', KUBE: 'infra', GIT: 'infra',
-  TS: 'frontend', REACT: 'frontend', NEXT: 'frontend', TWIND: 'frontend', KOTLIN: 'frontend', ARCORE: 'frontend',
-  AGILE: 'workflow', UAT: 'workflow', REQS: 'workflow',
-};
-
-export const inFilter = (k: Key, f: Filter) => f === 'all' || CATEGORY[k.label] === f;
+export const inFilter = (k: Key, f: Filter) => f === 'all' || k.group === f;
 
 /** Case studies named in a key's "used in" line. Only exact project names with
  *  a case-study page count, so Desk Assist, Sembcorp and "every project" get none. */
@@ -126,28 +114,17 @@ export type Cap = {
 };
 
 export function capFor(k: Key, i: number): Cap {
-  const { way, text } = CAP[k.label] ?? { way: 'cream' };
-  return { ...WAYS[way], text: text ?? k.label, no: String(i + 1).padStart(2, '0') };
+  return { ...WAYS[GROUP_WAY[k.group]], text: TEXT[k.label] ?? k.label, no: String(i + 1).padStart(2, '0') };
 }
 
 /** Retro filename for the tooltip and detail window, e.g. python.info */
 export const fileName = (cap: Cap) => `${cap.text.toLowerCase()}.info`;
 
-// Muted caps (filter mismatch): desaturated at constant luminance, then dimmed,
-// both in linear light, so legend contrast stays at or above 4.5:1 (lowest:
-// amber bar/black 4.8:1). The 3D board applies the same maths in its shader.
-export const MUTE = { desaturate: 0.85, dim: 0.7 };
-
-const toLinear = (c: number) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
-const toSrgb = (c: number) => (c <= 0.0031308 ? c * 12.92 : 1.055 * c ** (1 / 2.4) - 0.055);
-
-export function muteHex(hex: string) {
-  const rgb = [1, 3, 5].map(n => toLinear(parseInt(hex.slice(n, n + 2), 16) / 255));
-  const lum = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
-  return '#' + rgb
-    .map(c => Math.round(toSrgb((c + (lum - c) * MUTE.desaturate) * MUTE.dim) * 255).toString(16).padStart(2, '0'))
-    .join('');
-}
+// Muted caps (filter mismatch): "lights off", a dark neutral cap with a light
+// legend, so the state also reads in greyscale (with the key sitting flush,
+// without its shadow). Contrast: face/ink 8.10:1, bar/ink 9.88:1.
+export const MUTED = { face: '#34343E', bar: '#26262E', side: '#1D1D23', ink: '#D8D1C2' } as const;
+export const mutedCap = (cap: Cap): Cap => ({ ...cap, ...MUTED });
 
 /** Accessible name: the full name, plus the printed label when it isn't part of it
  *  (so voice control can say what it sees, e.g. "RAG"). */

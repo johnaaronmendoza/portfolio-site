@@ -12,7 +12,7 @@ import { motionTokens } from '@/lib/motion-tokens';
 import { chipClass } from './Projects';
 import { WindowBar } from './Window';
 import {
-  FILTERS, GROUP_NAME, KEYS, capFor, fileName, iconUrl, inFilter, keyName, muteHex, projectsFor,
+  FILTERS, GROUP_NAME, KEYS, capFor, fileName, iconUrl, inFilter, keyName, mutedCap, projectsFor,
   type Cap, type Filter,
 } from './skills3d/keys';
 import type { KeyLocator, KeyRect } from './skills3d/Keyboard3D';
@@ -26,6 +26,7 @@ const NAMES = KEYS.map((k, i) => keyName(k, CAPS[i]));
 const KB = motionTokens.keyboard;
 const GAP = 10; // px between a key and its tooltip or window
 const EDGE = 8; // px kept clear of the viewport edge
+const DOCK = 88; // px kept clear at the bottom for the fixed buttons (html scroll-padding-bottom)
 const TIP_ID = 'skill-tip';
 
 // The entrance plays once per page load, not on every return to Home
@@ -90,20 +91,10 @@ const keyButton = (i: number, { open, tip, btnRefs, onOpen, onFocusKey }: KeyHan
   onBlur: () => onFocusKey(null, false),
 });
 
-function FlatIcon({ src, dark }: { src: string; dark: boolean }) {
-  const [missing, setMissing] = useState(false);
-  if (missing) return null;
-  return (
-    <img
-      src={src}
-      alt=""
-      draggable={false}
-      onError={() => setMissing(true)}
-      className="w-[44%] aspect-square"
-      // Icons are white; on amber and cream caps they turn black, like the sheet
-      style={dark ? { filter: 'brightness(0)' } : undefined}
-    />
-  );
+/** The single-colour icon as a mask filled with the cap's ink (black, or
+ *  cream on violet); a missing file leaves the cap without an icon. */
+function FlatIcon({ src }: { src: string }) {
+  return <span aria-hidden="true" className="w-[44%] aspect-square bg-current" style={{ mask: `url(${src}) center / contain no-repeat` }} />;
 }
 
 /** Flat 2D keyboard: no WebGL, reduced motion, or the 3D chunk failed. */
@@ -115,10 +106,10 @@ function FlatKeys(handlers: KeyHandlers) {
   return (
     <div role="group" aria-label={GROUP_LABEL} className="grid grid-cols-4 sm:grid-cols-7 gap-2.5 sm:gap-3 pr-1 pb-1">
       {KEYS.map((k, i) => {
-        const cap = CAPS[i];
-        // Outside the filter: the same muted colourway as the 3D caps (AA contrast kept)
+        // Outside the filter: pressed flush without its shadow, in the same dark
+        // muted skin as the 3D caps (AA contrast kept), so it reads without colour
         const muted = !inFilter(k, filter);
-        const tone = (c: string) => (muted ? muteHex(c) : c);
+        const cap = muted ? mutedCap(CAPS[i]) : CAPS[i];
         return (
           <button
             key={k.label}
@@ -127,17 +118,21 @@ function FlatKeys(handlers: KeyHandlers) {
             onPointerEnter={hoverOn(i)}
             onPointerLeave={hoverOn(null)}
             // Keycap from John's sheet: number, icon, caps label on a darker strip
-            className="relative flex aspect-square flex-col overflow-hidden rounded-[6px] border-[3px] border-black shadow-[4px_4px_0_0_#000] transition-[translate,box-shadow,background-color,color] duration-150 ease-out active:translate-x-[4px] active:translate-y-[4px] active:shadow-none aria-expanded:translate-x-[4px] aria-expanded:translate-y-[4px] aria-expanded:shadow-none"
-            style={{ backgroundColor: tone(cap.face), color: tone(cap.ink) }}
+            className={`relative flex aspect-square flex-col overflow-hidden rounded-[6px] border-[3px] border-black transition-[translate,box-shadow,background-color,color] duration-150 ease-out ${
+              muted
+                ? 'translate-x-[4px] translate-y-[4px] shadow-none'
+                : 'shadow-[4px_4px_0_0_#000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none aria-expanded:translate-x-[4px] aria-expanded:translate-y-[4px] aria-expanded:shadow-none'
+            }`}
+            style={{ backgroundColor: cap.face, color: cap.ink }}
           >
             <span aria-hidden="true" className="absolute left-1.5 top-1 font-mono text-xs font-bold leading-none">{cap.no}</span>
             <span className="flex min-h-0 flex-1 items-center justify-center pt-3">
-              <FlatIcon src={iconUrl(k)} dark={cap.ink !== '#FFFFFF'} />
+              <FlatIcon src={iconUrl(k)} />
             </span>
             <span
               aria-hidden="true"
               className="block border-t-2 border-black/35 py-1 sm:py-1.5 font-mono text-xs sm:text-sm lg:text-base font-bold leading-none tracking-wide transition-[background-color] duration-150 ease-out"
-              style={{ backgroundColor: tone(cap.bar) }}
+              style={{ backgroundColor: cap.bar }}
             >
               {cap.text}
             </span>
@@ -148,17 +143,25 @@ function FlatKeys(handlers: KeyHandlers) {
   );
 }
 
-/** Category filters: toggle buttons in the Projects chip style (press-down, hard shadow). */
+/** Category filters: toggle buttons in the Projects chip style (press-down,
+ *  hard shadow). Below 640px one row that scrolls sideways to the screen edge,
+ *  where the last visible chip fades out to show there is more (the end
+ *  padding lets the last chip scroll clear of the fade); the padding keeps
+ *  shadows and focus rings inside the scroller. */
 function Filters({ value, onChange }: { value: Filter; onChange: (f: Filter) => void }) {
   return (
-    <div role="group" aria-label="Highlight skills by category" className="flex flex-wrap gap-2 sm:gap-3">
+    <div
+      role="group"
+      aria-label="Highlight skills by category"
+      className="-mx-4 flex gap-2 overflow-x-auto pl-4 pr-12 pt-1.5 pb-2.5 [mask-image:linear-gradient(to_right,#000_calc(100%-2.5rem),transparent)] sm:mx-0 sm:flex-wrap sm:gap-3 sm:overflow-visible sm:p-0 sm:[mask-image:none]"
+    >
       {FILTERS.map(f => (
         <button
           key={f.id}
           type="button"
           aria-pressed={value === f.id}
           onClick={() => onChange(f.id)}
-          className={chipClass(value === f.id)}
+          className={`shrink-0 ${chipClass(value === f.id)}`}
         >
           {f.label}
         </button>
@@ -275,7 +278,8 @@ function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps)
   );
 }
 
-export default function SkillKeyboard() {
+/** listId: the plain skills list the skip link jumps to (its <summary> takes focus) */
+export default function SkillKeyboard({ listId }: { listId: string }) {
   const reduced = useReducedMotion();
   const wide = useWide();
   const cols = wide ? 7 : 4;
@@ -338,7 +342,9 @@ export default function SkillKeyboard() {
   const live = useRef({ tip, selected, cols, locate });
   live.current = { tip, selected, cols, locate };
 
-  // Tooltip: centred above the key (below when there's no room), inside the viewport
+  // Tooltip: centred above the key, never higher than the board's top (so it
+  // stays clear of the filters and heading); else below the key; else as low
+  // as fits above the fixed buttons
   const placeTip = useCallback(() => {
     const { tip: i, locate: find } = live.current;
     const el = tipRef.current;
@@ -347,9 +353,11 @@ export default function SkillKeyboard() {
     if (!el || !box || !r) return;
     const b = box.getBoundingClientRect();
     const vw = document.documentElement.clientWidth;
+    const vh = window.innerHeight;
     const [w, hgt] = [el.offsetWidth, el.offsetHeight];
     const left = Math.max(EDGE, Math.min(vw - EDGE - w, r.x - w / 2));
-    const top = r.top - GAP - hgt >= EDGE ? r.top - GAP - hgt : r.bottom + GAP;
+    const [above, below, floor] = [r.top - GAP - hgt, r.bottom + GAP, Math.max(EDGE, b.top)];
+    const top = above >= floor ? above : below + hgt <= vh - DOCK ? below : Math.max(floor, vh - DOCK - hgt);
     el.style.transform = `translate(${Math.round(left - b.left)}px, ${Math.round(top - b.top)}px)`;
     el.style.visibility = 'visible';
   }, []);
@@ -446,7 +454,18 @@ export default function SkillKeyboard() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="relative space-y-6">
+      {/* Skips the 7 filters and 28 keys; hidden until it has keyboard focus */}
+      <a
+        href={`#${listId}`}
+        onClick={e => {
+          e.preventDefault();
+          document.getElementById(listId)?.querySelector('summary')?.focus();
+        }}
+        className="btn btn-primary sr-only focus:not-sr-only focus:absolute focus:left-0 focus:top-0 focus:z-40"
+      >
+        Skip the skills keyboard
+      </a>
       <Filters value={filter} onChange={chooseFilter} />
       <p className="sr-only" aria-live="polite">{announce}</p>
 

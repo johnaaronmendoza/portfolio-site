@@ -98,7 +98,9 @@ function AppInner() {
     <>
       <CommandPalette />
       <KeyboardShortcuts />
-      <Toaster />
+      {/* Toasts clear the floating buttons: Pause/Sound and chat (top edge
+          ~68px) on desktop, plus the phone menu button (~120px) on phones */}
+      <Toaster offset={{ bottom: 96 }} mobileOffset={{ bottom: 140, left: 16, right: 16 }} />
       <KonamiOverlay />
       <SecretTerminal />
       <Router />

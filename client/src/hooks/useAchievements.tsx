@@ -53,9 +53,10 @@ function showToast(id: string) {
         </div>
       </div>
     ),
-    // Shrink to the card on phones too (Sonner stretches toasts full width
-    // under 600px), so it sits top-right instead of across the page
-    { duration: 3500, position: 'top-right', style: { width: 'auto', left: 'auto' } }
+    // Bottom-centre, lifted above the floating Pause/Sound, menu and chat
+    // buttons (Toaster offsets in App.tsx), so it never covers the case-study
+    // Back button or breadcrumb at the top
+    { duration: 3500, position: 'bottom-center' }
   );
 }
 

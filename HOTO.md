@@ -65,8 +65,8 @@ Checks at handover: `pnpm check` and `pnpm build` pass; Impeccable detector clea
 
 1. Merge PR #1 only after his rebrand commits are pushed and the preview is checked: merging publishes the whole retro-web redesign plus everything above to production.
 2. Umami analytics: if used, set `VITE_ANALYTICS_ENDPOINT` and `VITE_ANALYTICS_WEBSITE_ID` in Vercel; if not, delete the script tag in `client/index.html`. Right now every page makes a failing request.
-3. Share image: OK to show Lil Johnny on it, and OK for the keycap blue/amber to appear in the share image and favicon? Square version for WhatsApp?
-4. Add the missing cowlick to the 7 ChatGPT-generated poses?
+3. ~~Share image: OK to show Lil Johnny on it, and OK for the keycap blue/amber to appear in the share image and favicon?~~ **Decided 7 Nov: John is OK with both.** Square version for WhatsApp still open.
+4. ~~Add the missing cowlick to the 7 ChatGPT-generated poses?~~ **Decided 7 Nov: no, leave the poses as they are.**
 5. Real-device check of the 3D keyboard: iOS Safari, Firefox, touch on a phone (only headless Chromium was tested). Known: back-row tooltips can overlap the filter row; empty navy around the board on phones; scroll tilt set to 5° (low end of 5–8°).
 
 ## Rules that bind future work

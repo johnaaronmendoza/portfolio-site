@@ -73,12 +73,17 @@ export const sounds = {
 
 // ── Mute state (persisted) ────────────────────────────────────────────────
 
+/** Fired on window whenever the mute state changes, so every toggle stays in sync */
+export const SOUND_EVENT = 'ja-sound-change';
+
+// Off by default: sound plays only after the viewer turns it on
 export function isMuted(): boolean {
-  try { return localStorage.getItem('ja_sound_muted') === 'true'; } catch { return false; }
+  try { return localStorage.getItem('ja_sound_muted') !== 'false'; } catch { return true; }
 }
 
 export function setMuted(v: boolean) {
   try { localStorage.setItem('ja_sound_muted', String(v)); } catch {}
+  window.dispatchEvent(new Event(SOUND_EVENT));
 }
 
 /** Plays a sound only if not muted */

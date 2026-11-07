@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project card</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /* Teal band → cards. Two levels only: the projects/ window wrapper is gone. */
+  .band { background: var(--teal); color: #000; border-block: 3px solid var(--ink); padding: 64px var(--gutter) 96px; --focus: var(--ink); }
+  @media (min-width: 1024px) { .band { padding-block: 112px; } }
+  .inner { max-width: 1152px; margin: 0 auto; }
+  .sh { display: flex; align-items: center; gap: 16px; }
+  .sh h2 { font-size: var(--px-h2); color: #000; }
+  .sh i { flex: 1; height: 6px; background: var(--ink); }
+  .lead { margin-top: 16px; max-width: 40ch; font: 700 var(--mono-lead)/1.4 'Courier Prime', monospace; text-wrap: balance; }
+
+  /* Filters = the colour legend: one taxonomy with the badges and the Skills groups */
+  .filters { margin-top: 24px; margin-bottom: 32px; display: flex; gap: 8px; overflow-x: auto; padding: 0 6px 6px 0; scrollbar-width: none; }
+  @media (min-width: 640px) { .filters { flex-wrap: wrap; overflow: visible; gap: 12px; } }
+  .fchip { flex-shrink: 0; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 14px; border: 3px solid var(--ink); background: var(--cream); color: #000; box-shadow: 3px 3px 0 0 var(--ink); font: 700 16px/1 'Courier Prime', monospace; cursor: pointer;
+    transition-property: translate, box-shadow, background-color, color; transition-duration: 150ms; transition-timing-function: var(--ease-out); }
+  .fchip[aria-pressed="true"] { background: #000; color: var(--cream); translate: 3px 3px; box-shadow: none; }
+  .fchip .sw { width: 14px; height: 14px; border: 2px solid var(--ink); }
+  .fchip[aria-pressed="true"] .sw { border-color: var(--cream); }
+  .sw--ai { background: var(--orange); } .sw--data { background: var(--teal); } .sw--fs { background: var(--cream); }
+
+  .cards { display: grid; gap: 24px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .cards { grid-template-columns: repeat(6, 1fr); gap: 32px 24px; } .c-feat { grid-column: span 3; } .c-reg { grid-column: span 2; } }
+
+  /* ── The card ── */
+  .card { display: flex; flex-direction: column; height: 100%; border: 3px solid var(--ink); background: var(--cream); color: var(--navy); box-shadow: 4px 4px 0 0 var(--ink); text-decoration: none; outline-offset: 4px;
+    transition-property: translate, box-shadow; transition-duration: 150ms; transition-timing-function: var(--ease-out); }
+  @media (hover: hover) and (pointer: fine) { .card:hover:not(:active) { translate: -2px -2px; box-shadow: 6px 6px 0 0 var(--ink); } }
+  .card:active { translate: 4px 4px; box-shadow: none; }
+  @media (prefers-reduced-motion: reduce) { .card { transition-duration: 0ms; } }
+
+  /* Thumbnail: a focal crop at native size (object-fit: none), never shrunk, so
+     the UI text inside the screenshot stays at its real size */
+  .thumb { position: relative; height: 200px; border-bottom: 3px solid var(--ink); background: #fff; overflow: hidden; }
+  .c-feat .thumb { height: 220px; }
+  @media (min-width: 1024px) { .c-feat .thumb { height: 260px; } .c-reg .thumb { height: 180px; } }
+  .thumb img { display: block; width: 100%; height: 100%; object-fit: none; outline: 1px solid rgb(0 0 0 / 0.1); outline-offset: -1px; }
+
+  .body { flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 20px; }
+  @media (min-width: 1024px) { .c-feat .body { padding: 24px 28px 24px; } }
+  .meta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .meta .yr { margin-left: auto; font: 400 15px/1.4 'Courier Prime', monospace; color: var(--navy); font-variant-numeric: tabular-nums; }
+  .card h3 { font-size: var(--px-h3); line-height: 1.4; color: #000; text-wrap: balance; overflow-wrap: anywhere; }
+  .c-feat h3 { font-size: var(--px-h3-feature); line-height: 1.3; }
+  .outcome { font: 400 16px/1.6 'Courier Prime', monospace; color: var(--navy); max-width: 48ch; text-wrap: pretty; }
+  .role { align-self: flex-start; display: inline-flex; gap: 8px; border: 2px solid var(--ink); padding: 4px 10px; font: 700 15px/1.4 'Courier Prime', monospace; color: #000; }
+  .role img { width: 16px; height: 16px; margin-top: 2px; image-rendering: pixelated; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .go { margin-top: auto; padding-top: 4px; display: flex; align-items: center; gap: 8px; min-height: 32px; font: 700 16px/1.2 'Courier Prime', monospace; color: #000; }
+  .go u { text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  .needs { font: 700 15px/1.4 'Courier Prime', monospace; color: #000; }
+</style>
+</head>
+<body>
+<main>
+<section class="band" aria-labelledby="proj-h">
+  <div class="inner">
+    <div class="sh"><img src="../../../client/public/assets/pixel/icon-projects.svg" width="32" height="32" alt="" style="image-rendering:pixelated"><h2 id="proj-h" class="px">PROJECTS</h2><i aria-hidden="true"></i></div>
+    <p class="lead">Start with SilverLink SG and the SCS Awareness Platform.</p>
+
+    <div class="filters" role="group" aria-label="Filter projects by area">
+      <button class="fchip" type="button" aria-pressed="true">All</button>
+      <button class="fchip" type="button" aria-pressed="false"><i class="sw sw--ai" aria-hidden="true"></i>AI</button>
+      <button class="fchip" type="button" aria-pressed="false"><i class="sw sw--data" aria-hidden="true"></i>Data &amp; ML</button>
+      <button class="fchip" type="button" aria-pressed="false"><i class="sw sw--fs" aria-hidden="true"></i>Full-stack</button>
+    </div>
+
+    <ul class="cards">
+      <li class="c-feat">
+        <a class="card" href="#" aria-label="SilverLink SG: read case study">
+          <div class="thumb"><img src="../../../attached_assets/silverlink_p19_img0.png" alt="" style="object-position: 11% 7%"></div>
+          <div class="body">
+            <div class="meta"><span class="badge badge--build">Full-stack</span><span class="yr">2025</span></div>
+            <h3 class="px">SilverLink SG</h3>
+            <p class="outcome">Connects seniors and youth through skill-sharing and live events, built to block double-bookings.</p>
+            <p class="role"><img src="../../../client/public/assets/pixel/chip-team.svg" alt="">Team project, 6 people</p>
+            <ul class="tags" aria-label="Tech"><li class="tag">React</li><li class="tag">gRPC</li><li class="tag">Kubernetes</li></ul>
+            <p class="go"><u>Read case study</u></p>
+          </div>
+        </a>
+      </li>
+      <li class="c-feat">
+        <a class="card" href="#" aria-label="SCS Awareness Platform: read case study">
+          <div class="thumb" style="background:#000"><img src="../../../attached_assets/scs_p65_img0.png" alt="" style="object-position: 50% 22%"></div>
+          <div class="body">
+            <div class="meta"><span class="badge badge--build">Full-stack</span><span class="yr">2025</span></div>
+            <h3 class="px">SCS Awareness Platform</h3>
+            <p class="outcome">Teaches cancer awareness through a branching story at Singapore Cancer Society booths.</p>
+            <p class="role"><img src="../../../client/public/assets/pixel/chip-team.svg" alt="">Team project · my part: core engine and media</p>
+            <ul class="tags" aria-label="Tech"><li class="tag">React 19</li><li class="tag">TypeScript</li><li class="tag">Supabase</li></ul>
+            <p class="go"><u>Read case study</u></p>
+          </div>
+        </a>
+      </li>
+      <li class="c-reg">
+        <a class="card" href="#" aria-label="AI Finance Insights Engine: read case study">
+          <div class="thumb"><img src="../../../attached_assets/aifinance_dashboard.jpg" alt="" style="object-position: 0% 0%"></div>
+          <div class="body">
+            <div class="meta"><span class="badge badge--data">Data &amp; ML</span><span class="yr">2024</span></div>
+            <h3 class="px">AI Finance Insights Engine</h3>
+            <p class="outcome">Pulls market data into one Power BI-ready warehouse; NLP flags supply-chain risk.</p>
+            <ul class="tags" aria-label="Tech"><li class="tag">Python</li><li class="tag">ETL</li><li class="tag">NLP</li></ul>
+            <p class="go"><u>Read case study</u></p>
+          </div>
+        </a>
+      </li>
+      <li class="c-reg">
+        <a class="card" href="#" aria-label="UWB Indoor Localization: read case study">
+          <div class="thumb"><img src="../../../attached_assets/da_p40_img1.png" alt="" style="object-position: 75% 0%"></div>
+          <div class="body">
+            <div class="meta"><span class="badge badge--data">Data &amp; ML</span><span class="yr">2025</span></div>
+            <h3 class="px">UWB Indoor Localization</h3>
+            <p class="outcome">Tells clear UWB signals from blocked (NLOS) ones with an SVM-RBF model.</p>
+            <p class="role"><img src="../../../client/public/assets/pixel/chip-team.svg" alt="">Team project · my part: data mining method</p>
+            <ul class="tags" aria-label="Tech"><li class="tag">Python</li><li class="tag">SVM</li><li class="tag">scikit-learn</li></ul>
+            <p class="go"><u>Read case study</u></p>
+          </div>
+        </a>
+      </li>
+      <li class="c-reg">
+        <a class="card" href="#" aria-label="UAT Testing Dashboard: read case study">
+          <div class="thumb"><img src="../../../attached_assets/uat_dashboard.jpg" alt="" style="object-position: 18% 0%"></div>
+          <div class="body">
+            <div class="meta"><span class="badge badge--build">Full-stack</span><span class="yr">2024</span></div>
+            <h3 class="px">UAT Testing Dashboard</h3>
+            <p class="outcome">Course project: links each failed test to its defect to show what blocks go-live.</p>
+            <ul class="tags" aria-label="Tech"><li class="tag">React 18</li><li class="tag">Node.js</li><li class="tag">SQLite</li></ul>
+            <p class="go"><u>Read case study</u></p>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+</main>
+<div class="dock dock--r"><span class="fbtn"><img src="../../../client/public/assets/mascot/lil-johnny-idle.png" alt="" width="20" style="image-rendering:pixelated"> <span class="lbl">Chat</span></span></div>
+</body>
+</html>

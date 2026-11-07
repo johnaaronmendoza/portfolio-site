@@ -1,0 +1,70 @@
+<!doctype html>
+<!-- Annotated real screenshot: SilverLink System Metrics (attached_assets/silverlink_p23_img0.png).
+     Crops only (browser bar and signed-in username removed); pixels of the UI are not edited.
+     Desktop: 712x488 (render at --scale 2). Mobile: 320x612, the two cards stacked as separate crops. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: 'Courier Prime'; font-weight: 400; src: url('../../../ui/fonts/CourierPrime-400.woff2') format('woff2'); }
+  @font-face { font-family: 'Courier Prime'; font-weight: 700; src: url('../../../ui/fonts/CourierPrime-700.woff2') format('woff2'); }
+  :root { --navy:#16163F; --ink:#000; --cream:#F4EAD5; --violet:#6C4AD0; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: var(--cream); color: var(--navy); font-family: 'Courier Prime', ui-monospace, monospace; }
+  .stage { position: relative; }
+  .shot { position: relative; border: 3px solid var(--ink); box-shadow: 4px 4px 0 0 var(--ink); line-height: 0; }
+  .shot img { display: block; }
+  .n { position: absolute; width: 28px; height: 28px; background: var(--violet); color: var(--cream);
+       border: 3px solid var(--ink); font: 700 16px/22px 'Courier Prime', monospace; text-align: center; }
+  ol { list-style: none; padding: 0; display: grid; gap: 8px; font-size: 15px; line-height: 1.4; }
+  li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; }
+  li .n { position: static; }
+  code { font-family: inherit; font-weight: 700; }
+
+  /* Desktop */
+  .d { padding: 16px; }
+  .d .shot { width: 686px; }
+  .d ol { margin-top: 20px; }
+  .m { display: none; }
+
+  /* Mobile */
+  @media (max-width: 400px) {
+    .d { display: none; }
+    .m { display: block; padding: 16px; }
+    .m .shot { width: 288px; margin-bottom: 18px; }
+    .m .shot img { width: 282px; height: auto; }
+    .m ol { margin-top: 4px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+  <div class="stage d">
+    <div class="shot">
+      <img src="crops/metrics-main.png" width="680" height="353" alt="">
+      <span class="n" style="left:4px;top:136px">1</span>
+      <span class="n" style="left:330px;top:136px">2</span>
+      <span class="n" style="left:4px;top:290px">3</span>
+    </div>
+    <ol>
+      <li><span class="n">1</span><span>Load forecast: current load 0.06 RPS, predicted 1.10 RPS.</span></li>
+      <li><span class="n">2</span><span>Recommendation: 1 replica (min 1, max 10). Target metric: <code>silverlink_predicted_load_rps</code></span></li>
+      <li><span class="n">3</span><span>Raw metrics in Prometheus format.</span></li>
+    </ol>
+  </div>
+
+  <div class="stage m">
+    <div class="shot">
+      <img src="crops/metrics-forecast.png" width="324" height="140" alt="">
+      <span class="n" style="right:-3px;top:-3px">1</span>
+    </div>
+    <div class="shot">
+      <img src="crops/metrics-autoscale.png" width="324" height="140" alt="">
+      <span class="n" style="right:-3px;top:-3px">2</span>
+    </div>
+    <ol>
+      <li><span class="n">1</span><span>Load forecast: current load 0.06 RPS, predicted 1.10 RPS.</span></li>
+      <li><span class="n">2</span><span>Recommendation: 1 replica (min 1, max 10). Target metric: <code>silverlink_predicted_load_rps</code></span></li>
+    </ol>
+  </div>
+</body>
+</html>

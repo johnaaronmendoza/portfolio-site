@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case study layout</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  html { scroll-padding-top: 72px; }
+  .taskbar { position: sticky; top: 0; z-index: 30; background: var(--violet); border-bottom: 3px solid var(--ink); padding: 0 var(--gutter); --focus: var(--cream); }
+  .taskbar div { max-width: 1152px; margin: 0 auto; height: 56px; display: flex; align-items: center; }
+  .taskbar .btn { min-height: 44px; padding: 6px 14px; }
+  .page { padding: 0 var(--gutter); }
+  .wrap { max-width: 1152px; margin: 0 auto; }
+  .crumb { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 16px 0 12px; font: 400 15px/1.4 'Courier Prime', monospace; }
+  .crumb a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  .crumb b { font-weight: 700; }
+
+  /* ── Top fold: header window ── */
+  .hdr .window-body { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 24px; }
+  @media (min-width: 1024px) { .hdr .window-body { padding: 40px 48px 32px; column-gap: 40px; } }
+  .hdr .top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+  .hdr .top .yr { font: 400 15px/1.4 'Courier Prime', monospace; color: var(--navy); }
+  .plate { grid-column: 2; grid-row: 1 / span 3; align-self: start; border: 3px solid var(--ink); background: var(--cream); }
+  .plate img { display: block; width: 96px; height: 96px; image-rendering: pixelated; }
+  @media (min-width: 1024px) { .plate img { width: 144px; height: 144px; } }
+  .hdr h1 { grid-column: 1 / -1; margin-top: 16px; font-size: var(--px-h1-case); line-height: 1.3; color: #000; text-transform: uppercase; overflow-wrap: anywhere; }
+  @media (min-width: 1024px) { .hdr h1 { grid-column: 1; } }
+  .hdr .lead { grid-column: 1 / -1; margin-top: 12px; position: relative; padding-left: 2ch; max-width: 46ch; font: 700 var(--mono-lead)/1.4 'Courier Prime', monospace; color: #000; text-wrap: balance; }
+  @media (min-width: 1024px) { .hdr .lead { grid-column: 1; } }
+  .hdr .lead::before { content: '>'; position: absolute; left: 0; }
+  .facts { grid-column: 1 / -1; margin-top: 24px; padding-top: 24px; border-top: 3px solid var(--ink); display: grid; gap: 20px; }
+  @media (min-width: 1024px) { .facts { grid-template-columns: 1fr 1fr 1.4fr; gap: 32px; } }
+  .facts dt { font-family: 'Press Start 2P', monospace; font-size: 12px; line-height: 1.5; letter-spacing: 0.05em; color: #000; }
+  .facts > div { min-width: 0; }
+  .facts dd { margin-top: 8px; font: 400 16px/1.6 'Courier Prime', monospace; color: var(--navy); max-width: 60ch; text-wrap: pretty; }
+  .facts dd b { color: #000; }
+  .links { grid-column: 1 / -1; margin-top: 24px; display: flex; flex-wrap: wrap; gap: 16px; }
+  .btn-ink { background: transparent; color: var(--navy); border-color: var(--ink); }
+  .btn-ink svg { width: 16px; height: 16px; }
+  .needs { display: inline-block; border: 2px dashed var(--ink); padding: 2px 8px; font: 700 15px/1.5 'Courier Prime', monospace; color: #000; background: var(--cream); }
+
+  /* Status bar: ink figures on cream cells (orange is reserved for AI) */
+  .status { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; background: var(--ink); border-top: 3px solid var(--ink); }
+  @media (min-width: 1024px) { .status { grid-template-columns: repeat(4, 1fr); } }
+  .status > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 10px; padding: 16px; background: var(--cream); }
+  .status dd { font-family: 'Press Start 2P', monospace; font-size: var(--px-stat); line-height: 1; color: #000; font-variant-numeric: tabular-nums; }
+  .status dt { font: 400 15px/1.4 'Courier Prime', monospace; color: var(--navy); }
+
+  /* ── Body: sticky TOC (lg) + sections ── */
+  .body { margin-top: 64px; display: grid; gap: 64px; }
+  @media (min-width: 1024px) { .body { grid-template-columns: 216px 1fr; column-gap: 56px; margin-top: 80px; } }
+  .toc { display: none; }
+  @media (min-width: 1024px) {
+    .toc { display: block; position: sticky; top: 88px; align-self: start; }
+    .toc p { font-family: 'Press Start 2P', monospace; font-size: 12px; letter-spacing: 0.05em; color: var(--teal); margin-bottom: 8px; }
+    .toc ol { border-left: 3px solid var(--violet); }
+    .toc a { display: flex; align-items: center; min-height: 44px; padding-left: 16px; font: 400 16px/1.3 'Courier Prime', monospace; color: var(--cream); text-decoration: none; position: relative; }
+    .toc a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+    .toc a[aria-current="true"] { font-weight: 700; }
+    .toc a[aria-current="true"]::before { content: '>'; position: absolute; left: -11px; width: 18px; background: var(--navy); color: var(--orange); font-weight: 700; text-align: center; }
+  }
+  .sections { display: grid; gap: 64px; min-width: 0; }
+  @media (min-width: 1024px) { .sections { gap: 80px; } }
+  .sh { display: flex; align-items: center; gap: 16px; }
+  .sh h2 { font-size: var(--px-h2-case); line-height: 1.3; color: var(--orange); text-transform: uppercase; white-space: nowrap; }
+  .sh h2 span { color: var(--teal); }
+  .sh i { flex: 1; min-width: 24px; height: 6px; background: var(--teal); }
+  .sh img { width: 32px; height: 32px; image-rendering: pixelated; }
+  .s-lead { margin: 16px 0 24px; position: relative; padding-left: 2ch; max-width: 40ch; font: 700 var(--mono-lead)/1.4 'Courier Prime', monospace; color: var(--cream); text-wrap: balance; }
+  .s-lead::before { content: '>'; position: absolute; left: 0; color: var(--orange); }
+  @media (min-width: 1024px) { .s-lead { margin: 20px 0 32px; } }
+
+  .bullets { display: grid; gap: 12px; max-width: 60ch; font: 400 16px/1.65 'Courier Prime', monospace; color: var(--navy); }
+  .bullets li { display: grid; grid-template-columns: 16px 1fr; gap: 12px; }
+  .bullets img { width: 16px; height: 16px; margin-top: 6px; image-rendering: pixelated; }
+  .bullets strong { color: #000; }
+  .quote { margin-top: var(--s-block); padding-top: var(--s-group); border-top: 3px solid var(--ink); max-width: 60ch; }
+  .quote p:first-child { font: 700 15px/1.5 'Courier Prime', monospace; color: #000; }
+  .quote blockquote { margin: 8px 0 0; font: 400 18px/1.55 'Courier Prime', monospace; color: var(--navy); text-wrap: pretty; }
+  .h3 { font-family: 'Press Start 2P', monospace; font-size: 14px; line-height: 1.5; letter-spacing: 0.05em; color: #000; margin-bottom: 12px; }
+  .block + .block { margin-top: var(--s-block); padding-top: var(--s-block); border-top: 3px solid var(--ink); }
+
+  .slot { border: 3px dashed var(--ink); background: var(--cream); padding: 16px; }
+  .slot .tagline { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; font: 700 15px/1.4 'Courier Prime', monospace; color: #000; }
+  .tiers { display: grid; gap: 14px; }
+  .tiers > li { position: relative; border: 2px solid var(--ink); background: var(--cream); padding: 10px 12px; font: 700 16px/1.35 'Courier Prime', monospace; color: #000; }
+  .tiers > li + li::before { content: ''; position: absolute; left: 22px; top: -16px; width: 3px; height: 14px; background: var(--ink); }
+  .tiers small { display: block; font: 400 15px/1.4 'Courier Prime', monospace; color: var(--navy); }
+  .tiers ul { margin-top: 10px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  @media (min-width: 640px) { .tiers ul { grid-template-columns: repeat(4, 1fr); } }
+  .tiers ul li { border: 2px solid var(--ink); padding: 6px 8px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  /* Key decision: one lead decision, two supporting */
+  .kd { display: grid; gap: 16px; }
+  @media (min-width: 1024px) { .kd { grid-template-columns: 1fr 1fr; } .kd .main { grid-column: 1 / -1; } }
+  .kd > div { border: 2px solid var(--ink); padding: 16px 18px; }
+  .kd .main { border-width: 3px; padding: 20px 24px; }
+  .kd h3 { font-family: 'Press Start 2P', monospace; font-size: 14px; line-height: 1.5; letter-spacing: 0.05em; color: #000; }
+  .kd .main h3 { font-size: 16px; }
+  .kd p { margin-top: 8px; font: 400 16px/1.6 'Courier Prime', monospace; color: var(--navy); max-width: 62ch; text-wrap: pretty; }
+  .kd .main p { font-size: 17px; }
+
+  /* Evidence: screenshot windows (.window--figure: 4px shadow, flush image) */
+  .shots { display: grid; gap: 32px; }
+  @media (min-width: 1024px) { .shots { grid-template-columns: 1fr 1fr; align-items: start; } .shots .wide { grid-column: 1 / -1; } }
+  .fig { box-shadow: 4px 4px 0 0 var(--ink); }
+  .fig img { display: block; width: 100%; height: auto; border-bottom: 3px solid var(--ink); }
+  .fig figcaption { padding: 12px 16px; font: 400 15px/1.5 'Courier Prime', monospace; color: var(--navy); }
+
+  .next-band { margin-top: 96px; background: var(--teal); color: #000; border-top: 3px solid var(--ink); padding: 56px var(--gutter) 64px; --focus: var(--ink); }
+  .next-band .sh h2 { color: #000; } .next-band .sh i { background: #000; }
+  .next-band .row { margin-top: 24px; display: grid; gap: 24px; }
+  @media (min-width: 1024px) { .next-band .row { grid-template-columns: 2fr 1fr; align-items: end; } }
+  .mini { display: grid; grid-template-columns: 1fr; border: 3px solid var(--ink); background: var(--cream); box-shadow: 4px 4px 0 0 var(--ink); text-decoration: none; color: var(--navy); }
+  @media (min-width: 640px) { .mini { grid-template-columns: 240px 1fr; } }
+  .mini .th { height: 160px; overflow: hidden; background: #000; border-bottom: 3px solid var(--ink); }
+  @media (min-width: 640px) { .mini .th { height: auto; border-bottom: 0; border-right: 3px solid var(--ink); } }
+  .mini .th img { width: 100%; height: 100%; object-fit: none; object-position: 50% 22%; }
+  .mini .b { padding: 20px; display: grid; gap: 10px; align-content: start; }
+  .mini h3 { font-size: 16px; line-height: 1.4; color: #000; }
+  .mini p { font: 400 16px/1.6 'Courier Prime', monospace; }
+  .mini u { font-weight: 700; color: #000; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+  /* Footer stub: chat-launcher-safe bottom padding on the last band */
+  .foot { background: var(--violet); border-top: 3px solid var(--ink); color: var(--cream); padding: 40px var(--gutter) calc(96px + env(safe-area-inset-bottom)); }
+  .foot p { max-width: 1152px; margin: 0 auto; font: 400 15px/1.5 'Courier Prime', monospace; }
+</style>
+</head>
+<body>
+<header class="taskbar"><div><a class="btn btn-ghost" href="#"><span aria-hidden="true">←</span>All projects</a></div></header>
+
+<main id="main">
+  <div class="page"><div class="wrap">
+    <nav aria-label="Breadcrumb"><ol class="crumb"><li><a href="#">Home</a></li><li aria-hidden="true">/</li><li><a href="#">Projects</a></li><li aria-hidden="true">/</li><li><b aria-current="page">SilverLink SG</b></li></ol></nav>
+
+    <!-- TOP FOLD: what it is, my role, my part, the outcome -->
+    <div class="window hdr">
+      <div class="window-bar"><p>silverlink_sg.exe</p><span aria-hidden="true">○□✕</span></div>
+      <div class="window-body">
+        <div class="top"><span class="badge badge--build">Full-stack</span><span class="yr">2025</span></div>
+        <div class="plate" aria-hidden="true"><img src="../../../client/public/assets/pixel/spot-silverlink.svg" alt=""></div>
+        <h1 class="px">SilverLink SG</h1>
+        <p class="lead">Connects seniors and youth through skill-sharing and live events, built to block double-bookings.</p>
+        <dl class="facts">
+          <div><dt>Role</dt><dd>Team project, Group 20, 6 people. SIT × University of Glasgow.</dd></div>
+          <div><dt>My part</dt><dd><span class="needs">NEEDS JOHN (Q1): what you built</span><br>Hidden until answered; the Role line carries it.</dd></div>
+          <div><dt>Outcome</dt><dd>A 6-person team delivered it in <b>7 Agile sprints</b>: 4 gRPC services on an 8-node Kubernetes cluster, with livestreaming, live chat and double-booking protection.</dd></div>
+        </dl>
+        <div class="links">
+          <a class="btn btn-ink" href="#"><svg viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><path d="M4 1h1v1H4zM11 1h1v1h-1zM3 2h3v1H3zM10 2h3v1h-3zM2 3h12v2H2zM2 5h2v1H2zM6 5h4v1H6zM12 5h2v1h-2zM2 6h12v1H2zM3 7h10v1H3zM4 8h8v1H4zM4 9h2v1H4zM9 9h2v1H9zM5 10h2v1H5zM8 10h2v1H8zM1 11h1v3H1z" fill="#000"/></svg>GitHub profile<span class="sr-only"> (opens in a new tab)</span></a>
+        </div>
+      </div>
+      <section aria-labelledby="kf"><h2 id="kf" class="sr-only">Key figures</h2>
+        <dl class="status">
+          <div><dt>gRPC microservices</dt><dd>4</dd></div>
+          <div><dt>Kubernetes nodes</dt><dd>8</dd></div>
+          <div><dt>isolated database schemas</dt><dd>8</dd></div>
+          <div><dt>Agile sprints</dt><dd>7</dd></div>
+        </dl>
+      </section>
+    </div>
+
+    <div class="body">
+      <nav class="toc" aria-label="On this page">
+        <p>ON THIS PAGE</p>
+        <ol>
+          <li><a href="#problem" aria-current="true">The problem</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#decision">Key decision</a></li>
+          <li><a href="#evidence">Evidence</a></li>
+          <li><a href="#next">What's next</a></li>
+        </ol>
+      </nav>
+
+      <div class="sections">
+        <section id="problem" aria-labelledby="problem-h">
+          <div class="sh"><img src="../../../client/public/assets/pixel/icon-about.svg" alt=""><h2 id="problem-h" class="px">The <span>problem</span></h2><i aria-hidden="true"></i></div>
+          <p class="s-lead">By 2030, 1 in 4 Singaporeans will be over 65.</p>
+          <div class="window"><div class="window-bar"><p>problem.txt</p><span aria-hidden="true">○□✕</span></div>
+            <div class="window-body">
+              <ul class="bullets">
+                <li><img src="../../../client/public/assets/pixel/bullet.svg" alt=""><span>Many seniors face <strong>isolation</strong> and are left out of digital life.</span></li>
+                <li><img src="../../../client/public/assets/pixel/bullet.svg" alt=""><span>Young people miss what older generations can teach.</span></li>
+              </ul>
+              <div class="quote"><p>The course brief asked:</p><blockquote>How might we use technology that is intuitive, culturally sensitive and engaging to build community among seniors?</blockquote></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="how" aria-labelledby="how-h">
+          <div class="sh"><img src="../../../client/public/assets/pixel/icon-skills.svg" alt=""><h2 id="how-h" class="px">How it <span>works</span></h2><i aria-hidden="true"></i></div>
+          <p class="s-lead">4 gRPC services behind one REST gateway, each with its own database schema.</p>
+          <div class="window"><div class="window-bar"><p>how_it_works.md</p><span aria-hidden="true">○□✕</span></div>
+            <div class="window-body">
+              <div class="block">
+                <p class="h3">What people can do</p>
+                <ul class="bullets">
+                  <li><img src="../../../client/public/assets/pixel/bullet.svg" alt=""><span><strong>Book seats</strong> at workshops, mentoring sessions and community events.</span></li>
+                  <li><img src="../../../client/public/assets/pixel/bullet.svg" alt=""><span>Host or watch <strong>livestreams</strong> with live chat.</span></li>
+                  <li><img src="../../../client/public/assets/pixel/bullet.svg" alt=""><span>Pick up <strong>volunteering tasks</strong> and earn badges.</span></li>
+                </ul>
+              </div>
+              <div class="block">
+                <figure class="slot" aria-labelledby="arch-cap">
+                  <p class="tagline"><span>SLOT: architecture.svg (design-visual-storyteller)</span><span>interim: FlowDiagram tiers</span></p>
+                  <ol class="tiers">
+                    <li>React front end</li>
+                    <li>API gateway<small>REST to gRPC</small></li>
+                    <li>gRPC services<ul><li>Event</li><li>Booking</li><li>Volunteer</li><li>User</li></ul></li>
+                    <li>8 isolated schemas<small>Neon PostgreSQL</small></li>
+                  </ol>
+                  <figcaption id="arch-cap" class="sr-only">SilverLink architecture, top to bottom</figcaption>
+                </figure>
+              </div>
+              <div class="block">
+                <p class="h3">Built with</p>
+                <ul class="tags"><li class="tag">React</li><li class="tag">Next.js</li><li class="tag">Node.js</li><li class="tag">gRPC</li><li class="tag">Docker</li><li class="tag">Kubernetes</li><li class="tag">PostgreSQL (Neon)</li><li class="tag">Prisma ORM</li><li class="tag">Keycloak</li><li class="tag">Cloudflare Tunnel</li><li class="tag">WebRTC</li><li class="tag">Socket.IO</li><li class="tag">GitHub Actions</li></ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="decision" aria-labelledby="decision-h">
+          <div class="sh"><img src="../../../client/public/assets/pixel/icon-results.svg" alt=""><h2 id="decision-h" class="px">Key <span>decision</span></h2><i aria-hidden="true"></i></div>
+          <p class="s-lead">Bookings never overbook, even when many people book at once.</p>
+          <div class="window"><div class="window-bar"><p>decisions.md</p><span aria-hidden="true">○□✕</span></div>
+            <div class="window-body">
+              <div class="kd">
+                <div class="main"><h3>No double-booking</h3><p>A booking saves only if the seat record hasn't changed since it was read (optimistic concurrency). A clash returns 409 Conflict instead of overbooking.</p></div>
+                <div><h3>Retries book once</h3><p>Idempotency keys make a repeated request return the same result, so each request runs exactly once.</p></div>
+                <div><h3>Scale before the rush</h3><p>An exponential moving average (EMA) forecasts load and sets a recommended replica count per service.</p></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="evidence" aria-labelledby="evidence-h">
+          <div class="sh"><img src="../../../client/public/assets/pixel/icon-screens.svg" alt=""><h2 id="evidence-h" class="px">Evidence</h2><i aria-hidden="true"></i></div>
+          <p class="s-lead">Screens from the team's build.</p>
+          <div class="shots">
+            <figure class="window fig wide"><div class="window-bar"><p>event_detail.png</p><span aria-hidden="true">○□✕</span></div>
+              <img src="../../../attached_assets/silverlink_p21_img0.png" width="640" height="428" alt="Event page for a Traditional Peranakan Cooking Workshop at Toa Payoh Community Centre, listing three sessions with capacity counts and Book or Cancel booking buttons.">
+              <figcaption>Event page: book or cancel a session, with capacity shown for each.</figcaption></figure>
+            <figure class="window fig"><div class="window-bar"><p>system_metrics.png</p><span aria-hidden="true">○□✕</span></div>
+              <img src="../../../attached_assets/silverlink_p23_img0.png" width="862" height="415" alt="System Metrics dashboard showing requests per second, queue length, 212 ms average response time, a load forecast and an autoscaling recommendation of 1 replica (min 1, max 10).">
+              <figcaption>System metrics: current and forecast load, and the recommended replica count.</figcaption></figure>
+            <figure class="window fig"><div class="window-bar"><p>livestream_studio.png</p><span aria-hidden="true">○□✕</span></div>
+              <img src="../../../attached_assets/silverlink_p22_img0.png" width="700" height="392" alt="Livestream Studio page with a live camera preview, Stop broadcast, Mute and Camera off controls, and a live chat panel.">
+              <figcaption>Livestream studio: the event owner broadcasts while viewers chat.</figcaption></figure>
+          </div>
+        </section>
+
+        <section id="next" aria-labelledby="next-h">
+          <div class="sh"><img src="../../../client/public/assets/pixel/icon-projects.svg" alt=""><h2 id="next-h" class="px">What's <span>next</span></h2><i aria-hidden="true"></i></div>
+          <p class="s-lead"><span class="needs" style="font-size:16px">NEEDS JOHN (Q2, Q14)</span></p>
+          <p class="note" style="max-width:60ch;font-size:15px">Is app.silverlink.cc live, and can it be linked? Any real-world result (demo day, grade, award)? Until answered this section is one lead line on navy, no window: e.g. a link to the live app, or it is dropped and the TOC loses its last item.</p>
+        </section>
+      </div>
+    </div>
+  </div></div>
+
+  <nav class="next-band" aria-labelledby="np-h">
+    <div class="wrap">
+      <div class="sh"><h2 id="np-h" class="px">Next project</h2><i aria-hidden="true"></i></div>
+      <div class="row">
+        <a class="mini" href="#" aria-label="Next: SCS Awareness Platform">
+          <div class="th"><img src="../../../attached_assets/scs_p65_img0.png" alt=""></div>
+          <div class="b"><div><span class="badge badge--build">Full-stack</span></div><h3 class="px">SCS Awareness Platform</h3><p>Teaches cancer awareness through a branching story at Singapore Cancer Society booths.</p><u>Read case study</u></div>
+        </a>
+        <div><a class="btn btn-primary" href="#" style="width:100%"><span aria-hidden="true">←</span>All projects</a></div>
+      </div>
+    </div>
+  </nav>
+</main>
+<footer class="foot"><p>Footer (unchanged). Bottom padding 96px + safe area so its last links clear the chat launcher.</p></footer>
+
+<div class="dock dock--l"><span class="fbtn">♪ <span class="lbl">Sound off</span></span></div>
+<div class="dock dock--r"><span class="fbtn"><img src="../../../client/public/assets/mascot/lil-johnny-idle.png" alt="" width="20" style="image-rendering:pixelated"> <span class="lbl">Chat</span></span></div>
+</body>
+</html>

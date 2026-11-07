@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
-"""Favicon + app-icon set from one 16x16 pixel master (the 01 PROMPT keycap).
+"""Favicon + app-icon set from one 16x16 pixel master (the 01 PROMPT keycap, AI = orange).
 
   python3 -I build_icons.py <out-dir> [--candidates <review-dir>]
+
+Colours (John, Nov 2026: keycaps use house colours with meaning, AI = orange, black ink):
+  face orange #FF7A2F, legend '>_' ink #000 (8.1:1), outline/seam/shadow ink #000,
+  front strip: see STRIP below (the variants are rendered side by side with --candidates).
 
 The master is a 16x16 grid drawn below. Every output is that grid scaled by a whole number
 with nearest-neighbour, so no size is ever resampled and the pixel edges stay crisp:
@@ -24,13 +28,24 @@ from pathlib import Path
 from PIL import Image
 
 NAVY = (0x16, 0x16, 0x3F, 255)
-COL = {
-    ".": None,
-    "K": (0, 0, 0, 255),            # ink outline + 1 px hard shadow
-    "B": (0x1B, 0x67, 0xBA, 255),   # keycap face (keys.ts blue)
-    "D": (0x0A, 0x3F, 0x78, 255),   # keycap front strip (keys.ts blue bar)
-    "W": (255, 255, 255, 255),      # legend
-}
+ORANGE = "#FF7A2F"
+# Front-strip options. "seam": orange strip under the ink seam row (palette only, ships);
+# "ink": black strip; "shade": a darker orange (off-palette, comparison only).
+STRIPS = {"seam": ORANGE, "ink": "#000000", "shade": "#B8501A"}
+STRIP = "seam"
+
+
+def rgba(hx):
+    hx = hx.lstrip("#")
+    return tuple(int(hx[i:i + 2], 16) for i in (0, 2, 4)) + (255,)
+
+
+def palette(strip=STRIP, face=ORANGE, legend="#000000"):
+    return {".": None, "K": rgba("#000000"), "B": rgba(face), "D": rgba(STRIPS.get(strip, strip)),
+            "W": rgba(legend)}
+
+
+COL = palette()
 
 # 01 PROMPT keycap: 15x15 cap with cut corners, face rows 1-9, ink seam row 10, strip rows 11-13,
 # '>_' legend (chevron 2 px stroke, underscore 2 rows), 1 px hard shadow right and below.
@@ -55,12 +70,13 @@ MASTER = [
 assert len(MASTER) == 16 and all(len(r) == 16 for r in MASTER)
 
 
-def grid_image(rows):
+def grid_image(rows, col=None):
+    col = col or COL
     im = Image.new("RGBA", (len(rows[0]), len(rows)), (0, 0, 0, 0))
     for y, row in enumerate(rows):
         for x, ch in enumerate(row):
-            if COL[ch]:
-                im.putpixel((x, y), COL[ch])
+            if col[ch]:
+                im.putpixel((x, y), col[ch])
     return im
 
 
@@ -77,7 +93,13 @@ def on_navy(im, size, k):
 
 
 def svg(rows):
-    hexes = {"K": "#000", "B": "#1B67BA", "D": "#0A3F78", "W": "#FFF"}
+    # The legend is ink like the outline, and a "seam" strip is the face colour: merge equal
+    # fills into one path each so the SVG stays small.
+    rows = [r.replace("W", "K") for r in rows]
+    hexes = {"K": "#000", "B": ORANGE, "D": STRIPS[STRIP]}
+    if STRIPS[STRIP].upper() == ORANGE:
+        rows = [r.replace("D", "B") for r in rows]
+        del hexes["D"]
     parts = []
     for ch, hx in hexes.items():
         d = []
@@ -126,6 +148,15 @@ def main():
             sq.resize((s, s), Image.Resampling.BOX).save(rev / f"cand-johnny-{s}.png")
         m.save(rev / "cand-keycap-16.png")
         scaled(m, 2).save(rev / "cand-keycap-32.png")
+        for name in STRIPS:
+            c = grid_image(MASTER, palette(name))
+            c.save(rev / f"cand-{name}-16.png")
+            scaled(c, 2).save(rev / f"cand-{name}-32.png")
+            on_navy(c, 180, 8).save(rev / f"cand-{name}-180.png")
+        # critique wording ("orange >_ on a navy/black cap"), for comparison only
+        c = grid_image(MASTER, palette("#000000", face="#000000", legend=ORANGE))
+        c.save(rev / "cand-blackcap-16.png")
+        scaled(c, 2).save(rev / "cand-blackcap-32.png")
 
 
 if __name__ == "__main__":

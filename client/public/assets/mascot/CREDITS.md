@@ -23,3 +23,26 @@ These files are the ground truth for the character's palette, outline, eyes and 
 
 Build script (reproducible from the pose sheet):
 `design-system/portfolio/asset-work/mascot-poses/build_poses.py`
+
+## Extra pose frames (`poses/`, own 47 x 72 canvas)
+
+- `wave.png`, `point-right.png`, `think.png`, `typing.png`: from a second ChatGPT pose sheet
+  John generated from his reference art
+  (`design-system/portfolio/asset-work/references/mascot-poses-sheet-2-unprocessed.webp`).
+  That sheet is small and WebP-smeared (about 2x the native pixel) and slightly off-model, so
+  it was used as a tracing guide only: each figure was snapped to the original 17-colour
+  palette and warp-resampled onto the native grid, then the frame was rebuilt from the
+  hand-made art. The head (hair, cowlick, ears, eyes) is the original from
+  `lil-johnny-idle.png`, unchanged. `wave` and `point-right` carry the original smile from
+  `lil-johnny-happy.png`. `think` keeps the idle face. `typing` has the idle eyes moved down
+  one row (looking down). Torso and legs are the original's wherever the pose matches idle.
+  The posed arms, hands, crossed legs and laptop were drawn in code on the native grid,
+  following the traced positions and the original outline colours.
+- `think.png` adds a black pixel "?" with a 1 px cream (#F4EAD5, site palette) keyline, so it
+  also reads on navy. The 8 extra rows of the canvas are headroom for it.
+- `sheet-extra.png` + `sheet-extra.json`: the four frames in one strip. It uses the same
+  scale, bottom row and feet-centring as `sheet.json`, so frames from the two sheets line up
+  when bottom-aligned.
+
+Build script: `design-system/portfolio/asset-work/mascot-poses/build_poses_extra.py`
+(review: `review_sheet_extra.py`).

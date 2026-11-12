@@ -4,7 +4,7 @@ type HeadingTone = 'two-tone' | 'ink';
 
 interface Props {
   text: string; // e.g. "ABOUT ME"
-  /** two-tone on the page (black first word, blue rest and rule); ink on the blue band */
+  /** default: blue shadow and rule on the page; ink: white shadow, black rule on the blue band */
   tone?: HeadingTone;
   /** section: Home h2; case: the smaller case-study h2 (MASTER 2.11), upper case via CSS */
   size?: 'section' | 'case';
@@ -16,13 +16,13 @@ interface Props {
 }
 
 const SIZE = {
-  section: 'text-[length:clamp(30px,9vw,40px)] sm:text-5xl lg:text-6xl',
-  case: 'text-[length:clamp(26px,7vw,30px)] sm:text-[34px] lg:text-[40px]',
+  section: 'text-[length:clamp(40px,12vw,52px)] sm:text-6xl lg:text-7xl',
+  case: 'text-[length:clamp(32px,9vw,38px)] sm:text-[44px] lg:text-[52px]',
 };
 
 /**
- * Big condensed Plex h2. On the page the first word is black and the rest blue;
- * a one-word heading stays black and the blue rule carries the second tone.
+ * Big comic-lettered h2 (Bangers) in black with a hard offset shadow; the rule
+ * beside it carries the accent colour.
  * The mobile size scales with the viewport so a 10-letter word plus the icon
  * fits on one line from 320px.
  */
@@ -33,11 +33,16 @@ export default function SectionHeading({ text, tone = 'two-tone', size = 'sectio
   return (
     <div className={`flex items-center gap-4 ${className}`}>
       {icon && <PixelArt name={icon} size={32} lazy />}
-      <h2 id={id} className={`font-display ${SIZE[size]} text-black`}>
+      {/* Comic lettering with a hard offset shadow: blue on the page, white on
+          the blue band (ink tone) so it still separates from the ground */}
+      <h2
+        id={id}
+        className={`font-comic ${SIZE[size]} text-black ${
+          ink ? '[text-shadow:4px_4px_0_var(--paper)]' : '[text-shadow:4px_4px_0_var(--blue)]'
+        }`}
+      >
         {first}
-        {rest.length > 0 && (
-          <span className={ink ? undefined : 'text-[color:var(--blue-text)]'}> {rest.join(' ')}</span>
-        )}
+        {rest.length > 0 && <> {rest.join(' ')}</>}
       </h2>
       <div
         aria-hidden="true"

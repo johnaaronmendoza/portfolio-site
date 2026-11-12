@@ -5,6 +5,7 @@ import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
 import PixelArt from './PixelArt';
 import { Lead } from './Hierarchy';
+import Burst from './comic/Burst';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
 import { noteProjectOpen } from '@/hooks/useAchievements';
 import { motionTokens } from '@/lib/motion-tokens';
@@ -98,13 +99,24 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
             Live site
           </span>
         )}
+        {/* Comic sound effect, decorative (the description says the same) */}
+        {project.sfx && (
+          <Burst
+            fill={project.num % 2 ? 'var(--blue)' : 'var(--yellow)'}
+            rotate={project.num % 2 ? 8 : -8}
+            className={`absolute bottom-2 right-2 size-28 lg:size-32 pointer-events-none ${project.num % 2 ? 'text-white' : 'text-black'}`}
+          >
+            <span aria-hidden="true" className="block px-3 text-[22px] lg:text-[26px]">{project.sfx}</span>
+          </Burst>
+        )}
       </div>
 
       {/* Project Info */}
       <div className="flex flex-1 flex-col gap-4 p-5">
         <div className="flex">
-          <span className="flex-shrink-0 border-2 border-black bg-[var(--yellow)] px-2 py-1 font-label text-xs text-black">
-            {project.year}
+          {/* Comic caption: each project is an issue in the series */}
+          <span className="comic-caption flex-shrink-0 text-base">
+            Issue #{String(project.num).padStart(2, '0')}, {project.year}
           </span>
         </div>
         <h3 className={`font-display break-words min-w-0 text-[color:var(--text)] ${project.featured ? 'text-2xl lg:text-[32px]' : 'text-[22px]'}`}>

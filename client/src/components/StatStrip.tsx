@@ -1,6 +1,8 @@
 import { useId } from 'react';
+import Burst from './comic/Burst';
 
-export type Stat = { value: string; label: string };
+/** burst: a white comic POW star behind the value (one per strip at most) */
+export type Stat = { value: string; label: string; burst?: boolean };
 
 type Variant = 'band' | 'status' | 'inline';
 
@@ -12,9 +14,8 @@ interface StatStripProps {
   className?: string;
 }
 
-// Cells are size containers, so 15cqi keeps a 6-glyph value ("89.61%" is
-// 6.3em wide in the pixel font) inside its cell at every width from 320px.
-// Inline uses 13cqi so a 7-glyph value ("1.757 m") fits too.
+// Cells are size containers, so the cqi caps keep a 6-glyph value ("89.61%")
+// inside its cell at every width from 320px; inline allows "1.757 m".
 const CELL: Record<Variant, string> = {
   band: 'px-4 py-6 sm:px-6 sm:py-8 [container-type:inline-size]',
   status: 'p-4 [container-type:inline-size]',
@@ -48,7 +49,7 @@ export default function StatStrip({ stats, variant, className = '' }: StatStripP
   const lgCols = inline ? INLINE_LG_COLS[Math.min(stats.length, 4)] : 'lg:grid-cols-4';
   const list = (
     <dl className={`grid grid-cols-2 ${lgCols} gap-[3px] bg-black text-black ${FRAME[variant]} ${className}`}>
-      {stats.map(({ value, label }, i) => (
+      {stats.map(({ value, label, burst }, i) => (
         <div
           key={label}
           className={`flex flex-col-reverse justify-end gap-3 bg-[var(--yellow)] ${CELL[variant]} ${
@@ -56,11 +57,18 @@ export default function StatStrip({ stats, variant, className = '' }: StatStripP
             inline && stats.length % 2 === 1 && i === stats.length - 1 ? 'col-span-2 lg:col-span-1' : ''
           }`}
         >
-          <dt className="font-mono text-[15px] sm:text-base leading-snug max-w-[18ch]">
+          <dt className="relative z-10 font-mono text-[15px] sm:text-base leading-snug max-w-[18ch]">
             {label}
           </dt>
-          <dd className={`font-label font-bold tracking-[-0.02em] leading-none tabular-nums ${VALUE[variant]}`}>
-            {value}
+          <dd className={`relative self-start font-label font-bold tracking-[-0.02em] leading-none tabular-nums ${VALUE[variant]}`}>
+            {burst && (
+              <Burst
+                fill="var(--paper)"
+                rotate={-6}
+                className="absolute -inset-x-[24%] -inset-y-[55%] pointer-events-none"
+              />
+            )}
+            <span className="relative">{value}</span>
           </dd>
         </div>
       ))}

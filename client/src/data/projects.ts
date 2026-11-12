@@ -50,6 +50,8 @@ export type Project = {
   span: string;
   /** Lead tile: taller image, bigger title, always in colour */
   featured?: boolean;
+  /** Comic sound-effect sticker on the tile image; true to what the project does, featured tiles only */
+  sfx?: string;
 };
 
 export const PROJECTS: Project[] = [
@@ -69,6 +71,7 @@ export const PROJECTS: Project[] = [
     span: 'lg:col-span-3',
     preloadImages: [silverLink2, silverLink3],
     featured: true,
+    sfx: 'Booked!',
   },
   {
     num: 2,
@@ -86,6 +89,7 @@ export const PROJECTS: Project[] = [
     span: 'lg:col-span-3',
     preloadImages: [scs2, scs3],
     featured: true,
+    sfx: 'Plot twist!',
   },
   {
     num: 3,

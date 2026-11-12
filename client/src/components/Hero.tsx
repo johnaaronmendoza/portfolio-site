@@ -11,6 +11,7 @@ import { scrollToSection } from '@/lib/utils';
 import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 import { Chip, Lead } from '@/components/Hierarchy';
 import PixelArt from '@/components/PixelArt';
+import Burst from '@/components/comic/Burst';
 import Window from '@/components/Window';
 
 const { hero: HERO, loop: LOOP, easing } = motionTokens;
@@ -163,6 +164,10 @@ export default function Hero() {
                 title="welcome.exe"
                 bodyClassName="bg-black text-[color:var(--paper)] [--focus:var(--yellow)] p-6 sm:p-10 xl:p-12"
               >
+                {/* Comic narration box opens the "first issue" (decorative) */}
+                <p aria-hidden="true" className="comic-caption text-lg sm:text-xl mb-5 sm:mb-7">
+                  Meanwhile, in Singapore...
+                </p>
                 {/* Sized so BRANZUELA plus the cursor fits from 320px up */}
                 <h1 className="font-pixel leading-[1.25] text-[length:clamp(20px,7vw,30px)] sm:text-4xl lg:text-[40px] xl:text-5xl">
                   <span className="sr-only">John Aaron Mendoza Branzuela</span>
@@ -261,13 +266,28 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* Art, large screens only so it never sits under text */}
-          <div aria-hidden="true" className="hidden lg:flex lg:col-span-5 items-center justify-center pointer-events-none">
-            <div className="relative flex items-center justify-center w-[336px] h-[336px] xl:w-[384px] xl:h-[384px]">
-              <PixelArt name="starburst" size={384} lazy className="absolute inset-0 w-full h-full" />
-              <PixelArt name="crt-computer" size={256} lazy className="relative" />
-              <PixelArt name="sparkle" size={32} lazy className="absolute -top-2 right-2" />
-              <PixelArt name="sparkle" size={32} lazy className="absolute bottom-2 -left-2" />
+          {/* Narrator, large screens only so it never sits under text: Lil Johnny
+              points at the name from a comic burst; his bubble opens the chat */}
+          <div className="hidden lg:flex lg:col-span-5 items-center justify-center">
+            <div className="relative w-[340px] h-[420px] xl:w-[380px] xl:h-[460px]">
+              <div aria-hidden="true" className="absolute inset-x-0 bottom-0 top-20 grid place-items-center pointer-events-none">
+                <Burst fill="var(--yellow)" rotate={-8} className="absolute inset-2" />
+                {/* point-right mirrored, so he points left at the name */}
+                <img
+                  src="/assets/mascot/poses/point-right.png"
+                  alt=""
+                  width={47}
+                  height={64}
+                  className="relative h-[256px] xl:h-[288px] w-auto -scale-x-100 [image-rendering:pixelated]"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new CustomEvent('open-chat'))}
+                className="comic-bubble absolute left-0 top-0 max-w-[270px] text-left font-sans text-[17px] leading-snug hover:underline underline-offset-4 decoration-2 [--tail-x:200px]"
+              >
+                Psst! Got questions about my work? Ask me.
+              </button>
             </div>
           </div>
         </div>

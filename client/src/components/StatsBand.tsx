@@ -9,7 +9,7 @@ import StatStrip, { type Stat } from './StatStrip';
 const STATS: Stat[] = [
   { value: '2', label: 'internships' },
   { value: '6', label: 'projects built' },
-  { value: '89.61%', label: 'UWB model accuracy' },
+  { value: '89.61%', label: 'UWB model accuracy', burst: true },
   { value: '4', label: 'SCS Awareness Platform languages' },
 ];
 

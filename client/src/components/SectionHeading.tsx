@@ -16,13 +16,13 @@ interface Props {
 }
 
 const SIZE = {
-  section: 'text-[length:clamp(20px,6.5vw,26px)] sm:text-4xl lg:text-5xl',
-  case: 'uppercase text-[length:clamp(18px,5.3vw,22px)] sm:text-[28px] lg:text-[32px] leading-[1.3]',
+  section: 'text-[length:clamp(30px,9vw,40px)] sm:text-5xl lg:text-6xl',
+  case: 'text-[length:clamp(26px,7vw,30px)] sm:text-[34px] lg:text-[40px]',
 };
 
 /**
- * Big pixel h2. On navy the first word is orange and the rest teal; a one-word
- * heading stays orange and the teal rule carries the second tone.
+ * Big condensed Plex h2. On the page the first word is black and the rest blue;
+ * a one-word heading stays black and the blue rule carries the second tone.
  * The mobile size scales with the viewport so a 10-letter word plus the icon
  * fits on one line from 320px.
  */
@@ -33,7 +33,7 @@ export default function SectionHeading({ text, tone = 'two-tone', size = 'sectio
   return (
     <div className={`flex items-center gap-4 ${className}`}>
       {icon && <PixelArt name={icon} size={32} lazy />}
-      <h2 id={id} className={`font-pixel ${SIZE[size]} text-black`}>
+      <h2 id={id} className={`font-display ${SIZE[size]} text-black`}>
         {first}
         {rest.length > 0 && (
           <span className={ink ? undefined : 'text-[color:var(--blue-text)]'}> {rest.join(' ')}</span>

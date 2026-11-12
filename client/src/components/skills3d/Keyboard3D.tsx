@@ -69,7 +69,7 @@ const TEX = 256;              // legend canvas width (spans the cap's full width
 const TOP_TEX_H = Math.round((TEX * TOP_D) / TOP_W);
 const FRONT_TEX_H = 128;
 const FOCUS = '#2347D6';      // focus outline: blue-text, 3:1+ on the page and keys
-const FONT = 'ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace';
+const FONT = '"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace';
 
 const fontAt = (px: number) => `700 ${px}px ${FONT}`;
 const KB = motionTokens.keyboard;

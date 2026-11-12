@@ -35,13 +35,13 @@ export default function KonamiOverlay() {
           <div className="window w-full max-w-sm">
             <WindowBar title="cheat_code.exe" />
             <div className="bg-black px-6 py-6 text-center text-[color:var(--paper)]">
-              <p className="font-pixel text-xs text-[color:var(--yellow)] mb-3">
+              <p className="font-label text-xs text-[color:var(--yellow)] mb-3">
                 <span aria-hidden="true">🎮 </span>Cheat code activated
               </p>
-              <p className="font-pixel text-xs leading-loose">
+              <p className="font-label text-xs leading-loose">
                 ↑↑↓↓←→←→BA
               </p>
-              <p className="font-mono text-[15px] mt-3">
+              <p className="font-sans text-[15px] mt-3">
                 +30 lives. Enjoy the portfolio.
               </p>
             </div>

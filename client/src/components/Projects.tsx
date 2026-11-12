@@ -83,18 +83,18 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
         )}
         {isComingSoon && (
           <div className="absolute inset-0 flex items-end justify-end p-3">
-            <span className="font-pixel text-xs text-black border-2 border-black bg-[var(--paper)] px-2 py-1">
+            <span className="font-label text-xs text-black border-2 border-black bg-[var(--paper)] px-2 py-1">
               COMING SOON
             </span>
           </div>
         )}
         {project.featured && (
-          <span className="absolute top-2 left-2 font-pixel text-xs text-black border-2 border-black bg-[var(--yellow)] px-2 py-1">
+          <span className="absolute top-2 left-2 font-label text-xs text-black border-2 border-black bg-[var(--yellow)] px-2 py-1">
             Featured
           </span>
         )}
         {isExternal && (
-          <span className="absolute top-2 right-2 font-pixel text-xs text-black border-2 border-black bg-[var(--blue)] px-2 py-1">
+          <span className="absolute top-2 right-2 font-label text-xs text-black border-2 border-black bg-[var(--blue)] px-2 py-1">
             Live site
           </span>
         )}
@@ -103,14 +103,14 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
       {/* Project Info */}
       <div className="flex flex-1 flex-col gap-4 p-5">
         <div className="flex">
-          <span className="flex-shrink-0 border-2 border-black bg-[var(--yellow)] px-2 py-1 font-pixel text-xs text-black">
+          <span className="flex-shrink-0 border-2 border-black bg-[var(--yellow)] px-2 py-1 font-label text-xs text-black">
             {project.year}
           </span>
         </div>
-        <h3 className={`font-pixel leading-snug break-words min-w-0 text-[color:var(--text)] ${project.featured ? 'text-lg lg:text-2xl' : 'text-[15px]'}`}>
+        <h3 className={`font-display break-words min-w-0 text-[color:var(--text)] ${project.featured ? 'text-2xl lg:text-[32px]' : 'text-[22px]'}`}>
           {project.name}
         </h3>
-        <p className="font-mono text-[15px] sm:text-base leading-relaxed">
+        <p className="font-sans text-[15px] sm:text-base leading-relaxed">
           {project.description}
         </p>
         <ul className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[15px] font-bold text-black">
@@ -129,7 +129,7 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
           ))}
         </div>
         {!isComingSoon && (
-          <div className="mt-auto pt-2 font-mono-8bit text-[15px] text-black font-bold underline underline-offset-4 decoration-2">
+          <div className="mt-auto pt-2 font-sans text-[15px] text-black font-bold underline underline-offset-4 decoration-2">
             {isExternal ? 'Visit site' : 'Read case study'}
           </div>
         )}
@@ -186,7 +186,7 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
 // sits pressed into its shadow.
 /** Filter chip style, shared with the Skills keyboard filters */
 export function chipClass(active: boolean) {
-  return `font-pixel text-xs text-black px-3 py-1.5 min-h-[44px] border-[3px] border-black transition-[translate,box-shadow,background-color] duration-150 ${
+  return `font-label text-xs text-black px-3 py-1.5 min-h-[44px] border-[3px] border-black transition-[translate,box-shadow,background-color] duration-150 ${
     active
       ? 'bg-[var(--yellow)] translate-x-[3px] translate-y-[3px] shadow-none'
       : 'bg-[var(--paper)] hover:bg-[var(--blue)] shadow-[3px_3px_0_0_var(--ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none'
@@ -259,7 +259,7 @@ export default function Projects() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
-                  <p className="font-mono text-[15px] sm:text-base">No projects match {active.label}.</p>
+                  <p className="font-sans text-[15px] sm:text-base">No projects match {active.label}.</p>
                   <button
                     type="button"
                     onClick={() => choose(null)}

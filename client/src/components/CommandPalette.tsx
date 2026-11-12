@@ -268,7 +268,7 @@ export default function CommandPalette() {
               {/* Commands: selected row orange, hover teal; the description inherits the row colour */}
               <div className="max-h-96 overflow-y-auto" data-lenis-prevent>
                 {filteredCommands.length === 0 ? (
-                  <p className="p-4 text-center font-mono text-sm">No commands found</p>
+                  <p className="p-4 text-center font-sans text-sm">No commands found</p>
                 ) : (
                   filteredCommands.map((cmd, idx) => (
                     <button
@@ -285,11 +285,11 @@ export default function CommandPalette() {
                       }`}
                       onFocus={() => setSelectedIndex(idx)}
                     >
-                      <span className="flex items-center gap-2 font-mono font-bold text-[15px]">
+                      <span className="flex items-center gap-2 font-sans font-bold text-[15px]">
                         {cmd.id === 'nav-hero' && <PixelArt name="icon-home" size={16} />}
                         {cmd.label}
                       </span>
-                      <span className="block font-mono text-sm mt-1">{cmd.description}</span>
+                      <span className="block font-sans text-sm mt-1">{cmd.description}</span>
                     </button>
                   ))
                 )}

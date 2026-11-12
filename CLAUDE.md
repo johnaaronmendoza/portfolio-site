@@ -53,7 +53,7 @@ Each section has a corresponding `id` attribute (`#hero`, `#about`, etc.) used b
 
 - **Tailwind CSS v4** (via `@tailwindcss/vite` plugin — no `tailwind.config.js`)
 - Design language: **neo-brutalist retro web** — see Design rules below for palette and limits
-- Typography: pixel fonts (`Press Start 2P` / `VT323`) via `font-pixel` class for headings; `font-mono` for body
+- Typography ("Plex Desktop", John, Nov 2026): `font-sans` = IBM Plex Sans for reading text; `font-display` = condensed bold Plex Sans for headings; `font-label` / `font-mono` = IBM Plex Mono for title bars, badges, figures, tags and terminals; `font-pixel` (Press Start 2P) only for the hero name and the HELLO sticker. Plex loads from Google Fonts in `client/index.html`.
 - Hard drop shadows use the custom `shadow-8bit` utility; no blur/soft shadows
 - Animations via **Framer Motion** — keep transitions snappy; take values from `client/src/lib/motion-tokens.ts`
 
@@ -67,19 +67,20 @@ Recruiters for AI, data and software graduate roles (currently the DBS 2027 Mana
 
 ## Design rules (binding)
 
-**Direction: neo-brutalist retro web** (chosen by John, Oct 2026, replacing "maximalist 8-bit"). Think a 90s web desktop rebuilt with modern discipline: dark navy page, retro OS windows with title bars, chunky solid colour blocks, thick black outlines, hard offset shadows, pixel type, marquee strips. References: a Netscape-style retro web studio page, a neo-brutalist design system sheet, and a pixel-font Web3 landing page with window cards.
+**Direction: neo-brutalist retro web** (chosen by John, Oct 2026, replacing "maximalist 8-bit"; palette changed to **Paper & Ink** and type to **Plex Desktop** by John, Nov 2026). Think a 90s web desktop rebuilt with modern discipline: warm paper page, retro OS windows with black title bars, chunky solid colour blocks, thick black outlines, hard offset shadows, marquee strips. References: a Netscape-style retro web studio page, a neo-brutalist design system sheet, and a pixel-font Web3 landing page with window cards.
 
 - **Palette tokens** (CSS variables in `client/src/index.css`, used through Tailwind arbitrary values):
-  - navy `#16163F` (page base), ink `#000000` (outlines, shadows), cream `#F4EAD5` (window bodies, light text)
-  - orange `#FF7A2F` (primary accent, primary buttons, marquee strips)
-  - teal `#2EC4B6` (secondary accent, secondary buttons, highlights)
-  - violet `#6C4AD0` (window title bars, footer band)
-  - Skills keyboard keycaps carry meaning with house colours (John, Nov 2026): **AI = orange, Data/ML = teal, Build/infra = cream, Ways of working = violet**, with black ink on orange/teal/cream and cream ink on violet. The earlier blue/amber keycap colourways and amber `#F59E0B` are retired.
-  - Approved text pairings only: cream, orange or teal on navy; navy or black on cream; black on orange or teal; white or cream on violet. Never orange on teal, teal on orange, or orange/teal text on violet.
-- **Window component** is the core motif: cream body, 3px black border, hard black offset shadow, violet title bar with a pixel-font filename-style title (e.g. `about_me.txt`) and decorative ○ □ ✕ controls (`aria-hidden`). Square corners or a very small radius only. Exception: the hero `welcome.exe` window has a black body so the particles and the two-tone (orange/teal) name read.
+  - page `#EFEAE0` (warm off-white ground), ink `#000000` (outlines, shadows), text `#111111` (reading text), paper `#FFFFFF` (window bodies, chips; light text on dark)
+  - bar `#111111` (window title bars, footer band, case-study header)
+  - blue `#3A66FF` (primary buttons with white text 4.64:1; fills with black text 4.52:1)
+  - yellow `#FFD23F` (secondary buttons, badges, figures, marquee; black text 14.6:1)
+  - blue-text `#2347D6` (blue text on page 5.95:1 or paper 7.13:1: section-heading second word, role line, links)
+  - Skills keyboard keycaps carry meaning (John, Nov 2026): **AI = yellow, Data/ML = blue, Build/infra = white, Ways of working = black**; muted (filtered-out) keys are flat warm grey and sit flush. The old navy/orange/teal/cream/violet palette is retired (preserved in branch history).
+  - Approved text pairings only: text/ink on page, paper or yellow; black or white on blue; white or yellow on bar/black; blue-text on page or paper. Never yellow text on the page or paper, never plain blue `#3A66FF` as body text on the page.
+- **Window component** is the core motif: white body, 3px black border, hard black offset shadow, black title bar with a Plex Mono filename-style title (e.g. `about_me.txt`) and decorative ○ □ ✕ controls (`aria-hidden`). Square corners or a very small radius only. Exception: the hero `welcome.exe` window has a black body so the particles and the two-tone (white/yellow) pixel name read.
 - **Skills keyboard exception:** the 3D sculpted keycaps (rounded, lit, in perspective) stay by John's choice, coloured by category as above; keycap labels must be at least 12px and every legend AA. Filter state must not rely on colour alone.
-- **Type:** pixel fonts (`Press Start 2P` / `VT323`) for display and title bars; `font-mono` for body. Display headings can be two-tone (orange + teal).
-- **Hard shadows only**, thick black borders, solid colour blocks. A faint grid texture on the navy page is allowed. No gradients as decoration, no blur shadows.
+- **Type:** one role per face (see Styling): Plex Sans for reading, condensed bold Plex Sans for headings (two-tone: black + blue-text), Plex Mono for labels and data, Press Start 2P only for the hero name. No monospace or pixel type for paragraphs; no all-caps for long text.
+- **Hard shadows only**, thick black borders, solid colour blocks. A faint grid texture on the page is allowed; CRT scanlines are off by default (opt-in CRT mode only). No gradients as decoration, no blur shadows.
 - **Motion:** the hero keeps John's original effects by his choice (WebGL particles, scrambling name, floating pixels, blinking cursor; the magnetic resume button and scroll-linked card shadow were dropped in favour of press-down buttons; particles skipped under `prefers-reduced-motion`); don't add particles elsewhere. Marquee strips are allowed: straight (not slanted), CSS transform only, pause on hover, a visible "Pause motion" toggle (WCAG 2.2.2; keep it), static under `prefers-reduced-motion`. Buttons may press down (translate into their shadow) on click. No scroll-triggered fades or passive pop-ups. **Exception (John, Nov 2026): the 3D Skills keyboard** (`components/skills3d/`) may play a one-time entrance when it first enters view and a subtle, reversible scroll-linked perspective shift (5–8°, no pinning or scroll hijacking), plus cursor tilt (±3°, pointer devices only), key hover lift with a `*.info` tooltip, mechanical press and a skill detail window. All of it is off under `prefers-reduced-motion` (2D fallback). Don't extend scroll-linked motion to other sections.
 - **No self-rated skill levels.** Stats must be real figures already on the site or resume.
 - **Readable first:** body 15–16px+ on mobile, lines under 80 characters, WCAG AA contrast, 44px tap targets, visible keyboard focus. Decoration never sits on top of body text.

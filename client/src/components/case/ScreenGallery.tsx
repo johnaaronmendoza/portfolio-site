@@ -13,7 +13,7 @@ export type Shot = {
   caption: string;
 };
 
-const CAPTION_TEXT = 'font-mono text-[15px] sm:text-base leading-[1.5] text-[color:var(--text)]';
+const CAPTION_TEXT = 'font-sans text-[15px] sm:text-base leading-[1.5] text-[color:var(--text)]';
 
 function FullSizeLink({ src, caption }: { src: string; caption: string }) {
   return (

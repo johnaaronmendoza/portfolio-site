@@ -33,7 +33,7 @@ const CRUMB_LINK = 'inline-flex min-h-[44px] items-center underline decoration-2
 function Breadcrumb({ current }: { current: string }) {
   return (
     <nav aria-label="Breadcrumb" className="mt-6 mb-4">
-      <ol className="flex flex-wrap items-center gap-x-2 font-mono text-[15px] sm:text-base text-[color:var(--paper)]">
+      <ol className="flex flex-wrap items-center gap-x-2 font-sans text-[15px] sm:text-base text-[color:var(--paper)]">
         <li className="flex items-center gap-x-2">
           <Link href="/" className={CRUMB_LINK}>Home</Link>
           <span aria-hidden="true">/</span>

@@ -10,8 +10,7 @@ ROOT = Path(__file__).resolve().parents[4]
 A = ROOT / 'attached_assets'
 HERE = Path(__file__).parent
 SRC = HERE / 'src'
-FONTS = ROOT / 'client/public/fonts'
-CP = ROOT / 'design-system/portfolio/asset-work/share-and-icons/fonts'
+G = Path('/home/claude/ext/gfonts/ofl')  # OFL fonts from github.com/google/fonts
 # Paper & Ink palette: yellow and blue grounds alternate; cards are white
 INK, CREAM, ORANGE, TEAL = '#000000', '#FFFFFF', '#FFD23F', '#3A66FF'
 
@@ -28,8 +27,8 @@ TILES = {
 BLEED_W = {'silverlink': 1200, 'scs': 1240, 'uat': 1500}
 
 HEAD = f'''<!doctype html><html><head><meta charset="utf-8"><style>
-@font-face{{font-family:"Press Start 2P";src:url("{(FONTS/'PressStart2P.woff2').as_uri()}")}}
-@font-face{{font-family:"Courier Prime";font-weight:700;src:url("{(CP/'CourierPrime-Bold.woff2').as_uri()}")}}
+@font-face{{font-family:"IBM Plex Mono";font-weight:700;src:url("{(G/'ibmplexmono/IBMPlexMono-Bold.ttf').as_uri()}")}}
+@font-face{{font-family:"IBM Plex Sans";font-weight:100 700;font-stretch:85% 100%;src:url("{(G/'ibmplexsans/IBMPlexSans[wdth,wght].ttf').as_uri()}")}}
 html,body{{margin:0;width:100vw;height:100vh;overflow:hidden}}
 .shot{{position:absolute;border:4px solid {INK};box-shadow:14px 14px 0 {INK};display:block}}
 </style></head>'''
@@ -69,10 +68,10 @@ for n, (big, label) in enumerate(steps):
     cards += f'''<div style="position:absolute;left:{60+n*285}px;top:{150 if n%2==0 else 250}px;width:240px;height:240px;
       background:{TEAL if accent else CREAM};border:4px solid {INK};box-shadow:12px 12px 0 {INK};
       display:flex;flex-direction:column;justify-content:space-between;padding:22px;box-sizing:border-box">
-      <div style="font:400 {64 if len(big)<3 else 48}px/1 'Press Start 2P';color:{INK}">{big}</div>
-      <div style="font:700 38px/1.05 'Courier Prime';color:{INK}">{label}</div></div>'''
+      <div style="font:700 {84 if len(big)<3 else 64}px/1 'IBM Plex Mono';letter-spacing:-0.03em;color:{INK}">{big}</div>
+      <div style="font:700 condensed 38px/1.05 'IBM Plex Sans';color:{INK}">{label}</div></div>'''
     if n < 3:
         y = (150 if n%2==0 else 250) + 120
-        cards += f'<div style="position:absolute;left:{60+n*285+252}px;top:{y+ (50 if n%2==0 else -50)}px;font:400 28px \'Press Start 2P\';color:{INK}">&#9654;</div>'
+        cards += f'<div style="position:absolute;left:{60+n*285+252}px;top:{y+ (50 if n%2==0 else -50)}px;font:700 32px \'IBM Plex Mono\';color:{INK}">&#9654;</div>'
 (HERE / 'ai-finance.html').write_text(f'{HEAD}<body style="background:{ORANGE}">{cards}</body></html>')
 print('ok', sorted(p.name for p in HERE.glob('*.html')))

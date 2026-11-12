@@ -22,9 +22,11 @@ const CELL: Record<Variant, string> = {
 };
 
 const VALUE: Record<Variant, string> = {
-  band: 'text-[length:min(24px,15cqi)] sm:text-[length:min(36px,15cqi)] lg:text-[length:min(30px,15cqi)] xl:text-[length:min(38px,15cqi)]',
-  status: 'text-[length:min(24px,15cqi)] lg:text-[length:min(28px,15cqi)]',
-  inline: 'text-[length:min(28px,13cqi)]',
+  // Plex Mono is about 0.6em per glyph, so values can run larger than the
+  // old pixel face and still fit "89.61%" from 320px up
+  band: 'text-[length:min(36px,22cqi)] sm:text-[length:min(52px,22cqi)] lg:text-[length:min(44px,22cqi)] xl:text-[length:min(56px,22cqi)]',
+  status: 'text-[length:min(36px,22cqi)] lg:text-[length:min(42px,22cqi)]',
+  inline: 'text-[length:min(40px,20cqi)]',
 };
 
 const FRAME: Record<Variant, string> = {
@@ -57,7 +59,7 @@ export default function StatStrip({ stats, variant, className = '' }: StatStripP
           <dt className="font-mono text-[15px] sm:text-base leading-snug max-w-[18ch]">
             {label}
           </dt>
-          <dd className={`font-pixel leading-none tabular-nums ${VALUE[variant]}`}>
+          <dd className={`font-label font-bold tracking-[-0.02em] leading-none tabular-nums ${VALUE[variant]}`}>
             {value}
           </dd>
         </div>

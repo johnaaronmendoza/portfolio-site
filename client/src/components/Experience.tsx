@@ -74,7 +74,7 @@ export default function Experience() {
               <Window key={entry.org} title={entry.file} bodyClassName="p-6 sm:p-10 lg:p-12">
                 <div className="flex flex-wrap items-center gap-2 mb-4">
                   {entry.badges.map(badge => (
-                    <span key={badge} className={`font-pixel text-xs text-black border-2 border-black px-2 py-1 ${BADGE_FILL[badge]}`}>
+                    <span key={badge} className={`font-label text-xs text-black border-2 border-black px-2 py-1 ${BADGE_FILL[badge]}`}>
                       {badge}
                     </span>
                   ))}
@@ -83,10 +83,10 @@ export default function Experience() {
                 {/* Header Row */}
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-8 pb-6 border-b-[3px] border-black">
                   <div>
-                    <h3 className="font-pixel text-base sm:text-lg text-black mb-2 leading-relaxed">
+                    <h3 className="font-display text-2xl sm:text-[28px] text-black mb-2">
                       {entry.org}
                     </h3>
-                    <p className="font-mono-8bit text-[15px] sm:text-base font-bold">
+                    <p className="font-sans text-[15px] sm:text-base font-bold">
                       {entry.role}
                     </p>
                   </div>

@@ -11,7 +11,7 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { scrollToSection } from '@/lib/utils';
 
 const LINK_CLASS =
-  'min-h-[44px] inline-flex items-center gap-3 font-mono text-[15px] sm:text-base font-bold underline-offset-4 decoration-2 hover:underline';
+  'min-h-[44px] inline-flex items-center gap-3 font-sans text-[15px] sm:text-base font-bold underline-offset-4 decoration-2 hover:underline';
 
 const NEW_TAB = <span className="sr-only"> (opens in a new tab)</span>;
 
@@ -46,11 +46,11 @@ export default function Footer() {
         <div className="space-y-5">
           <div className="flex items-start gap-4">
             <PixelArt name="icon-contact" size={32} lazy className="mt-1" />
-            <h2 className="font-pixel text-[22px] sm:text-[28px] leading-snug">
+            <h2 className="font-display text-[28px] sm:text-[36px]">
               Hiring for 2027? Let's talk.
             </h2>
           </div>
-          <p className="font-mono-8bit text-[15px] sm:text-base max-w-[40ch] leading-relaxed">
+          <p className="font-sans text-[15px] sm:text-base max-w-[40ch] leading-relaxed">
             Open to AI, data and software graduate roles. Graduating April 2027.
           </p>
           <a href="mailto:johnaaronmb@gmail.com" className="btn btn-primary">
@@ -61,7 +61,7 @@ export default function Footer() {
 
         {/* Socials */}
         <div className="space-y-4">
-          <h3 className="font-pixel text-sm leading-snug">Find me on</h3>
+          <h3 className="font-display text-xl">Find me on</h3>
           <ul className="space-y-1">
             <li>
               <a
@@ -97,12 +97,12 @@ export default function Footer() {
         {/* Clock + terminal Easter egg hint */}
         <div className="space-y-4">
           {sgtTime && (
-            <p className="flex items-center gap-3 font-pixel text-sm leading-snug tabular-nums">
+            <p className="flex items-center gap-3 font-label text-sm leading-snug tabular-nums">
               <PixelArt name="globe" size={24} lazy />
               <span>SGT {sgtTime}<span className="sr-only"> Singapore time</span></span>
             </p>
           )}
-          <p className="font-mono text-[15px] sm:text-base leading-relaxed">
+          <p className="font-sans text-[15px] sm:text-base leading-relaxed">
             Open the terminal and try{' '}
             <button
               type="button"
@@ -112,7 +112,7 @@ export default function Footer() {
               {'>'} sudo hire-me
             </button>
           </p>
-          <p className="font-mono-8bit text-sm">
+          <p className="font-sans text-sm">
             © {currentYear} John Aaron Mendoza Branzuela
           </p>
           {/* Back to the top of the page; focus moves to <main> so Tab starts there */}

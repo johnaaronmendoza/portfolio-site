@@ -75,7 +75,7 @@ export function Lead({
 }) {
   return (
     <p
-      className={`relative max-w-[42ch] font-mono font-bold text-lg leading-[1.4] lg:text-[22px] lg:leading-[1.35] text-balance ${prompt ? 'pl-[2ch]' : ''} ${LEAD_TEXT[tone]} ${className}`}
+      className={`relative max-w-[42ch] font-sans font-bold text-lg leading-[1.4] lg:text-[22px] lg:leading-[1.35] text-balance ${prompt ? 'pl-[2ch]' : ''} ${LEAD_TEXT[tone]} ${className}`}
     >
       {prompt && (
         <span aria-hidden="true" className={`absolute left-0 ${tone === 'navy' ? 'text-[color:var(--blue-text)]' : ''}`}>
@@ -91,7 +91,7 @@ export function Lead({
 export function PixelList({ items, columns = 1, className = '' }: { items: string[]; columns?: 1 | 2; className?: string }) {
   return (
     <ul
-      className={`font-mono text-[15px] sm:text-base leading-[1.65] ${
+      className={`font-sans text-[15px] sm:text-base leading-[1.65] ${
         columns === 2 ? 'grid gap-x-8 gap-y-3 lg:gap-y-4 sm:grid-cols-2' : 'space-y-3 lg:space-y-4 max-w-[60ch]'
       } ${className}`}
     >

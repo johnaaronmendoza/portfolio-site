@@ -4,7 +4,7 @@ import { Link } from 'wouter';
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
 import PixelArt from './PixelArt';
-import { Lead, SpotPlate } from './Hierarchy';
+import { Lead } from './Hierarchy';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
 import { noteProjectOpen } from '@/hooks/useAchievements';
 import { motionTokens } from '@/lib/motion-tokens';
@@ -102,13 +102,7 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
 
       {/* Project Info */}
       <div className="flex flex-1 flex-col gap-4 p-5">
-        {/* Spot sticker straddles the image rule (half of its 102px plate above
-            it, minus the 20px body padding); it covers only the screenshot.
-            The title gets its own full-width row so long words never break. */}
-        <div className="flex items-end justify-between gap-3">
-          <div className="relative z-10 -mt-[72px]">
-            <SpotPlate spot={project.spot} />
-          </div>
+        <div className="flex">
           <span className="flex-shrink-0 border-2 border-black bg-[var(--orange)] px-2 py-1 font-pixel text-xs text-black">
             {project.year}
           </span>

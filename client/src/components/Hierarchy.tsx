@@ -3,7 +3,7 @@
  * bullets, fact chips and spot plates. Copy marks key terms with **double
  * asterisks**; they are parsed here into <strong>, never injected as HTML.
  */
-import PixelArt, { type PixelArtName, type SpotName } from './PixelArt';
+import PixelArt, { type PixelArtName } from './PixelArt';
 
 /** teal: on cream windows and navy. cream: on the teal band or inside a teal/orange block */
 export type KeySurface = 'teal' | 'cream';
@@ -133,23 +133,3 @@ export function FactChips({ facts, label, className = '' }: { facts: Fact[]; lab
   );
 }
 
-export type PlateTone = 'orange' | 'teal';
-export type Spot = { name: SpotName; tone: PlateTone };
-
-const PLATE_FILL: Record<PlateTone, string> = {
-  orange: 'bg-[var(--orange)]',
-  teal: 'bg-[var(--teal)]',
-};
-
-/**
- * A project's "program icon": 48×48 spot on a square colour plate, 3px ink
- * border, no shadow. `className` sizes the image at 2×, 3× or 4× (size-24,
- * size-36, size-48). Decorative: the project name always sits beside it.
- */
-export function SpotPlate({ spot, className = 'size-24', lazy = true }: { spot: Spot; className?: string; lazy?: boolean }) {
-  return (
-    <span aria-hidden="true" className={`inline-block flex-shrink-0 self-start border-[3px] border-black ${PLATE_FILL[spot.tone]}`}>
-      <PixelArt name={spot.name} size={192} lazy={lazy} className={`block ${className}`} />
-    </span>
-  );
-}

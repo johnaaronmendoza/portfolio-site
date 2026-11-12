@@ -277,7 +277,7 @@ export default function Hero() {
                   src="/assets/mascot/poses/point-right.png"
                   alt=""
                   width={47}
-                  height={64}
+                  height={72}
                   className="relative h-[256px] xl:h-[288px] w-auto -scale-x-100 [image-rendering:pixelated]"
                 />
               </div>

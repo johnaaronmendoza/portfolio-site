@@ -25,7 +25,7 @@ export default function StatsBand() {
     >
       <p
         aria-hidden="true"
-        className="hidden md:flex flex-shrink-0 flex-col items-center justify-center gap-3 bg-[var(--cream)] px-6 lg:px-8 font-pixel text-xl lg:text-2xl"
+        className="hidden md:flex flex-shrink-0 flex-col items-center justify-center gap-3 bg-[var(--paper)] px-6 lg:px-8 font-pixel text-xl lg:text-2xl"
       >
         <PixelArt name="smiley" size={32} lazy />
         HELLO!

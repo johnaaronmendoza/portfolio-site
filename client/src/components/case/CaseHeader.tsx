@@ -50,7 +50,7 @@ export default function CaseHeader({ slug, file, facts, note, links, stats, hero
         <WindowBar title={file} />
         <div className="window-body p-6 sm:p-10 lg:p-14">
           <div className="grid grid-cols-1">
-            <span className="col-start-1 row-start-1 self-start justify-self-start border-2 border-black bg-[var(--orange)] px-2 py-1 font-pixel text-xs text-black">
+            <span className="col-start-1 row-start-1 self-start justify-self-start border-2 border-black bg-[var(--yellow)] px-2 py-1 font-pixel text-xs text-black">
               {project.year}
             </span>
             {/* Upper case is CSS only, so screen readers get the real name */}
@@ -60,7 +60,7 @@ export default function CaseHeader({ slug, file, facts, note, links, stats, hero
             <Lead text={project.description} tone="cream" className={`${ROW} mt-4`} />
             <FactChips facts={facts} label="Project facts" className={`${ROW} mt-6`} />
             {note && (
-              <p className={`${ROW} mt-3 max-w-[60ch] font-mono text-[15px] sm:text-base leading-[1.5] text-[color:var(--navy)]`}>
+              <p className={`${ROW} mt-3 max-w-[60ch] font-mono text-[15px] sm:text-base leading-[1.5] text-[color:var(--text)]`}>
                 {note}
               </p>
             )}

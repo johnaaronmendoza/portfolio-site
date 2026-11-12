@@ -17,26 +17,26 @@ const { hero: HERO, loop: LOOP, easing } = motionTokens;
 
 const ROLE_LINE = 'AI, data and full-stack developer';
 
-// Two-tone name, one colour per line (orange 8.08:1, teal 9.69:1 on black)
+// Two-tone name on the black window: white, then yellow (21:1 and 14:1 on black)
 const NAME_LINES = [
-  { text: 'JOHN AARON', color: 'text-[color:var(--orange)]' },
-  { text: 'BRANZUELA', color: 'text-[color:var(--teal)]' },
+  { text: 'JOHN AARON', color: 'text-[color:var(--paper)]' },
+  { text: 'BRANZUELA', color: 'text-[color:var(--yellow)]' },
 ];
 
-const ORANGE = 'bg-[var(--orange)]';
-const TEAL = 'bg-[var(--teal)]';
-const CREAM = 'bg-[var(--cream)]';
+const YELLOW = 'bg-[var(--yellow)]';
+const BLUE = 'bg-[var(--blue)]';
+const INK = 'bg-black';
 
 const PIXELS = [
-  { top: '12%',  right: '8%',   size: 4, color: ORANGE, delay: 0 },
-  { top: '20%',  right: '18%',  size: 3, color: TEAL,   delay: 0.5 },
-  { top: '45%',  right: '6%',   size: 2, color: CREAM,  delay: 1 },
-  { top: '65%',  right: '22%',  size: 3, color: TEAL,   delay: 1.5 },
-  { top: '80%',  right: '10%',  size: 2, color: ORANGE, delay: 0.8 },
-  { top: '15%',  left: '5%',    size: 2, color: TEAL,   delay: 0.3 },
-  { top: '35%',  left: '8%',    size: 3, color: ORANGE, delay: 1.2 },
-  { top: '55%',  left: '4%',    size: 2, color: CREAM,  delay: 0.7 },
-  { top: '72%',  left: '12%',   size: 4, color: TEAL,   delay: 1.8 },
+  { top: '12%',  right: '8%',   size: 4, color: YELLOW, delay: 0 },
+  { top: '20%',  right: '18%',  size: 3, color: BLUE,   delay: 0.5 },
+  { top: '45%',  right: '6%',   size: 2, color: INK,  delay: 1 },
+  { top: '65%',  right: '22%',  size: 3, color: BLUE,   delay: 1.5 },
+  { top: '80%',  right: '10%',  size: 2, color: YELLOW, delay: 0.8 },
+  { top: '15%',  left: '5%',    size: 2, color: BLUE,   delay: 0.3 },
+  { top: '35%',  left: '8%',    size: 3, color: YELLOW, delay: 1.2 },
+  { top: '55%',  left: '4%',    size: 2, color: INK,  delay: 0.7 },
+  { top: '72%',  left: '12%',   size: 4, color: BLUE,   delay: 1.8 },
 ];
 
 const NEW_TAB = <span className="sr-only"> (opens in a new tab)</span>;
@@ -46,7 +46,7 @@ function Cursor({ calm, className }: { calm: boolean; className: string }) {
   return (
     <motion.span
       aria-hidden="true"
-      className={`inline-block flex-shrink-0 bg-[var(--orange)] ${className}`}
+      className={`inline-block flex-shrink-0 bg-[var(--yellow)] ${className}`}
       animate={calm ? { opacity: 1 } : { opacity: [1, 0] }}
       transition={calm ? { duration: 0 } : { duration: LOOP.blink, repeat: Infinity }}
     />
@@ -106,12 +106,12 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--cream)] px-4 sm:px-8 lg:px-16 pt-12 pb-6 sm:pt-20">
+    <section ref={sectionRef} className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--text)] px-4 sm:px-8 lg:px-16 pt-12 pb-6 sm:pt-20">
       {/* WebGL particles (skipped with reduced motion, frozen by Pause motion) */}
       {!reduced && (
         <div className="absolute inset-0 z-0 pointer-events-none">
           <Particles
-            particleColors={['#FF7A2F', '#2EC4B6', '#F4EAD5']}
+            particleColors={['#3A66FF', '#FFD23F', '#111111']}
             particleCount={120}
             particleSpread={8}
             speed={0.05}
@@ -161,7 +161,7 @@ export default function Hero() {
               {/* Terminal variant: black body so the two-tone name reads */}
               <Window
                 title="welcome.exe"
-                bodyClassName="bg-black text-[color:var(--cream)] [--focus:var(--orange)] p-6 sm:p-10 xl:p-12"
+                bodyClassName="bg-black text-[color:var(--paper)] [--focus:var(--yellow)] p-6 sm:p-10 xl:p-12"
               >
                 {/* Sized so BRANZUELA plus the cursor fits from 320px up */}
                 <h1 className="font-pixel leading-[1.25] text-[length:clamp(20px,7vw,30px)] sm:text-4xl lg:text-[40px] xl:text-5xl">
@@ -193,8 +193,8 @@ export default function Hero() {
               animate={{ opacity: 1 }}
               transition={{ duration: motionTokens.duration.slow, delay: HERO.role }}
             >
-              <span aria-hidden="true" className="font-mono text-[15px] sm:text-base text-[color:var(--orange)] flex-shrink-0">{'>'}</span>
-              <p className="font-mono text-[15px] sm:text-base font-bold text-[color:var(--teal)]">{ROLE_LINE}</p>
+              <span aria-hidden="true" className="font-mono text-[15px] sm:text-base text-[color:var(--text)] flex-shrink-0">{'>'}</span>
+              <p className="font-mono text-[15px] sm:text-base font-bold text-[color:var(--blue-text)]">{ROLE_LINE}</p>
               <Cursor calm={calm} className="w-2 h-4" />
             </motion.div>
 
@@ -278,7 +278,7 @@ export default function Hero() {
         type="button"
         aria-label="Scroll to About"
         onClick={() => scrollToSection('about', reduced)}
-        className="relative z-10 self-center mt-8 min-h-[44px] min-w-[44px] px-3 flex flex-col items-center justify-center gap-1 text-[color:var(--orange)]"
+        className="relative z-10 self-center mt-8 min-h-[44px] min-w-[44px] px-3 flex flex-col items-center justify-center gap-1 text-[color:var(--text)]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: HERO.cue, duration: motionTokens.duration.slow }}

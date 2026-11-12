@@ -49,7 +49,7 @@ export default function StatStrip({ stats, variant, className = '' }: StatStripP
       {stats.map(({ value, label }, i) => (
         <div
           key={label}
-          className={`flex flex-col-reverse justify-end gap-3 bg-[var(--orange)] ${CELL[variant]} ${
+          className={`flex flex-col-reverse justify-end gap-3 bg-[var(--yellow)] ${CELL[variant]} ${
             // An odd last cell spans the 2-column row below lg
             inline && stats.length % 2 === 1 && i === stats.length - 1 ? 'col-span-2 lg:col-span-1' : ''
           }`}

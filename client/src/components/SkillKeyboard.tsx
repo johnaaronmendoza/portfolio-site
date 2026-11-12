@@ -180,7 +180,7 @@ function KeyTip({ index, tipRef, reduced }: { index: number; tipRef: RefObject<H
         initial={{ opacity: 0, y: reduced ? 0 : motionTokens.distance.xs }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: motionTokens.duration.instant, ease: motionTokens.easing.out }}
-        className="border-[3px] border-black bg-[var(--cream)] text-[color:var(--navy)] shadow-[4px_4px_0_0_#000]"
+        className="border-[3px] border-black bg-[var(--paper)] text-[color:var(--text)] shadow-[4px_4px_0_0_#000]"
       >
         <WindowBar title={fileName(CAPS[index])} />
         <div className="px-3 py-2.5 font-mono">
@@ -491,7 +491,7 @@ export default function SkillKeyboard({ listId }: { listId: string }) {
               ))}
             </div>
             <div
-              className={`relative aspect-[2/3] sm:aspect-[2/1] lg:aspect-[16/9] rounded-[10px] outline-offset-4 outline-[color:var(--orange)] ${focus?.visible ? 'outline-3' : ''}`}
+              className={`relative aspect-[2/3] sm:aspect-[2/1] lg:aspect-[16/9] rounded-[10px] outline-offset-4 outline-[color:var(--yellow)] ${focus?.visible ? 'outline-3' : ''}`}
             >
               {stage === '3d' && (
                 <Boundary onError={() => setStage('2d')}>

@@ -18,9 +18,9 @@ type Entry = {
 type Badge = 'Internship' | 'In progress' | 'Education';
 
 const BADGE_FILL: Record<Badge, string> = {
-  Internship: 'bg-[var(--orange)]',
-  'In progress': 'bg-[var(--teal)]',
-  Education: 'bg-[var(--teal)]',
+  Internship: 'bg-[var(--yellow)]',
+  'In progress': 'bg-[var(--blue)]',
+  Education: 'bg-[var(--blue)]',
 };
 
 const ENTRIES: Entry[] = [

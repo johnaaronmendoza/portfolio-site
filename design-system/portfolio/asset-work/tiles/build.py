@@ -12,7 +12,8 @@ HERE = Path(__file__).parent
 SRC = HERE / 'src'
 FONTS = ROOT / 'client/public/fonts'
 CP = ROOT / 'design-system/portfolio/asset-work/share-and-icons/fonts'
-INK, CREAM, ORANGE, TEAL, NAVY, VIOLET = '#000000', '#F4EAD5', '#FF7A2F', '#2EC4B6', '#16163F', '#6C4AD0'
+# Paper & Ink palette: yellow and blue grounds alternate; cards are white
+INK, CREAM, ORANGE, TEAL = '#000000', '#FFFFFF', '#FFD23F', '#3A66FF'
 
 # slug: (ground, kind, [(file, crop box)])
 TILES = {

@@ -51,7 +51,7 @@ export default function Home() {
   useLayoutEffect(() => saveHomeScroll, []);
 
   return (
-    <div className="min-h-screen text-[color:var(--cream)]">
+    <div className="min-h-screen text-[color:var(--text)]">
       <SkipLink />
       <SectionNav />
       <main id="main" tabIndex={-1}>

@@ -30,26 +30,25 @@ export const FILTERS: { id: Filter; label: string }[] = [
   ...(Object.keys(GROUP_NAME) as GroupId[]).map(id => ({ id, label: GROUP_NAME[id] })),
 ];
 
-// Keycap colourways in the house palette, with meaning (John, 7 Nov 2026):
-// AI orange, Data teal, build (Frontend, Backend, Infrastructure) cream,
-// Workflow violet. Cream is the --cream token, not the old sheet's #FBF0DD,
-// so the board shares one palette with the windows. WCAG contrast of the ink:
-// orange face 8.08, bar 6.65; teal face 9.69, bar 7.23; cream face 15.80,
-// bar 10.25; violet face 4.98, bar 8.02. Muted keys use MUTED below.
+// Keycap colourways in the Paper & Ink palette, with meaning (John, Nov 2026):
+// AI yellow, Data blue, build (Frontend, Backend, Infrastructure) paper white,
+// Workflow ink. WCAG contrast of the legend ink on face / bar:
+// yellow 14.6 / 12.6; blue (white legend) 4.64 / 5.9; paper 18.9 / 13.9;
+// ink (white legend) 14.4 / 18.9. Muted keys use MUTED below.
 export const WAYS = {
-  orange: { face: '#FF7A2F', bar: '#EC6A22', side: '#B5521A', ink: '#000000' },
-  teal:   { face: '#2EC4B6', bar: '#23A99C', side: '#17847A', ink: '#000000' },
-  cream:  { face: '#F4EAD5', bar: '#C9BEA6', side: '#ADA28B', ink: '#111111' },
-  violet: { face: '#6C4AD0', bar: '#4A2F9E', side: '#3E2788', ink: '#F4EAD5' },
+  yellow: { face: '#FFD23F', bar: '#E6B92A', side: '#B8901A', ink: '#000000' },
+  blue:   { face: '#3A66FF', bar: '#2E55E0', side: '#2241B0', ink: '#FFFFFF' },
+  paper:  { face: '#FFFFFF', bar: '#DCD7CB', side: '#B5B0A4', ink: '#111111' },
+  ink:    { face: '#2A2A2A', bar: '#111111', side: '#000000', ink: '#FFFFFF' },
 } as const;
 
 export const GROUP_WAY: Record<GroupId, keyof typeof WAYS> = {
-  ai: 'orange',
-  data: 'teal',
-  frontend: 'cream',
-  backend: 'cream',
-  infra: 'cream',
-  workflow: 'violet',
+  ai: 'yellow',
+  data: 'blue',
+  frontend: 'paper',
+  backend: 'paper',
+  infra: 'paper',
+  workflow: 'ink',
 };
 
 // Printed labels that differ from the key's id
@@ -120,10 +119,11 @@ export function capFor(k: Key, i: number): Cap {
 /** Retro filename for the tooltip and detail window, e.g. python.info */
 export const fileName = (cap: Cap) => `${cap.text.toLowerCase()}.info`;
 
-// Muted caps (filter mismatch): "lights off", a dark neutral cap with a light
-// legend, so the state also reads in greyscale (with the key sitting flush,
-// without its shadow). Contrast: face/ink 8.10:1, bar/ink 9.88:1.
-export const MUTED = { face: '#34343E', bar: '#26262E', side: '#1D1D23', ink: '#D8D1C2' } as const;
+// Muted caps (filter mismatch): "lights off", a flat warm-grey cap with a dark
+// grey legend, distinct from the white build keys and the black workflow keys,
+// and the key sits flush without its shadow so the state doesn't rely on colour.
+// Contrast: face/ink 6.93:1, bar/ink 5.73:1.
+export const MUTED = { face: '#CFCAC0', bar: '#BDB8AE', side: '#A39E94', ink: '#3D3A35' } as const;
 export const mutedCap = (cap: Cap): Cap => ({ ...cap, ...MUTED });
 
 /** Accessible name: the full name, plus the printed label when it isn't part of it

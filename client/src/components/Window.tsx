@@ -21,7 +21,7 @@ export function WindowBar({ title, onClose, closeLabel }: WindowBarProps) {
           type="button"
           onClick={onClose}
           aria-label={closeLabel}
-          className="flex-shrink-0 inline-flex items-center justify-center w-11 h-11 -my-1.5 -mr-2 font-mono text-base leading-none text-[color:var(--cream)] outline-offset-[-4px] [--focus:var(--cream)] transition-colors duration-150 hover:bg-black"
+          className="flex-shrink-0 inline-flex items-center justify-center w-11 h-11 -my-1.5 -mr-2 font-mono text-base leading-none text-[color:var(--paper)] outline-offset-[-4px] [--focus:var(--paper)] transition-colors duration-150 hover:bg-[var(--blue)]"
         >
           <span aria-hidden="true">✕</span>
         </button>

@@ -68,7 +68,7 @@ const BOARD_SHADOW = 0.2;     // the board's own hard shadow offset
 const TEX = 256;              // legend canvas width (spans the cap's full width on the front)
 const TOP_TEX_H = Math.round((TEX * TOP_D) / TOP_W);
 const FRONT_TEX_H = 128;
-const ORANGE = '#FF7A2F';     // focus outline, matching the site's :focus-visible
+const FOCUS = '#2347D6';      // focus outline: blue-text, 3:1+ on the page and keys
 const FONT = 'ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace';
 
 const fontAt = (px: number) => `700 ${px}px ${FONT}`;
@@ -164,7 +164,7 @@ function focusFrameTexture() {
     ctx.beginPath();
     ctx.roundRect(lw / 2, lw / 2, TEX - lw, TOP_TEX_H - lw, TEX * 0.13);
     ctx.lineWidth = lw;
-    ctx.strokeStyle = ORANGE;
+    ctx.strokeStyle = FOCUS;
     ctx.stroke();
   }
   const t = new THREE.CanvasTexture(cv);
@@ -370,7 +370,7 @@ function Scene({ cols, icons, wrap, play, focused, open, pulse, filter, entrance
       inkMat: new THREE.MeshBasicMaterial({ color: '#000000', side: THREE.BackSide }),
       // Hard shadows: flat ink, drawn just above the surface they fall on
       shadowMat: new THREE.MeshBasicMaterial({ color: '#000000', polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
-      focusMat: new THREE.MeshBasicMaterial({ color: ORANGE, side: THREE.BackSide, toneMapped: false }),
+      focusMat: new THREE.MeshBasicMaterial({ color: FOCUS, side: THREE.BackSide, toneMapped: false }),
       frameMat: new THREE.MeshBasicMaterial({ map: focusFrameTexture(), transparent: true, depthWrite: false, toneMapped: false }),
       boardMat: new THREE.MeshStandardMaterial({ color: '#17171D', roughness: 0.55, metalness: 0.2 }),
     };

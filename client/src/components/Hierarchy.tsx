@@ -9,8 +9,8 @@ import PixelArt, { type PixelArtName } from './PixelArt';
 export type KeySurface = 'teal' | 'cream';
 
 const KEY_FILL: Record<KeySurface, string> = {
-  teal: 'bg-[var(--teal)]',
-  cream: 'bg-[var(--cream)]',
+  teal: 'bg-[var(--blue)]',
+  cream: 'bg-[var(--paper)]',
 };
 
 interface KeyTextProps {
@@ -52,7 +52,7 @@ type LeadTone = 'navy' | 'teal' | 'cream';
 
 // Approved pairings: cream on navy (orange prompt), ink on teal, ink on cream
 const LEAD_TEXT: Record<LeadTone, string> = {
-  navy: 'text-[color:var(--cream)]',
+  navy: 'text-[color:var(--text)]',
   teal: 'text-black',
   cream: 'text-black',
 };
@@ -78,7 +78,7 @@ export function Lead({
       className={`relative max-w-[42ch] font-mono font-bold text-lg leading-[1.4] lg:text-[22px] lg:leading-[1.35] text-balance ${prompt ? 'pl-[2ch]' : ''} ${LEAD_TEXT[tone]} ${className}`}
     >
       {prompt && (
-        <span aria-hidden="true" className={`absolute left-0 ${tone === 'navy' ? 'text-[color:var(--orange)]' : ''}`}>
+        <span aria-hidden="true" className={`absolute left-0 ${tone === 'navy' ? 'text-[color:var(--blue-text)]' : ''}`}>
           {'>'}
         </span>
       )}
@@ -110,7 +110,7 @@ export function PixelList({ items, columns = 1, className = '' }: { items: strin
 export type Fact = { icon: PixelArtName; text: string };
 
 const CHIP =
-  'inline-flex min-w-0 max-w-full items-start gap-2 min-h-9 border-2 border-black bg-[var(--cream)] px-2.5 py-1.5 font-mono text-[15px] sm:text-base font-bold leading-[1.4] text-black';
+  'inline-flex min-w-0 max-w-full items-start gap-2 min-h-9 border-2 border-black bg-[var(--paper)] px-2.5 py-1.5 font-mono text-[15px] sm:text-base font-bold leading-[1.4] text-black';
 
 /** L6 chip: a static label (no shadow, not pressable); the words carry the meaning, the icon is decorative */
 export function Chip({ icon, text, as: Tag = 'p', className = '' }: Fact & { as?: 'p' | 'li'; className?: string }) {

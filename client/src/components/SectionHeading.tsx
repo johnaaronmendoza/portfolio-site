@@ -4,7 +4,7 @@ type HeadingTone = 'two-tone' | 'ink';
 
 interface Props {
   text: string; // e.g. "ABOUT ME"
-  /** two-tone on navy (orange first word, teal rest and rule); ink on the teal band */
+  /** two-tone on the page (black first word, blue rest and rule); ink on the blue band */
   tone?: HeadingTone;
   /** section: Home h2; case: the smaller case-study h2 (MASTER 2.11), upper case via CSS */
   size?: 'section' | 'case';
@@ -33,15 +33,15 @@ export default function SectionHeading({ text, tone = 'two-tone', size = 'sectio
   return (
     <div className={`flex items-center gap-4 ${className}`}>
       {icon && <PixelArt name={icon} size={32} lazy />}
-      <h2 id={id} className={`font-pixel ${SIZE[size]} ${ink ? 'text-black' : 'text-[color:var(--orange)]'}`}>
+      <h2 id={id} className={`font-pixel ${SIZE[size]} text-black`}>
         {first}
         {rest.length > 0 && (
-          <span className={ink ? undefined : 'text-[color:var(--teal)]'}> {rest.join(' ')}</span>
+          <span className={ink ? undefined : 'text-[color:var(--blue-text)]'}> {rest.join(' ')}</span>
         )}
       </h2>
       <div
         aria-hidden="true"
-        className={`flex-1 min-w-0 h-[6px] ${ink ? 'bg-black' : 'bg-[var(--teal)]'}`}
+        className={`flex-1 min-w-0 h-[6px] ${ink ? 'bg-black' : 'bg-[var(--blue)]'}`}
       />
     </div>
   );

@@ -13,8 +13,8 @@ interface RibbonProps {
 
 // Approved pairings: black on orange or teal
 const TONES: Record<RibbonTone, string> = {
-  orange: 'bg-[var(--orange)] text-black',
-  teal: 'bg-[var(--teal)] text-black',
+  orange: 'bg-[var(--yellow)] text-black',
+  teal: 'bg-[var(--blue)] text-black',
 };
 
 // Lower-bound glyph advance: Press Start 2P is 1em wide (14px at text-sm), so

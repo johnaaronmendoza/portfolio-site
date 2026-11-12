@@ -122,8 +122,8 @@ const MASCOT_WORRY = MASCOT.worry;
 
 // User: orange + ink (8.08). Bot: cream + navy (14.40), framed so it reads on the cream body.
 const BUBBLE = {
-  user: 'bg-[var(--orange)] text-black',
-  system: 'bg-[var(--cream)] text-[color:var(--navy)]',
+  user: 'bg-[var(--yellow)] text-black',
+  system: 'bg-[var(--paper)] text-[color:var(--text)]',
 };
 
 // Typing animation: reveals the answer letter by letter (full text for screen readers)
@@ -283,7 +283,7 @@ export default function MascotChatWidget() {
         aria-label={isOpen ? 'Close chat' : "Chat about John's work"}
         aria-expanded={isOpen}
         aria-controls={PANEL_ID}
-        className={`btn focus-ring-float fixed bottom-4 right-4 sm:bottom-6 z-40 p-0 text-black ${isOpen ? 'bg-[var(--orange)]' : 'bg-[var(--cream)]'}`}
+        className={`btn focus-ring-float fixed bottom-4 right-4 sm:bottom-6 z-40 p-0 text-black ${isOpen ? 'bg-[var(--yellow)]' : 'bg-[var(--paper)]'}`}
       >
         <div className="flex items-center gap-2 p-1 sm:px-3 sm:py-1.5">
           <img
@@ -339,7 +339,7 @@ export default function MascotChatWidget() {
                   )}
                   <div className="max-w-[80%]">
                     <TypingMessage content={msg.content} role={msg.role} />
-                    <p className={`font-mono text-sm text-[color:var(--navy)] mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+                    <p className={`font-mono text-sm text-[color:var(--text)] mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
                       {msg.timestamp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
                     </p>
                   </div>
@@ -385,7 +385,7 @@ export default function MascotChatWidget() {
                   onChange={e => setInput(e.target.value)}
                   placeholder="Ask about a project or skill"
                   aria-label="Ask about a project or skill"
-                  className="flex-1 min-w-0 bg-transparent text-[color:var(--navy)] placeholder:text-[color:var(--navy)] placeholder:italic font-mono text-base outline-none"
+                  className="flex-1 min-w-0 bg-transparent text-[color:var(--text)] placeholder:text-[color:var(--text)] placeholder:italic font-mono text-base outline-none"
                   disabled={isTyping}
                 />
               </div>

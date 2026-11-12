@@ -40,7 +40,7 @@ export default function Footer() {
 
   return (
     // Extra bottom padding so the floating controls and chat button never cover the last row
-    <footer className="bg-[var(--violet)] text-[color:var(--cream)] border-t-[3px] border-black px-4 sm:px-8 lg:px-16 pt-16 pb-28 sm:pt-20 [--focus:var(--cream)]">
+    <footer className="bg-[var(--bar)] text-[color:var(--paper)] border-t-[3px] border-black px-4 sm:px-8 lg:px-16 pt-16 pb-28 sm:pt-20 [--focus:var(--paper)]">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr] gap-12 md:gap-10">
         {/* Contact CTA */}
         <div className="space-y-5">
@@ -106,7 +106,7 @@ export default function Footer() {
             Open the terminal and try{' '}
             <button
               type="button"
-              className="min-h-[44px] inline-flex items-center px-1 font-bold underline underline-offset-4 decoration-2 transition-[background-color,color] duration-150 hover:bg-[var(--cream)] hover:text-[color:var(--violet)]"
+              className="min-h-[44px] inline-flex items-center px-1 font-bold underline underline-offset-4 decoration-2 transition-[background-color,color] duration-150 hover:bg-[var(--paper)] hover:text-[color:var(--bar)]"
               onClick={() => window.dispatchEvent(new Event('toggle-terminal'))}
             >
               {'>'} sudo hire-me

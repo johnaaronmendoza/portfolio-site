@@ -73,9 +73,9 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
             className={`w-full h-full transition-[filter,scale] duration-200 ${
               isComingSoon
                 ? 'opacity-50 grayscale'
-                : project.featured
-                  ? '[@media(hover:hover)]:group-hover:scale-[1.03]'
-                  : '[@media(hover:hover)]:grayscale [@media(hover:hover)]:group-hover:grayscale-0 [@media(hover:hover)]:group-hover:scale-[1.03]'
+                // Every tile in colour: greyscale made the non-featured
+                // projects (AI Finance, UWB, UAT) look disabled
+                : '[@media(hover:hover)]:group-hover:scale-[1.03]'
             }`}
           />
         ) : (

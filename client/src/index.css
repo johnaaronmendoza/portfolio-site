@@ -445,17 +445,27 @@
     padding: 14px 18px;
     font-weight: 600;
   }
+  /* Tail: an ink triangle with a smaller paper triangle on top, so it reads
+     as a 3px outline joined to the bubble's border */
+  .comic-bubble::before,
   .comic-bubble::after {
     content: '';
     position: absolute;
+    clip-path: polygon(0 0, 100% 0, 30% 100%);
+  }
+  .comic-bubble::before {
     left: var(--tail-x, 40px);
-    bottom: -14px;
-    width: 22px;
+    bottom: -28px;
+    width: 36px;
+    height: 28px;
+    background-color: var(--ink);
+  }
+  .comic-bubble::after {
+    left: calc(var(--tail-x, 40px) + 6px);
+    bottom: -19px;
+    width: 23px;
     height: 22px;
     background-color: var(--paper);
-    border-right: 3px solid var(--ink);
-    border-bottom: 3px solid var(--ink);
-    transform: rotate(45deg);
   }
 
   /* Labels: title bars, badges, filters, figures, marquee. Monospace marks them

@@ -11,7 +11,7 @@ import { scrollToSection } from '@/lib/utils';
 import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 import { Chip, Lead } from '@/components/Hierarchy';
 import PixelArt from '@/components/PixelArt';
-import Burst from '@/components/comic/Burst';
+import HeroNarrator from '@/components/comic/HeroNarrator';
 import Window from '@/components/Window';
 
 const { hero: HERO, loop: LOOP, easing } = motionTokens;
@@ -263,28 +263,9 @@ export default function Hero() {
           </div>
 
           {/* Narrator, large screens only so it never sits under text: Lil Johnny
-              points at the name from a comic burst; his bubble opens the chat */}
+              points at the name from a comic burst; pressing him opens the chat */}
           <div className="hidden lg:flex lg:col-span-5 items-center justify-center">
-            <div className="relative w-[340px] h-[420px] xl:w-[380px] xl:h-[460px]">
-              <div aria-hidden="true" className="absolute inset-x-0 bottom-0 top-20 grid place-items-center pointer-events-none">
-                <Burst fill="var(--yellow)" rotate={-8} className="absolute inset-2" />
-                {/* point-right mirrored, so he points left at the name */}
-                <img
-                  src="/assets/mascot/poses/point-right.png"
-                  alt=""
-                  width={47}
-                  height={72}
-                  className="relative h-[256px] xl:h-[288px] w-auto -scale-x-100 [image-rendering:pixelated]"
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => window.dispatchEvent(new CustomEvent('open-chat'))}
-                className="comic-bubble absolute left-0 top-0 max-w-[270px] text-left font-sans text-[17px] leading-snug hover:underline underline-offset-4 decoration-2 [--tail-x:200px]"
-              >
-                Psst! Got questions about my work? Ask me.
-              </button>
-            </div>
+            <HeroNarrator />
           </div>
         </div>
       </div>

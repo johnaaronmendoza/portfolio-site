@@ -2,7 +2,8 @@
  * Home Page: neo-brutalist retro web portfolio.
  * Hero → key figures → About → Experience → Projects → Skills → Footer,
  * with straight marquee strips between sections. The page background stays
- * transparent so the navy body and its pixel grid show through.
+ * transparent so the page's halftone dots show through. Original pixel
+ * stickers sit in the side gutters on wide screens (comic/Stickers).
  */
 
 import { useEffect, useLayoutEffect } from 'react';
@@ -16,12 +17,13 @@ import Ribbon from '@/components/Ribbon';
 import StatsBand from '@/components/StatsBand';
 import SectionNav from '@/components/SectionNav';
 import SkipLink from '@/components/SkipLink';
+import Stickers from '@/components/comic/Stickers';
 import { useHomeAchievements } from '@/hooks/useAchievements';
 import { getLenis } from '@/hooks/useLenis';
 import { saveHomeScroll } from '@/lib/scroll-memory';
 
 // Section wrappers take focus (without a ring) when a link lands on them
-const SECTION_CLASS = 'section-transition focus:outline-none';
+const SECTION_CLASS = 'relative section-transition focus:outline-none';
 
 /** Arriving at "/#projects" (e.g. a case study's Back link): jump there and focus it */
 function useScrollToHash() {
@@ -62,19 +64,23 @@ export default function Home() {
         {/* Negative margins overlap touching 3px borders so bands share one rule */}
         <Ribbon tone="teal" className="-mt-[3px]" items={['ABOUT ME', 'AI', 'DATA', 'FULL-STACK']} />
         <div id="about" tabIndex={-1} className={SECTION_CLASS}>
+          <Stickers set="about" />
           <About />
         </div>
         <Ribbon tone="teal" reverse items={['EXPERIENCE', 'BUILDING DESK ASSIST', 'LGA TELECOM', 'SEMBCORP SOLAR']} />
         <div id="experience" tabIndex={-1} className={SECTION_CLASS}>
+          <Stickers set="experience" />
           <Experience />
         </div>
         {/* Orange either side of the teal Projects band so strips never merge into it */}
         <Ribbon tone="orange" className="-mb-[3px]" items={['PROJECTS', 'SILVERLINK SG', 'SCS AWARENESS PLATFORM']} />
         <div id="projects" tabIndex={-1} className={SECTION_CLASS}>
+          <Stickers set="projects" />
           <Projects />
         </div>
         <Ribbon tone="orange" reverse className="-mt-[3px]" items={['SKILLS', 'PRESS A KEY']} />
         <div id="skills" tabIndex={-1} className={SECTION_CLASS}>
+          <Stickers set="skills" />
           <Skills />
         </div>
       </main>

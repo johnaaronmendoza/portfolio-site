@@ -1,6 +1,8 @@
 /**
  * MascotChatWidget: floating keyword-bot chat (bottom-right).
- * A `chat.exe` window (MASTER 2.10): violet bar, cream body, navy text.
+ * An `ask_johnny.exe` window styled as a retro OS dialog (John, Nov 2026):
+ * a conversation.log dialog with a chunky scrollbar, Lil Johnny leaning on its
+ * top edge, the visitor's questions as blue "selected" rows, and topic keycaps.
  * Answers come from the local knowledge base below; there is no backend.
  */
 
@@ -11,6 +13,7 @@ import { hasFinePointer } from '@/lib/utils';
 import { MASCOT, preloadMascot } from '@/lib/mascot';
 import { motionTokens } from '@/lib/motion-tokens';
 import { WindowBar } from './Window';
+import PixelArt, { type PixelArtName } from './PixelArt';
 
 const PANEL_ID = 'chat-panel';
 
@@ -108,21 +111,21 @@ function findResponse(query: string): string {
   return ANSWERS.find(({ pattern }) => pattern.test(query))?.answer ?? FALLBACK;
 }
 
-const QUICK_ACTIONS = [
-  { label: 'About me', query: 'Tell me about yourself' },
-  { label: 'Projects', query: 'Tell me about your projects' },
-  { label: 'Experience', query: 'Tell me about your experience' },
-  { label: 'Skills', query: 'What are your skills' },
-  { label: 'Education', query: 'Tell me about your education' },
-  { label: 'Contact', query: 'How can I contact you' },
+const QUICK_ACTIONS: { label: string; query: string; icon: PixelArtName }[] = [
+  { label: 'About me', query: 'Tell me about yourself', icon: 'icon-about' },
+  { label: 'Projects', query: 'Tell me about your projects', icon: 'icon-projects' },
+  { label: 'Experience', query: 'Tell me about your experience', icon: 'icon-experience' },
+  { label: 'Skills', query: 'What are your skills', icon: 'icon-skills' },
+  { label: 'Education', query: 'Tell me about your education', icon: 'chip-school' },
+  { label: 'Contact', query: 'How can I contact you', icon: 'icon-contact' },
 ];
 
 const MASCOT_HAPPY = MASCOT.happy;
 const MASCOT_WORRY = MASCOT.worry;
 
-// User: orange + ink (8.08). Bot: cream + navy (14.40), framed so it reads on the cream body.
+// User: a blue "selected row", white text (4.64). Bot: paper + text (18.9).
 const BUBBLE = {
-  user: 'bg-[var(--yellow)] text-black',
+  user: 'bg-[var(--blue)] text-white',
   system: 'bg-[var(--paper)] text-[color:var(--text)]',
 };
 
@@ -312,15 +315,35 @@ export default function MascotChatWidget() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: motionTokens.distance.sm }}
             transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
-            className="window fixed bottom-24 left-2 right-2 sm:left-auto sm:right-4 z-50 sm:w-96 flex flex-col"
-            style={{ height: 'min(520px, calc(100dvh - 8rem))' }}
+            className="window fixed bottom-24 left-2 right-2 sm:left-auto sm:right-4 z-50 sm:w-[26rem] flex flex-col bg-[var(--page)]"
+            style={{ height: 'min(600px, calc(100dvh - 8rem))' }}
           >
-            <WindowBar title="chat.exe" onClose={closeChat} closeLabel="Close chat" />
+            <WindowBar title="ask_johnny.exe" onClose={closeChat} closeLabel="Close chat" />
 
-            {/* Messages: flex-1 + min-h-0 lets the log scroll inside the flex column */}
+            {/* Prompt line, with Lil Johnny leaning on the dialog's top edge
+                (he worries while the bot types) */}
+            <div className="relative flex-shrink-0 flex items-end justify-between gap-3 px-4 pt-3">
+              <p className="font-sans text-[15px] font-bold text-[color:var(--text)] pb-2">
+                Pick a topic or type a question
+              </p>
+              <img
+                src={isTyping ? MASCOT_WORRY : MASCOT_HAPPY}
+                alt=""
+                width={47}
+                height={64}
+                className="relative z-0 h-16 w-auto translate-y-5 -mt-6 [image-rendering:pixelated]"
+              />
+            </div>
+
+            {/* conversation.log dialog: flex-1 + min-h-0 lets the log scroll inside */}
+            <div className="relative z-10 mx-3 flex-1 min-h-0 flex flex-col border-[3px] border-black bg-[var(--paper)] shadow-[4px_4px_0_#000]">
+              <div aria-hidden="true" className="flex-shrink-0 flex items-center justify-between bg-[var(--bar)] text-[color:var(--paper)] font-label text-xs px-2.5 py-1.5">
+                <span>conversation.log</span>
+                <span>○□✕</span>
+              </div>
             <div
               ref={logRef}
-              className="window-body flex-1 min-h-0 overflow-y-auto p-4 space-y-3"
+              className="retro-scroll flex-1 min-h-0 overflow-y-auto p-3 space-y-3"
               data-lenis-prevent
               role="log"
               aria-live="polite"
@@ -332,12 +355,9 @@ export default function MascotChatWidget() {
                   initial={{ opacity: 0, y: motionTokens.distance.sm }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: motionTokens.duration.fast }}
-                  className={`flex items-start gap-2 ${msg.role === 'system' ? 'justify-start' : 'justify-end'}`}
+                  className={`flex ${msg.role === 'system' ? 'justify-start' : 'justify-end'}`}
                 >
-                  {msg.role === 'system' && (
-                    <img src={MASCOT_HAPPY} alt="" className="flex-shrink-0 w-10 h-10 object-contain" style={{ imageRendering: 'pixelated' }} />
-                  )}
-                  <div className="max-w-[80%]">
+                  <div className="max-w-[88%]">
                     <TypingMessage content={msg.content} role={msg.role} />
                     <p className={`font-sans text-sm text-[color:var(--text)] mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
                       {msg.timestamp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
@@ -346,8 +366,7 @@ export default function MascotChatWidget() {
                 </motion.div>
               ))}
               {isTyping && (
-                <div className="flex items-start gap-2 justify-start">
-                  <img src={MASCOT_WORRY} alt="" className="flex-shrink-0 w-10 h-10 object-contain" style={{ imageRendering: 'pixelated' }} />
+                <div className="flex justify-start">
                   <div className={`border-2 border-black px-4 py-3 font-sans text-[15px] ${BUBBLE.system}`}>
                     <span className="sr-only">Typing</span>
                     <span aria-hidden="true" className="animate-pulse">▌▌▌</span>
@@ -355,18 +374,20 @@ export default function MascotChatWidget() {
                 </div>
               )}
             </div>
+            </div>
 
-            {/* Quick actions */}
-            <div className="window-body flex-shrink-0 border-t-[3px] border-black p-3 grid grid-cols-2 gap-x-3 gap-y-2.5">
-              {QUICK_ACTIONS.map(({ label, query }) => (
+            {/* Topic keycaps: one press asks */}
+            <div className="flex-shrink-0 grid grid-cols-3 gap-2.5 px-3 pt-4 pb-1">
+              {QUICK_ACTIONS.map(({ label, query, icon }) => (
                 <button
                   key={label}
                   type="button"
                   onClick={() => sendMessage(query)}
                   aria-disabled={isTyping}
-                  className="btn btn-ghost-ink px-2 py-1"
+                  className="chat-key"
                 >
-                  {label}
+                  <PixelArt name={icon} size={20} />
+                  <span>{label}</span>
                 </button>
               ))}
             </div>
@@ -374,9 +395,9 @@ export default function MascotChatWidget() {
             {/* Input row: the ring sits on the row because the input itself has no outline */}
             <form
               onSubmit={(e) => { e.preventDefault(); sendMessage(input); }}
-              className="window-body flex-shrink-0 border-t-[3px] border-black p-3 flex gap-3"
+              className="flex-shrink-0 p-3 flex gap-3"
             >
-              <div className="flex-1 min-w-0 flex items-center border-[3px] border-black px-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--ink)] focus-within:outline-offset-2">
+              <div className="flex-1 min-w-0 flex items-center border-[3px] border-black bg-[var(--paper)] px-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--ink)] focus-within:outline-offset-2">
                 <span aria-hidden="true" className="font-mono text-base font-bold mr-1">&gt;_</span>
                 <input
                   ref={inputRef}
@@ -390,7 +411,7 @@ export default function MascotChatWidget() {
                 />
               </div>
               <button type="submit" aria-disabled={isTyping} className="btn btn-primary px-4">
-                Send
+                Ask
               </button>
             </form>
           </motion.div>

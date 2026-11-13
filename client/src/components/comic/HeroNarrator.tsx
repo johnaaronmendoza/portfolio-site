@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
-import Burst from './Burst';
-import PixelArt from '@/components/PixelArt';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useCalmMotion } from '@/hooks/useCalmMotion';
 import { motionTokens } from '@/lib/motion-tokens';
@@ -18,22 +16,18 @@ const STEP = [0, 0.5, 0.5, 1];
 const boil = (duration: number, delay = 0) =>
   ({ duration, times: STEP, ease: 'linear' as const, repeat: Infinity, repeatType: 'mirror' as const, delay });
 
-// Sparkles at the burst's edge; each blinks on its own beat
-const SPARKLES = [
-  { className: 'right-0 top-24', size: 32, delay: 0 },
-  { className: 'left-2 bottom-16', size: 24, delay: 0.5 },
-  { className: 'right-6 bottom-2', size: 24, delay: 1.0 },
-];
-
 /**
  * Lil Johnny as the hero's narrator (large screens only; the parent hides it
  * below lg). One button: pressing him or his speech bubble opens the chat.
  *
+ * He stands in a comic panel styled as a site window (lil_johnny.gif): blue
+ * halftone fill, yellow floor (John chose this over the star, Nov 2026).
+ *
  * Motion (hero only, by John's choice, Nov 2026):
- * - entrance, once: the burst pops, he hops in, the bubble pops last;
- * - idle loop: the burst and bubble "boil" between two hand-drawn frames, he
- *   bobs, sparkles blink, and every few seconds he waves;
- * - hover or focus: he waves and the burst boils faster; press: he hops.
+ * - entrance, once: the panel pops, he hops in, the bubble pops last;
+ * - idle loop: the halftone dots drift, the bubble bobs in two-frame comic
+ *   steps, he bobs, and every few seconds he waves;
+ * - hover or focus: he waves and the dots drift faster; press: he hops.
  * Loops stop with Pause motion; nothing moves under prefers-reduced-motion.
  */
 export default function HeroNarrator() {
@@ -74,38 +68,29 @@ export default function HeroNarrator() {
       onBlur={() => setHover(false)}
       className="group relative block w-[340px] h-[420px] xl:w-[380px] xl:h-[460px] text-left"
     >
-      <span aria-hidden="true" className="absolute inset-x-0 bottom-0 top-20 grid place-items-center">
-        {/* Burst: pops in with an overshoot, then boils */}
+      <span aria-hidden="true" className="absolute inset-x-0 bottom-0 top-24 grid place-items-center">
+        {/* Panel window: pops in, then its halftone dots drift */}
         <motion.span
-          className="absolute inset-2"
-          initial={reduced ? false : { scale: 0, rotate: -60 }}
-          animate={reduced ? { scale: 1, rotate: 0 } : { scale: [0, 1.15, 1], rotate: [-60, 6, 0] }}
+          className="absolute inset-x-4 top-6 bottom-0 block border-4 border-black bg-[var(--blue)] shadow-[10px_10px_0_#000] overflow-hidden"
+          initial={reduced ? false : { scale: 0.6, opacity: 0, rotate: -4 }}
+          animate={reduced ? { scale: 1, opacity: 1, rotate: 0 } : { scale: [0.6, 1.05, 1], opacity: [0, 1, 1], rotate: [-4, 1, 0] }}
           transition={{ duration: N.pop, delay: N.burst, times: [0, 0.7, 1], ease: easing.out }}
         >
           <motion.span
-            className="absolute inset-0"
-            animate={calm ? { rotate: 0, scale: 1 } : { rotate: [0, 0, 6, 6], scale: hover ? [1.04, 1.04, 1.08, 1.08] : [1, 1, 1.03, 1.03] }}
-            transition={calm ? { duration: 0 } : boil(hover ? N.boil / 3 : N.boil)}
-          >
-            <Burst fill="var(--yellow)" rotate={-8} className="absolute inset-0" />
-          </motion.span>
+            className="absolute inset-0 [background-image:radial-gradient(rgb(255_255_255/0.28)_2px,transparent_2.4px)] [background-size:12px_12px]"
+            animate={calm ? { backgroundPosition: '0px 0px' } : { backgroundPosition: ['0px 0px', '24px 24px'] }}
+            transition={calm ? { duration: 0 } : { duration: hover ? N.drift / 3 : N.drift, ease: 'linear', repeat: Infinity }}
+          />
+          <span className="absolute inset-x-0 top-0 flex items-center justify-between bg-[var(--bar)] text-[color:var(--paper)] font-label text-sm px-3 py-1.5 border-b-[3px] border-black">
+            <span>lil_johnny.gif</span>
+            <span>○□✕</span>
+          </span>
+          <span className="absolute inset-x-0 bottom-0 h-10 bg-[var(--yellow)] border-t-[3px] border-black" />
         </motion.span>
-
-        {SPARKLES.map((s, i) => (
-          <motion.span
-            key={i}
-            className={`absolute ${s.className}`}
-            initial={reduced ? false : { opacity: 0 }}
-            animate={calm ? { opacity: 1, scale: 1 } : { opacity: [0, 0, 1, 1], scale: [0.6, 0.6, 1, 1] }}
-            transition={calm ? { duration: 0 } : boil(N.blink, N.bubble + s.delay)}
-          >
-            <PixelArt name="sparkle" size={s.size} lazy />
-          </motion.span>
-        ))}
 
         {/* Johnny: hops in from below, bobs, waves; mirrored so he points at the name */}
         <motion.span
-          className="relative block"
+          className="absolute bottom-[34px] left-1/2 -translate-x-1/2 block"
           initial={reduced ? false : { y: 80, opacity: 0 }}
           animate={reduced ? { y: 0, opacity: 1 } : { y: [80, -16, 0], opacity: [0, 1, 1] }}
           transition={{ duration: N.pop, delay: N.johnny, times: [0, 0.65, 1], ease: easing.out }}
@@ -121,7 +106,7 @@ export default function HeroNarrator() {
                 alt=""
                 width={47}
                 height={72}
-                className="h-[256px] xl:h-[288px] w-auto -scale-x-100 [image-rendering:pixelated]"
+                className="h-[240px] xl:h-[272px] w-auto -scale-x-100 [image-rendering:pixelated]"
               />
             </motion.span>
           </motion.span>

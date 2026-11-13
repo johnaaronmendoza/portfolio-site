@@ -34,13 +34,12 @@ export const motionTokens = {
   // Lil Johnny, the hero narrator: entrance delays follow the hero load-in
   // (after ctas at 1.1s), then two-frame loops and a wave every few seconds
   narrator: {
-    burst: 1.25,
+    burst: 1.25,  // the panel window
     johnny: 1.45,
     bubble: 1.75,
     pop: 0.45,
-    boil: 0.9,
     bob: 1.1,
-    blink: 1.4,
+    drift: 3,
     wiggle: 0.3,
     hop: 0.32,
     waveEvery: 6,

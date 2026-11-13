@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Favicon + app-icon set from one 16x16 pixel master (the 01 PROMPT keycap, AI = orange).
+"""Favicon + app-icon set from one 16x16 pixel master (the 01 PROMPT keycap, AI = yellow).
 
   python3 -I build_icons.py <out-dir> [--candidates <review-dir>]
 
-Colours (John, Nov 2026: keycaps use house colours with meaning, AI = orange, black ink):
-  face orange #FF7A2F, legend '>_' ink #000 (8.1:1), outline/seam/shadow ink #000,
+Colours (John, Nov 2026, Paper & Ink: keycaps use colours with meaning, AI = yellow, black ink):
+  face yellow #FFD23F, legend '>_' ink #000 (14.6:1); app-icon ground is the bar black #111111, outline/seam/shadow ink #000,
   front strip: see STRIP below (the variants are rendered side by side with --candidates).
 
 The master is a 16x16 grid drawn below. Every output is that grid scaled by a whole number
@@ -27,11 +27,11 @@ import sys
 from pathlib import Path
 from PIL import Image
 
-NAVY = (0x16, 0x16, 0x3F, 255)
-ORANGE = "#FF7A2F"
+NAVY = (0x11, 0x11, 0x11, 255)  # name kept for the on_navy() helper; now the bar black
+ORANGE = "#FFD23F"  # name kept; now the AI-key yellow
 # Front-strip options. "seam": orange strip under the ink seam row (palette only, ships);
 # "ink": black strip; "shade": a darker orange (off-palette, comparison only).
-STRIPS = {"seam": ORANGE, "ink": "#000000", "shade": "#B8501A"}
+STRIPS = {"seam": ORANGE, "ink": "#000000", "shade": "#B8901A"}
 STRIP = "seam"
 
 

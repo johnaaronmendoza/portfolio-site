@@ -57,18 +57,21 @@ export default function StatStrip({ stats, variant, className = '' }: StatStripP
             inline && stats.length % 2 === 1 && i === stats.length - 1 ? 'col-span-2 lg:col-span-1' : ''
           }`}
         >
-          <dt className="relative z-10 font-mono text-[15px] sm:text-base leading-snug max-w-[18ch]">
+          <dt className="font-mono text-[15px] sm:text-base leading-snug max-w-[18ch]">
             {label}
           </dt>
-          <dd className={`relative self-start font-label font-bold tracking-[-0.02em] leading-none tabular-nums ${VALUE[variant]}`}>
+          <dd className={`relative isolate self-start font-label font-bold tracking-[-0.02em] leading-none tabular-nums ${burst ? 'px-[0.55em] py-[0.45em] -mx-[0.35em] -mt-[0.45em] mb-[0.15em]' : ''} ${VALUE[variant]}`}>
+            {/* POW star behind the number only. The padding gives the digits room
+                inside the star's inner points; the box (and so the star) ends
+                above the label, which sits gap-3 below */}
             {burst && (
               <Burst
                 fill="var(--paper)"
-                rotate={-6}
-                className="absolute -inset-x-[24%] -inset-y-[55%] pointer-events-none"
+                rotate={-4}
+                className="absolute -inset-x-[8%] -inset-y-[10%] -z-10 pointer-events-none"
               />
             )}
-            <span className="relative">{value}</span>
+            {value}
           </dd>
         </div>
       ))}

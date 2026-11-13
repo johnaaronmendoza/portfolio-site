@@ -26,10 +26,14 @@ interface BurstProps {
 export default function Burst({ fill = 'var(--yellow)', rotate = -6, className = '', style, children }: BurstProps) {
   return (
     <span className={`grid place-items-center ${className}`} style={style}>
+      {/* Absolutely filling the box the caller positions (className must make
+          the burst absolute and give it a size or insets), stretched with
+          preserveAspectRatio none. Out of flow, so it can never grow the box */}
       <svg
         viewBox="0 0 100 100"
+        preserveAspectRatio="none"
         aria-hidden="true"
-        className="col-start-1 row-start-1 w-full h-full overflow-visible"
+        className="absolute inset-0 w-full h-full overflow-visible"
         style={{ transform: `rotate(${rotate}deg)` }}
       >
         <polygon
@@ -42,7 +46,7 @@ export default function Burst({ fill = 'var(--yellow)', rotate = -6, className =
         />
       </svg>
       {children && (
-        <span className="col-start-1 row-start-1 relative font-comic text-center leading-none" style={{ transform: `rotate(${rotate}deg)` }}>
+        <span className="relative font-comic text-center leading-none" style={{ transform: `rotate(${rotate}deg)` }}>
           {children}
         </span>
       )}

@@ -164,10 +164,6 @@ export default function Hero() {
                 title="welcome.exe"
                 bodyClassName="bg-black text-[color:var(--paper)] [--focus:var(--yellow)] p-6 sm:p-10 xl:p-12"
               >
-                {/* Comic narration box opens the "first issue" (decorative) */}
-                <p aria-hidden="true" className="comic-caption text-lg sm:text-xl mb-5 sm:mb-7">
-                  Meanwhile, in Singapore...
-                </p>
                 {/* Sized so BRANZUELA plus the cursor fits from 320px up */}
                 <h1 className="font-pixel leading-[1.25] text-[length:clamp(20px,7vw,30px)] sm:text-4xl lg:text-[40px] xl:text-5xl">
                   <span className="sr-only">John Aaron Mendoza Branzuela</span>

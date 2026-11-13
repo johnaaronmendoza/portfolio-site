@@ -38,3 +38,8 @@ Served from `/assets/pixel/<file>`.
 | `chip-team.svg` | 16×16 | Two overlapping heads-and-shoulders: front teal top, back orange top, cream faces | Fact chips for team (16px) | Decorative, `aria-hidden` |
 | `chip-phone.svg` | 16×16 | Plain upright cream phone with an ink speaker slit and a navy screen holding one teal bar | Fact chips for platform / device (16px) | Decorative, `aria-hidden` |
 | `bullet.svg` | 8×8 | Stepped right-pointing orange arrowhead with an ink outline | List marker in every bullet list (16px, 2×) | Decorative, `aria-hidden` |
+
+
+## Stickers (Nov 2026)
+
+`sticker-*.svg`: ten original 16x16 retro-desk objects (heart, cursor, cookie, coffee, card, cd, folder, phone, notepad, magnifier) in the Paper & Ink palette, drawn from scratch as pixel grids in `design-system/portfolio/asset-work/stickers/build.py` (edit the grids there and re-run). All other icons here were recoloured from the old navy/orange/teal/cream palette to Paper & Ink in the same change.

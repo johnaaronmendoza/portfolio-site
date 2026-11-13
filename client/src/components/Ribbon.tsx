@@ -13,13 +13,13 @@ interface RibbonProps {
 
 // Approved pairings: black on orange or teal
 const TONES: Record<RibbonTone, string> = {
-  orange: 'bg-[var(--orange)] text-black',
-  teal: 'bg-[var(--teal)] text-black',
+  orange: 'bg-[var(--yellow)] text-black',
+  teal: 'bg-[var(--blue)] text-black',
 };
 
-// Lower-bound glyph advance: Press Start 2P is 1em wide (14px at text-sm), so
-// this errs towards extra repeats.
-const CHAR_PX = 14;
+// Lower-bound glyph advance: IBM Plex Mono is 0.6em wide (8.4px at text-sm,
+// 9.6px at sm:text-base); 8px errs towards extra repeats, never a gap.
+const CHAR_PX = 8;
 const SEPARATOR_PX = 16 + 2 * 16; // sparkle plus the gap either side
 const MIN_HALF_PX = 4200; // each half of the loop must be wider than a wide screen
 const SPEED_PX_PER_S = 60; // same scroll speed whatever the text length
@@ -51,7 +51,7 @@ export default function Ribbon({
           <span key={i} className="flex items-center">
             {items.map(item => (
               <span key={item} className="flex items-center">
-                <span className="font-pixel text-sm sm:text-base whitespace-pre">{item}</span>
+                <span className="font-label text-sm sm:text-base whitespace-pre">{item}</span>
                 <PixelArt name="sparkle" size={16} lazy className="mx-4" />
               </span>
             ))}

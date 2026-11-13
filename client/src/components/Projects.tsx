@@ -4,7 +4,8 @@ import { Link } from 'wouter';
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
 import PixelArt from './PixelArt';
-import { Lead, SpotPlate } from './Hierarchy';
+import { Lead } from './Hierarchy';
+import Burst from './comic/Burst';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
 import { noteProjectOpen } from '@/hooks/useAchievements';
 import { motionTokens } from '@/lib/motion-tokens';
@@ -64,7 +65,7 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
   const body = (
     <>
       {/* Project image on top, framed by the tile border and a 3px rule */}
-      <div className={`relative overflow-hidden border-b-[3px] border-black bg-[var(--navy)] ${imageHeight ?? (project.featured ? 'h-56 lg:h-72' : 'h-48')}`}>
+      <div className={`relative overflow-hidden border-b-[3px] border-black bg-[var(--page)] ${imageHeight ?? (project.featured ? 'h-56 lg:h-72' : 'h-48')}`}>
         {/* alt="" because the tile's link already names the project */}
         {project.image ? (
           <PixelatedImage
@@ -73,9 +74,9 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
             className={`w-full h-full transition-[filter,scale] duration-200 ${
               isComingSoon
                 ? 'opacity-50 grayscale'
-                : project.featured
-                  ? '[@media(hover:hover)]:group-hover:scale-[1.03]'
-                  : '[@media(hover:hover)]:grayscale [@media(hover:hover)]:group-hover:grayscale-0 [@media(hover:hover)]:group-hover:scale-[1.03]'
+                // Every tile in colour: greyscale made the non-featured
+                // projects (AI Finance, UWB, UAT) look disabled
+                : '[@media(hover:hover)]:group-hover:scale-[1.03]'
             }`}
           />
         ) : (
@@ -83,40 +84,45 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
         )}
         {isComingSoon && (
           <div className="absolute inset-0 flex items-end justify-end p-3">
-            <span className="font-pixel text-xs text-black border-2 border-black bg-[var(--cream)] px-2 py-1">
+            <span className="font-label text-xs text-black border-2 border-black bg-[var(--paper)] px-2 py-1">
               COMING SOON
             </span>
           </div>
         )}
         {project.featured && (
-          <span className="absolute top-2 left-2 font-pixel text-xs text-black border-2 border-black bg-[var(--orange)] px-2 py-1">
+          <span className="absolute top-2 left-2 font-label text-xs text-black border-2 border-black bg-[var(--yellow)] px-2 py-1">
             Featured
           </span>
         )}
         {isExternal && (
-          <span className="absolute top-2 right-2 font-pixel text-xs text-black border-2 border-black bg-[var(--teal)] px-2 py-1">
+          <span className="absolute top-2 right-2 font-label text-xs text-black border-2 border-black bg-[var(--blue)] px-2 py-1">
             Live site
           </span>
+        )}
+        {/* Comic sound effect, decorative (the description says the same) */}
+        {project.sfx && (
+          <Burst
+            fill={project.num % 2 ? 'var(--blue)' : 'var(--yellow)'}
+            rotate={project.num % 2 ? 8 : -8}
+            className={`absolute bottom-2 right-2 size-28 lg:size-32 pointer-events-none ${project.num % 2 ? 'text-white' : 'text-black'}`}
+          >
+            <span aria-hidden="true" className="block px-3 text-[22px] lg:text-[26px]">{project.sfx}</span>
+          </Burst>
         )}
       </div>
 
       {/* Project Info */}
       <div className="flex flex-1 flex-col gap-4 p-5">
-        {/* Spot sticker straddles the image rule (half of its 102px plate above
-            it, minus the 20px body padding); it covers only the screenshot.
-            The title gets its own full-width row so long words never break. */}
-        <div className="flex items-end justify-between gap-3">
-          <div className="relative z-10 -mt-[72px]">
-            <SpotPlate spot={project.spot} />
-          </div>
-          <span className="flex-shrink-0 border-2 border-black bg-[var(--orange)] px-2 py-1 font-pixel text-xs text-black">
-            {project.year}
+        <div className="flex">
+          {/* Comic caption: each project is an issue in the series */}
+          <span className="comic-caption flex-shrink-0 text-base">
+            Issue #{String(project.num).padStart(2, '0')}, {project.year}
           </span>
         </div>
-        <h3 className={`font-pixel leading-snug break-words min-w-0 text-[color:var(--navy)] ${project.featured ? 'text-lg lg:text-2xl' : 'text-[15px]'}`}>
+        <h3 className={`font-display break-words min-w-0 text-[color:var(--text)] ${project.featured ? 'text-2xl lg:text-[32px]' : 'text-[22px]'}`}>
           {project.name}
         </h3>
-        <p className="font-mono text-[15px] sm:text-base leading-relaxed">
+        <p className="font-sans text-[15px] sm:text-base leading-relaxed">
           {project.description}
         </p>
         <ul className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[15px] font-bold text-black">
@@ -135,7 +141,7 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
           ))}
         </div>
         {!isComingSoon && (
-          <div className="mt-auto pt-2 font-mono-8bit text-[15px] text-black font-bold underline underline-offset-4 decoration-2">
+          <div className="mt-auto pt-2 font-sans text-[15px] text-black font-bold underline underline-offset-4 decoration-2">
             {isExternal ? 'Visit site' : 'Read case study'}
           </div>
         )}
@@ -178,7 +184,7 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
     // on pointers that can hover (Tailwind v4 gates hover: on that media query)
     <motion.div
       ref={ref}
-      className={`group border-[3px] border-black bg-[var(--cream)] shadow-[4px_4px_0_0_var(--ink)] transition-[translate,box-shadow] duration-150 ease-[var(--ease-out)] ${
+      className={`group border-[3px] border-black bg-[var(--paper)] shadow-[4px_4px_0_0_var(--ink)] transition-[translate,box-shadow] duration-150 ease-[var(--ease-out)] ${
         isComingSoon ? '' : 'hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--ink)] active:translate-x-1 active:translate-y-1 active:shadow-none'
       } ${span}`}
       exit={{ opacity: 0, y: motionTokens.distance.sm, transition: { duration: motionTokens.duration.fast } }}
@@ -192,10 +198,10 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
 // sits pressed into its shadow.
 /** Filter chip style, shared with the Skills keyboard filters */
 export function chipClass(active: boolean) {
-  return `font-pixel text-xs text-black px-3 py-1.5 min-h-[44px] border-[3px] border-black transition-[translate,box-shadow,background-color] duration-150 ${
+  return `font-label text-xs text-black px-3 py-1.5 min-h-[44px] border-[3px] border-black transition-[translate,box-shadow,background-color] duration-150 ${
     active
-      ? 'bg-[var(--orange)] translate-x-[3px] translate-y-[3px] shadow-none'
-      : 'bg-[var(--cream)] hover:bg-[var(--teal)] shadow-[3px_3px_0_0_var(--ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none'
+      ? 'bg-[var(--yellow)] translate-x-[3px] translate-y-[3px] shadow-none'
+      : 'bg-[var(--paper)] hover:bg-[var(--blue)] shadow-[3px_3px_0_0_var(--ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none'
   }`;
 }
 
@@ -219,7 +225,7 @@ export default function Projects() {
   return (
     <FramerReveal>
       {/* Full-width teal band; all text on it is black or sits on cream */}
-      <section className="bg-[var(--teal)] text-black border-y-[3px] border-black px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
+      <section className="bg-[var(--blue)] text-black border-y-[3px] border-black px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
           <SectionHeading text="PROJECTS" tone="ink" icon="icon-projects" className="mb-4 lg:mb-5" />
           <Lead text="Start with **SilverLink SG** and the SCS Awareness Platform." tone="teal" className="mb-6 lg:mb-8" />
@@ -265,7 +271,7 @@ export default function Projects() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
-                  <p className="font-mono text-[15px] sm:text-base">No projects match {active.label}.</p>
+                  <p className="font-sans text-[15px] sm:text-base">No projects match {active.label}.</p>
                   <button
                     type="button"
                     onClick={() => choose(null)}

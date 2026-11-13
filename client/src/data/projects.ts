@@ -3,13 +3,13 @@
 // Order = Home tile order; the case-study "Next project" chain follows it.
 
 // ── Card images (shown in grid) ───────────────────────────────────────────
-import silverLinkImg    from '@assets/silverlink_p19_img0.png';
-import scsImg           from '@assets/scs_p65_img0.png';
-import fireSafetyImg    from '@assets/firesafety_p29_img2.png';
-import uwbImg           from '@assets/da_p40_img1.png';
+import silverLinkImg    from '@assets/tile_silverlink.webp';
+import scsImg           from '@assets/tile_scs.webp';
+import fireSafetyImg    from '@assets/tile_firesafety.webp';
+import uwbImg           from '@assets/tile_uwb.webp';
 import greenloopImg     from '@assets/greenloop_hero.jpg';
-import uatImg           from '@assets/uat_dashboard.jpg';
-import aiFinanceImg     from '@assets/aifinance_dashboard.jpg';
+import uatImg           from '@assets/tile_uat.webp';
+import aiFinanceImg     from '@assets/tile_ai_finance.webp';
 
 // ── Secondary images to preload on hover (detail-page screenshots) ─────────
 import silverLink2      from '@assets/silverlink_p21_img0.png';
@@ -22,7 +22,6 @@ import uwb2             from '@assets/da_p39_img2.png';
 import uwb3             from '@assets/da_p35_img1.png';
 import greenloop2       from '@assets/greenloop_tour.jpg';
 
-import type { Spot } from '@/components/Hierarchy';
 
 /** Route segment of a case-study page: /projects/{slug} */
 export type CaseSlug = 'silverlink' | 'scs' | 'ai-finance' | 'uwb' | 'uat' | 'firesafety';
@@ -36,8 +35,6 @@ export type Project = {
    *  h1 (one string, so they can't drift). No key terms:
    *  the tile's facts carry the emphasis. */
   description: string;
-  /** Program icon: spot illustration and its plate colour (visual-hierarchy §3.1) */
-  spot: Spot;
   /** Short facts shown as a list under the description */
   facts: string[];
   year: string;
@@ -53,6 +50,8 @@ export type Project = {
   span: string;
   /** Lead tile: taller image, bigger title, always in colour */
   featured?: boolean;
+  /** Comic sound-effect sticker on the tile image; true to what the project does, featured tiles only */
+  sfx?: string;
 };
 
 export const PROJECTS: Project[] = [
@@ -62,17 +61,17 @@ export const PROJECTS: Project[] = [
     slug: 'silverlink',
     description:
       "Connects seniors and youth through skill-sharing and live events, built to block double-bookings.",
-    spot: { name: 'spot-silverlink', tone: 'orange' },
     facts: ["8-node cluster", "4 services", "6-person team"],
     year: "2025",
     image: silverLinkImg,
-    imageWidth: 873,
-    imageHeight: 560,
+    imageWidth: 1200,
+    imageHeight: 660,
     tags: ["React", "gRPC", "K8s", "PostgreSQL"],
     link: "/projects/silverlink",
     span: 'lg:col-span-3',
     preloadImages: [silverLink2, silverLink3],
     featured: true,
+    sfx: 'Booked!',
   },
   {
     num: 2,
@@ -80,17 +79,17 @@ export const PROJECTS: Project[] = [
     slug: 'scs',
     description:
       "Teaches cancer awareness through a branching story at Singapore Cancer Society booths.",
-    spot: { name: 'spot-scs', tone: 'teal' },
     facts: ["4 languages", "4 question types", "4-person team"],
     year: "2025",
     image: scsImg,
-    imageWidth: 532,
-    imageHeight: 843,
+    imageWidth: 1200,
+    imageHeight: 660,
     tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
     link: "/projects/scs",
     span: 'lg:col-span-3',
     preloadImages: [scs2, scs3],
     featured: true,
+    sfx: 'Plot twist!',
   },
   {
     num: 3,
@@ -98,12 +97,11 @@ export const PROJECTS: Project[] = [
     slug: 'ai-finance',
     description:
       "Pulls market data into one Power BI-ready warehouse; NLP flags supply-chain risk.",
-    spot: { name: 'spot-ai-finance', tone: 'orange' },
     facts: ["5 data sources", "star schema", "100% Pytest coverage"],
     year: "2024",
     image: aiFinanceImg,
-    imageWidth: 1024,
-    imageHeight: 1024,
+    imageWidth: 1200,
+    imageHeight: 660,
     tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
     link: "/projects/ai-finance",
     span: 'lg:col-span-2',
@@ -115,12 +113,11 @@ export const PROJECTS: Project[] = [
     slug: 'uwb',
     description:
       "Tells clear UWB signals from blocked (NLOS) ones with an SVM-RBF model.",
-    spot: { name: 'spot-uwb', tone: 'teal' },
     facts: ["89.61% accuracy", "0.9612 AUC", "41,996 samples"],
     year: "2025",
     image: uwbImg,
-    imageWidth: 1229,
-    imageHeight: 490,
+    imageWidth: 1200,
+    imageHeight: 660,
     tags: ["Python", "SVM", "PCA", "scikit-learn"],
     link: "/projects/uwb",
     span: 'lg:col-span-2',
@@ -132,12 +129,11 @@ export const PROJECTS: Project[] = [
     slug: 'uat',
     description:
       "Course project: links each failed test to its defect to show what blocks go-live.",
-    spot: { name: 'spot-uat', tone: 'orange' },
     facts: ["25 sample defects", "8 modules", "4 roles"],
     year: "2024",
     image: uatImg,
-    imageWidth: 1280,
-    imageHeight: 627,
+    imageWidth: 1200,
+    imageHeight: 660,
     tags: ["React 18", "Node.js", "Express", "SQLite"],
     link: "/projects/uat",
     span: 'lg:col-span-2',
@@ -149,12 +145,11 @@ export const PROJECTS: Project[] = [
     slug: 'firesafety',
     description:
       "Lets HDB residents rehearse fire evacuation in their own block with AR arrows.",
-    spot: { name: 'spot-firesafety', tone: 'teal' },
     facts: ["SUS 79/100", "~80% test coverage", "drill works offline"],
     year: "2025",
     image: fireSafetyImg,
-    imageWidth: 605,
-    imageHeight: 520,
+    imageWidth: 1200,
+    imageHeight: 660,
     tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
     link: "/projects/firesafety",
     span: 'lg:col-span-3',
@@ -165,7 +160,6 @@ export const PROJECTS: Project[] = [
     name: "GreenLoopFarms",
     description:
       "Helped pitch a Singapore hydroponic urban farm to an industry investor panel.",
-    spot: { name: 'spot-greenloop', tone: 'orange' },
     facts: ["SGD 10,000 NYP JumpStart Grant"],
     year: "2022",
     image: greenloopImg,

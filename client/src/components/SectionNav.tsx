@@ -93,8 +93,8 @@ function SectionMenu({ active }: { active: string }) {
                     type="button"
                     onClick={() => go(id)}
                     aria-current={active === id ? 'location' : undefined}
-                    className={`flex w-full min-h-[44px] items-center gap-3 px-3 font-mono text-base font-bold text-left transition-colors duration-150 hover:bg-[var(--teal)] hover:text-black ${
-                      active === id ? 'bg-[var(--orange)] text-black' : 'text-[color:var(--navy)]'
+                    className={`flex w-full min-h-[44px] items-center gap-3 px-3 font-sans text-base font-bold text-left transition-colors duration-150 hover:bg-[var(--blue)] hover:text-black ${
+                      active === id ? 'bg-[var(--yellow)] text-black' : 'text-[color:var(--text)]'
                     }`}
                   >
                     <PixelArt name={icon} size={16} />
@@ -117,7 +117,7 @@ function SectionMenu({ active }: { active: string }) {
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={MENU_ID}
-        className="btn focus-ring-float lg:hidden min-w-[44px] px-3 text-black bg-[var(--cream)]"
+        className="btn focus-ring-float lg:hidden min-w-[44px] px-3 text-black bg-[var(--paper)]"
       >
         <span aria-hidden="true">☰</span>
         Menu
@@ -180,7 +180,7 @@ export default function SectionNav() {
         onClick={toggleMotion}
         aria-pressed={motionPaused}
         className={`btn focus-ring-float motion-reduce:hidden min-w-[44px] px-3 text-black ${
-          motionPaused ? 'bg-[var(--orange)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--cream)]'
+          motionPaused ? 'bg-[var(--yellow)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)]'
         }`}
       >
         <span aria-hidden="true">❚❚</span>
@@ -204,7 +204,7 @@ export default function SectionNav() {
               {/* Visible name on hover or keyboard focus; the aria-label carries it for screen readers */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute right-full mr-1 flex items-center gap-2 whitespace-nowrap border-[3px] border-black bg-[var(--navy)] px-2 py-1 font-pixel text-xs text-[color:var(--cream)] opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+                className="pointer-events-none absolute right-full mr-1 flex items-center gap-2 whitespace-nowrap border-[3px] border-black bg-[var(--bar)] px-2 py-1 font-label text-xs text-[color:var(--paper)] opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
               >
                 {id === 'hero' && <PixelArt name="icon-home" size={16} />}
                 {label}
@@ -214,8 +214,8 @@ export default function SectionNav() {
                 // Ink ring keeps the dot visible where it crosses the teal band
                 className={`block w-3 h-3 border-2 shadow-[0_0_0_2px_var(--ink)] transition-colors duration-150 ${
                   active === id
-                    ? 'bg-[var(--orange)] border-[color:var(--orange)]'
-                    : 'border-[color:var(--cream)] group-hover:bg-[var(--cream)]'
+                    ? 'bg-[var(--yellow)] border-[color:var(--yellow)]'
+                    : 'border-black bg-[var(--paper)] group-hover:bg-[var(--yellow)]'
                 }`}
               />
             </button>

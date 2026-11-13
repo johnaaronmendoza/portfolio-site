@@ -58,14 +58,14 @@ export default function KeyboardShortcuts() {
           >
             <WindowBar title="shortcuts.txt" onClose={() => setOpen(false)} closeLabel="Close keyboard shortcuts" />
 
-            <div className="bg-black text-[color:var(--cream)] [--focus:var(--orange)]">
+            <div className="bg-black text-[color:var(--paper)] [--focus:var(--yellow)]">
               <dl className="p-4 space-y-1">
                 {SHORTCUTS.map(({ keys, desc }) => (
                   <div key={desc} className="flex items-center justify-between gap-4 py-2">
-                    <dt className="font-mono text-[15px]">{desc}</dt>
+                    <dt className="font-sans text-[15px]">{desc}</dt>
                     <dd className="flex flex-shrink-0 items-center gap-1">
                       {keys.map((k) => (
-                        <kbd key={k} className="font-mono text-sm font-bold text-black bg-[var(--orange)] border-2 border-[color:var(--cream)] px-1.5 py-0.5 leading-none">
+                        <kbd key={k} className="font-mono text-sm font-bold text-black bg-[var(--yellow)] border-2 border-[color:var(--paper)] px-1.5 py-0.5 leading-none">
                           {k}
                         </kbd>
                       ))}
@@ -74,8 +74,8 @@ export default function KeyboardShortcuts() {
                 ))}
               </dl>
 
-              <p className="border-t-2 border-[color:var(--cream)] px-4 py-2 font-mono text-sm text-center">
-                Press <kbd className="font-bold text-[color:var(--orange)]">?</kbd> to toggle
+              <p className="border-t-2 border-[color:var(--paper)] px-4 py-2 font-mono text-sm text-center">
+                Press <kbd className="font-bold text-[color:var(--yellow)]">?</kbd> to toggle
               </p>
             </div>
           </motion.div>

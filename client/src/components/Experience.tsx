@@ -1,7 +1,5 @@
-import type { ReactNode } from 'react';
-import FlowDiagram, { type FlowStep } from './FlowDiagram';
 import FramerReveal from './FramerReveal';
-import { Chip, PixelList, SpotPlate } from './Hierarchy';
+import { Chip, PixelList } from './Hierarchy';
 import SectionHeading from './SectionHeading';
 import Window from './Window';
 
@@ -14,45 +12,16 @@ type Entry = {
   /** ≤ 3 bullets, outcome or number first; `**…**` marks the key term */
   highlights: string[];
   badges: Badge[];
-  /** A visual block after the bullets */
-  extra?: ReactNode;
 };
 
 // Black text on orange or teal (approved pairings); sentence case
 type Badge = 'Internship' | 'In progress' | 'Education';
 
 const BADGE_FILL: Record<Badge, string> = {
-  Internship: 'bg-[var(--orange)]',
-  'In progress': 'bg-[var(--teal)]',
-  Education: 'bg-[var(--teal)]',
+  Internship: 'bg-[var(--yellow)]',
+  'In progress': 'bg-[var(--blue)]',
+  Education: 'bg-[var(--blue)]',
 };
-
-// From the Desk Assist description already on the site: the AI reads the
-// thread, finds knowledge-base guidance and drafts; an agent reviews every
-// draft before it's sent. The review step is the emphasis.
-const DESK_ASSIST_FLOW: FlowStep[] = [
-  { label: 'Ticket' },
-  { label: 'Reads the thread', actor: 'AI' },
-  { label: 'Finds KB guidance', actor: 'AI' },
-  { label: 'Drafts a reply', actor: 'AI' },
-  { label: 'Agent reviews', actor: 'Agent', emphasis: true },
-  { label: 'Sent' },
-];
-
-/** Desk Assist (in progress, per the window's badge): its program icon and how a reply gets drafted */
-function DeskAssistFlow() {
-  return (
-    <div className="mt-8 lg:mt-10">
-      <div className="flex items-center gap-4 mb-6 lg:mb-8">
-        <SpotPlate spot={{ name: 'spot-desk-assist', tone: 'teal' }} className="size-24 lg:size-36" />
-        <h4 id="desk-assist-flow" className="font-pixel text-[15px] sm:text-base leading-[1.5] text-black">
-          How Desk Assist will draft a reply
-        </h4>
-      </div>
-      <FlowDiagram steps={DESK_ASSIST_FLOW} labelledBy="desk-assist-flow" lgCols={3} />
-    </div>
-  );
-}
 
 const ENTRIES: Entry[] = [
   {
@@ -67,7 +36,6 @@ const ENTRIES: Entry[] = [
       "**1,000+ network configurations** migrated while leading the FreeSDN integration across 4+ manufacturers.",
       "**40%** fewer manual agent actions, 15 minutes faster incident resolution, via Freshservice automation.",
     ],
-    extra: <DeskAssistFlow />,
   },
   {
     org: "Sembcorp Solar Singapore",
@@ -106,7 +74,7 @@ export default function Experience() {
               <Window key={entry.org} title={entry.file} bodyClassName="p-6 sm:p-10 lg:p-12">
                 <div className="flex flex-wrap items-center gap-2 mb-4">
                   {entry.badges.map(badge => (
-                    <span key={badge} className={`font-pixel text-xs text-black border-2 border-black px-2 py-1 ${BADGE_FILL[badge]}`}>
+                    <span key={badge} className={`font-label text-xs text-black border-2 border-black px-2 py-1 ${BADGE_FILL[badge]}`}>
                       {badge}
                     </span>
                   ))}
@@ -115,10 +83,10 @@ export default function Experience() {
                 {/* Header Row */}
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-8 pb-6 border-b-[3px] border-black">
                   <div>
-                    <h3 className="font-pixel text-base sm:text-lg text-black mb-2 leading-relaxed">
+                    <h3 className="font-display text-2xl sm:text-[28px] text-black mb-2">
                       {entry.org}
                     </h3>
-                    <p className="font-mono-8bit text-[15px] sm:text-base font-bold">
+                    <p className="font-sans text-[15px] sm:text-base font-bold">
                       {entry.role}
                     </p>
                   </div>
@@ -126,7 +94,6 @@ export default function Experience() {
                 </div>
 
                 <PixelList items={entry.highlights} />
-                {entry.extra}
               </Window>
             ))}
           </div>

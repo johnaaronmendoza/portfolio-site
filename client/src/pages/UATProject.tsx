@@ -45,15 +45,15 @@ type Level = 'Critical' | 'High' | 'Medium' | 'Low';
 
 // The word carries the meaning; the fill only helps scanning. Ink text on all.
 const LEVEL_FILL: Record<Level, string> = {
-  Critical: 'bg-[var(--orange)]',
-  High: 'bg-[var(--teal)]',
-  Medium: 'bg-[var(--cream)]',
-  Low: 'bg-[var(--cream)]',
+  Critical: 'bg-[var(--yellow)]',
+  High: 'bg-[var(--blue)]',
+  Medium: 'bg-[var(--paper)]',
+  Low: 'bg-[var(--paper)]',
 };
 
 function LevelBadge({ level }: { level: Level }) {
   return (
-    <span className={`inline-block border-2 border-black px-2 py-1 font-pixel text-xs text-black ${LEVEL_FILL[level]}`}>
+    <span className={`inline-block border-2 border-black px-2 py-1 font-label text-xs text-black ${LEVEL_FILL[level]}`}>
       {level}
     </span>
   );
@@ -77,7 +77,7 @@ const CELL = 'border-b-2 border-black py-3 align-middle';
 function ModuleTable() {
   return (
     <div role="region" aria-labelledby="test-scope-heading" tabIndex={0} className="overflow-x-auto max-w-[65ch]">
-      <table aria-labelledby="test-scope-heading" className="w-full border-collapse font-mono text-[15px] sm:text-base text-[color:var(--navy)]">
+      <table aria-labelledby="test-scope-heading" className="w-full border-collapse font-sans text-[15px] sm:text-base text-[color:var(--text)]">
         <thead>
           <tr className="text-left text-black">
             <th scope="col" className={`${CELL} border-b-[3px] pr-4`}>
@@ -113,14 +113,14 @@ const SEVERITY: { level: Level; priority: string; desc: string }[] = [
 
 function SeverityList() {
   return (
-    <dl className="max-w-[65ch] font-mono text-[15px] sm:text-base leading-[1.65]">
+    <dl className="max-w-[65ch] font-sans text-[15px] sm:text-base leading-[1.65]">
       {SEVERITY.map(({ level, priority, desc }) => (
         <div key={level} className="flex flex-col sm:flex-row sm:items-baseline gap-x-4 gap-y-2 border-b-2 border-black py-3">
           <dt className="flex flex-shrink-0 items-center gap-3 sm:w-44 font-bold text-black">
             <LevelBadge level={level} />
             {priority}
           </dt>
-          <dd className="text-[color:var(--navy)]">{desc}</dd>
+          <dd className="text-[color:var(--text)]">{desc}</dd>
         </div>
       ))}
     </dl>
@@ -130,7 +130,7 @@ function SeverityList() {
 const RECORD: { label: string; value: ReactNode }[] = [
   { label: 'Code', value: 'TC-022' },
   { label: 'Module', value: 'Notifications' },
-  { label: 'Status', value: <span className="inline-block border-2 border-black bg-[var(--orange)] px-2 py-1 font-pixel text-xs text-black">Fail</span> },
+  { label: 'Status', value: <span className="inline-block border-2 border-black bg-[var(--yellow)] px-2 py-1 font-label text-xs text-black">Fail</span> },
   { label: 'Linked defect', value: 'DEF-025' },
   { label: 'Title', value: 'Verify Notification Service Stability Under High Load' },
   { label: 'Preconditions', value: 'Active notification queue, 100+ pending items, signed in as QA Tester.' },
@@ -138,7 +138,7 @@ const RECORD: { label: string; value: ReactNode }[] = [
 
 function TestCaseRecord() {
   return (
-    <div className="border-2 border-black p-4 sm:p-6 max-w-[75ch] font-mono text-[15px] sm:text-base leading-[1.65] text-[color:var(--navy)] space-y-6">
+    <div className="border-2 border-black p-4 sm:p-6 max-w-[75ch] font-sans text-[15px] sm:text-base leading-[1.65] text-[color:var(--text)] space-y-6">
       <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-2">
         {RECORD.map(({ label, value }) => (
           <div key={label} className={label === 'Title' || label === 'Preconditions' ? 'sm:col-span-2' : undefined}>
@@ -156,11 +156,11 @@ function TestCaseRecord() {
         </ol>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 text-black">
-        <div className="border-2 border-black bg-[var(--teal)] p-3">
+        <div className="border-2 border-black bg-[var(--blue)] p-3">
           <p className="font-bold">Expected</p>
           <p>Notifications processed in queue without crash</p>
         </div>
-        <div className="border-2 border-black bg-[var(--orange)] p-3">
+        <div className="border-2 border-black bg-[var(--yellow)] p-3">
           <p className="font-bold">Actual</p>
           <p>Service crashes, all pending notifications lost</p>
         </div>

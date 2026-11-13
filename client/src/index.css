@@ -143,8 +143,12 @@
 }
 
 @theme inline {
-  /* Body face: font-mono is Courier Prime site-wide (loaded in client/index.html) */
-  --font-mono: 'Courier Prime', ui-monospace, monospace;
+  /* Type roles (John, Nov 2026, "Plex Desktop"; fonts loaded in client/index.html):
+     font-sans = IBM Plex Sans for reading text; font-mono = IBM Plex Mono for
+     labels, data, code and terminals. Headings use .font-display, small
+     labels .font-label; .font-pixel (Press Start 2P) is only the hero name. */
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -184,90 +188,91 @@
 }
 
 :root {
-  /* Neo-brutalist retro web palette (see CLAUDE.md Design rules for pairings) */
-  --navy: #16163F;
-  --ink: #000;
-  --cream: #F4EAD5;
-  --orange: #FF7A2F;
-  --teal: #2EC4B6;
-  --violet: #6C4AD0;
-  --amber: #F59E0B;
-  /* Focus ring colour. Orange reads on navy; cream window bodies set it to
-     ink and the violet footer sets it to cream (orange is under 3:1 there). */
-  --focus: var(--orange);
+  /* Paper & Ink palette (John, Nov 2026; see CLAUDE.md Design rules for pairings) */
+  --page: #EFEAE0;      /* page ground: warm off-white */
+  --ink: #000;          /* outlines, hard shadows */
+  --text: #111111;      /* body text on page and paper */
+  --paper: #FFFFFF;     /* window bodies, chips; light text on bar/black */
+  --bar: #111111;       /* title bars, footer band, case-study header */
+  --yellow: #FFD23F;    /* accent fill, black text (14.6:1) */
+  --blue: #3A66FF;      /* accent fill, black (4.52:1) or white (4.64:1) text */
+  --blue-text: #2347D6; /* blue text on page (5.95:1) or paper (7.13:1) */
+  /* Focus ring: ink on the light page and paper; dark surfaces (title bars,
+     footer, overlays, hero window) set it to paper or yellow. */
+  --focus: var(--ink);
 
   --radius: 0;
 
   /* shadcn aliases: always palette tokens, never their own hex (MASTER 2.10) */
-  --background: var(--navy);
-  --foreground: var(--cream);
-  --card: var(--cream);
-  --card-foreground: var(--navy);
-  --popover: var(--cream);
-  --popover-foreground: var(--navy);
-  --primary: var(--orange);
+  --background: var(--page);
+  --foreground: var(--text);
+  --card: var(--paper);
+  --card-foreground: var(--text);
+  --popover: var(--paper);
+  --popover-foreground: var(--text);
+  --primary: var(--yellow);
   --primary-foreground: var(--ink);
-  --secondary: var(--teal);
+  --secondary: var(--blue);
   --secondary-foreground: var(--ink);
-  --muted: var(--cream);
-  --muted-foreground: var(--navy);
-  --accent: var(--teal);
+  --muted: var(--paper);
+  --muted-foreground: var(--text);
+  --accent: var(--blue);
   --accent-foreground: var(--ink);
-  --destructive: var(--orange);
+  --destructive: var(--yellow);
   --destructive-foreground: var(--ink);
   --border: var(--ink);
-  --input: var(--cream);
-  --ring: var(--orange);
-  --chart-1: var(--orange);
-  --chart-2: var(--teal);
-  --chart-3: var(--violet);
-  --chart-4: var(--cream);
-  --chart-5: var(--navy);
-  --sidebar: var(--cream);
-  --sidebar-foreground: var(--navy);
-  --sidebar-primary: var(--orange);
+  --input: var(--paper);
+  --ring: var(--yellow);
+  --chart-1: var(--yellow);
+  --chart-2: var(--blue);
+  --chart-3: var(--bar);
+  --chart-4: var(--paper);
+  --chart-5: var(--text);
+  --sidebar: var(--paper);
+  --sidebar-foreground: var(--text);
+  --sidebar-primary: var(--yellow);
   --sidebar-primary-foreground: var(--ink);
-  --sidebar-accent: var(--teal);
+  --sidebar-accent: var(--blue);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--ink);
-  --sidebar-ring: var(--orange);
+  --sidebar-ring: var(--yellow);
 }
 
 /* Dark mode is not exposed; it uses the same aliases */
 .dark {
   /* shadcn aliases: always palette tokens, never their own hex (MASTER 2.10) */
-  --background: var(--navy);
-  --foreground: var(--cream);
-  --card: var(--cream);
-  --card-foreground: var(--navy);
-  --popover: var(--cream);
-  --popover-foreground: var(--navy);
-  --primary: var(--orange);
+  --background: var(--page);
+  --foreground: var(--text);
+  --card: var(--paper);
+  --card-foreground: var(--text);
+  --popover: var(--paper);
+  --popover-foreground: var(--text);
+  --primary: var(--yellow);
   --primary-foreground: var(--ink);
-  --secondary: var(--teal);
+  --secondary: var(--blue);
   --secondary-foreground: var(--ink);
-  --muted: var(--cream);
-  --muted-foreground: var(--navy);
-  --accent: var(--teal);
+  --muted: var(--paper);
+  --muted-foreground: var(--text);
+  --accent: var(--blue);
   --accent-foreground: var(--ink);
-  --destructive: var(--orange);
+  --destructive: var(--yellow);
   --destructive-foreground: var(--ink);
   --border: var(--ink);
-  --input: var(--cream);
-  --ring: var(--orange);
-  --chart-1: var(--orange);
-  --chart-2: var(--teal);
-  --chart-3: var(--violet);
-  --chart-4: var(--cream);
-  --chart-5: var(--navy);
-  --sidebar: var(--cream);
-  --sidebar-foreground: var(--navy);
-  --sidebar-primary: var(--orange);
+  --input: var(--paper);
+  --ring: var(--yellow);
+  --chart-1: var(--yellow);
+  --chart-2: var(--blue);
+  --chart-3: var(--bar);
+  --chart-4: var(--paper);
+  --chart-5: var(--text);
+  --sidebar: var(--paper);
+  --sidebar-foreground: var(--text);
+  --sidebar-primary: var(--yellow);
   --sidebar-primary-foreground: var(--ink);
-  --sidebar-accent: var(--teal);
+  --sidebar-accent: var(--blue);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--ink);
-  --sidebar-ring: var(--orange);
+  --sidebar-ring: var(--yellow);
 }
 
 @layer base {
@@ -275,17 +280,17 @@
     @apply border-border outline-ring/50;
   }
   body {
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="6" y="2" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="2" y="6" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="6" y="6" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="10" y="10" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="14" y="10" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="10" y="14" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="14" y="14" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/></svg>') 2 2, auto;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="6" y="2" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="2" y="6" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="6" y="6" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="10" y="10" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="14" y="10" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="10" y="14" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="14" y="14" width="4" height="4" fill="%233A66FF" stroke="%23000"/></svg>') 2 2, auto;
   }
   body {
     @apply text-foreground;
-    background-color: var(--navy);
-    font-family: 'Courier Prime', monospace;
+    background-color: var(--page);
+    font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
     position: relative;
     overflow-x: hidden;
   }
 
-  /* Faint pixel grid on the navy page. Sits behind #root, so it only shows
+  /* Faint comic halftone dots on the page. Sits behind #root, so it only shows
      where a page leaves its background transparent (Home). */
   body::before {
     content: '';
@@ -295,15 +300,14 @@
     width: 100%;
     height: 100%;
     background-image:
-      linear-gradient(0deg, rgb(46 196 182 / 0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(108 74 208 / 0.12) 1px, transparent 1px);
-    background-size: 24px 24px;
+      radial-gradient(rgb(0 0 0 / 0.08) 1.1px, transparent 1.3px);
+    background-size: 10px 10px;
     background-position: 0 0;
     pointer-events: none;
     z-index: 1;
   }
   
-  /* CRT Scanlines Layer */
+  /* CRT scanlines: only in the opt-in CRT mode, never over text by default */
   body::after {
     content: '';
     position: fixed;
@@ -311,13 +315,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.08) 2px,
-      rgba(0, 0, 0, 0.08) 4px
-    );
+    background-image: none;
     pointer-events: none;
     z-index: 2;
   }
@@ -342,9 +340,11 @@
     scroll-padding-bottom: 88px;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Press Start 2P', cursive;
-    letter-spacing: 0.05em;
-    line-height: 1.2;
+    font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-stretch: 85%;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
     text-wrap: balance;
   }
   p, li {
@@ -360,7 +360,7 @@
   select:not(:disabled),
   input[type="checkbox"]:not(:disabled),
   input[type="radio"]:not(:disabled) {
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="6" y="2" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="2" y="6" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="6" y="6" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="10" y="10" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="14" y="10" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="10" y="14" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/><rect x="14" y="14" width="4" height="4" fill="%23FF7A2F" stroke="%23000"/></svg>') 2 2, auto;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="6" y="2" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="2" y="6" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="6" y="6" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="10" y="10" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="14" y="10" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="10" y="14" width="4" height="4" fill="%233A66FF" stroke="%23000"/><rect x="14" y="14" width="4" height="4" fill="%233A66FF" stroke="%23000"/></svg>') 2 2, auto;
   }
 
   /* Text gets an I-beam so it reads as selectable; placed after the pixel
@@ -398,11 +398,83 @@
     border: 2px solid #3B82F6;
   }
   
-  /* Pixel-art heading font */
+  /* Pixel face: the hero name (and the HELLO sticker) only */
   .font-pixel {
     font-family: 'Press Start 2P', cursive;
     letter-spacing: 0.05em;
     line-height: 1.2;
+  }
+
+  /* Headings: condensed bold Plex Sans, so long titles stay short and scan fast */
+  .font-display {
+    font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-stretch: 85%;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+
+  /* Comic lettering (Bangers): section titles, captions and sound effects
+     only, never paragraphs. Bangers is caps-only. */
+  .font-comic {
+    font-family: 'Bangers', 'IBM Plex Sans', ui-sans-serif, sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    line-height: 1;
+  }
+
+  /* Comic narration box: yellow caption with an ink frame */
+  .comic-caption {
+    display: inline-block;
+    background-color: var(--yellow);
+    color: #000;
+    border: 3px solid var(--ink);
+    font-family: 'Bangers', 'IBM Plex Sans', ui-sans-serif, sans-serif;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    padding: 0.4em 0.65em 0.3em;
+  }
+
+  /* Speech bubble with a hard-outlined tail; --tail-x moves the tail */
+  .comic-bubble {
+    position: relative;
+    background-color: var(--paper);
+    color: var(--text);
+    border: 3px solid var(--ink);
+    border-radius: 24px;
+    padding: 14px 18px;
+    font-weight: 600;
+  }
+  /* Tail: an ink triangle with a smaller paper triangle on top, so it reads
+     as a 3px outline joined to the bubble's border */
+  .comic-bubble::before,
+  .comic-bubble::after {
+    content: '';
+    position: absolute;
+    clip-path: polygon(0 0, 100% 0, 30% 100%);
+  }
+  .comic-bubble::before {
+    left: var(--tail-x, 40px);
+    bottom: -28px;
+    width: 36px;
+    height: 28px;
+    background-color: var(--ink);
+  }
+  .comic-bubble::after {
+    left: calc(var(--tail-x, 40px) + 6px);
+    bottom: -19px;
+    width: 23px;
+    height: 22px;
+    background-color: var(--paper);
+  }
+
+  /* Labels: title bars, badges, filters, figures, marquee. Monospace marks them
+     as "data", distinct from reading text */
+  .font-label {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.3;
   }
   
   /* Glitch Effect - CRT-style text distortion on hover */
@@ -537,12 +609,12 @@
     }
   }
 
-  /* Retro OS window: cream body, thick ink frame, hard offset shadow, violet
+  /* Retro OS window: white body, thick ink frame, hard offset shadow, black
      title bar. Kept in the components layer so utilities passed through
      className / bodyClassName override it cleanly. */
   .window {
     border: 3px solid var(--ink);
-    background-color: var(--cream);
+    background-color: var(--paper);
     box-shadow: 6px 6px 0 0 var(--ink);
   }
 
@@ -566,15 +638,15 @@
     gap: 0.75rem;
     min-height: 2.25rem;
     padding: 0.375rem 0.75rem;
-    background-color: var(--violet);
-    color: var(--cream);
+    background-color: var(--bar);
+    color: var(--paper);
     border-bottom: 3px solid var(--ink);
   }
 
   .window-body {
     --focus: var(--ink);
-    background-color: var(--cream);
-    color: var(--navy);
+    background-color: var(--paper);
+    color: var(--text);
   }
 
   /* Retro buttons: 3px ink frame, 4px hard shadow; pressing moves the button
@@ -588,10 +660,10 @@
     padding: 0.625rem 1.25rem;
     border: 3px solid var(--ink);
     box-shadow: 4px 4px 0 0 var(--ink);
-    font-family: 'Courier Prime', monospace;
-    font-weight: 700;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-weight: 600;
     font-size: 0.9375rem;
-    letter-spacing: 0.04em;
+    letter-spacing: 0;
     user-select: none;
     transition-property: translate, box-shadow, background-color, color;
     transition-duration: 150ms;
@@ -603,35 +675,36 @@
     box-shadow: 0 0 0 0 var(--ink);
   }
 
-  /* Unavailable (e.g. Send while the bot replies): cream fill, ink text, no
-     shadow. Contrast stays 17.58; never lowered opacity (MASTER 2.2). */
+  /* Unavailable (e.g. Send while the bot replies): paper fill, ink text, no
+     shadow. Contrast stays 21:1; never lowered opacity (MASTER 2.2). */
   .btn[aria-disabled="true"] {
-    background-color: var(--cream);
+    background-color: var(--paper);
     color: var(--ink);
     box-shadow: none;
     cursor: not-allowed;
   }
 
+  /* Primary: cobalt with white text (4.64:1); secondary: yellow with ink */
   .btn-primary {
-    background-color: var(--orange);
-    color: var(--ink);
+    background-color: var(--blue);
+    color: #fff;
   }
 
   .btn-secondary {
-    background-color: var(--teal);
+    background-color: var(--yellow);
     color: var(--ink);
   }
 
   .btn-ghost {
     background-color: transparent;
-    color: var(--cream);
-    border-color: var(--cream);
+    color: var(--text);
+    border-color: var(--ink);
   }
 
-  /* Ghost for cream surfaces (chat quick actions): ink frame, navy text */
+  /* Ghost for paper surfaces (chat quick actions): ink frame, dark text */
   .btn-ghost-ink {
     background-color: transparent;
-    color: var(--navy);
+    color: var(--text);
     border-color: var(--ink);
   }
 
@@ -644,12 +717,12 @@
     }
 
     .btn-ghost:hover {
-      background-color: var(--cream);
-      color: var(--navy);
+      background-color: var(--paper);
+      color: var(--text);
     }
 
     .btn-ghost-ink:hover {
-      background-color: var(--teal);
+      background-color: var(--blue);
       color: var(--ink);
     }
   }
@@ -694,12 +767,6 @@
     animation-play-state: paused;
   }
 
-  /* Monospace body font — line-height 1.7 for light text on dark backgrounds (impeccable) */
-  .font-mono-8bit {
-    font-family: 'Courier Prime', monospace;
-    letter-spacing: 0.02em;
-    line-height: 1.75;
-  }
 
   /* Body text line-length cap (~65ch) for readability */
   .prose-8bit {
@@ -749,7 +816,7 @@
 .focus-ring-float:focus-visible {
   outline: 3px solid var(--ink);
   outline-offset: 3px;
-  box-shadow: var(--float-shadow, 4px 4px 0 0 var(--ink)), 0 0 0 9px var(--cream);
+  box-shadow: var(--float-shadow, 4px 4px 0 0 var(--ink)), 0 0 0 9px var(--paper);
 }
 
 /* Respect user motion preferences */

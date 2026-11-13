@@ -180,10 +180,10 @@ function KeyTip({ index, tipRef, reduced }: { index: number; tipRef: RefObject<H
         initial={{ opacity: 0, y: reduced ? 0 : motionTokens.distance.xs }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: motionTokens.duration.instant, ease: motionTokens.easing.out }}
-        className="border-[3px] border-black bg-[var(--cream)] text-[color:var(--navy)] shadow-[4px_4px_0_0_#000]"
+        className="border-[3px] border-black bg-[var(--paper)] text-[color:var(--text)] shadow-[4px_4px_0_0_#000]"
       >
         <WindowBar title={fileName(CAPS[index])} />
-        <div className="px-3 py-2.5 font-mono">
+        <div className="px-3 py-2.5 font-sans">
           <p className="text-[15px] font-bold leading-snug text-balance">{k.name}</p>
           <p className="mt-1 text-sm leading-snug text-pretty">{k.blurb}</p>
         </div>
@@ -253,9 +253,9 @@ function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps)
         transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
       >
         <WindowBar title={fileName(CAPS[index])} onClose={onClose} closeLabel={`Close ${k.name}`} />
-        <div className="window-body p-4 sm:p-5 font-mono">
+        <div className="window-body p-4 sm:p-5 font-sans">
           <p className="text-sm font-bold">{GROUP_NAME[k.group]}</p>
-          <h3 id={titleId} className="font-pixel text-base sm:text-lg leading-snug mt-2 mb-3 text-balance">{k.name}</h3>
+          <h3 id={titleId} className="font-display text-xl sm:text-2xl mt-2 mb-3 text-balance">{k.name}</h3>
           <p className="text-[15px] leading-relaxed text-pretty">{k.blurb}</p>
           <p className="text-[15px] leading-relaxed mt-3"><span className="font-bold">Used in:</span> {k.usedIn}</p>
           {links.length > 0 && (
@@ -491,7 +491,7 @@ export default function SkillKeyboard({ listId }: { listId: string }) {
               ))}
             </div>
             <div
-              className={`relative aspect-[2/3] sm:aspect-[2/1] lg:aspect-[16/9] rounded-[10px] outline-offset-4 outline-[color:var(--orange)] ${focus?.visible ? 'outline-3' : ''}`}
+              className={`relative aspect-[2/3] sm:aspect-[2/1] lg:aspect-[16/9] rounded-[10px] outline-offset-4 outline-[color:var(--yellow)] ${focus?.visible ? 'outline-3' : ''}`}
             >
               {stage === '3d' && (
                 <Boundary onError={() => setStage('2d')}>

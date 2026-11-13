@@ -1,16 +1,4 @@
-/** 48×48 spot illustrations, shown on a colour plate (assets.md #15–22) */
-export type SpotName =
-  | 'spot-silverlink'
-  | 'spot-scs'
-  | 'spot-ai-finance'
-  | 'spot-uwb'
-  | 'spot-uat'
-  | 'spot-firesafety'
-  | 'spot-greenloop'
-  | 'spot-desk-assist';
-
 export type PixelArtName =
-  | SpotName
   | 'chip-school'
   | 'chip-calendar'
   | 'chip-team'

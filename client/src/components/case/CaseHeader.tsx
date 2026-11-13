@@ -1,4 +1,4 @@
-import { FactChips, Lead, SpotPlate, type Fact } from '@/components/Hierarchy';
+import { FactChips, Lead, type Fact } from '@/components/Hierarchy';
 import { PixelGitHub } from '@/components/PixelIcons';
 import StatStrip, { type Stat } from '@/components/StatStrip';
 import { WindowBar } from '@/components/Window';
@@ -18,7 +18,7 @@ export const GITHUB_PROFILE: CaseLink = {
   kind: 'profile',
 };
 
-const ROW = 'col-span-2 lg:col-span-1';
+const ROW = '';
 
 interface CaseHeaderProps {
   slug: CaseSlug;
@@ -36,11 +36,10 @@ interface CaseHeaderProps {
 }
 
 /**
- * The project opens as a program: its spot "icon" on a colour plate, the
- * name, a one-line lead, fact chips and links, and an orange status bar of
- * key figures along the bottom edge. Name, year, summary and spot come from
- * data/projects.ts. At 375 the plate sits beside the year badge and the h1
- * gets its own row; from lg the plate takes the right column.
+ * The project opens as a program: year, name, a one-line lead, fact chips
+ * and links, and an orange status bar of key figures along the bottom edge.
+ * Name, year and summary come from data/projects.ts; the real screenshot
+ * (heroShot) follows straight after.
  */
 export default function CaseHeader({ slug, file, facts, note, links, stats, heroShot }: CaseHeaderProps) {
   const project = getCase(slug);
@@ -50,21 +49,17 @@ export default function CaseHeader({ slug, file, facts, note, links, stats, hero
       <div className="window">
         <WindowBar title={file} />
         <div className="window-body p-6 sm:p-10 lg:p-14">
-          <div className="grid grid-cols-[1fr_auto] gap-x-6 lg:gap-x-10">
-            <span className="col-start-1 row-start-1 self-start justify-self-start border-2 border-black bg-[var(--orange)] px-2 py-1 font-pixel text-xs text-black">
+          <div className="grid grid-cols-1">
+            <span className="col-start-1 row-start-1 self-start justify-self-start border-2 border-black bg-[var(--yellow)] px-2 py-1 font-label text-xs text-black">
               {project.year}
             </span>
-            <div className="col-start-2 row-start-1 lg:row-span-6">
-              <SpotPlate spot={project.spot} lazy={false} className="size-24 sm:size-36 lg:size-48" />
-            </div>
-            {/* Upper case is CSS only, so screen readers get the real name */}
-            <h1 className={`${ROW} mt-4 font-pixel uppercase text-black break-words text-balance leading-[1.3] text-[length:clamp(20px,6vw,24px)] sm:text-[32px] xl:text-[40px]`}>
+            <h1 className={`${ROW} mt-4 font-display text-black break-words text-balance text-[length:clamp(30px,8.5vw,38px)] sm:text-[46px] xl:text-[56px]`}>
               {project.name}
             </h1>
             <Lead text={project.description} tone="cream" className={`${ROW} mt-4`} />
             <FactChips facts={facts} label="Project facts" className={`${ROW} mt-6`} />
             {note && (
-              <p className={`${ROW} mt-3 max-w-[60ch] font-mono text-[15px] sm:text-base leading-[1.5] text-[color:var(--navy)]`}>
+              <p className={`${ROW} mt-3 max-w-[60ch] font-sans text-[15px] sm:text-base leading-[1.5] text-[color:var(--text)]`}>
                 {note}
               </p>
             )}

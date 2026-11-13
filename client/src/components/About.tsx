@@ -48,7 +48,7 @@ export default function About() {
             {/* Bio Text */}
             <div className="space-y-4 flex-1">
               {BIO.map(text => (
-                <p key={text} className="font-mono-8bit text-[15px] sm:text-base leading-relaxed max-w-[60ch]">
+                <p key={text} className="font-sans text-[15px] sm:text-base leading-relaxed max-w-[60ch]">
                   <KeyText text={text} max={2} />
                 </p>
               ))}

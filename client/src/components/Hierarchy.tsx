@@ -3,14 +3,14 @@
  * bullets, fact chips and spot plates. Copy marks key terms with **double
  * asterisks**; they are parsed here into <strong>, never injected as HTML.
  */
-import PixelArt, { type PixelArtName, type SpotName } from './PixelArt';
+import PixelArt, { type PixelArtName } from './PixelArt';
 
 /** teal: on cream windows and navy. cream: on the teal band or inside a teal/orange block */
 export type KeySurface = 'teal' | 'cream';
 
 const KEY_FILL: Record<KeySurface, string> = {
-  teal: 'bg-[var(--teal)]',
-  cream: 'bg-[var(--cream)]',
+  teal: 'bg-[var(--blue)]',
+  cream: 'bg-[var(--paper)]',
 };
 
 interface KeyTextProps {
@@ -52,7 +52,7 @@ type LeadTone = 'navy' | 'teal' | 'cream';
 
 // Approved pairings: cream on navy (orange prompt), ink on teal, ink on cream
 const LEAD_TEXT: Record<LeadTone, string> = {
-  navy: 'text-[color:var(--cream)]',
+  navy: 'text-[color:var(--text)]',
   teal: 'text-black',
   cream: 'text-black',
 };
@@ -75,10 +75,10 @@ export function Lead({
 }) {
   return (
     <p
-      className={`relative max-w-[42ch] font-mono font-bold text-lg leading-[1.4] lg:text-[22px] lg:leading-[1.35] text-balance ${prompt ? 'pl-[2ch]' : ''} ${LEAD_TEXT[tone]} ${className}`}
+      className={`relative max-w-[42ch] font-sans font-bold text-lg leading-[1.4] lg:text-[22px] lg:leading-[1.35] text-balance ${prompt ? 'pl-[2ch]' : ''} ${LEAD_TEXT[tone]} ${className}`}
     >
       {prompt && (
-        <span aria-hidden="true" className={`absolute left-0 ${tone === 'navy' ? 'text-[color:var(--orange)]' : ''}`}>
+        <span aria-hidden="true" className={`absolute left-0 ${tone === 'navy' ? 'text-[color:var(--blue-text)]' : ''}`}>
           {'>'}
         </span>
       )}
@@ -91,7 +91,7 @@ export function Lead({
 export function PixelList({ items, columns = 1, className = '' }: { items: string[]; columns?: 1 | 2; className?: string }) {
   return (
     <ul
-      className={`font-mono text-[15px] sm:text-base leading-[1.65] ${
+      className={`font-sans text-[15px] sm:text-base leading-[1.65] ${
         columns === 2 ? 'grid gap-x-8 gap-y-3 lg:gap-y-4 sm:grid-cols-2' : 'space-y-3 lg:space-y-4 max-w-[60ch]'
       } ${className}`}
     >
@@ -110,7 +110,7 @@ export function PixelList({ items, columns = 1, className = '' }: { items: strin
 export type Fact = { icon: PixelArtName; text: string };
 
 const CHIP =
-  'inline-flex min-w-0 max-w-full items-start gap-2 min-h-9 border-2 border-black bg-[var(--cream)] px-2.5 py-1.5 font-mono text-[15px] sm:text-base font-bold leading-[1.4] text-black';
+  'inline-flex min-w-0 max-w-full items-start gap-2 min-h-9 border-2 border-black bg-[var(--paper)] px-2.5 py-1.5 font-mono text-[15px] sm:text-base font-bold leading-[1.4] text-black';
 
 /** L6 chip: a static label (no shadow, not pressable); the words carry the meaning, the icon is decorative */
 export function Chip({ icon, text, as: Tag = 'p', className = '' }: Fact & { as?: 'p' | 'li'; className?: string }) {
@@ -133,23 +133,3 @@ export function FactChips({ facts, label, className = '' }: { facts: Fact[]; lab
   );
 }
 
-export type PlateTone = 'orange' | 'teal';
-export type Spot = { name: SpotName; tone: PlateTone };
-
-const PLATE_FILL: Record<PlateTone, string> = {
-  orange: 'bg-[var(--orange)]',
-  teal: 'bg-[var(--teal)]',
-};
-
-/**
- * A project's "program icon": 48×48 spot on a square colour plate, 3px ink
- * border, no shadow. `className` sizes the image at 2×, 3× or 4× (size-24,
- * size-36, size-48). Decorative: the project name always sits beside it.
- */
-export function SpotPlate({ spot, className = 'size-24', lazy = true }: { spot: Spot; className?: string; lazy?: boolean }) {
-  return (
-    <span aria-hidden="true" className={`inline-block flex-shrink-0 self-start border-[3px] border-black ${PLATE_FILL[spot.tone]}`}>
-      <PixelArt name={spot.name} size={192} lazy={lazy} className={`block ${className}`} />
-    </span>
-  );
-}

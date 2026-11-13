@@ -343,7 +343,7 @@ export default function SecretTerminal() {
           >
             <WindowBar title="terminal.sh" onClose={close} closeLabel="Close terminal" />
 
-            <div className="bg-black text-[color:var(--cream)] [--focus:var(--orange)]">
+            <div className="bg-black text-[color:var(--paper)] [--focus:var(--yellow)]">
               {/* Output */}
               <div
                 ref={logRef}
@@ -356,11 +356,11 @@ export default function SecretTerminal() {
                 {lines.map((l, i) => (
                   <div key={i}>
                     {l.type === 'input' ? (
-                      <span className="text-[color:var(--orange)]">$ {l.text}</span>
+                      <span className="text-[color:var(--yellow)]">$ {l.text}</span>
                     ) : l.type === 'error' ? (
-                      <span className="bg-[var(--orange)] text-black px-1">error: {l.text}</span>
+                      <span className="bg-[var(--yellow)] text-black px-1">error: {l.text}</span>
                     ) : l.type === 'system' ? (
-                      <span className="text-[color:var(--teal)]">{l.text || '\u00A0'}</span>
+                      <span className="text-[color:var(--blue)]">{l.text || '\u00A0'}</span>
                     ) : (
                       l.text || '\u00A0'
                     )}
@@ -369,8 +369,8 @@ export default function SecretTerminal() {
               </div>
 
               {/* Input row: the ring sits on the row; the input itself has no outline */}
-              <div className="border-t-2 border-[color:var(--cream)] px-4 py-3 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--orange)] focus-within:outline-offset-[-6px]">
-                <span aria-hidden="true" className="font-mono text-base font-bold text-[color:var(--orange)] flex-shrink-0">$</span>
+              <div className="border-t-2 border-[color:var(--paper)] px-4 py-3 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--yellow)] focus-within:outline-offset-[-6px]">
+                <span aria-hidden="true" className="font-mono text-base font-bold text-[color:var(--yellow)] flex-shrink-0">$</span>
                 <input
                   ref={inputRef}
                   type="text"
@@ -378,12 +378,12 @@ export default function SecretTerminal() {
                   onChange={e => { setInput(e.target.value); play('type'); }}
                   onKeyDown={handleKey}
                   aria-label="Terminal command"
-                  className="flex-1 min-w-0 bg-transparent text-[color:var(--cream)] placeholder:text-[color:var(--cream)] placeholder:italic font-mono text-base outline-none caret-[var(--orange)]"
+                  className="flex-1 min-w-0 bg-transparent text-[color:var(--paper)] placeholder:text-[color:var(--paper)] placeholder:italic font-mono text-base outline-none caret-[var(--yellow)]"
                   placeholder="type a command..."
                   spellCheck={false}
                   autoComplete="off"
                 />
-                <span className="hidden sm:inline font-mono text-sm text-[color:var(--cream)] flex-shrink-0">Esc to close</span>
+                <span className="hidden sm:inline font-mono text-sm text-[color:var(--paper)] flex-shrink-0">Esc to close</span>
               </div>
             </div>
           </motion.div>

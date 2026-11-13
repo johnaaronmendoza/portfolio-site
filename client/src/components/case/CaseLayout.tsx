@@ -16,9 +16,9 @@ const GUTTERS = 'px-4 sm:px-8 lg:px-16';
 /** Sticky violet bar with the one way back to the Projects grid */
 function CaseTaskbar() {
   return (
-    <header className={`sticky top-0 z-30 bg-[var(--violet)] border-b-[3px] border-black ${GUTTERS} [--focus:var(--cream)]`}>
+    <header className={`sticky top-0 z-30 bg-[var(--bar)] border-b-[3px] border-black ${GUTTERS} [--focus:var(--paper)]`}>
       <div className="max-w-5xl mx-auto h-14 flex items-center">
-        <Link href="/#projects" replace onClick={() => play('back')} className="btn btn-ghost">
+        <Link href="/#projects" replace onClick={() => play('back')} className="btn btn-ghost text-[color:var(--paper)] border-[color:var(--paper)] hover:text-[color:var(--text)]">
           <span aria-hidden="true">←</span>
           <PixelArt name="icon-projects" size={16} />
           All projects
@@ -33,7 +33,7 @@ const CRUMB_LINK = 'inline-flex min-h-[44px] items-center underline decoration-2
 function Breadcrumb({ current }: { current: string }) {
   return (
     <nav aria-label="Breadcrumb" className="mt-6 mb-4">
-      <ol className="flex flex-wrap items-center gap-x-2 font-mono text-[15px] sm:text-base text-[color:var(--cream)]">
+      <ol className="flex flex-wrap items-center gap-x-2 font-sans text-[15px] sm:text-base text-[color:var(--paper)]">
         <li className="flex items-center gap-x-2">
           <Link href="/" className={CRUMB_LINK}>Home</Link>
           <span aria-hidden="true">/</span>
@@ -56,7 +56,7 @@ function NextProject({ slug }: { slug: CaseSlug }) {
   return (
     <nav
       aria-label="More projects"
-      className={`bg-[var(--teal)] text-black border-t-[3px] border-black ${GUTTERS} py-16 lg:py-20 [--focus:var(--ink)]`}
+      className={`bg-[var(--blue)] text-black border-t-[3px] border-black ${GUTTERS} py-16 lg:py-20 [--focus:var(--ink)]`}
     >
       <div className="max-w-5xl mx-auto">
         <SectionHeading text="Next project" tone="ink" size="case" className="mb-6" />
@@ -99,7 +99,7 @@ export default function CaseLayout({ slug, children }: CaseLayoutProps) {
   }, [slug, name]);
 
   return (
-    <div className="min-h-screen text-[color:var(--cream)]">
+    <div className="min-h-screen text-[color:var(--text)]">
       <SkipLink />
       <CaseTaskbar />
       <main id="main" tabIndex={-1}>

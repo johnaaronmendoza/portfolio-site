@@ -247,10 +247,10 @@ export default function CommandPalette() {
           >
             <WindowBar title="commands.exe" onClose={() => setIsOpen(false)} closeLabel="Close command menu" />
 
-            <div className="bg-black text-[color:var(--cream)] [--focus:var(--orange)]">
+            <div className="bg-black text-[color:var(--paper)] [--focus:var(--yellow)]">
               {/* Search: the ring sits on the row; the input itself has no outline */}
-              <div className="border-b-2 border-[color:var(--cream)] p-4 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--orange)] focus-within:outline-offset-[-6px]">
-                <span aria-hidden="true" className="font-mono text-base font-bold text-[color:var(--orange)]">&gt;</span>
+              <div className="border-b-2 border-[color:var(--paper)] p-4 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--yellow)] focus-within:outline-offset-[-6px]">
+                <span aria-hidden="true" className="font-mono text-base font-bold text-[color:var(--yellow)]">&gt;</span>
                 <input
                   ref={inputRef}
                   type="text"
@@ -261,14 +261,14 @@ export default function CommandPalette() {
                   }}
                   placeholder="Search commands..."
                   aria-label="Search commands"
-                  className="flex-1 min-w-0 bg-transparent text-[color:var(--cream)] placeholder:text-[color:var(--cream)] placeholder:italic font-mono text-base outline-none caret-[var(--orange)]"
+                  className="flex-1 min-w-0 bg-transparent text-[color:var(--paper)] placeholder:text-[color:var(--paper)] placeholder:italic font-mono text-base outline-none caret-[var(--yellow)]"
                 />
               </div>
 
               {/* Commands: selected row orange, hover teal; the description inherits the row colour */}
               <div className="max-h-96 overflow-y-auto" data-lenis-prevent>
                 {filteredCommands.length === 0 ? (
-                  <p className="p-4 text-center font-mono text-sm">No commands found</p>
+                  <p className="p-4 text-center font-sans text-sm">No commands found</p>
                 ) : (
                   filteredCommands.map((cmd, idx) => (
                     <button
@@ -280,23 +280,23 @@ export default function CommandPalette() {
                       }}
                       className={`block w-full min-h-[44px] text-left px-4 py-3 outline-offset-[-6px] [--focus:var(--ink)] transition-colors duration-150 ${
                         idx === selectedIndex
-                          ? 'bg-[var(--orange)] text-black'
-                          : 'hover:bg-[var(--teal)] hover:text-black'
+                          ? 'bg-[var(--yellow)] text-black'
+                          : 'hover:bg-[var(--blue)] hover:text-black'
                       }`}
                       onFocus={() => setSelectedIndex(idx)}
                     >
-                      <span className="flex items-center gap-2 font-mono font-bold text-[15px]">
+                      <span className="flex items-center gap-2 font-sans font-bold text-[15px]">
                         {cmd.id === 'nav-hero' && <PixelArt name="icon-home" size={16} />}
                         {cmd.label}
                       </span>
-                      <span className="block font-mono text-sm mt-1">{cmd.description}</span>
+                      <span className="block font-sans text-sm mt-1">{cmd.description}</span>
                     </button>
                   ))
                 )}
               </div>
 
               {/* Footer hints */}
-              <div className="border-t-2 border-[color:var(--cream)] p-3 flex flex-wrap justify-between gap-x-4 gap-y-1 text-sm font-mono">
+              <div className="border-t-2 border-[color:var(--paper)] p-3 flex flex-wrap justify-between gap-x-4 gap-y-1 text-sm font-mono">
                 <span>↑↓ Navigate | Enter Select | Esc Close</span>
                 <span>Ctrl+K Toggle</span>
               </div>

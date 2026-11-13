@@ -22,5 +22,7 @@ python3 design-system/portfolio/asset-work/tiles/build.py
 D=design-system/portfolio/asset-work/tiles
 for s in silverlink scs uwb uat firesafety; do node .claude/skills/asset-toolkit/scripts/html2png.mjs $D/$s.html --out $D/renders --name $s --size 1200x660; done
 node .claude/skills/asset-toolkit/scripts/html2png.mjs $D/ai-finance.html --out $D/renders --name ai-finance --size 1200x660 --require-font "Press Start 2P"
-# then save each render as attached_assets/tile_<slug>.webp (quality 82)
+# then save each render as attached_assets/tile_<slug>.webp (Pillow: quality=82, method=6)
 ```
+
+Grounds: page `#EFEAE0` for SilverLink and UAT (not AI; yellow means AI only, John 13 Nov 2026), yellow for AI Finance, blue for SCS, UWB and Fire Safety.

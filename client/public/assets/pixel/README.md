@@ -36,7 +36,7 @@ Served from `/assets/pixel/<file>`.
 | `chip-calendar.svg` | 16×16 | Cream calendar page with an orange top band, two ink binder rings and a 3×2 grid of ink dots | Fact chips for dates and periods (16px) | Decorative, `aria-hidden` |
 | `chip-team.svg` | 16×16 | Two overlapping heads-and-shoulders: front teal top, back orange top, cream faces | Fact chips for team (16px) | Decorative, `aria-hidden` |
 | `chip-phone.svg` | 16×16 | Plain upright cream phone with an ink speaker slit and a navy screen holding one teal bar | Fact chips for platform / device (16px) | Decorative, `aria-hidden` |
-| `bullet.svg` | 8×8 | Stepped right-pointing orange arrowhead with an ink outline | List marker in every bullet list (16px, 2×) | Decorative, `aria-hidden` |
+| `bullet.svg` | 8×8 | Stepped right-pointing paper (white) arrowhead with an ink outline (yellow = AI only, 13 Nov 2026) | List marker in every bullet list (16px, 2×) | Decorative, `aria-hidden` |
 
 
 ## Stickers (Nov 2026)

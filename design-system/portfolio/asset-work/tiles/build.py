@@ -10,15 +10,17 @@ ROOT = Path(__file__).resolve().parents[4]
 A = ROOT / 'attached_assets'
 HERE = Path(__file__).parent
 SRC = HERE / 'src'
+SRC.mkdir(exist_ok=True)
 G = Path('/home/claude/ext/gfonts/ofl')  # OFL fonts from github.com/google/fonts
-# Paper & Ink palette: yellow and blue grounds alternate; cards are white
-INK, CREAM, ORANGE, TEAL = '#000000', '#FFFFFF', '#FFD23F', '#3A66FF'
+# Paper & Ink palette; cards are white. Yellow means AI only (John, 13 Nov 2026):
+# only the AI Finance tile keeps the yellow ground; SilverLink and UAT sit on the page colour.
+INK, CREAM, ORANGE, TEAL, PAGE = '#000000', '#FFFFFF', '#FFD23F', '#3A66FF', '#EFEAE0'
 
 # slug: (ground, kind, [(file, crop box)])
 TILES = {
-    'silverlink': (ORANGE, 'bleed', [('silverlink_p21_img0.png', (100, 30, 640, 428))]),
+    'silverlink': (PAGE,   'bleed', [('silverlink_p21_img0.png', (100, 30, 640, 428))]),
     'scs':        (TEAL,   'bleed', [('scs_p71_img1.png', (0, 0, 1400, 1006))]),
-    'uat':        (ORANGE, 'bleed', [('uat_dashboard_full.png', (256, 16, 1440, 922))]),
+    'uat':        (PAGE,   'bleed', [('uat_dashboard_full.png', (256, 16, 1440, 922))]),
     'uwb':        (TEAL,   'fit',   [('da_p40_img1.png', (640, 0, 1229, 490))]),
     'firesafety': (TEAL,   'phones', [('firesafety_p29_img5.png', (31, 26, 177, 345)),
                                       ('firesafety_p29_img5.png', (257, 26, 403, 345))]),

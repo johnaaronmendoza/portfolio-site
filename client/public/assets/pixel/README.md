@@ -42,4 +42,4 @@ Served from `/assets/pixel/<file>`.
 
 ## Stickers (Nov 2026)
 
-`sticker-*.svg`: ten original 16x16 retro-desk objects (heart, cursor, cookie, coffee, card, cd, folder, phone, notepad, magnifier) in the Paper & Ink palette, drawn from scratch as pixel grids in `design-system/portfolio/asset-work/stickers/build.py` (edit the grids there and re-run). All other icons here were recoloured from the old navy/orange/teal/cream palette to Paper & Ink in the same change.
+`sticker-{cd,folder,phone,notepad,magnifier}.svg`: original 16x16 icons in the Paper & Ink palette, drawn from scratch as pixel grids in `design-system/portfolio/asset-work/stickers/build.py` (edit there and re-run). They stand in for the Windows 95 icons on John's reference sheet. John's own sticker art is in `../stickers/`. All other icons here were recoloured from the old palette to Paper & Ink in Nov 2026.

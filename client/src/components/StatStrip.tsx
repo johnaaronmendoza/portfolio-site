@@ -1,8 +1,9 @@
 import { useId } from 'react';
 import Burst from './comic/Burst';
 
-/** burst: a white comic POW star behind the value (one per strip at most) */
-export type Stat = { value: string; label: string; burst?: boolean };
+/** burst: a blue comic POW star behind the value (band only, one at most);
+ *  source: where the figure comes from, read as part of the label */
+export type Stat = { value: string; label: string; source?: string; burst?: boolean };
 
 type Variant = 'band' | 'status' | 'inline';
 
@@ -40,7 +41,7 @@ const FRAME: Record<Variant, string> = {
 const INLINE_LG_COLS = ['', 'lg:grid-cols-1', 'lg:grid-cols-2', 'lg:grid-cols-3', 'lg:grid-cols-4'];
 
 /**
- * Orange figure cells on black: 3px gaps draw the dividers. Label first in the
+ * Paper figure cells on black: 3px gaps draw the dividers. Label first in the
  * DOM for screen readers, number shown on top. Values render final (no count-up).
  */
 export default function StatStrip({ stats, variant, className = '' }: StatStripProps) {
@@ -49,32 +50,37 @@ export default function StatStrip({ stats, variant, className = '' }: StatStripP
   const lgCols = inline ? INLINE_LG_COLS[Math.min(stats.length, 4)] : 'lg:grid-cols-4';
   const list = (
     <dl className={`grid grid-cols-2 ${lgCols} gap-[3px] bg-black text-black ${FRAME[variant]} ${className}`}>
-      {stats.map(({ value, label, burst }, i) => (
+      {stats.map(({ value, label, source, burst }, i) => {
+        // Bursts only in Home's band: its cell padding holds the star's overhang
+        const pow = burst && variant === 'band';
+        return (
         <div
           key={label}
-          className={`flex flex-col-reverse justify-end gap-3 bg-[var(--yellow)] ${CELL[variant]} ${
+          className={`flex flex-col-reverse justify-end gap-3 bg-[var(--paper)] ${CELL[variant]} ${
             // An odd last cell spans the 2-column row below lg
             inline && stats.length % 2 === 1 && i === stats.length - 1 ? 'col-span-2 lg:col-span-1' : ''
           }`}
         >
           <dt className="font-mono text-[15px] sm:text-base leading-snug max-w-[18ch]">
             {label}
+            {source && <span className="mt-2 block w-fit border-2 border-black px-2 py-0.5 font-label text-[15px] leading-[1.35]">{source}</span>}
           </dt>
-          <dd className={`relative isolate self-start font-label font-bold tracking-[-0.02em] leading-none tabular-nums ${burst ? 'px-[0.55em] py-[0.45em] -mx-[0.35em] -mt-[0.45em] mb-[0.15em]' : ''} ${VALUE[variant]}`}>
+          <dd className={`relative isolate self-start font-label font-bold tracking-[-0.02em] leading-none tabular-nums ${pow ? 'px-[0.8em] pt-[0.5em] pb-[0.45em] -ml-[0.4em] -mt-[0.5em]' : ''} ${VALUE[variant]}`}>
             {/* POW star behind the number only. The padding gives the digits room
-                inside the star's inner points; the box (and so the star) ends
-                above the label, which sits gap-3 below */}
-            {burst && (
+                inside the star's inner points; the negative margins stay inside
+                the cell's padding, so the star never reaches the cell edge */}
+            {pow && (
               <Burst
-                fill="var(--paper)"
+                fill="var(--blue)"
                 rotate={-4}
-                className="absolute -inset-x-[8%] -inset-y-[10%] -z-10 pointer-events-none"
+                className="absolute inset-0 -z-10 pointer-events-none"
               />
             )}
             {value}
           </dd>
         </div>
-      ))}
+        );
+      })}
     </dl>
   );
 

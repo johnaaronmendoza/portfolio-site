@@ -72,13 +72,13 @@ export default function Home() {
           <Stickers set="experience" />
           <Experience />
         </div>
-        {/* Yellow either side of the blue Projects band so strips never merge into it */}
-        <Ribbon tone="yellow" className="-mb-[3px]" items={['PROJECTS', 'SILVERLINK SG', 'SCS AWARENESS PLATFORM']} />
+        {/* Ink either side of the blue Projects band so strips never merge into it */}
+        <Ribbon tone="ink" className="-mb-[3px]" items={['PROJECTS', 'SILVERLINK SG', 'SCS AWARENESS PLATFORM']} />
         <div id="projects" tabIndex={-1} className={SECTION_CLASS}>
           <Stickers set="projects" />
           <Projects />
         </div>
-        <Ribbon tone="yellow" reverse className="-mt-[3px]" items={['SKILLS', 'PRESS A KEY']} />
+        <Ribbon tone="ink" reverse className="-mt-[3px]" items={['SKILLS', 'PRESS A KEY']} />
         <div id="skills" tabIndex={-1} className={SECTION_CLASS}>
           <Stickers set="skills" />
           <Skills />

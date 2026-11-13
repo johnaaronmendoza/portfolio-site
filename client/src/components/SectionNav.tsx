@@ -96,7 +96,7 @@ function SectionMenu({ active }: { active: string }) {
                     onClick={() => go(id)}
                     aria-current={active === id ? 'location' : undefined}
                     className={`flex w-full min-h-[44px] items-center gap-3 px-3 font-sans text-base font-bold text-left transition-colors duration-150 hover:bg-[var(--blue)] hover:text-black ${
-                      active === id ? 'bg-[var(--yellow)] text-black' : 'text-[color:var(--text)]'
+                      active === id ? 'bg-[var(--bar)] text-[color:var(--paper)]' : 'text-[color:var(--text)]'
                     }`}
                   >
                     <PixelArt name={icon} size={16} />
@@ -174,15 +174,15 @@ export default function SectionNav() {
     <>
     {/* Bottom-left at every width; the chat launcher owns bottom-right. The focus
         ring is ink with a white halo so it reads over every band it floats above.
-        Paused = yellow and pressed into its shadow, so the state shows at a glance */}
+        Paused = ink and pressed into its shadow, so the state shows at a glance */}
     <div className={FLOAT_DOCK}>
       <SectionMenu active={active} />
       <button
         type="button"
         onClick={toggleMotion}
         aria-pressed={motionPaused}
-        className={`btn focus-ring-float motion-reduce:hidden min-w-[44px] px-3 text-black ${
-          motionPaused ? 'bg-[var(--yellow)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)]'
+        className={`btn focus-ring-float motion-reduce:hidden min-w-[44px] px-3 ${
+          motionPaused ? 'bg-[var(--bar)] text-[color:var(--paper)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)] text-black'
         }`}
       >
         <span aria-hidden="true">❚❚</span>
@@ -191,7 +191,7 @@ export default function SectionNav() {
       <SoundToggle />
     </div>
     {/* Section dots (large screens): 44px targets around 12px dots. Inactive
-        dots are white, the current section is filled yellow. */}
+        dots are white, the current section is filled ink. */}
     <nav aria-label="Sections" className="fixed right-2 top-1/2 -translate-y-1/2 z-40 hidden lg:block">
       <ul className="flex flex-col">
         {SECTIONS.map(({ id, label }) => (
@@ -216,8 +216,8 @@ export default function SectionNav() {
                 // Ink ring keeps the dot visible where it crosses the blue band
                 className={`block w-3 h-3 border-2 shadow-[0_0_0_2px_var(--ink)] transition-colors duration-150 ${
                   active === id
-                    ? 'bg-[var(--yellow)] border-[color:var(--yellow)]'
-                    : 'border-black bg-[var(--paper)] group-hover:bg-[var(--yellow)]'
+                    ? 'bg-[var(--bar)] border-black'
+                    : 'border-black bg-[var(--paper)] group-hover:bg-[var(--blue)]'
                 }`}
               />
             </button>

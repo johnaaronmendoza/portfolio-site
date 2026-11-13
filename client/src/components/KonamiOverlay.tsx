@@ -35,7 +35,7 @@ export default function KonamiOverlay() {
           <div className="window w-full max-w-sm">
             <WindowBar title="cheat_code.exe" />
             <div className="bg-black px-6 py-6 text-center text-[color:var(--paper)]">
-              <p className="font-label text-xs text-[color:var(--yellow)] mb-3">
+              <p className="font-label text-xs text-[color:var(--paper)] mb-3">
                 <span aria-hidden="true">🎮 </span>Cheat code activated
               </p>
               <p className="font-label text-xs leading-loose">

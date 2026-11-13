@@ -16,7 +16,7 @@ export type FlowStep = {
   /** Optional, ≤ 40 characters */
   detail?: string;
   actor?: FlowActor;
-  /** The one step that matters most: orange fill. One per diagram, max */
+  /** The one step that matters most: ink fill, paper text. One per diagram, max */
   emphasis?: boolean;
   /** Parallel branches or an unordered group inside this step */
   items?: FlowItem[];
@@ -37,12 +37,13 @@ interface FlowDiagramProps {
 
 const LG_COLS = { 1: '', 3: 'lg:grid-cols-3', 4: 'lg:grid-cols-4', 5: 'lg:grid-cols-5' } as const;
 
+// Yellow marks AI only (site-wide); the agent is paper
 const ACTOR_FILL: Record<FlowActor, string> = {
-  AI: 'bg-[var(--blue)]',
+  AI: 'bg-[var(--yellow)]',
   Agent: 'bg-[var(--paper)]',
 };
 
-const LABEL = 'font-sans font-bold text-[15px] sm:text-base leading-[1.4] text-black text-balance';
+const LABEL = 'font-sans font-bold text-[15px] sm:text-base leading-[1.4] text-balance';
 
 export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols = 1, className = '' }: FlowDiagramProps) {
   const row = lgCols > 1;
@@ -60,15 +61,15 @@ export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols
             )}
             <div
               className={`flex-1 min-h-14 px-3.5 py-3 border-black ${
-                emphasis ? 'border-[3px] bg-[var(--yellow)]' : 'border-2 bg-[var(--paper)]'
+                emphasis
+                  ? 'border-[3px] bg-[var(--bar)] text-[color:var(--paper)] shadow-[4px_4px_0_0_var(--ink)]'
+                  : 'border-2 bg-[var(--paper)] text-black'
               }`}
             >
               <div className="flex flex-wrap items-start gap-2">
                 {numbered && (
                   <span
-                    className={`flex-shrink-0 border-2 border-black px-1.5 py-0.5 font-label text-xs text-black tabular-nums ${
-                      emphasis ? 'bg-[var(--paper)]' : 'bg-[var(--yellow)]'
-                    }`}
+                    className="flex-shrink-0 border-2 border-black bg-[var(--paper)] px-1.5 py-0.5 font-label text-xs text-black tabular-nums"
                   >
                     {i + 1}
                   </span>
@@ -81,7 +82,7 @@ export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols
                 )}
               </div>
               {detail && (
-                <p className={`mt-1 font-sans text-[15px] leading-[1.5] ${emphasis ? 'text-black' : 'text-[color:var(--text)]'}`}>
+                <p className={`mt-1 font-sans text-[15px] leading-[1.5] ${emphasis ? 'text-[color:var(--paper)]' : 'text-[color:var(--text)]'}`}>
                   {detail}
                 </p>
               )}
@@ -89,7 +90,7 @@ export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols
                 <ul className={`mt-3 grid gap-2 ${itemCols}`}>
                   {items.map(item => (
                     <li key={item.label} className="min-w-0 border-2 border-black bg-[var(--paper)] px-2.5 py-2">
-                      <span className={`block break-words ${LABEL}`}>{item.label}</span>
+                      <span className={`block break-words text-black ${LABEL}`}>{item.label}</span>
                       {item.detail && (
                         <span className="block mt-1 font-sans text-[15px] leading-[1.5] text-[color:var(--text)]">{item.detail}</span>
                       )}

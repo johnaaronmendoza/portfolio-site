@@ -13,6 +13,7 @@ import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 import { Chip, Lead } from '@/components/Hierarchy';
 import PixelArt from '@/components/PixelArt';
 import HeroNarrator from '@/components/comic/HeroNarrator';
+import DeskAssistWindow from '@/components/DeskAssistWindow';
 import Window from '@/components/Window';
 
 const { hero: HERO, loop: LOOP, easing } = motionTokens;
@@ -25,19 +26,18 @@ const NAME_LINES = [
   { text: 'BRANZUELA', color: 'text-[color:var(--yellow)]' },
 ];
 
-const YELLOW = 'bg-[var(--yellow)]';
 const BLUE = 'bg-[var(--blue)]';
 const INK = 'bg-black';
 
 const PIXELS = [
-  { top: '12%',  right: '8%',   size: 4, color: YELLOW, delay: 0 },
+  { top: '12%',  right: '8%',   size: 4, color: BLUE,   delay: 0 },
   { top: '20%',  right: '18%',  size: 3, color: BLUE,   delay: 0.5 },
-  { top: '45%',  right: '6%',   size: 2, color: INK,  delay: 1 },
+  { top: '45%',  right: '6%',   size: 2, color: INK,    delay: 1 },
   { top: '65%',  right: '22%',  size: 3, color: BLUE,   delay: 1.5 },
-  { top: '80%',  right: '10%',  size: 2, color: YELLOW, delay: 0.8 },
+  { top: '80%',  right: '10%',  size: 2, color: INK,    delay: 0.8 },
   { top: '15%',  left: '5%',    size: 2, color: BLUE,   delay: 0.3 },
-  { top: '35%',  left: '8%',    size: 3, color: YELLOW, delay: 1.2 },
-  { top: '55%',  left: '4%',    size: 2, color: INK,  delay: 0.7 },
+  { top: '35%',  left: '8%',    size: 3, color: BLUE,   delay: 1.2 },
+  { top: '55%',  left: '4%',    size: 2, color: INK,    delay: 0.7 },
   { top: '72%',  left: '12%',   size: 4, color: BLUE,   delay: 1.8 },
 ];
 
@@ -95,8 +95,8 @@ function ScrambleLine({
 export default function Hero() {
   const reduced = useReducedMotion();
   const calm = useCalmMotion();
-  // The narrator only mounts where it shows, so its loops never run hidden
-  const wide = useMediaQuery('(min-width: 1024px)');
+  // The narrator mounts only where it shows (beside the window from 1280px)
+  const xl = useMediaQuery('(min-width: 1280px)');
 
   // Particles also pause while the hero is scrolled out of view
   const sectionRef = useRef<HTMLElement>(null);
@@ -115,7 +115,7 @@ export default function Hero() {
       {!reduced && (
         <div className="absolute inset-0 z-0 pointer-events-none">
           <Particles
-            particleColors={['#3A66FF', '#FFD23F', '#111111']}
+            particleColors={['#3A66FF', '#111111']}
             particleCount={120}
             particleSpread={8}
             speed={0.05}
@@ -165,7 +165,7 @@ export default function Hero() {
               {/* Terminal variant: black body so the two-tone name reads */}
               <Window
                 title="welcome.exe"
-                bodyClassName="bg-black text-[color:var(--paper)] [--focus:var(--yellow)] p-6 sm:p-10 xl:p-12"
+                bodyClassName="bg-black text-[color:var(--paper)] [--focus:var(--paper)] p-6 sm:p-10 xl:p-12"
               >
                 {/* Sized so BRANZUELA plus the cursor fits from 320px up */}
                 <h1 className="font-pixel leading-[1.25] text-[length:clamp(20px,7vw,30px)] sm:text-4xl lg:text-[40px] xl:text-5xl">
@@ -199,7 +199,6 @@ export default function Hero() {
             >
               <span aria-hidden="true" className="font-mono text-[15px] sm:text-base text-[color:var(--text)] flex-shrink-0">{'>'}</span>
               <p className="font-mono text-[15px] sm:text-base font-bold text-[color:var(--blue-text)]">{ROLE_LINE}</p>
-              <Cursor calm={calm} className="w-2 h-4" />
             </motion.div>
 
             {/* Positioning: the L2 lead (no prompt: the role line above has it) + study chip */}
@@ -265,11 +264,19 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* Narrator, large screens only so it never sits under text: Lil Johnny
-              points at the name from a comic panel window; pressing him opens the chat */}
-          <div className="hidden lg:flex lg:col-span-5 items-center justify-center">
-            {wide && <HeroNarrator />}
-          </div>
+          {/* The AI proof: desk_assist.exe. From 1280px the column borrows 64px of
+              the gutter on its left so Lil Johnny can stand on the window's edge,
+              pointing at the agent-review step (his bubble opens the chat). After
+              the left column, so tab order runs name, CTAs, narrator, flow link. */}
+          <motion.div
+            className="mt-12 lg:mt-0 lg:col-span-5 xl:-ml-16 xl:grid xl:grid-cols-[148px_minmax(0,1fr)] xl:gap-x-3 xl:items-end"
+            initial={{ opacity: 0, y: reduced ? 0 : motionTokens.distance.sm }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: HERO.line, delay: HERO.ctas, ease: easing.out }}
+          >
+            {xl && <HeroNarrator />}
+            <DeskAssistWindow />
+          </motion.div>
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useMotionValue } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Component, lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState,
   type FocusEvent, type PointerEvent, type ReactNode, type RefObject,
@@ -8,7 +8,6 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useModalFocus } from '@/hooks/useModalFocus';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { play } from '@/hooks/useSound';
-import { MASCOT, MASCOT_PX, preloadMascot, type Pose } from '@/lib/mascot';
 import { motionTokens } from '@/lib/motion-tokens';
 import { chipClass } from './Projects';
 import { WindowBar } from './Window';
@@ -24,7 +23,6 @@ const Keyboard3D = lazy(() => import('./skills3d/Keyboard3D'));
 const GROUP_LABEL = 'Skills keyboard. Press a key to open what the skill is and where I used it.';
 const CAPS: Cap[] = KEYS.map(capFor);
 const NAMES = KEYS.map((k, i) => keyName(k, CAPS[i]));
-const KB = motionTokens.keyboard;
 const GAP = 10; // px between a key and its tooltip or window
 const EDGE = 8; // px kept clear of the viewport edge
 const DOCK = 88; // px kept clear at the bottom for the fixed buttons (html scroll-padding-bottom)
@@ -86,7 +84,7 @@ function FlatIcon({ src }: { src: string }) {
   return <span aria-hidden="true" className="w-[44%] aspect-square bg-current" style={{ mask: `url(${src}) center / contain no-repeat` }} />;
 }
 
-/** Flat 2D keyboard: no WebGL, reduced motion, or the 3D chunk failed. */
+/** Flat 2D keyboard: phones and touch screens, no WebGL, reduced motion, or the 3D chunk failed. */
 function FlatKeys(handlers: KeyHandlers) {
   const { filter, onHover } = handlers;
   const hoverOn = (i: number | null) => (e: PointerEvent) => {
@@ -276,39 +274,23 @@ export default function SkillKeyboard({ listId }: { listId: string }) {
   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const locatorRef = useRef<KeyLocator | null>(null);
   const tipRef = useRef<HTMLDivElement>(null);
-  const mascotRef = useRef<HTMLImageElement>(null);
   const [stage, setStage] = useState<'wait' | '3d' | '2d'>('wait');
   const [filter, setFilter] = useState<Filter>('all');
   const [announce, setAnnounce] = useState('');
   const [hover, setHover] = useState<number | null>(null); // mouse or pen only
   const [focus, setFocus] = useState<{ i: number; visible: boolean } | null>(null);
   const [open, setOpen] = useState<number | null>(null);
-  const [selected, setSelected] = useState<number | null>(null); // last opened: the mascot stands on it
-  const [taps, setTaps] = useState(0); // drives the mascot's hop
   const [pulse, setPulse] = useState<{ i: number; n: number } | null>(null);
   const [entrance] = useState(() => !enteredThisLoad);
-  const [entered, setEntered] = useState(!entrance);
-  const [dir, setDir] = useState(0); // which way the mascot leans: -1 left, 0 upright, 1 right
-  // The latest hop, relative to where it lands: start offset and scale, duration
-  const [hop, setHop] = useState<{ dx: number; dy: number; s: number; d: number } | null>(null);
-  const [seq, setSeq] = useState<Pose | null>(null); // frame of the press sequence, if one is playing
-  const flat = reduced || stage === '2d';
+  // Phones and touch screens get the flat board: the 3D chunk (three.js) is
+  // never requested there, since Keyboard3D only renders when !flat
+  const handheld = useMediaQuery('(max-width: 639.98px), (pointer: coarse)');
+  const flat = reduced || handheld || stage === '2d';
   // Tooltip: the hovered or keyboard-focused key, unless Escape dismissed it
   // (WCAG 1.4.13); it comes back when hover or focus moves to another key
   const [dismissed, setDismissed] = useState<number | null>(null);
   const shown = open === null ? hover ?? (focus?.visible ? focus.i : null) : null;
   const tip = shown === dismissed ? null : shown;
-  // Mascot frame. 3D: the press sequence, else lean (or happy, if the key is
-  // straight below) toward the hovered or focused key, else idle. Flat / reduced
-  // motion: no hop, a thumbs-up while a window is open.
-  const leanPose: Pose | null = tip === null ? null : dir === 0 ? 'happy' : dir < 0 ? 'lean-left' : 'lean-right';
-  const frame: Pose = flat
-    ? open !== null ? 'thumbs-up' : tip !== null ? 'happy' : 'idle'
-    : seq ?? leanPose ?? 'idle';
-  // Integer scales of the pixel grid: x1 on phones and when standing on a key, x2 above the board
-  const mascotStyle = { width: MASCOT_PX.w * (wide ? 2 : 1), height: MASCOT_PX.h * (wide ? 2 : 1), imageRendering: 'pixelated' as const };
-
-  useEffect(preloadMascot, []);
 
   // Load the 3D board when the section nears the viewport (loading, not a scroll effect)
   useEffect(() => {
@@ -332,8 +314,8 @@ export default function SkillKeyboard({ listId }: { listId: string }) {
   }, [flat]);
 
   // Latest values for the per-frame callbacks below
-  const live = useRef({ tip, selected, cols, locate });
-  live.current = { tip, selected, cols, locate };
+  const live = useRef({ tip, locate });
+  live.current = { tip, locate };
 
   // Tooltip: centred above the key, never higher than the board's top (so it
   // stays clear of the filters and heading); else below the key; else as low
@@ -365,75 +347,10 @@ export default function SkillKeyboard({ listId }: { listId: string }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [tip]);
 
-  // Mascot: stands behind the top-right key, or on the last opened key
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const ms = useMotionValue(1);
-  const perch = useCallback((sel: number | null) => {
-    const { cols: c, locate: find } = live.current;
-    const box = boardRef.current;
-    const r = find(sel ?? c - 1);
-    if (!box || !r) return null;
-    const b = box.getBoundingClientRect();
-    // On a key he stands at the front of its top face, at x1 so the row behind stays readable
-    const w = mascotRef.current?.offsetWidth || MASCOT_PX.w;
-    const scale = sel === null ? 1 : Math.min(1, MASCOT_PX.w / w);
-    return { x: r.x - b.left, y: (sel === null ? r.top : r.face) - b.top, scale };
-  }, []);
-  // Every frame: the mascot's outer layer tracks its perch; the hop is a separate layer
-  const followMascot = useCallback(() => {
-    const p = perch(live.current.selected);
-    if (!p) return;
-    mx.set(p.x);
-    my.set(p.y);
-    ms.set(p.scale);
-  }, [perch, mx, my, ms]);
-
-  const onFrame = useCallback(() => {
-    placeTip();
-    followMascot();
-  }, [placeTip, followMascot]);
-
-  // Turn and lean toward the hovered or focused key; upright again when it ends
-  useEffect(() => {
-    if (flat) return;
-    const r = tip === null ? null : live.current.locate(tip);
-    const box = boardRef.current;
-    if (!r || !box) {
-      setDir(0);
-      return;
-    }
-    const dx = r.x - box.getBoundingClientRect().left - mx.get();
-    setDir(Math.abs(dx) < 8 ? 0 : Math.sign(dx));
-  }, [tip, flat, mx]);
-
-  // Press sequence: crouch, jump for the hop, land, celebrate, then back to idle
-  useEffect(() => {
-    if (taps === 0 || flat) return;
-    const M = motionTokens.mascot;
-    const air = M.crouch + (hop?.d ?? 0);
-    const steps: [Pose | null, number][] = [['jump', M.crouch], ['land', air], ['celebrate', air + M.land], [null, air + M.land + M.celebrate]];
-    setSeq('crouch');
-    const timers = steps.map(([p, t]) => setTimeout(() => setSeq(p), t * 1000));
-    return () => timers.forEach(clearTimeout);
-  }, [taps, hop, flat]);
-
   const openKey = (i: number) => {
     // Focus the key's control first, so the window hands focus back to it on close
     btnRefs.current[i]?.focus({ preventScroll: true });
-    // Mascot: jump the perch to the key now and play the hop from the old spot
-    const to = flat ? null : perch(i);
-    if (to) {
-      const from = { x: mx.get(), y: my.get(), s: ms.get() };
-      const far = Math.abs(from.x - to.x) > 160;
-      setHop({ dx: from.x - to.x, dy: from.y - to.y, s: from.s / to.scale, d: far ? motionTokens.duration.slow : motionTokens.duration.normal });
-      mx.set(to.x);
-      my.set(to.y);
-      ms.set(to.scale);
-    }
-    setSelected(i);
     setOpen(i);
-    setTaps(t => t + 1);
     play('click');
   };
   const closeWindow = useCallback(() => setOpen(null), []);
@@ -471,7 +388,7 @@ export default function SkillKeyboard({ listId }: { listId: string }) {
       <Filters value={filter} onChange={chooseFilter} />
       <p className="sr-only" aria-live="polite">{announce}</p>
 
-      <div ref={boardRef} className="relative pt-14 sm:pt-16 lg:pt-20">
+      <div ref={boardRef} className="relative pt-6 sm:pt-8">
         {flat ? (
           <FlatKeys {...handlers} />
         ) : (
@@ -508,57 +425,16 @@ export default function SkillKeyboard({ listId }: { listId: string }) {
                       locator={locatorRef}
                       onHover={setHover}
                       onSelect={openKey}
-                      onFrame={onFrame}
+                      onFrame={placeTip}
                       onEntered={() => {
                         enteredThisLoad = true;
-                        setEntered(true);
                       }}
                     />
                   </Suspense>
                 </Boundary>
               )}
             </div>
-            {/* Mascot: stands on the board, leans toward the key in focus, hops
-                onto a pressed key. Frames swap by src; movement is transforms. */}
-            {stage === '3d' && (
-              <motion.div
-                aria-hidden="true"
-                className="pointer-events-none absolute left-0 top-0 z-20"
-                style={{ x: mx, y: my }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: entered ? 1 : 0 }}
-                transition={{ duration: motionTokens.duration.fast }}
-              >
-                <motion.div
-                  key={taps}
-                  className="absolute bottom-0 left-0 origin-bottom"
-                  // Starts at the old spot, holds through the crouch, then arcs onto the key
-                  initial={hop ? { x: hop.dx, y: hop.dy, scale: hop.s } : false}
-                  animate={hop ? { x: [hop.dx, 0], y: [hop.dy, Math.min(hop.dy, 0) - KB.hop, 0], scale: [hop.s, 1] } : undefined}
-                  transition={{ duration: hop?.d, delay: motionTokens.mascot.crouch, times: [0, 0.45, 1], ease: [motionTokens.easing.out, motionTokens.easing.sharp] }}
-                >
-                  <motion.img
-                    ref={mascotRef}
-                    src={MASCOT[frame]}
-                    alt=""
-                    draggable={false}
-                    className="absolute bottom-0 left-0 max-w-none -translate-x-1/2 origin-bottom"
-                    style={{ ...mascotStyle, scale: ms }}
-                  />
-                </motion.div>
-              </motion.div>
-            )}
           </>
-        )}
-        {flat && (
-          <img
-            src={MASCOT[frame]}
-            alt=""
-            aria-hidden="true"
-            draggable={false}
-            className="absolute right-4 top-14 sm:top-16 lg:top-20 max-w-none -translate-y-full pointer-events-none"
-            style={mascotStyle}
-          />
         )}
 
         {tip !== null && <KeyTip key={tip} index={tip} tipRef={tipRef} reduced={flat} />}

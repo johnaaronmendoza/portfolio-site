@@ -305,7 +305,7 @@ export default function MascotChatWidget() {
         aria-label={isOpen ? 'Close chat' : "Chat about John's work"}
         aria-expanded={isOpen}
         aria-controls={PANEL_ID}
-        className={`btn focus-ring-float fixed bottom-4 right-4 sm:bottom-6 z-40 p-0 text-black ${isOpen ? 'bg-[var(--yellow)]' : 'bg-[var(--paper)]'}`}
+        className={`btn focus-ring-float fixed bottom-4 right-4 sm:bottom-6 z-40 p-0 text-black ${isOpen ? 'bg-[var(--page)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)]'}`}
       >
         <div className="flex items-center gap-2 p-1 sm:px-3 sm:py-1.5">
           <img

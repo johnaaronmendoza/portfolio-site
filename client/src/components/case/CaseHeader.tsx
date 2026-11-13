@@ -48,7 +48,7 @@ export default function CaseHeader({ slug, file, facts, note, links, stats, hero
         <WindowBar title={file} />
         <div className="window-body p-6 sm:p-10 lg:p-14">
           <div className="grid grid-cols-1">
-            <span className="col-start-1 row-start-1 self-start justify-self-start border-2 border-black bg-[var(--yellow)] px-2 py-1 font-label text-xs text-black">
+            <span className="badge badge--paper col-start-1 row-start-1 self-start justify-self-start">
               {project.year}
             </span>
             <h1 className="mt-4 font-display text-black break-words text-balance text-[length:clamp(30px,8.5vw,38px)] sm:text-[46px] xl:text-[56px]">

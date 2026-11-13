@@ -247,10 +247,10 @@ export default function CommandPalette() {
           >
             <WindowBar title="commands.exe" onClose={() => setIsOpen(false)} closeLabel="Close command menu" />
 
-            <div className="bg-black text-[color:var(--paper)] [--focus:var(--yellow)]">
+            <div className="bg-black text-[color:var(--paper)] [--focus:var(--paper)]">
               {/* Search: the ring sits on the row; the input itself has no outline */}
-              <div className="border-b-2 border-[color:var(--paper)] p-4 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--yellow)] focus-within:outline-offset-[-6px]">
-                <span aria-hidden="true" className="font-mono text-base font-bold text-[color:var(--yellow)]">&gt;</span>
+              <div className="border-b-2 border-[color:var(--paper)] p-4 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--paper)] focus-within:outline-offset-[-6px]">
+                <span aria-hidden="true" className="font-mono text-base font-bold text-[color:var(--paper)]">&gt;</span>
                 <input
                   ref={inputRef}
                   type="text"
@@ -261,11 +261,11 @@ export default function CommandPalette() {
                   }}
                   placeholder="Search commands..."
                   aria-label="Search commands"
-                  className="flex-1 min-w-0 bg-transparent text-[color:var(--paper)] placeholder:text-[color:var(--paper)] placeholder:italic font-mono text-base outline-none caret-[var(--yellow)]"
+                  className="flex-1 min-w-0 bg-transparent text-[color:var(--paper)] placeholder:text-[color:var(--paper)] placeholder:italic font-mono text-base outline-none caret-[var(--paper)]"
                 />
               </div>
 
-              {/* Commands: selected row orange, hover teal; the description inherits the row colour */}
+              {/* Commands: selected row paper (inverted), hover blue; the description inherits the row colour */}
               <div className="max-h-96 overflow-y-auto" data-lenis-prevent>
                 {filteredCommands.length === 0 ? (
                   <p className="p-4 text-center font-sans text-sm">No commands found</p>
@@ -280,7 +280,7 @@ export default function CommandPalette() {
                       }}
                       className={`block w-full min-h-[44px] text-left px-4 py-3 outline-offset-[-6px] [--focus:var(--ink)] transition-colors duration-150 ${
                         idx === selectedIndex
-                          ? 'bg-[var(--yellow)] text-black'
+                          ? 'bg-[var(--paper)] text-black'
                           : 'hover:bg-[var(--blue)] hover:text-black'
                       }`}
                       onFocus={() => setSelectedIndex(idx)}

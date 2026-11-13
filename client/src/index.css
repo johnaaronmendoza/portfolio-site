@@ -107,6 +107,12 @@
   100% { transform: translateX(0); }
 }
 
+/* Hero narrator bob (.johnny-bob): two frames, 2px */
+@keyframes johnny-bob {
+  0% { translate: 0 0; }
+  50% { translate: 0 -2px; }
+}
+
 /* Screen Tear VHS Effect */
 @keyframes screenTear {
   0% {
@@ -184,11 +190,11 @@
   --text: #111111;      /* body text on page and paper */
   --paper: #FFFFFF;     /* window bodies, chips; light text on bar/black */
   --bar: #111111;       /* title bars, footer band, case-study header */
-  --yellow: #FFD23F;    /* accent fill, black text (14.6:1) */
+  --yellow: #FFD23F;    /* AI only (keycaps, AI tags, legend), black text (14.6:1) */
   --blue: #3A66FF;      /* accent fill, black (4.52:1) or white (4.64:1) text */
   --blue-text: #2347D6; /* blue text on page (5.95:1) or paper (7.13:1) */
   /* Focus ring: ink on the light page and paper; dark surfaces (title bars,
-     footer, overlays, hero window) set it to paper or yellow. */
+     footer, overlays, hero window) set it to paper. */
   --focus: var(--ink);
 
   --radius: 0;
@@ -200,32 +206,32 @@
   --card-foreground: var(--text);
   --popover: var(--paper);
   --popover-foreground: var(--text);
-  --primary: var(--yellow);
-  --primary-foreground: var(--ink);
+  --primary: var(--blue);
+  --primary-foreground: #fff;
   --secondary: var(--blue);
   --secondary-foreground: var(--ink);
   --muted: var(--paper);
   --muted-foreground: var(--text);
   --accent: var(--blue);
   --accent-foreground: var(--ink);
-  --destructive: var(--yellow);
-  --destructive-foreground: var(--ink);
+  --destructive: var(--bar);
+  --destructive-foreground: var(--paper);
   --border: var(--ink);
   --input: var(--paper);
-  --ring: var(--yellow);
-  --chart-1: var(--yellow);
-  --chart-2: var(--blue);
+  --ring: var(--ink);
+  --chart-1: var(--blue);
+  --chart-2: var(--bar);
   --chart-3: var(--bar);
   --chart-4: var(--paper);
   --chart-5: var(--text);
   --sidebar: var(--paper);
   --sidebar-foreground: var(--text);
-  --sidebar-primary: var(--yellow);
-  --sidebar-primary-foreground: var(--ink);
+  --sidebar-primary: var(--blue);
+  --sidebar-primary-foreground: #fff;
   --sidebar-accent: var(--blue);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--ink);
-  --sidebar-ring: var(--yellow);
+  --sidebar-ring: var(--ink);
 }
 
 /* Dark mode is not exposed; it uses the same aliases */
@@ -237,32 +243,32 @@
   --card-foreground: var(--text);
   --popover: var(--paper);
   --popover-foreground: var(--text);
-  --primary: var(--yellow);
-  --primary-foreground: var(--ink);
+  --primary: var(--blue);
+  --primary-foreground: #fff;
   --secondary: var(--blue);
   --secondary-foreground: var(--ink);
   --muted: var(--paper);
   --muted-foreground: var(--text);
   --accent: var(--blue);
   --accent-foreground: var(--ink);
-  --destructive: var(--yellow);
-  --destructive-foreground: var(--ink);
+  --destructive: var(--bar);
+  --destructive-foreground: var(--paper);
   --border: var(--ink);
   --input: var(--paper);
-  --ring: var(--yellow);
-  --chart-1: var(--yellow);
-  --chart-2: var(--blue);
+  --ring: var(--ink);
+  --chart-1: var(--blue);
+  --chart-2: var(--bar);
   --chart-3: var(--bar);
   --chart-4: var(--paper);
   --chart-5: var(--text);
   --sidebar: var(--paper);
   --sidebar-foreground: var(--text);
-  --sidebar-primary: var(--yellow);
-  --sidebar-primary-foreground: var(--ink);
+  --sidebar-primary: var(--blue);
+  --sidebar-primary-foreground: #fff;
   --sidebar-accent: var(--blue);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--ink);
-  --sidebar-ring: var(--yellow);
+  --sidebar-ring: var(--ink);
 }
 
 @layer base {
@@ -371,8 +377,8 @@
     line-height: 1.15;
   }
 
-  /* Comic lettering (Bangers): section titles, captions and sound effects
-     only, never paragraphs. Bangers is caps-only. */
+  /* Comic lettering (Bangers): section titles and the two featured tiles'
+     sound effects only, never paragraphs. Bangers is caps-only. */
   .font-comic {
     font-family: 'Bangers', 'IBM Plex Sans', ui-sans-serif, sans-serif;
     font-weight: 400;
@@ -380,17 +386,24 @@
     line-height: 1;
   }
 
-  /* Comic narration box: yellow caption with an ink frame */
-  .comic-caption {
+  /* Badges: one shape for every status/meta badge. Yellow marks AI only;
+     blue marks data or a link; ink, paper and dashed (unfinished) are status. */
+  .badge {
     display: inline-block;
-    background-color: var(--yellow);
+    border: 2px solid var(--ink);
+    padding: 4px 8px;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-weight: 600;
+    font-size: 0.75rem;
+    line-height: 1.3;
     color: #000;
-    border: 3px solid var(--ink);
-    font-family: 'Bangers', 'IBM Plex Sans', ui-sans-serif, sans-serif;
-    letter-spacing: 0.04em;
-    line-height: 1;
-    padding: 0.4em 0.65em 0.3em;
+    white-space: nowrap;
   }
+  .badge--ai { background-color: var(--yellow); }
+  .badge--data { background-color: var(--blue); }
+  .badge--ink { background-color: var(--bar); color: var(--paper); }
+  .badge--paper { background-color: var(--paper); }
+  .badge--status { background-color: var(--paper); border-style: dashed; }
 
   /* Speech bubble with a hard-outlined tail; --tail-x moves the tail */
   .comic-bubble {
@@ -446,7 +459,7 @@
     transition: background-color 150ms ease, transform 80ms ease, border-bottom-width 80ms ease;
   }
   @media (hover: hover) {
-    .chat-key:hover { background-color: var(--yellow); }
+    .chat-key:hover { background-color: var(--page); }
   }
   .chat-key:active:not([aria-disabled="true"]) {
     transform: translateY(3px);
@@ -606,6 +619,47 @@
     }
   }
 
+  /* Desk Assist flow (hero): 3px ink connectors between the stacked steps,
+     and a stepped arrow from step 5 (agent review) into step 6, which share
+     the last row. Decorative; the list order carries the sequence. */
+  .da-flow > li { position: relative; }
+  .da-flow > li:not(:first-child):not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: -12px;
+    width: 3px;
+    height: 10px;
+    background: var(--ink);
+  }
+  /* Step 5 has a 3px frame: keep its connector on the same line */
+  .da-flow > li:nth-child(5)::before { left: 21px; top: -13px; }
+  .da-flow > li:nth-child(5)::after {
+    content: '';
+    position: absolute;
+    right: -27px;
+    top: 50%;
+    width: 22px;
+    height: 3px;
+    background: var(--ink);
+  }
+  .da-flow > li:last-child::before {
+    content: '';
+    position: absolute;
+    left: -9px;
+    top: 50%;
+    width: 9px;
+    height: 12px;
+    translate: 0 -50%;
+    background: var(--ink);
+    clip-path: polygon(0 0, 34% 0, 34% 25%, 67% 25%, 67% 42%, 100% 42%, 100% 58%, 67% 58%, 67% 75%, 34% 75%, 34% 100%, 0 100%);
+  }
+
+  /* Hero narrator's one loop: a two-frame, one-art-pixel bob (2px at 2x).
+     Stopped by Pause motion here and by reduced motion (end of file). */
+  .johnny-bob { animation: johnny-bob 1.2s steps(1) infinite; }
+  :root[data-motion="paused"] .johnny-bob { animation: none; }
+
   /* Retro OS window: white body, thick ink frame, hard offset shadow, black
      title bar. Kept in the components layer so utilities passed through
      className / bodyClassName override it cleanly. */
@@ -681,14 +735,14 @@
     cursor: not-allowed;
   }
 
-  /* Primary: cobalt with white text (4.64:1); secondary: yellow with ink */
+  /* Primary: cobalt with white text (4.64:1); secondary: paper with ink */
   .btn-primary {
     background-color: var(--blue);
     color: #fff;
   }
 
   .btn-secondary {
-    background-color: var(--yellow);
+    background-color: var(--paper);
     color: var(--ink);
   }
 
@@ -867,8 +921,9 @@
     transition-duration: 0.01ms !important;
   }
 
-  /* Marquee strips stay completely still */
-  .ribbon-track {
+  /* Marquee strips and the narrator stay completely still */
+  .ribbon-track,
+  .johnny-bob {
     animation: none !important;
   }
 }

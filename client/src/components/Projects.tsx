@@ -84,27 +84,21 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
         )}
         {isComingSoon && (
           <div className="absolute inset-0 flex items-end justify-end p-3">
-            <span className="font-label text-xs text-black border-2 border-black bg-[var(--paper)] px-2 py-1">
-              COMING SOON
-            </span>
+            <span className="badge badge--paper">COMING SOON</span>
           </div>
         )}
         {project.featured && (
-          <span className="absolute top-2 left-2 font-label text-xs text-black border-2 border-black bg-[var(--yellow)] px-2 py-1">
-            Featured
-          </span>
+          <span className="badge badge--ink absolute top-2 left-2">Featured</span>
         )}
         {isExternal && (
-          <span className="absolute top-2 right-2 font-label text-xs text-black border-2 border-black bg-[var(--blue)] px-2 py-1">
-            Live site
-          </span>
+          <span className="badge badge--data absolute top-2 right-2">Live site</span>
         )}
         {/* Comic sound effect, decorative (the description says the same) */}
         {project.sfx && (
           <Burst
-            fill={project.num % 2 ? 'var(--blue)' : 'var(--yellow)'}
+            fill="var(--paper)"
             rotate={project.num % 2 ? 8 : -8}
-            className={`absolute bottom-2 right-2 size-28 lg:size-32 pointer-events-none ${project.num % 2 ? 'text-white' : 'text-black'}`}
+            className="absolute bottom-2 right-2 size-28 lg:size-32 pointer-events-none text-black"
           >
             <span aria-hidden="true" className="block px-3 text-[22px] lg:text-[26px]">{project.sfx}</span>
           </Burst>
@@ -113,12 +107,10 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
 
       {/* Project Info */}
       <div className="flex flex-1 flex-col gap-4 p-5">
-        <div className="flex">
-          {/* Comic caption: each project is an issue in the series */}
-          <span className="comic-caption flex-shrink-0 text-base">
-            Issue #{String(project.num).padStart(2, '0')}, {project.year}
-          </span>
-        </div>
+        {/* Year and team context, from projects.ts */}
+        <p className="font-label text-sm text-[color:var(--text)] -mb-2">
+          {project.year}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{project.caption}
+        </p>
         <h3 className={`font-display break-words min-w-0 text-[color:var(--text)] ${project.featured ? 'text-2xl lg:text-[32px]' : 'text-[22px]'}`}>
           {project.name}
         </h3>
@@ -194,14 +186,14 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
   );
 }
 
-// Retro filter chip: cream with an ink frame; the active chip turns orange and
-// sits pressed into its shadow.
+// Retro filter chip: paper with an ink frame; the active chip turns ink with
+// paper text and sits pressed into its shadow (state also in aria-pressed).
 /** Filter chip style, shared with the Skills keyboard filters */
 export function chipClass(active: boolean) {
-  return `font-label text-xs text-black px-3 py-1.5 min-h-[44px] border-[3px] border-black transition-[translate,box-shadow,background-color] duration-150 ${
+  return `font-label text-xs px-3 py-1.5 min-h-[44px] border-[3px] border-black transition-[translate,box-shadow,background-color,color] duration-150 ${
     active
-      ? 'bg-[var(--yellow)] translate-x-[3px] translate-y-[3px] shadow-none'
-      : 'bg-[var(--paper)] hover:bg-[var(--blue)] shadow-[3px_3px_0_0_var(--ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none'
+      ? 'bg-[var(--bar)] text-[color:var(--paper)] translate-x-[3px] translate-y-[3px] shadow-none'
+      : 'bg-[var(--paper)] text-black hover:bg-[var(--blue)] shadow-[3px_3px_0_0_var(--ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none'
   }`;
 }
 

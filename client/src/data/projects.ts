@@ -38,6 +38,9 @@ export type Project = {
   /** Short facts shown as a list under the description */
   facts: string[];
   year: string;
+  /** Team or course context after the year on the tile ("2025 · team of 6");
+   *  facts already on the case pages and resume */
+  caption: string;
   image: string | null;
   tags: string[];
   link: string;
@@ -58,8 +61,9 @@ export const PROJECTS: Project[] = [
     slug: 'silverlink',
     description:
       "Connects seniors and youth through skill-sharing and live events, built to block double-bookings.",
-    facts: ["8-node cluster", "4 services", "6-person team"],
+    facts: ["8-node cluster", "4 services"],
     year: "2025",
+    caption: "team of 6",
     image: silverLinkImg,
     tags: ["React", "gRPC", "K8s", "PostgreSQL"],
     link: "/projects/silverlink",
@@ -74,8 +78,9 @@ export const PROJECTS: Project[] = [
     slug: 'scs',
     description:
       "Teaches cancer awareness through a branching story at Singapore Cancer Society booths.",
-    facts: ["4 languages", "4 question types", "4-person team"],
+    facts: ["4 languages", "4 question types"],
     year: "2025",
+    caption: "team of 4",
     image: scsImg,
     tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
     link: "/projects/scs",
@@ -92,6 +97,7 @@ export const PROJECTS: Project[] = [
       "Pulls market data into one Power BI-ready warehouse; NLP flags supply-chain risk.",
     facts: ["5 data sources", "star schema", "100% Pytest coverage"],
     year: "2024",
+    caption: "data pipeline",
     image: aiFinanceImg,
     tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
     link: "/projects/ai-finance",
@@ -106,6 +112,7 @@ export const PROJECTS: Project[] = [
       "Tells clear UWB signals from blocked (NLOS) ones with an SVM-RBF model.",
     facts: ["89.61% accuracy", "0.9612 AUC", "41,996 samples"],
     year: "2025",
+    caption: "team coursework",
     image: uwbImg,
     tags: ["Python", "SVM", "PCA", "scikit-learn"],
     link: "/projects/uwb",
@@ -117,9 +124,10 @@ export const PROJECTS: Project[] = [
     name: "UAT Testing Dashboard",
     slug: 'uat',
     description:
-      "Course project: links each failed test to its defect to show what blocks go-live.",
+      "Links each failed test to its defect to show what blocks go-live.",
     facts: ["25 sample defects", "8 modules", "4 roles"],
     year: "2024",
+    caption: "coursework",
     image: uatImg,
     tags: ["React 18", "Node.js", "Express", "SQLite"],
     link: "/projects/uat",
@@ -134,6 +142,7 @@ export const PROJECTS: Project[] = [
       "Lets HDB residents rehearse fire evacuation in their own block with AR arrows.",
     facts: ["SUS 79/100", "~80% test coverage", "drill works offline"],
     year: "2025",
+    caption: "team coursework",
     image: fireSafetyImg,
     tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
     link: "/projects/firesafety",
@@ -147,6 +156,7 @@ export const PROJECTS: Project[] = [
       "Helped pitch a Singapore hydroponic urban farm to an industry investor panel.",
     facts: ["SGD 10,000 NYP JumpStart Grant"],
     year: "2022",
+    caption: "team pitch",
     image: greenloopImg,
     tags: ["NYP JumpStart", "Urban Farming"],
     link: "external",

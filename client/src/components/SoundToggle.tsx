@@ -23,8 +23,8 @@ export default function SoundToggle() {
       type="button"
       onClick={toggle}
       aria-pressed={on}
-      className={`btn focus-ring-float min-w-[44px] px-3 text-black ${
-        on ? 'bg-[var(--yellow)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)]'
+      className={`btn focus-ring-float min-w-[44px] px-3 ${
+        on ? 'bg-[var(--bar)] text-[color:var(--paper)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)] text-black'
       }`}
     >
       <span aria-hidden="true">♪</span>

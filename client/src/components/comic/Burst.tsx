@@ -8,7 +8,7 @@ const POINTS = Array.from({ length: 24 }, (_, i) => {
 }).join(' ');
 
 interface BurstProps {
-  /** Fill colour, a palette var such as 'var(--yellow)' */
+  /** Fill colour, a palette var such as 'var(--blue)' (paper by default) */
   fill?: string;
   /** Tilt in degrees; small tilts read as hand-placed */
   rotate?: number;
@@ -23,7 +23,7 @@ interface BurstProps {
  * decorative: callers hide it from assistive tech when the words also exist
  * as real text, or use it as a background behind real text.
  */
-export default function Burst({ fill = 'var(--yellow)', rotate = -6, className = '', style, children }: BurstProps) {
+export default function Burst({ fill = 'var(--paper)', rotate = -6, className = '', style, children }: BurstProps) {
   return (
     <span className={`grid place-items-center ${className}`} style={style}>
       {/* Absolutely filling the box the caller positions (className must make

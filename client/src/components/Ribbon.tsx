@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import PixelArt from './PixelArt';
 
-type RibbonTone = 'yellow' | 'blue';
+type RibbonTone = 'ink' | 'blue';
 
 interface RibbonProps {
   /** Phrases on the strip; each is followed by a sparkle separator */
@@ -11,9 +11,9 @@ interface RibbonProps {
   className?: string;
 }
 
-// Approved pairings: black on yellow or blue
+// Approved pairings: paper on ink (18.9:1), black on blue
 const TONES: Record<RibbonTone, string> = {
-  yellow: 'bg-[var(--yellow)] text-black',
+  ink: 'bg-[var(--bar)] text-[color:var(--paper)]',
   blue: 'bg-[var(--blue)] text-black',
 };
 
@@ -30,7 +30,7 @@ const SPEED_PX_PER_S = 60; // same scroll speed whatever the text length
  */
 export default function Ribbon({
   items,
-  tone = 'yellow',
+  tone = 'ink',
   reverse = false,
   className = '',
 }: RibbonProps) {

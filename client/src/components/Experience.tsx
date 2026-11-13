@@ -14,13 +14,14 @@ type Entry = {
   badges: Badge[];
 };
 
-// Black text on yellow or blue (approved pairings); sentence case
+// Status badges (index.css .badge): ink with paper text, dashed paper for
+// unfinished work, plain paper; never yellow (yellow marks AI). Sentence case.
 type Badge = 'Internship' | 'In progress' | 'Education';
 
-const BADGE_FILL: Record<Badge, string> = {
-  Internship: 'bg-[var(--yellow)]',
-  'In progress': 'bg-[var(--blue)]',
-  Education: 'bg-[var(--blue)]',
+const BADGE_CLASS: Record<Badge, string> = {
+  Internship: 'badge badge--ink',
+  'In progress': 'badge badge--status',
+  Education: 'badge badge--paper',
 };
 
 const ENTRIES: Entry[] = [
@@ -74,7 +75,7 @@ export default function Experience() {
               <Window key={entry.org} title={entry.file} bodyClassName="p-6 sm:p-10 lg:p-12">
                 <div className="flex flex-wrap items-center gap-2 mb-4">
                   {entry.badges.map(badge => (
-                    <span key={badge} className={`font-label text-xs text-black border-2 border-black px-2 py-1 ${BADGE_FILL[badge]}`}>
+                    <span key={badge} className={BADGE_CLASS[badge]}>
                       {badge}
                     </span>
                   ))}

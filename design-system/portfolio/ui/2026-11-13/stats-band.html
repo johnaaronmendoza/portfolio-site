@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Key figures band</title>
+<link rel="stylesheet" href="mock.css">
+<style>
+  .above { height: 120px; display: grid; place-items: center; }
+  .band { display: flex; gap: 3px; background: #000; border-block: 3px solid #000; color: #000; }
+  .hello { display: none; flex-shrink: 0; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: var(--paper); padding: 0 24px; font-family: 'Press Start 2P', monospace; font-size: 20px; letter-spacing: 0.05em; }
+  .hello img { width: 32px; height: 32px; image-rendering: pixelated; }
+  @media (min-width: 768px) { .hello { display: flex; } }
+  @media (min-width: 1024px) { .hello { padding: 0 32px; font-size: 24px; } }
+
+  dl { flex: 1; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; background: #000; }
+  @media (min-width: 1024px) { dl { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  /* NEW: paper cells (were yellow) */
+  .cell { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 12px; background: var(--paper); padding: 24px 16px; container-type: inline-size; }
+  @media (min-width: 640px) { .cell { padding: 32px 24px; } }
+  dt { font: 400 15px/1.375 'IBM Plex Mono', monospace; max-width: 18ch; }
+  @media (min-width: 640px) { dt { font-size: 16px; } }
+  /* NEW: source tag, its own line inside the dt */
+  .src { display: block; margin-top: 8px; width: fit-content; border: 2px solid #000; padding: 2px 8px; font: 600 15px/1.35 'IBM Plex Mono', monospace; }
+  dd { position: relative; isolation: isolate; align-self: flex-start; margin: 0; font: 700 min(36px, 22cqi)/1 'IBM Plex Mono', monospace; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  @media (min-width: 640px) { dd { font-size: min(52px, 22cqi); } }
+  @media (min-width: 1024px) { dd { font-size: min(44px, 22cqi); } }
+  @media (min-width: 1280px) { dd { font-size: min(56px, 22cqi); } }
+  /* NEW burst box. The star fills the value's padded box. The negative margins pull it back so the
+     digits line up with the neighbours, and each margin stays smaller than the cell padding
+     (left 0.4em: 14px < 16px at 375, 22px < 24px at xl; top 0.5em: 18px < 24px at 375, 28px < 32px at xl), so nothing clips. */
+  dd.has-burst { padding: 0.5em 0.8em 0.45em; margin: -0.5em 0 0 -0.4em; }
+  .burst { position: absolute; inset: 0; z-index: -1; }
+  .burst svg { width: 100%; height: 100%; overflow: visible; display: block; }
+</style>
+</head>
+<body>
+<div class="above"><span class="annot">hero ends here</span></div>
+<section class="band" aria-label="Key figures">
+  <p class="hello" aria-hidden="true"><img src="../../../../client/public/assets/pixel/smiley.svg" alt="">HELLO!</p>
+  <dl>
+    <div class="cell">
+      <dt>fewer manual agent actions<span class="src">LGA Telecom</span></dt>
+      <dd class="has-burst"><span class="burst" aria-hidden="true"><svg viewBox="0 0 100 100" preserveAspectRatio="none" style="transform:rotate(-4deg)"><polygon class="star" fill="#3A66FF" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg></span>40%</dd>
+    </div>
+    <div class="cell">
+      <dt>network configurations migrated<span class="src">LGA Telecom</span></dt>
+      <dd>1,000+</dd>
+    </div>
+    <div class="cell">
+      <dt>UAT defects tracked to resolution<span class="src">Sembcorp Solar</span></dt>
+      <dd>50+</dd>
+    </div>
+    <div class="cell">
+      <dt>ML classifier accuracy, 41,996 samples<span class="src">UWB team coursework</span></dt>
+      <dd>89.61%</dd>
+    </div>
+  </dl>
+</section>
+<div class="above"><span class="annot">blue ribbon, then About</span></div>
+<script>
+  const pts = Array.from({ length: 24 }, (_, i) => { const r = i % 2 ? 33 : 48, a = i * Math.PI / 12; return (50 + r * Math.cos(a)).toFixed(1) + ',' + (50 + r * Math.sin(a)).toFixed(1); }).join(' ');
+  document.querySelectorAll('.star').forEach(p => p.setAttribute('points', pts));
+</script>
+</body>
+</html>

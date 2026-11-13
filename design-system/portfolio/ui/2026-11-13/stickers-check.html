@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sticker placement check</title>
+<link rel="stylesheet" href="mock.css">
+<style>
+  /* Section stand-ins at real content widths (max-w-5xl 1024, Projects max-w-6xl 1152) and
+     rough real heights; stickers placed with Stickers.tsx's formula:
+     edge = max(8px, (100% - width)/2 - 88px) [was 80px], 72px box, shown from xl (1024 sets) or 1360px (Projects). */
+  .sec { position: relative; padding: 0 64px; }
+  .box { position: relative; z-index: 1; margin: 0 auto; border: 3px dashed #6b6457; display: grid; place-items: center; font: 600 15px 'IBM Plex Mono', monospace; color: #3d3a35; background: rgb(239 234 224 / 0.6); }
+  .w1024 .box { max-width: 1024px; }
+  .w1152 .box { max-width: 1152px; }
+  .blue { background: var(--blue); border-block: 3px solid #000; }
+  .rib { height: 52px; background: var(--bar); border-block: 3px solid #000; }
+  .rib.b { background: var(--blue); }
+  .stk { position: absolute; z-index: 0; width: 72px; height: 72px; display: none; place-items: center; }
+  .stk img { max-width: 100%; max-height: 100%; filter: drop-shadow(3px 3px 0 #000); }
+  .stk img.px { width: 64px; height: 64px; image-rendering: pixelated; }
+  @media (min-width: 1280px) { .w1024 .stk { display: grid; } }
+  @media (min-width: 1360px) { .w1152 .stk { display: grid; } }
+  .w1024 .stk { --edge: max(8px, calc((100% - 1024px) / 2 - 88px)); }
+  .w1152 .stk { --edge: max(8px, calc((100% - 1152px) / 2 - 88px)); }
+  .L { left: var(--edge); } .R { right: var(--edge); }
+  .gap { position: absolute; z-index: 2; font: 600 12px 'IBM Plex Mono', monospace; background: #fff; border: 2px solid #000; padding: 2px 6px; }
+</style>
+</head>
+<body>
+<div class="rib b"></div>
+<div class="sec w1024" style="height:900px;padding-block:80px">
+  <span class="stk R" style="top:30%;transform:rotate(6deg)"><img class="px" src="../../../../client/public/assets/pixel/sticker-notepad.svg" alt=""></span>
+  <div class="box" style="height:100%">#about (max-w-5xl, 1024)</div>
+</div>
+<div class="rib b"></div>
+<div class="sec w1024" style="height:1400px;padding-block:80px">
+  <span class="stk R" style="top:8%;transform:rotate(6deg)"><img src="../../../../client/public/assets/stickers/retro-computer.png" alt=""></span>
+  <span class="stk L" style="top:45%;transform:rotate(-6deg)"><img class="px" src="../../../../client/public/assets/pixel/sticker-folder.svg" alt=""></span>
+  <div class="box" style="height:100%">#experience (max-w-5xl, 1024)</div>
+</div>
+<div class="rib"></div>
+<div class="sec w1152 blue" style="height:1500px;padding-block:80px">
+  <span class="stk R" style="top:25%;transform:rotate(10deg)"><img class="px" src="../../../../client/public/assets/pixel/sticker-cd.svg" alt=""></span>
+  <span class="stk L" style="top:65%;transform:rotate(-6deg)"><img class="px" src="../../../../client/public/assets/pixel/sticker-magnifier.svg" alt=""></span>
+  <div class="box" style="height:100%">#projects (max-w-6xl, 1152; stickers from 1360px)</div>
+</div>
+<div class="rib"></div>
+<div class="sec w1024" style="height:1100px;padding-block:80px">
+  <span class="stk L" style="top:15%;transform:rotate(-4deg)"><img src="../../../../client/public/assets/stickers/cursor-arrow.png" alt=""></span>
+  <span class="stk R" style="top:70%;transform:rotate(-5deg)"><img class="px" src="../../../../client/public/assets/pixel/sticker-phone.svg" alt=""></span>
+  <div class="box" style="height:100%">#skills (max-w-5xl, 1024)</div>
+</div>
+<script>
+  // Measure each visible sticker's gap to the content box and to the screen edge
+  addEventListener('load', () => {
+    document.querySelectorAll('.stk').forEach(s => {
+      if (getComputedStyle(s).display === 'none') return;
+      const r = s.getBoundingClientRect(), b = s.parentElement.querySelector('.box').getBoundingClientRect();
+      const toBox = s.classList.contains('L') ? b.left - r.right : r.left - b.right;
+      const toEdge = s.classList.contains('L') ? r.left : innerWidth - r.right;
+      const t = document.createElement('span'); t.className = 'gap'; t.textContent = `edge ${Math.round(toEdge)} · content ${Math.round(toBox)}`;
+      t.style.top = (s.offsetTop + 78) + 'px'; t.style[s.classList.contains('L') ? 'left' : 'right'] = '8px';
+      s.parentElement.appendChild(t);
+    });
+  });
+</script>
+</body>
+</html>

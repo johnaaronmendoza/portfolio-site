@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hero with desk_assist.exe</title>
+<link rel="stylesheet" href="mock.css">
+<style>
+  .hero { position: relative; overflow: hidden; min-height: 100svh; display: flex; flex-direction: column; padding: 48px 16px 24px; }
+  @media (min-width: 640px) { .hero { padding: 80px 32px 24px; } }
+  @media (min-width: 1024px) { .hero { padding-left: 64px; padding-right: 64px; } }
+  .hero-row { position: relative; z-index: 1; flex: 1; display: flex; align-items: center; }
+  .hero-grid { width: 100%; max-width: 896px; margin: 0 auto; }
+  @media (min-width: 1024px) {
+    .hero-grid { max-width: 1152px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 32px; align-items: center; }
+    .col-left { grid-column: span 7; }
+    .col-right { grid-column: span 5; }
+  }
+
+  /* Static floating pixels (gutters only, sm+). Yellow removed: blue and ink only */
+  .px { position: absolute; z-index: 0; display: none; }
+  @media (min-width: 640px) { .px { display: block; } }
+
+  /* LEFT COLUMN: unchanged from Hero.tsx */
+  .welcome .window-body { background: #000; color: var(--paper); padding: 24px; }
+  @media (min-width: 640px) { .welcome .window-body { padding: 40px; } }
+  @media (min-width: 1280px) { .welcome .window-body { padding: 48px; } }
+  .name { font-size: clamp(20px, 7vw, 30px); }
+  @media (min-width: 640px) { .name { font-size: 36px; } }
+  @media (min-width: 1024px) { .name { font-size: 40px; } }
+  @media (min-width: 1280px) { .name { font-size: 48px; } }
+  .name span { display: block; white-space: nowrap; }
+  .cursor { display: inline-block; width: 8px; height: 0.9em; margin-left: 4px; vertical-align: -0.05em; background: var(--yellow); animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .role { display: flex; align-items: center; gap: 12px; margin: 32px 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 15px; }
+  @media (min-width: 640px) { .role { font-size: 16px; margin-top: 40px; } }
+  .role b { color: var(--blue-text); }
+  .lead { max-width: 42ch; font-weight: 700; font-size: 18px; line-height: 1.4; text-wrap: balance; }
+  @media (min-width: 1024px) { .lead { font-size: 22px; line-height: 1.35; } }
+  .chip { display: inline-flex; align-items: flex-start; gap: 8px; min-height: 36px; border: 2px solid #000; background: var(--paper); padding: 6px 10px; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 15px; line-height: 1.4; margin-top: 16px; }
+  @media (min-width: 640px) { .chip { font-size: 16px; } }
+  .chip img { width: 16px; height: 16px; margin-top: 3px; image-rendering: pixelated; }
+  .ctas { display: flex; flex-direction: column; gap: 16px; margin-top: 32px; }
+  .ctas .btn { width: 100%; }
+  .ghosts { display: flex; flex-wrap: wrap; gap: 12px; }
+  .ghosts .btn { width: auto; }
+  @media (min-width: 640px) {
+    .ctas { flex-direction: row; flex-wrap: wrap; align-items: center; margin-top: 40px; }
+    .ctas .btn { width: auto; }
+  }
+  .btn img { width: 16px; height: 16px; image-rendering: pixelated; }
+
+  /* RIGHT COLUMN: desk_assist.exe (+ Lil Johnny at xl) */
+  .right { margin-top: 48px; }
+  @media (min-width: 1024px) { .right { margin-top: 0; } }
+  @media (min-width: 1280px) {
+    .right { display: grid; grid-template-columns: 148px minmax(0, 1fr); column-gap: 12px; align-items: end; margin-left: -64px; }
+  }
+
+  /* Narrator: ONE button = bubble + Johnny. xl only. */
+  .narrator { display: none; }
+  @media (min-width: 1280px) {
+    .narrator {
+      position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 22px;
+      padding: 0; margin: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+      /* the ledge: the window's bottom edge carried left under his feet */
+      border-bottom: 3px solid var(--ink); margin-right: -12px; padding-right: 12px;
+    }
+  }
+  .bubble {
+    position: relative; display: block; background: var(--paper); color: var(--text); border: 3px solid var(--ink); border-radius: 20px;
+    padding: 12px 16px; font-weight: 600; font-size: 15px; line-height: 1.4; text-underline-offset: 4px; text-decoration-thickness: 2px;
+    transition-property: translate, box-shadow; transition-duration: 150ms; transition-timing-function: var(--ease-out);
+    box-shadow: 4px 4px 0 0 var(--ink);
+  }
+  .bubble::before, .bubble::after { content: ''; position: absolute; clip-path: polygon(0 0, 100% 0, 30% 100%); }
+  .bubble::before { left: 26px; bottom: -24px; width: 30px; height: 24px; background: var(--ink); }
+  .bubble::after { left: 31px; bottom: -16px; width: 19px; height: 18px; background: var(--paper); }
+  .narrator:hover .bubble { text-decoration-line: underline; }
+  .narrator:active .bubble { translate: 4px 4px; box-shadow: 0 0 0 0 var(--ink); }
+  .narrator:focus-visible { outline: 3px solid var(--ink); outline-offset: 6px; }
+  .johnny { width: 94px; height: 144px; image-rendering: pixelated; margin-left: 4px; }
+  /* The one loop: a two-frame, one-art-pixel bob (2px at x2). Stops with Pause motion / reduced motion */
+  .bob { animation: bob 1.2s steps(1) infinite; }
+  @keyframes bob { 0% { translate: 0 0; } 50% { translate: 0 -2px; } }
+  :root[data-motion="paused"] .bob { animation: none; }
+
+  .da .window-body { padding: 16px; }
+  @media (min-width: 640px) { .da .window-body { padding: 20px; } }
+  .da-head { display: grid; gap: 8px; }
+  .da-head h2 { font-size: 20px; }
+  @media (min-width: 1024px) { .da-head h2 { font-size: 22px; } }
+  .da-intro { display: none; font-size: 15px; line-height: 1.5; }
+  @media (min-width: 1024px) { .da-intro { display: block; } }
+  .da-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; font-size: 15px; color: var(--text); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; justify-self: start; }
+  .chev { width: 9px; height: 9px; border-right: 3px solid currentColor; border-bottom: 3px solid currentColor; rotate: 45deg; translate: 0 -2px; }
+
+  /* Flow: one ordered list of six <li>. Steps 1-4 span the row; 5 and 6 share the last row
+     (grid placement only, so the list order and semantics stay 1..6) */
+  .flow { display: grid; grid-template-columns: minmax(0, 1fr) 22px auto; row-gap: 10px; margin-top: 4px; }
+  .step { position: relative; grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 12px; border: 2px solid var(--ink); background: var(--paper); }
+  /* connector into every step from the one above (decorative) */
+  .step:not(:first-child):not(.step--end)::before { content: ''; position: absolute; left: 22px; top: -12px; width: 3px; height: 10px; background: var(--ink); }
+  .num { flex-shrink: 0; min-width: 22px; text-align: center; border: 2px solid var(--ink); background: var(--paper); padding: 1px 4px; font: 600 12px/1.3 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; color: #000; }
+  .label { flex: 1; min-width: 0; font-weight: 700; font-size: 15px; line-height: 1.35; }
+  @media (min-width: 640px) { .label { font-size: 16px; } }
+  .step--human { grid-column: 1; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; column-gap: 8px; row-gap: 6px; padding: 10px 12px 12px; border-width: 3px; background: var(--bar); color: var(--paper); box-shadow: 4px 4px 0 0 var(--ink); }
+  .step--human::before { left: 21px !important; top: -13px !important; }
+  .step--human .label { color: var(--paper); }
+  .step--human .detail { grid-column: 2; font-size: 15px; line-height: 1.4; font-weight: 400; }
+  .step--human .tag { grid-column: 2; justify-self: start; border-color: var(--paper); background: var(--paper); color: #000; }
+  /* arrow 5 -> 6: drawn by step 5, across the 22px track */
+  .step--human::after { content: ''; position: absolute; right: -27px; top: 50%; width: 22px; height: 3px; background: var(--ink); }
+  .step--end { grid-column: 3; align-self: center; }
+  .step--end::before { content: ''; position: absolute; left: -9px; top: 50%; width: 9px; height: 12px; translate: 0 -50%; background: var(--ink); clip-path: polygon(0 0, 34% 0, 34% 25%, 67% 25%, 67% 42%, 100% 42%, 100% 58%, 67% 58%, 67% 75%, 34% 75%, 34% 100%, 0 100%); }
+
+  /* scroll cue */
+  .cue { position: relative; z-index: 1; align-self: center; margin-top: 32px; min-height: 44px; min-width: 44px; display: flex; flex-direction: column; align-items: center; gap: 4px; font: 15px 'IBM Plex Mono', monospace; }
+
+  /* Fixed dock drawn in to check overlap (not part of this change) */
+  .dock { position: fixed; bottom: 16px; z-index: 5; display: flex; gap: 12px; }
+  .dock .btn { padding: 8px 12px; font-size: 14px; background: var(--paper); }
+  .dock-l { left: 16px; }
+  .dock-r { right: 16px; }
+  .dock-r .btn { padding: 4px 12px 4px 6px; }
+  .dock-r img { width: 24px; height: 33px; image-rendering: pixelated; }
+  @media (max-width: 639px) { .dock-l .btn span { display: none; } .dock-l .btn { min-width: 44px; padding: 8px 12px; } }
+</style>
+</head>
+<body>
+<main>
+<section class="hero" id="hero">
+  <span class="px" aria-hidden="true" style="top:12%;right:8%;width:16px;height:16px;background:var(--blue)"></span>
+  <span class="px" aria-hidden="true" style="top:45%;right:3%;width:8px;height:8px;background:#000"></span>
+  <span class="px" aria-hidden="true" style="top:15%;left:3%;width:8px;height:8px;background:var(--blue)"></span>
+  <span class="px" aria-hidden="true" style="top:72%;left:2%;width:16px;height:16px;background:var(--blue)"></span>
+
+  <div class="hero-row">
+    <div class="hero-grid">
+      <div class="col-left">
+        <div class="window welcome">
+          <div class="window-bar"><p>welcome.exe</p><span aria-hidden="true">○□✕</span></div>
+          <div class="window-body">
+            <h1 class="font-pixel name">
+              <span class="sr-only">John Aaron Mendoza Branzuela</span>
+              <span aria-hidden="true" style="color:var(--paper)">JOHN AARON</span>
+              <span aria-hidden="true" style="color:var(--yellow)">BRANZUELA<i class="cursor"></i></span>
+            </h1>
+          </div>
+        </div>
+        <div class="role"><span aria-hidden="true">&gt;</span><b>AI, data and full-stack developer</b></div>
+        <p class="lead">I build AI and data tools people can trust, now building Desk Assist at LGA Telecom.</p>
+        <p class="chip"><img src="../../../../client/public/assets/pixel/chip-school.svg" alt="">SIT × Glasgow · graduating Apr 2027</p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="#"><img src="../../../../client/public/assets/pixel/floppy.svg" alt="">Download resume</a>
+          <a class="btn btn-secondary" href="#">See projects</a>
+          <div class="ghosts">
+            <a class="btn btn-ghost" href="#"><img src="../../../../client/public/assets/pixel/icon-contact.svg" alt="">Email me</a>
+            <a class="btn btn-ghost" href="#">GitHub</a>
+            <a class="btn btn-ghost" href="#">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-right right">
+        <button type="button" class="narrator">
+          <span class="bubble">The AI drafts, an agent decides. Ask me how.<span class="sr-only"> Opens the chat.</span></span>
+          <img class="johnny bob" src="../../../../client/public/assets/mascot/poses/point-right.png" alt="" aria-hidden="true" width="47" height="72">
+        </button>
+
+        <div class="window da">
+          <div class="window-bar"><p>desk_assist.exe</p><span aria-hidden="true">○□✕</span></div>
+          <div class="window-body">
+            <div class="da-head">
+              <span class="tag tag--status" style="justify-self:start">In progress</span>
+              <h2 id="da-flow">How Desk Assist will draft a reply</h2>
+              <p class="da-intro">A Chrome extension for service desk agents at LGA Telecom.</p>
+              <a class="da-link" href="#experience">See experience <span class="chev" aria-hidden="true"></span></a>
+            </div>
+            <figure aria-labelledby="da-flow" style="margin:0">
+              <ol class="flow">
+                <li class="step"><span class="num">1</span><span class="label">Ticket</span></li>
+                <li class="step"><span class="num">2</span><span class="label">Reads the thread</span><span class="tag tag--ai">AI</span></li>
+                <li class="step"><span class="num">3</span><span class="label">Finds KB guidance</span><span class="tag tag--ai">AI</span></li>
+                <li class="step"><span class="num">4</span><span class="label">Drafts a reply</span><span class="tag tag--ai">AI</span></li>
+                <li class="step step--human">
+                  <span class="num">5</span><span class="label">Agent reviews</span>
+                  <span class="detail">Every draft, before it's sent.</span>
+                  <span class="tag">Agent</span>
+                </li>
+                <li class="step step--end"><span class="num">6</span><span class="label">Sent</span></li>
+              </ol>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a class="cue" href="#about">Scroll<span class="chev" aria-hidden="true" style="width:14px;height:14px"></span></a>
+</section>
+</main>
+<div class="dock dock-l" aria-hidden="true"><span class="btn"><b>II</b><span>Pause motion</span></span><span class="btn"><b>♪</b><span>Sound off</span></span></div>
+<div class="dock dock-r" aria-hidden="true"><span class="btn"><img src="../../../../client/public/assets/mascot/poses/happy.png" alt="">Chat</span></div>
+</body>
+</html>

@@ -500,7 +500,7 @@
   /* Retro OS scrollbar: chunky ink-framed thumb on a paper track */
   .retro-scroll { scrollbar-color: var(--page) var(--paper); }
   .retro-scroll::-webkit-scrollbar { width: 18px; }
-  .retro-scroll::-webkit-scrollbar-track { background: var(--paper); border-left: 3px solid var(--ink); }
+  .retro-scroll::-webkit-scrollbar-track { background: var(--paper); box-shadow: inset 3px 0 0 var(--ink); }
   .retro-scroll::-webkit-scrollbar-thumb {
     background: var(--page);
     border: 3px solid var(--ink);

@@ -101,6 +101,15 @@
         ],
         "createdAt": "2026-11-13T17:09:10.373Z",
         "reason": "lead (Claude): page #EFEAE0 is the binding Paper & Ink page token John chose (CLAUDE.md palette)"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "design-system/portfolio/asset-work/share-and-icons/og.html"
+        ],
+        "createdAt": "2026-11-13T17:16:15.892Z",
+        "reason": "lead (Claude): page #EFEAE0 is the binding Paper & Ink page token John chose (CLAUDE.md palette)"
       }
     ]
   }

@@ -49,7 +49,7 @@ const LEGEND: { way: keyof typeof WAYS; label: string }[] = [
   { way: 'ink', label: 'Workflow' },
 ];
 
-/** A keycap colour sample; the cream rim keeps violet visible on navy */
+/** A keycap colour sample; the ink rim keeps the white swatch visible on the page */
 function Swatch({ way }: { way: keyof typeof WAYS }) {
   return <span aria-hidden="true" className="inline-block size-3.5 shrink-0 border-2 border-black" style={{ backgroundColor: WAYS[way].face }} />;
 }

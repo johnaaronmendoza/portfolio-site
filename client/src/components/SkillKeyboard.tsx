@@ -4,6 +4,7 @@ import {
   type FocusEvent, type PointerEvent, type ReactNode, type RefObject,
 } from 'react';
 import { Link } from 'wouter';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useModalFocus } from '@/hooks/useModalFocus';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { play } from '@/hooks/useSound';
@@ -40,18 +41,6 @@ function hasWebGL() {
   } catch {
     return false;
   }
-}
-
-function useWide() {
-  const query = '(min-width: 640px)';
-  const [wide, setWide] = useState(() => typeof window !== 'undefined' && window.matchMedia(query).matches);
-  useEffect(() => {
-    const mq = window.matchMedia(query);
-    const fn = (e: MediaQueryListEvent) => setWide(e.matches);
-    mq.addEventListener('change', fn);
-    return () => mq.removeEventListener('change', fn);
-  }, []);
-  return wide;
 }
 
 /** Falls back to the flat keyboard if the 3D chunk fails to load or WebGL errors. */
@@ -92,7 +81,7 @@ const keyButton = (i: number, { open, tip, btnRefs, onOpen, onFocusKey }: KeyHan
 });
 
 /** The single-colour icon as a mask filled with the cap's ink (black, or
- *  cream on violet); a missing file leaves the cap without an icon. */
+ *  white on black); a missing file leaves the cap without an icon. */
 function FlatIcon({ src }: { src: string }) {
   return <span aria-hidden="true" className="w-[44%] aspect-square bg-current" style={{ mask: `url(${src}) center / contain no-repeat` }} />;
 }
@@ -281,7 +270,7 @@ function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps)
 /** listId: the plain skills list the skip link jumps to (its <summary> takes focus) */
 export default function SkillKeyboard({ listId }: { listId: string }) {
   const reduced = useReducedMotion();
-  const wide = useWide();
+  const wide = useMediaQuery('(min-width: 640px)');
   const cols = wide ? 7 : 4;
   const boardRef = useRef<HTMLDivElement>(null);
   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -304,7 +293,11 @@ export default function SkillKeyboard({ listId }: { listId: string }) {
   const [hop, setHop] = useState<{ dx: number; dy: number; s: number; d: number } | null>(null);
   const [seq, setSeq] = useState<Pose | null>(null); // frame of the press sequence, if one is playing
   const flat = reduced || stage === '2d';
-  const tip = open === null ? hover ?? (focus?.visible ? focus.i : null) : null;
+  // Tooltip: the hovered or keyboard-focused key, unless Escape dismissed it
+  // (WCAG 1.4.13); it comes back when hover or focus moves to another key
+  const [dismissed, setDismissed] = useState<number | null>(null);
+  const shown = open === null ? hover ?? (focus?.visible ? focus.i : null) : null;
+  const tip = shown === dismissed ? null : shown;
   // Mascot frame. 3D: the press sequence, else lean (or happy, if the key is
   // straight below) toward the hovered or focused key, else idle. Flat / reduced
   // motion: no hop, a thumbs-up while a window is open.
@@ -362,6 +355,15 @@ export default function SkillKeyboard({ listId }: { listId: string }) {
     el.style.visibility = 'visible';
   }, []);
   useLayoutEffect(placeTip, [tip, placeTip]);
+  useEffect(() => setDismissed(null), [shown]);
+  useEffect(() => {
+    if (tip === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setDismissed(tip);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [tip]);
 
   // Mascot: stands behind the top-right key, or on the last opened key
   const mx = useMotionValue(0);
@@ -475,7 +477,7 @@ export default function SkillKeyboard({ listId }: { listId: string }) {
         ) : (
           <>
             {/* The real controls for the 3D board: keyboard and screen readers.
-                Focus shows on the board (outline) and on the key (orange ring). */}
+                Focus shows on the board (ink outline) and on the key (ink and white frame). */}
             <div role="group" aria-label={GROUP_LABEL} className="sr-only">
               {KEYS.map((k, i) => (
                 <button
@@ -491,7 +493,7 @@ export default function SkillKeyboard({ listId }: { listId: string }) {
               ))}
             </div>
             <div
-              className={`relative aspect-[2/3] sm:aspect-[2/1] lg:aspect-[16/9] rounded-[10px] outline-offset-4 outline-[color:var(--yellow)] ${focus?.visible ? 'outline-3' : ''}`}
+              className={`relative aspect-[2/3] sm:aspect-[2/1] lg:aspect-[16/9] rounded-[10px] outline-offset-4 outline-[color:var(--ink)] ${focus?.visible ? 'outline-3' : ''}`}
             >
               {stage === '3d' && (
                 <Boundary onError={() => setStage('2d')}>

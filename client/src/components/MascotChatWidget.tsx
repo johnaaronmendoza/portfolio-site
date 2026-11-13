@@ -6,7 +6,7 @@
  * Answers come from the local knowledge base below; there is no backend.
  */
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { hasFinePointer } from '@/lib/utils';
@@ -28,7 +28,7 @@ const ABOUT =
  */
 const KNOWLEDGE_BASE: [string, string][] = [
   // Sembcorp / Experience
-  ['sembcorp', 'I interned as a Digitization Analyst at Sembcorp Solar Singapore (Oct 2020 – Jun 2021), working across a 240MWp+ solar portfolio. I led the company-wide rollout of the Momens CRM, hosted training sessions for 10+ stakeholders at a time, gathered UX feedback to take to the vendor, and ran UAT on new Momens releases, tracking 50+ defects to resolution. I was awarded an Internship Distinction and earned a contract extension.'],
+  ['sembcorp', 'I interned as a Digitization Analyst at Sembcorp Solar Singapore (Oct 2020 – Jun 2021), working across a 240MWp+ solar portfolio. I led the company-wide rollout of the Momens CRM, hosted training sessions for 10+ stakeholders at a time, gathered UX feedback to take to the vendor, and designed and ran UAT before the CRM went live, tracking 50+ defects to resolution. I was awarded an Internship Distinction and earned a contract extension.'],
   ['experience', 'My experience: Service Desk Operations & AI Integration Intern at LGA Telecom (Aug 2026 – Present), where I handle Freshservice tickets and am building Desk Assist (in progress), an AI assistant for service desk agents. Before that, Digitization Analyst Intern at Sembcorp Solar Singapore (Oct 2020 – Jun 2021), where I rolled out Momens CRM across Projects, C&I, and SolarNova divisions.'],
   ['internship', 'I am currently interning at LGA Telecom (Aug 2026 – Present) in service desk operations and AI integration. Previously I interned at Sembcorp Solar Singapore as a Digitization Analyst, owning the Momens CRM rollout and its UAT.'],
   // LGA Telecom
@@ -37,7 +37,7 @@ const KNOWLEDGE_BASE: [string, string][] = [
   ['momens', 'Momens is a project management CRM used at Sembcorp Solar. I led its company-wide rollout, trained stakeholders across divisions, and acted as a liaison between users and the vendor to implement UI enhancements and fix bugs.'],
 
   // SilverLink
-  ['silverlink', 'SilverLink SG is a six-person team project (Group 20, SIT × University of Glasgow): a cloud-native platform that connects seniors and youth through skill-sharing, micro-volunteering, and community events. Tech: React, Next.js, Node.js, gRPC (4 microservices), Docker, Kubernetes, Neon PostgreSQL (serverless), Cloudflare Tunnel, Keycloak JWT auth, and Prisma ORM with 8 isolated schemas. Features include real-time WebRTC livestreaming, Socket.IO chat, and predictive autoscaling using EMA forecasting.'],
+  ['silverlink', 'SilverLink SG is a six-person team project (Group 20, SIT × University of Glasgow): a cloud-native platform that connects seniors and youth through skill-sharing, micro-volunteering, and community events. Tech: React, Next.js, Node.js, gRPC (4 microservices), Docker, Kubernetes, Neon PostgreSQL (serverless), Cloudflare Tunnel, Keycloak JWT auth, and Prisma ORM with 8 isolated schemas. Features include real-time WebRTC livestreaming, Socket.IO chat, and an EMA load forecast that recommends replicas per service.'],
   ['grpc', 'SilverLink SG uses gRPC for all internal microservice communication. The API Gateway translates REST requests from the frontend to gRPC calls across 4 services: Event (50051), Booking (50052), Volunteer (50053), and User (50054).'],
   ['microservice', 'SilverLink uses 4 gRPC microservices: Event Service (event creation, seat availability), Booking Service (idempotent bookings, cancellations), Volunteer Service (listings, applications, assignments), and User Service (profiles, ratings, verification tiers).'],
 
@@ -52,13 +52,13 @@ const KNOWLEDGE_BASE: [string, string][] = [
   ['grant', 'GreenLoopFarms won a SGD 10,000 NYP JumpStart Grant, a startup grant from Nanyang Polytechnic. We pitched it to an industry investor panel.'],
 
   // Fire Safety
-  ['fire*', 'The Fire Safety Drill Companion is a native Android app our team built for HDB residents to rehearse fire evacuation on demand. My core contributions: Dijkstra shortest-path with dynamic hazard re-routing, full ARCore integration, AR corridor rendering, and PDR sensor fusion optimization. Tech: Kotlin, Jetpack Compose, MVVM+Hilt, ARCore, TFLite, Firebase FCM. Stats: 10,984 lines of Kotlin, ~80% test coverage, SUS score 79/100.'],
-  ['android', 'The Fire Safety Drill Companion is a native Android app with AR navigation (ARCore), on-device ML (TFLite extinguisher classification), sensor-fusion PDR (Weinberg stride estimation), and Firebase push notifications. It works fully offline.'],
+  ['fire*', 'The Fire Safety Drill Companion is a native Android app our team built for HDB residents to rehearse fire evacuation on demand. I built the algorithms and AR: Dijkstra routing to the nearest exit, re-planning around blocked stairwells; ARCore corridor rendering and waypoints; and tuned step-based positioning (PDR) from accelerometer and gyroscope. Tech: Kotlin, Jetpack Compose, MVVM+Hilt, ARCore, TFLite, Firebase FCM. Stats: 10,984 lines of Kotlin, ~80% test coverage, SUS score 79/100.'],
+  ['android', 'The Fire Safety Drill Companion is a native Android app with AR navigation (ARCore), on-device ML (TFLite extinguisher classification), sensor-fusion PDR (Weinberg stride estimation), and Firebase push notifications. Routing, ML and data all run on the phone, so drills work offline.'],
   ['arcore', 'In the Fire Safety project, I integrated ARCore for real-time corridor navigation. Breadcrumb arrows are overlaid on the live camera feed, guiding residents along the Dijkstra-computed evacuation route. I wrote ArCoreSessionManager, ArCoreRenderer, and ArWaypointConverter.'],
   ['dijkstra', 'I implemented Dijkstra\'s shortest-path algorithm for the Fire Safety app, applied to a weighted floor plan graph with a blockedNodes param for dynamic stairwell exclusion. findPathToNearestExit() runs against all exit nodes and picks the minimum-cost route. Thread-safe with @Synchronized.'],
 
   // UAT Testing Dashboard
-  ['uat', 'The UAT Testing Dashboard is a full-stack defect tracker and UAT management tool, a course project built around a hospital appointment system UAT scenario. It tracks defects end-to-end (Open → In Progress → Resolved → Closed), links failed test cases directly to open defects, and has a real-time analytics dashboard with severity breakdown charts and UAT progress trends. Role-based access for PM, QA Lead, Tester, and Developer. CSV export for defect registers and test logs. Tech: React 18, Node.js, Express, SQLite, Recharts.'],
+  ['uat', 'The UAT Testing Dashboard is a full-stack defect tracker and UAT management tool, a course project built around a hospital appointment system UAT scenario. It tracks defects end-to-end (Open → In Progress → Resolved → Closed), links failed test cases directly to open defects, and charts defects by severity, module and status, plus a monthly trend. Role-based access for PM, QA Lead, Tester, and Developer. CSV export for defect registers and test logs. Tech: React 18, Node.js, Express, SQLite, Recharts.'],
   ['defect', 'In the UAT Testing Dashboard, defects go through a full lifecycle: Open → In Progress → Resolved → Closed. Each defect links directly to the test cases that triggered it, creating an auditable chain from failure to fix. Severity levels (Critical, High, Medium, Low) feed into the analytics dashboard.'],
 
   // AI Finance Insights Engine
@@ -76,16 +76,16 @@ const KNOWLEDGE_BASE: [string, string][] = [
   ['project', 'There are 6 projects on this site: (1) SilverLink SG: cloud-native gRPC microservices platform with WebRTC; (2) SCS Awareness Platform: visual novel engine with React 19 + Supabase; (3) Fire Safety Drill Companion: Android AR + ML + Dijkstra; (4) UWB Indoor Localization: SVM-RBF ML pipeline at 89.61% accuracy; (5) UAT Testing Dashboard: defect tracker for a hospital appointment system UAT scenario (course project); (6) AI Finance Insights Engine: ETL pipeline + NLP engine + Power BI Star Schema. I also co-pitched GreenLoopFarms, which won a SGD 10,000 NYP JumpStart Grant.'],
 
   // Skills (mirrors the Skills section)
-  ['skill', 'AI & LLMs: prompt engineering, RAG, LLM-assisted workflows, AI guardrails and data-leakage prevention, human-in-the-loop design. Data & ML: Python, Pandas, NumPy, scikit-learn, SQL, ETL pipelines, Power BI, TFLite. Backend & cloud: Node.js, Express, gRPC, PostgreSQL, Supabase, Prisma ORM, Docker, Kubernetes, Git. Frontend & mobile: TypeScript, JavaScript, React, Next.js, Tailwind CSS, Kotlin, Jetpack Compose, ARCore. I also work with Java, C++, AWS, GitHub Actions, MongoDB, Cloudflare, JIRA and Confluence.'],
-  ['tech', 'My stack: React and TypeScript on the frontend; Node.js, Express, gRPC and Prisma ORM on the backend; Docker and Kubernetes for containers; PostgreSQL and Supabase for data; Python, Pandas and scikit-learn for data and ML. I also use Java, C++, AWS, GitHub Actions, MongoDB and Cloudflare.'],
+  ['skill', 'AI & LLMs: prompt engineering, RAG, LLM-assisted workflows, AI guardrails and data-leakage prevention, human-in-the-loop design. Data & ML: Python, Pandas, NumPy, scikit-learn, SQL, ETL pipelines, Power BI, TFLite. Backend & cloud: Node.js, Express, gRPC, PostgreSQL, Supabase, Prisma ORM, Docker, Kubernetes, Git. Frontend & mobile: TypeScript, JavaScript, React, Next.js, Tailwind CSS, Kotlin, Jetpack Compose, ARCore. I also work with GitHub Actions, Cloudflare Tunnel, JIRA and Confluence.'],
+  ['tech', 'My stack: React and TypeScript on the frontend; Node.js, Express, gRPC and Prisma ORM on the backend; Docker and Kubernetes for containers; PostgreSQL and Supabase for data; Python, Pandas and scikit-learn for data and ML. I also use GitHub Actions and Cloudflare Tunnel.'],
   ['frontend', 'Frontend: React, Next.js, TypeScript and Tailwind CSS. I built the core engine and media systems of the SCS Awareness Platform in React and TypeScript. SilverLink SG, a six-person team project, also has a React and Next.js front end.'],
   ['backend', 'Backend: Node.js, Express, gRPC microservices, Prisma ORM and Supabase. SilverLink SG\'s 4 gRPC services use optimistic concurrency control and idempotency keys to prevent double-bookings.'],
   ['docker', 'SilverLink SG, a six-person team project, uses Docker Compose for local development and Kubernetes for orchestration. Every SilverLink microservice runs in its own isolated container.'],
-  ['kubernetes', 'In SilverLink SG, Kubernetes handles container orchestration and horizontal scaling on an 8-node cluster. With EMA-based load forecasting, the platform scales microservices ahead of demand.'],
+  ['kubernetes', 'In SilverLink SG, Kubernetes handles container orchestration on an 8-node cluster. An EMA load forecast recommends replicas per service.'],
 
   // Background
   ['graduat*', 'I graduate in April 2027 from Singapore Institute of Technology × University of Glasgow, with a BSc (Hons) in Computing Science.'],
-  ['background', 'I\'m a Computing Science student at Singapore Institute of Technology (SIT) × University of Glasgow, with a foundation in Electrical Engineering from Nanyang Polytechnic. I bridge physical operations and digital systems, from 240MWp+ solar operations to cloud-native microservice platforms.'],
+  ['background', 'I\'m a Computing Science student at Singapore Institute of Technology (SIT) × University of Glasgow, with a foundation in Electrical Engineering from Nanyang Polytechnic. At Sembcorp Solar I led the Momens CRM rollout for a 240MWp+ portfolio; now I build AI and data tools.'],
   ['education', 'BSc (Hons) Computing Science at Singapore Institute of Technology (SIT) × University of Glasgow, graduating April 2027. Before that: Diploma in Electrical Engineering with Eco-Design from Nanyang Polytechnic.'],
   ['about', ABOUT],
   ['yourself', ABOUT],
@@ -196,11 +196,21 @@ export default function MascotChatWidget() {
   const inputRef = useRef<HTMLInputElement>(null);
   const refocusRef = useRef(false);
   const launcherRef = useRef<HTMLButtonElement>(null);
+  const openerRef = useRef<Element | null>(null);
 
-  // Close and put focus back on the launcher, so keyboard users aren't stranded
+  // What had focus when the chat opened (the launcher, Lil Johnny, the palette's
+  // input), read before the open effects below move focus into the panel
+  useLayoutEffect(() => {
+    if (isOpen) openerRef.current = document.activeElement;
+  }, [isOpen]);
+
+  // Close and put focus back where it was, or on the launcher if that has gone
+  // (e.g. the command palette closed), so keyboard users aren't stranded
   const closeChat = () => {
     setIsOpen(false);
-    launcherRef.current?.focus();
+    const opener = openerRef.current;
+    const back = opener instanceof HTMLElement && opener.isConnected && opener !== document.body ? opener : launcherRef.current;
+    back?.focus();
   };
 
   // Escape closes the chat (F13)
@@ -218,7 +228,16 @@ export default function MascotChatWidget() {
   // Keep the newest message in view (scrolls the log only, never the page)
   useEffect(() => {
     const log = logRef.current;
-    log?.scrollTo({ top: log.scrollHeight, behavior: reduced ? 'auto' : 'smooth' });
+    const behavior = reduced ? 'auto' : 'smooth';
+    log?.scrollTo({ top: log.scrollHeight, behavior });
+    // Short screens / zoomed in: the whole sheet scrolls, so bring the log back
+    // under the title bar after a topic key below it was pressed
+    const panel = panelRef.current;
+    const box = log?.parentElement;
+    const bar = panel?.firstElementChild;
+    if (panel && box && bar instanceof HTMLElement && panel.scrollHeight > panel.clientHeight) {
+      panel.scrollTo({ top: box.offsetTop - bar.offsetHeight, behavior });
+    }
   }, [messages, isTyping, reduced]);
 
   // Other components (e.g. the command palette) open the chat with an
@@ -301,7 +320,8 @@ export default function MascotChatWidget() {
         </div>
       </button>
 
-      {/* chat.exe window: fixed height so it never grows past the viewport */}
+      {/* chat.exe window: fixed height so it never grows past the viewport; a
+          scrolling full-viewport sheet on short screens and when zoomed (index.css) */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -311,12 +331,12 @@ export default function MascotChatWidget() {
             role="dialog"
             aria-label="Chat"
             tabIndex={-1}
+            data-lenis-prevent
             initial={{ opacity: 0, y: motionTokens.distance.sm }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: motionTokens.distance.sm }}
             transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
-            className="window fixed bottom-24 left-2 right-2 sm:left-auto sm:right-4 z-50 sm:w-[26rem] flex flex-col bg-[var(--page)]"
-            style={{ height: 'min(600px, calc(100dvh - 8rem))' }}
+            className="chat-panel window fixed bottom-24 left-2 right-2 sm:left-auto sm:right-4 z-50 sm:w-[26rem] flex flex-col bg-[var(--page)]"
           >
             <WindowBar title="ask_johnny.exe" onClose={closeChat} closeLabel="Close chat" />
 
@@ -336,7 +356,7 @@ export default function MascotChatWidget() {
             </div>
 
             {/* conversation.log dialog: flex-1 + min-h-0 lets the log scroll inside */}
-            <div className="relative z-10 mx-3 flex-1 min-h-0 flex flex-col border-[3px] border-black bg-[var(--paper)] shadow-[4px_4px_0_#000]">
+            <div className="chat-log-box relative z-10 mx-3 flex-1 min-h-0 flex flex-col border-[3px] border-black bg-[var(--paper)] shadow-[4px_4px_0_#000]">
               <div aria-hidden="true" className="flex-shrink-0 flex items-center justify-between bg-[var(--bar)] text-[color:var(--paper)] font-label text-xs px-2.5 py-1.5">
                 <span>conversation.log</span>
                 <span>○□✕</span>
@@ -377,7 +397,7 @@ export default function MascotChatWidget() {
             </div>
 
             {/* Topic keycaps: one press asks */}
-            <div className="flex-shrink-0 grid grid-cols-3 gap-2.5 px-3 pt-4 pb-1">
+            <div className="chat-keys flex-shrink-0 grid grid-cols-3 gap-2.5 px-3 pt-4 pb-1">
               {QUICK_ACTIONS.map(({ label, query, icon }) => (
                 <button
                   key={label}
@@ -395,7 +415,7 @@ export default function MascotChatWidget() {
             {/* Input row: the ring sits on the row because the input itself has no outline */}
             <form
               onSubmit={(e) => { e.preventDefault(); sendMessage(input); }}
-              className="flex-shrink-0 p-3 flex gap-3"
+              className="chat-input flex-shrink-0 p-3 flex gap-3"
             >
               <div className="flex-1 min-w-0 flex items-center border-[3px] border-black bg-[var(--paper)] px-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--ink)] focus-within:outline-offset-2">
                 <span aria-hidden="true" className="font-mono text-base font-bold mr-1">&gt;_</span>

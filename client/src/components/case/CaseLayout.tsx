@@ -13,7 +13,7 @@ import { play } from '@/hooks/useSound';
 const HOME_TITLE = 'John Aaron Mendoza Branzuela | Computing Science Portfolio';
 const GUTTERS = 'px-4 sm:px-8 lg:px-16';
 
-/** Sticky violet bar with the one way back to the Projects grid */
+/** Sticky black bar with the one way back to the Projects grid */
 function CaseTaskbar() {
   return (
     <header className={`sticky top-0 z-30 bg-[var(--bar)] border-b-[3px] border-black ${GUTTERS} [--focus:var(--paper)]`}>
@@ -28,12 +28,13 @@ function CaseTaskbar() {
   );
 }
 
-const CRUMB_LINK = 'inline-flex min-h-[44px] items-center underline decoration-2 underline-offset-4';
+// Links in blue-text (5.95:1 on the page); 44px tap targets, even for "Home"
+const CRUMB_LINK = 'inline-flex min-h-[44px] min-w-[44px] items-center text-[color:var(--blue-text)] underline decoration-2 underline-offset-4';
 
 function Breadcrumb({ current }: { current: string }) {
   return (
     <nav aria-label="Breadcrumb" className="mt-6 mb-4">
-      <ol className="flex flex-wrap items-center gap-x-2 font-sans text-[15px] sm:text-base text-[color:var(--paper)]">
+      <ol className="flex flex-wrap items-center gap-x-2 font-sans text-[15px] sm:text-base text-[color:var(--text)]">
         <li className="flex items-center gap-x-2">
           <Link href="/" className={CRUMB_LINK}>Home</Link>
           <span aria-hidden="true">/</span>
@@ -50,7 +51,7 @@ function Breadcrumb({ current }: { current: string }) {
   );
 }
 
-/** Teal band: the next case in Home tile order, and the way back to all projects */
+/** Blue band: the next case in Home tile order, and the way back to all projects */
 function NextProject({ slug }: { slug: CaseSlug }) {
   const next = getNextCase(slug);
   return (
@@ -100,7 +101,8 @@ export default function CaseLayout({ slug, children }: CaseLayoutProps) {
 
   return (
     <div className="min-h-screen text-[color:var(--text)]">
-      <SkipLink />
+      {/* Shows over the black taskbar: white focus ring there (an ink ring would be 1.1:1) */}
+      <SkipLink className="[--focus:var(--paper)]" />
       <CaseTaskbar />
       <main id="main" tabIndex={-1}>
         <div className={`${GUTTERS} pb-16 lg:pb-20`}>

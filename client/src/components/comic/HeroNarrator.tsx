@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { motion, useAnimationControls } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useAnimationControls, useInView } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useCalmMotion } from '@/hooks/useCalmMotion';
 import { motionTokens } from '@/lib/motion-tokens';
@@ -17,8 +17,8 @@ const boil = (duration: number, delay = 0) =>
   ({ duration, times: STEP, ease: 'linear' as const, repeat: Infinity, repeatType: 'mirror' as const, delay });
 
 /**
- * Lil Johnny as the hero's narrator (large screens only; the parent hides it
- * below lg). One button: pressing him or his speech bubble opens the chat.
+ * Lil Johnny as the hero's narrator (large screens only; Hero mounts it from
+ * 1024px). One button: pressing him or his speech bubble opens the chat.
  *
  * He stands in a comic panel styled as a site window (lil_johnny.gif): blue
  * halftone fill, yellow floor (John chose this over the star, Nov 2026).
@@ -28,11 +28,17 @@ const boil = (duration: number, delay = 0) =>
  * - idle loop: the halftone dots drift, the bubble bobs in two-frame comic
  *   steps, he bobs, and every few seconds he waves;
  * - hover or focus: he waves and the dots drift faster; press: he hops.
- * Loops stop with Pause motion; nothing moves under prefers-reduced-motion.
+ * Loops stop with Pause motion and while he is off screen (each loop layer
+ * remounts still, so no repeating animation survives); nothing moves under
+ * prefers-reduced-motion.
  */
 export default function HeroNarrator() {
   const reduced = useReducedMotion();
   const calm = useCalmMotion();
+  const ref = useRef<HTMLButtonElement>(null);
+  const inView = useInView(ref);
+  const idle = calm || !inView;
+  const loop = idle ? 'still' : 'live';
   const [hover, setHover] = useState(false);
   const [autoWave, setAutoWave] = useState(false);
   const hop = useAnimationControls();
@@ -42,14 +48,14 @@ export default function HeroNarrator() {
 
   // A wave every few seconds while motion is running
   useEffect(() => {
-    if (calm) { setAutoWave(false); return; }
+    if (idle) { setAutoWave(false); return; }
     let off = 0;
     const id = window.setInterval(() => {
       setAutoWave(true);
       off = window.setTimeout(() => setAutoWave(false), N.waveHold * 1000);
     }, N.waveEvery * 1000);
     return () => { window.clearInterval(id); window.clearTimeout(off); };
-  }, [calm]);
+  }, [idle]);
 
   const waving = hover || autoWave;
 
@@ -60,6 +66,7 @@ export default function HeroNarrator() {
 
   return (
     <button
+      ref={ref}
       type="button"
       onClick={onPress}
       onMouseEnter={() => setHover(true)}
@@ -77,9 +84,10 @@ export default function HeroNarrator() {
           transition={{ duration: N.pop, delay: N.burst, times: [0, 0.7, 1], ease: easing.out }}
         >
           <motion.span
+            key={loop}
             className="absolute inset-0 [background-image:radial-gradient(rgb(255_255_255/0.28)_2px,transparent_2.4px)] [background-size:12px_12px]"
-            animate={calm ? { backgroundPosition: '0px 0px' } : { backgroundPosition: ['0px 0px', '24px 24px'] }}
-            transition={calm ? { duration: 0 } : { duration: hover ? N.drift / 3 : N.drift, ease: 'linear', repeat: Infinity }}
+            animate={idle ? undefined : { backgroundPosition: ['0px 0px', '24px 24px'] }}
+            transition={{ duration: hover ? N.drift / 3 : N.drift, ease: 'linear', repeat: Infinity }}
           />
           <span className="absolute inset-x-0 top-0 flex items-center justify-between bg-[var(--bar)] text-[color:var(--paper)] font-label text-sm px-3 py-1.5 border-b-[3px] border-black">
             <span>lil_johnny.gif</span>
@@ -97,9 +105,10 @@ export default function HeroNarrator() {
         >
           <motion.span className="block" animate={hop}>
             <motion.span
+              key={loop}
               className="block origin-bottom"
-              animate={calm ? { y: 0, rotate: 0 } : waving ? { y: 0, rotate: [-4, -4, 4, 4] } : { y: [0, 0, -4, -4], rotate: 0 }}
-              transition={calm ? { duration: 0 } : boil(waving ? N.wiggle : N.bob)}
+              animate={idle ? undefined : waving ? { y: 0, rotate: [-4, -4, 4, 4] } : { y: [0, 0, -4, -4], rotate: 0 }}
+              transition={boil(waving ? N.wiggle : N.bob)}
             >
               <img
                 src={waving ? WAVE : POINT}
@@ -121,9 +130,10 @@ export default function HeroNarrator() {
         transition={{ duration: N.pop, delay: N.bubble, times: [0, 0.7, 1], ease: easing.out }}
       >
         <motion.span
+          key={loop}
           className="comic-bubble block max-w-[270px] font-sans text-[17px] leading-snug group-hover:underline underline-offset-4 decoration-2 [--tail-x:200px]"
-          animate={calm ? { y: 0 } : { y: [0, 0, -3, -3] }}
-          transition={calm ? { duration: 0 } : boil(N.bob, 0.3)}
+          animate={idle ? undefined : { y: [0, 0, -3, -3] }}
+          transition={boil(N.bob, 0.3)}
         >
           Psst! Got questions about my work? Ask me.
         </motion.span>

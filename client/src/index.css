@@ -22,16 +22,6 @@
   }
 }
 
-/* CRT Scanlines Animation */
-@keyframes scanlines {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 4px;
-  }
-}
-
 /* Floating Pixel Animation */
 @keyframes float {
   0%, 100% {
@@ -307,31 +297,6 @@
     z-index: 1;
   }
   
-  /* CRT scanlines: only in the opt-in CRT mode, never over text by default */
-  body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: none;
-    pointer-events: none;
-    z-index: 2;
-  }
-  
-  /* CRT Enhanced mode — cranked up scanlines */
-  body.crt-enhanced::after {
-    background-image: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 1px,
-      rgba(0, 0, 0, 0.25) 1px,
-      rgba(0, 0, 0, 0.25) 3px
-    );
-    animation: scanlines 0.1s steps(1) infinite;
-  }
-
   
   html {
     -webkit-font-smoothing: antialiased;
@@ -389,14 +354,6 @@
     box-shadow: 8px 8px 0 0 var(--ink); /* large plates */
   }
 
-  /* Still used by the chat components and NotFound; restyle there before removing */
-  .border-8bit {
-    border: 2px solid #F59E0B;
-  }
-
-  .border-8bit-blue {
-    border: 2px solid #3B82F6;
-  }
   
   /* Pixel face: the hero name (and the HELLO sticker) only */
   .font-pixel {
@@ -498,7 +455,7 @@
   .chat-key[aria-disabled="true"] { cursor: not-allowed; }
 
   /* Retro OS scrollbar: chunky ink-framed thumb on a paper track */
-  .retro-scroll { scrollbar-color: var(--page) var(--paper); }
+  .retro-scroll { scrollbar-color: var(--ink) var(--paper); }
   .retro-scroll::-webkit-scrollbar { width: 18px; }
   .retro-scroll::-webkit-scrollbar-track { background: var(--paper); box-shadow: inset 3px 0 0 var(--ink); }
   .retro-scroll::-webkit-scrollbar-thumb {
@@ -577,7 +534,7 @@
   }
 
   /* Focus-visible: 3px ring for keyboard nav, invisible for mouse/touch.
-     Orange by default; surfaces where orange is under 3:1 override --focus. */
+     Ink by default; dark surfaces (title bars, the case taskbar) override --focus. */
   :focus-visible {
     outline: 3px solid var(--focus);
     outline-offset: 3px;
@@ -850,13 +807,54 @@
 }
 
 /* Fixed buttons that float over every band (Pause motion, chat launcher):
-   ink ring with a cream gap and halo, so focus reads over orange, teal, navy
-   and cream alike. Unlayered so it wins over utility shadows; a pressed
+   ink ring with a white gap and halo, so focus reads over yellow, blue, black
+   and the page alike. Unlayered so it wins over utility shadows; a pressed
    button sets --float-shadow to none to stay sunk. */
 .focus-ring-float:focus-visible {
   outline: 3px solid var(--ink);
   outline-offset: 3px;
   box-shadow: var(--float-shadow, 4px 4px 0 0 var(--ink)), 0 0 0 9px var(--paper);
+}
+
+/* Chat window (MascotChatWidget): a fixed height that never grows past the
+   viewport. On short viewports (landscape phones, 200-400% zoom) it becomes a
+   full-viewport sheet that scrolls as a whole (WCAG 1.4.4, 1.4.10): title bar
+   and input pinned, the log keeps a readable height, topic keys in one row
+   that scrolls sideways. Unlayered so it wins over the panel's utilities. */
+.chat-panel {
+  height: min(600px, calc(100dvh - 8rem));
+}
+@media (max-height: 500px) {
+  .chat-panel {
+    inset: 0;
+    width: auto;
+    height: auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .chat-panel > .window-bar,
+  .chat-panel > .chat-input {
+    position: sticky;
+    z-index: 20;
+  }
+  .chat-panel > .window-bar { top: 0; }
+  .chat-panel > .chat-input {
+    bottom: 0;
+    background-color: var(--page);
+  }
+  .chat-panel .chat-log-box {
+    flex: none;
+    height: max(8rem, calc(100dvh - 7.5rem));
+  }
+  .chat-panel .chat-keys {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 0.75rem;
+  }
+  .chat-panel .chat-keys > * {
+    flex: none;
+    width: 7rem;
+  }
 }
 
 /* Respect user motion preferences */

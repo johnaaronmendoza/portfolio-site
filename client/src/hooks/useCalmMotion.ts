@@ -15,6 +15,9 @@ export function useCalmMotion(): boolean {
   const [paused, setPaused] = useState(isPaused);
 
   useEffect(() => {
+    // SectionNav can set the attribute (a saved Pause) in an effect that runs
+    // before this one subscribes, so read it again here
+    setPaused(isPaused());
     const observer = new MutationObserver(() => setPaused(isPaused()));
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-motion'] });
     return () => observer.disconnect();

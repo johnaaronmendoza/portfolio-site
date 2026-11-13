@@ -77,7 +77,7 @@ export const KEYS: Key[] = [
   { label: 'PGSQL', name: 'PostgreSQL', group: 'backend', blurb: 'Relational data with eight isolated schemas, one per service.', usedIn: 'SilverLink SG, SCS Awareness Platform' },
   { label: 'SUPA', name: 'Supabase', group: 'backend', blurb: 'Auth, storage and row-level security for a public-facing app.', usedIn: 'SCS Awareness Platform' },
   { label: 'DOCKER', name: 'Docker', group: 'infra', blurb: 'Packaging services so they run the same everywhere.', usedIn: 'SilverLink SG' },
-  { label: 'KUBE', name: 'Kubernetes', group: 'infra', blurb: 'Running services on an 8-node cluster that scales ahead of demand.', usedIn: 'SilverLink SG' },
+  { label: 'KUBE', name: 'Kubernetes', group: 'infra', blurb: 'Running services on an 8-node cluster, with an EMA load forecast recommending replicas.', usedIn: 'SilverLink SG' },
   { label: 'GIT', name: 'Git', group: 'infra', blurb: 'Branching, reviews and clean history across every team project.', usedIn: 'Every project' },
   { label: 'TS', name: 'TypeScript', group: 'frontend', blurb: 'Typed front ends that catch mistakes before users do.', usedIn: 'SCS Awareness Platform, this portfolio' },
   { label: 'REACT', name: 'React', group: 'frontend', blurb: 'Interactive interfaces, from a branching story engine to an admin panel.', usedIn: 'SCS Awareness Platform, SilverLink SG' },

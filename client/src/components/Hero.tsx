@@ -5,6 +5,7 @@ import { unlockAchievement } from '@/hooks/useAchievements';
 import { play } from '@/hooks/useSound';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useCalmMotion } from '@/hooks/useCalmMotion';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useTextScramble } from '@/hooks/useTextScramble';
 import { motionTokens } from '@/lib/motion-tokens';
 import { scrollToSection } from '@/lib/utils';
@@ -94,6 +95,8 @@ function ScrambleLine({
 export default function Hero() {
   const reduced = useReducedMotion();
   const calm = useCalmMotion();
+  // The narrator only mounts where it shows, so its loops never run hidden
+  const wide = useMediaQuery('(min-width: 1024px)');
 
   // Particles also pause while the hero is scrolled out of view
   const sectionRef = useRef<HTMLElement>(null);
@@ -263,9 +266,9 @@ export default function Hero() {
           </div>
 
           {/* Narrator, large screens only so it never sits under text: Lil Johnny
-              points at the name from a comic burst; pressing him opens the chat */}
+              points at the name from a comic panel window; pressing him opens the chat */}
           <div className="hidden lg:flex lg:col-span-5 items-center justify-center">
-            <HeroNarrator />
+            {wide && <HeroNarrator />}
           </div>
         </div>
       </div>

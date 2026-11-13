@@ -78,14 +78,16 @@ function SectionMenu({ active }: { active: string }) {
             aria-modal="true"
             aria-label="Sections"
             tabIndex={-1}
-            className="window fixed bottom-20 left-4 z-[70] w-[min(20rem,calc(100vw-2rem))]"
+            // Never taller than the viewport: the list scrolls inside, and on short
+            // screens (or zoomed in) it drops to the bottom edge, over the button
+            className="window fixed bottom-20 left-4 z-[70] flex w-[min(20rem,calc(100vw-2rem))] max-h-[calc(100dvh-6rem)] flex-col [@media(max-height:500px)]:bottom-2 [@media(max-height:500px)]:max-h-[calc(100dvh-1rem)]"
             initial={{ opacity: 0, y: motionTokens.distance.sm }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: motionTokens.distance.sm }}
             transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
           >
             <WindowBar title="menu.exe" onClose={() => setOpen(false)} closeLabel="Close menu" />
-            <ul className="window-body p-2">
+            <ul className="window-body min-h-0 overflow-y-auto p-2" data-lenis-prevent>
               {SECTIONS.map(({ id, label, icon }, i) => (
                 <li key={id}>
                   <button
@@ -171,8 +173,8 @@ export default function SectionNav() {
   return (
     <>
     {/* Bottom-left at every width; the chat launcher owns bottom-right. The focus
-        ring is ink with a cream halo so it reads over every band it floats above.
-        Paused = orange and pressed into its shadow, so the state shows at a glance */}
+        ring is ink with a white halo so it reads over every band it floats above.
+        Paused = yellow and pressed into its shadow, so the state shows at a glance */}
     <div className={FLOAT_DOCK}>
       <SectionMenu active={active} />
       <button
@@ -189,7 +191,7 @@ export default function SectionNav() {
       <SoundToggle />
     </div>
     {/* Section dots (large screens): 44px targets around 12px dots. Inactive
-        dots are cream outlines, the current section is filled orange. */}
+        dots are white, the current section is filled yellow. */}
     <nav aria-label="Sections" className="fixed right-2 top-1/2 -translate-y-1/2 z-40 hidden lg:block">
       <ul className="flex flex-col">
         {SECTIONS.map(({ id, label }) => (
@@ -211,7 +213,7 @@ export default function SectionNav() {
               </span>
               <span
                 aria-hidden="true"
-                // Ink ring keeps the dot visible where it crosses the teal band
+                // Ink ring keeps the dot visible where it crosses the blue band
                 className={`block w-3 h-3 border-2 shadow-[0_0_0_2px_var(--ink)] transition-colors duration-150 ${
                   active === id
                     ? 'bg-[var(--yellow)] border-[color:var(--yellow)]'

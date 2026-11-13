@@ -62,23 +62,23 @@ export default function Home() {
         </div>
         <StatsBand />
         {/* Negative margins overlap touching 3px borders so bands share one rule */}
-        <Ribbon tone="teal" className="-mt-[3px]" items={['ABOUT ME', 'AI', 'DATA', 'FULL-STACK']} />
+        <Ribbon tone="blue" className="-mt-[3px]" items={['ABOUT ME', 'AI', 'DATA', 'FULL-STACK']} />
         <div id="about" tabIndex={-1} className={SECTION_CLASS}>
           <Stickers set="about" />
           <About />
         </div>
-        <Ribbon tone="teal" reverse items={['EXPERIENCE', 'BUILDING DESK ASSIST', 'LGA TELECOM', 'SEMBCORP SOLAR']} />
+        <Ribbon tone="blue" reverse items={['EXPERIENCE', 'BUILDING DESK ASSIST', 'LGA TELECOM', 'SEMBCORP SOLAR']} />
         <div id="experience" tabIndex={-1} className={SECTION_CLASS}>
           <Stickers set="experience" />
           <Experience />
         </div>
-        {/* Orange either side of the teal Projects band so strips never merge into it */}
-        <Ribbon tone="orange" className="-mb-[3px]" items={['PROJECTS', 'SILVERLINK SG', 'SCS AWARENESS PLATFORM']} />
+        {/* Yellow either side of the blue Projects band so strips never merge into it */}
+        <Ribbon tone="yellow" className="-mb-[3px]" items={['PROJECTS', 'SILVERLINK SG', 'SCS AWARENESS PLATFORM']} />
         <div id="projects" tabIndex={-1} className={SECTION_CLASS}>
           <Stickers set="projects" />
           <Projects />
         </div>
-        <Ribbon tone="orange" reverse className="-mt-[3px]" items={['SKILLS', 'PRESS A KEY']} />
+        <Ribbon tone="yellow" reverse className="-mt-[3px]" items={['SKILLS', 'PRESS A KEY']} />
         <div id="skills" tabIndex={-1} className={SECTION_CLASS}>
           <Stickers set="skills" />
           <Skills />

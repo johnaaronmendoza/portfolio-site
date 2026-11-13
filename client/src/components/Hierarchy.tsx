@@ -5,12 +5,12 @@
  */
 import PixelArt, { type PixelArtName } from './PixelArt';
 
-/** teal: on cream windows and navy. cream: on the teal band or inside a teal/orange block */
-export type KeySurface = 'teal' | 'cream';
+/** The key term's fill. blue: on white windows and the page. paper: on the blue band or inside a blue/yellow block */
+export type KeySurface = 'blue' | 'paper';
 
 const KEY_FILL: Record<KeySurface, string> = {
-  teal: 'bg-[var(--blue)]',
-  cream: 'bg-[var(--paper)]',
+  blue: 'bg-[var(--blue)]',
+  paper: 'bg-[var(--paper)]',
 };
 
 interface KeyTextProps {
@@ -25,7 +25,7 @@ interface KeyTextProps {
  * later marks render as plain text. Odd runs of a split on "**" are the marked
  * words; unbalanced markers fall back to plain text.
  */
-export function KeyText({ text, max = 1, surface = 'teal' }: KeyTextProps) {
+export function KeyText({ text, max = 1, surface = 'blue' }: KeyTextProps) {
   let used = 0;
   const runs = text.split('**');
   if (runs.length % 2 === 0) return <>{runs.join('')}</>;
@@ -48,13 +48,14 @@ export function KeyText({ text, max = 1, surface = 'teal' }: KeyTextProps) {
   );
 }
 
-type LeadTone = 'navy' | 'teal' | 'cream';
+/** The surface the lead sits on */
+type LeadTone = 'page' | 'blue' | 'paper';
 
-// Approved pairings: cream on navy (orange prompt), ink on teal, ink on cream
+// Approved pairings: text on the page (blue-text prompt), ink on blue, ink on paper
 const LEAD_TEXT: Record<LeadTone, string> = {
-  navy: 'text-[color:var(--text)]',
-  teal: 'text-black',
-  cream: 'text-black',
+  page: 'text-[color:var(--text)]',
+  blue: 'text-black',
+  paper: 'text-black',
 };
 
 /**
@@ -63,7 +64,7 @@ const LEAD_TEXT: Record<LeadTone, string> = {
  */
 export function Lead({
   text,
-  tone = 'navy',
+  tone = 'page',
   prompt = true,
   className = '',
 }: {
@@ -78,11 +79,11 @@ export function Lead({
       className={`relative max-w-[42ch] font-sans font-bold text-lg leading-[1.4] lg:text-[22px] lg:leading-[1.35] text-balance ${prompt ? 'pl-[2ch]' : ''} ${LEAD_TEXT[tone]} ${className}`}
     >
       {prompt && (
-        <span aria-hidden="true" className={`absolute left-0 ${tone === 'navy' ? 'text-[color:var(--blue-text)]' : ''}`}>
+        <span aria-hidden="true" className={`absolute left-0 ${tone === 'page' ? 'text-[color:var(--blue-text)]' : ''}`}>
           {'>'}
         </span>
       )}
-      <KeyText text={text} max={1} surface={tone === 'teal' ? 'cream' : 'teal'} />
+      <KeyText text={text} max={1} surface={tone === 'blue' ? 'paper' : 'blue'} />
     </p>
   );
 }

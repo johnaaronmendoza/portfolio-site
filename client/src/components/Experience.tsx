@@ -14,7 +14,7 @@ type Entry = {
   badges: Badge[];
 };
 
-// Black text on orange or teal (approved pairings); sentence case
+// Black text on yellow or blue (approved pairings); sentence case
 type Badge = 'Internship' | 'In progress' | 'Education';
 
 const BADGE_FILL: Record<Badge, string> = {

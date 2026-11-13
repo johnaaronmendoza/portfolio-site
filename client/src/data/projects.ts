@@ -39,9 +39,6 @@ export type Project = {
   facts: string[];
   year: string;
   image: string | null;
-  /** Intrinsic size of `image`, so the box is reserved before it loads */
-  imageWidth: number;
-  imageHeight: number;
   tags: string[];
   link: string;
   externalUrl?: string;
@@ -64,8 +61,6 @@ export const PROJECTS: Project[] = [
     facts: ["8-node cluster", "4 services", "6-person team"],
     year: "2025",
     image: silverLinkImg,
-    imageWidth: 1200,
-    imageHeight: 660,
     tags: ["React", "gRPC", "K8s", "PostgreSQL"],
     link: "/projects/silverlink",
     span: 'lg:col-span-3',
@@ -82,8 +77,6 @@ export const PROJECTS: Project[] = [
     facts: ["4 languages", "4 question types", "4-person team"],
     year: "2025",
     image: scsImg,
-    imageWidth: 1200,
-    imageHeight: 660,
     tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
     link: "/projects/scs",
     span: 'lg:col-span-3',
@@ -100,8 +93,6 @@ export const PROJECTS: Project[] = [
     facts: ["5 data sources", "star schema", "100% Pytest coverage"],
     year: "2024",
     image: aiFinanceImg,
-    imageWidth: 1200,
-    imageHeight: 660,
     tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
     link: "/projects/ai-finance",
     span: 'lg:col-span-2',
@@ -116,8 +107,6 @@ export const PROJECTS: Project[] = [
     facts: ["89.61% accuracy", "0.9612 AUC", "41,996 samples"],
     year: "2025",
     image: uwbImg,
-    imageWidth: 1200,
-    imageHeight: 660,
     tags: ["Python", "SVM", "PCA", "scikit-learn"],
     link: "/projects/uwb",
     span: 'lg:col-span-2',
@@ -132,8 +121,6 @@ export const PROJECTS: Project[] = [
     facts: ["25 sample defects", "8 modules", "4 roles"],
     year: "2024",
     image: uatImg,
-    imageWidth: 1200,
-    imageHeight: 660,
     tags: ["React 18", "Node.js", "Express", "SQLite"],
     link: "/projects/uat",
     span: 'lg:col-span-2',
@@ -148,8 +135,6 @@ export const PROJECTS: Project[] = [
     facts: ["SUS 79/100", "~80% test coverage", "drill works offline"],
     year: "2025",
     image: fireSafetyImg,
-    imageWidth: 1200,
-    imageHeight: 660,
     tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
     link: "/projects/firesafety",
     span: 'lg:col-span-3',
@@ -163,8 +148,6 @@ export const PROJECTS: Project[] = [
     facts: ["SGD 10,000 NYP JumpStart Grant"],
     year: "2022",
     image: greenloopImg,
-    imageWidth: 1200,
-    imageHeight: 800,
     tags: ["NYP JumpStart", "Urban Farming"],
     link: "external",
     span: 'sm:col-span-2 lg:col-span-3',

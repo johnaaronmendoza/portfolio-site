@@ -19,8 +19,7 @@ Served from `/assets/pixel/<file>`.
 
 | File | Grid | Depicts | Placement (size) | Accessibility |
 |---|---|---|---|---|
-| `crt-computer.svg` | 64×64 | Generic cream desktop computer: monitor with a navy screen showing four teal output bars and a teal block cursor, orange 2×2 power light, base unit with vents and a floppy slot, keyboard slab of 2×2 keys; right and bottom faces dithered | Hero art column over the starburst (256px, `lg`+) | Decorative, `alt=""` |
-| `starburst.svg` | 48×48 | Orange 16-point burst with slightly uneven points and an empty cream centre disc | Behind the CRT (384px, `lg`+); footer sign-off sticker (96px, `md`+) | Decorative, `alt=""` |
+| `starburst.svg` | 48×48 | Orange 16-point burst with slightly uneven points and an empty cream centre disc | Footer sign-off sticker (96px, `md`+) | Decorative, `alt=""` |
 | `sparkle.svg` | 16×16 | Cream four-point sparkle with stepped, pinched centre | Marquee separator (16px); two in the hero art (32px) | Decorative, `alt=""` |
 | `smiley.svg` | 16×16 | Orange face, 1×2 eyes, slightly tilted smile, one cream highlight | Above "HELLO!" in the stats strip (32px, `md`+) | Decorative, `alt=""` |
 | `floppy.svg` | 16×16 | Teal diskette with clipped corner, cream shutter with ink slot, blank cream label | Left of "Resume (PDF)" in the hero button (16px) | Decorative, `alt=""` |
@@ -37,7 +36,7 @@ Served from `/assets/pixel/<file>`.
 | `chip-calendar.svg` | 16×16 | Cream calendar page with an orange top band, two ink binder rings and a 3×2 grid of ink dots | Fact chips for dates and periods (16px) | Decorative, `aria-hidden` |
 | `chip-team.svg` | 16×16 | Two overlapping heads-and-shoulders: front teal top, back orange top, cream faces | Fact chips for team (16px) | Decorative, `aria-hidden` |
 | `chip-phone.svg` | 16×16 | Plain upright cream phone with an ink speaker slit and a navy screen holding one teal bar | Fact chips for platform / device (16px) | Decorative, `aria-hidden` |
-| `bullet.svg` | 8×8 | Stepped right-pointing orange arrowhead with an ink outline | List marker in every bullet list (16px, 2×) | Decorative, `aria-hidden` |
+| `bullet.svg` | 8×8 | Stepped right-pointing paper (white) arrowhead with an ink outline (yellow = AI only, 13 Nov 2026) | List marker in every bullet list (16px, 2×) | Decorative, `aria-hidden` |
 
 
 ## Stickers (Nov 2026)

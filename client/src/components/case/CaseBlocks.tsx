@@ -11,7 +11,7 @@ type CaseSectionProps = {
   id: string;
   heading: string;
   icon?: PixelArtName;
-  /** One-line opener on navy, under the h2 (≤ 1 key term) */
+  /** One-line opener on the page, under the h2 (≤ 1 key term) */
   lead?: string;
 } & (
   | {
@@ -23,7 +23,7 @@ type CaseSectionProps = {
   | { file?: never; children?: never }
 );
 
-/** h2 on navy, an optional lead, then one cream window holding the detail */
+/** h2 on the page, an optional lead, then one white window holding the detail */
 export function CaseSection({ id, heading, icon, lead, file, children }: CaseSectionProps) {
   return (
     <section aria-labelledby={`${id}-heading`}>
@@ -44,7 +44,7 @@ export function CaseSection({ id, heading, icon, lead, file, children }: CaseSec
   );
 }
 
-/** lead-s: the first line inside a window block, ink on cream (≤ 1 key term) */
+/** lead-s: the first line inside a window block, ink on white (≤ 1 key term) */
 export function LeadS({ text }: { text: string }) {
   return (
     <p className="max-w-[60ch] font-sans font-bold text-base lg:text-lg leading-[1.6] text-black text-pretty">

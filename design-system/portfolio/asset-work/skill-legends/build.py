@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
 """Build the 28 Skills-keyboard keycap legends.
 
-  python3 -I build.py <icons-src-dir> <out-dir>
+  python3 -I build.py <icons-src-dir> <out-dir> kotlin=0.8,kube=0.96,next=0.94,ts=0.84
 
-<icons-src-dir> holds the extracted npm packages: si/package (simple-icons 16.36.0, CC0)
-and dv/package (devicon 2.16.0, MIT). Output: one 128x128 SVG per key, a single path
-filled #FFFFFF, glyph centred in a 104x104 box (12px padding).
+<icons-src-dir> holds the extracted npm package si/package (simple-icons 16.36.0, CC0);
+devicon was only needed for the old gRPC wordmark and is no longer used. Output: one
+128x128 SVG per key, a single path filled #FFFFFF, glyph centred in a 104x104 box
+(12px padding).
 
-Brand keys: the official mark from simple-icons (fallback devicon), transform baked into the
+The scale overrides in the command above are the ones the shipped files were built with.
+
+Brand keys: the official mark from simple-icons, transform baked into the
 path data. Concept keys: original pixel glyphs on a 13x13 grid of 8px cells (13*8 = 104),
-traced to one outline path so there are no seams between cells.
+traced to one outline path so there are no seams between cells. SKLRN and GRPC were brand
+marks (wide wordmarks that smudged on the keycaps) and are now original glyphs too.
 """
 import re
 import sys
@@ -21,17 +25,14 @@ SRC = Path(sys.argv[1])
 OUT = Path(sys.argv[2])
 OUT.mkdir(parents=True, exist_ok=True)
 SI = SRC / "si/package/icons"
-DV = SRC / "dv/package/icons"
 
 # key -> (source file, optical scale of the 104px box). Scale < 1 for marks that fill their
 # box (squares, dense wordmarks) so every key reads at a similar optical size.
 BRAND = {
     "python": (SI / "python.svg", 1.0),
     "pandas": (SI / "pandas.svg", 1.0),
-    "sklrn": (SI / "scikitlearn.svg", 1.0),
     "numpy": (SI / "numpy.svg", 1.0),
     "node": (SI / "nodedotjs.svg", 1.0),
-    "grpc": (DV / "grpc/grpc-plain.svg", 1.0),
     "pgsql": (SI / "postgresql.svg", 1.0),
     "supa": (SI / "supabase.svg", 1.0),
     "docker": (SI / "docker.svg", 1.0),
@@ -362,6 +363,41 @@ PIXEL["arcore"] = grid("""
 ...##.#.##...
 #....###....#
 ##.........##
+""")
+
+# scikit-learn: scatter plot of two classes split by a decision line (no scikit-learn mark)
+PIXEL["sklrn"] = grid("""
+#...........#
+#.##.......##
+#.##......##.
+#........##..
+#...##..##...
+#...##.##..##
+#.....##...##
+#....##......
+#...##..##...
+#..##...##...
+#.##.........
+#............
+#############
+""")
+
+# gRPC: two services, a call going one way and the reply coming back (no gRPC mark).
+# Point-symmetric: the lower half is the upper half turned 180 degrees.
+PIXEL["grpc"] = grid("""
+#####........
+#####.#####..
+#####.#####..
+#####....##..
+#####..######
+........####.
+..##.....##..
+.####........
+######..#####
+..##....#####
+..#####.#####
+..#####.#####
+........#####
 """)
 
 HEAD = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">'

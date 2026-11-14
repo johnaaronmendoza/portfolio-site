@@ -31,27 +31,13 @@ export const motionTokens = {
     float: 3,
     bounce: 1.2,
   },
-  // Lil Johnny, the hero narrator: entrance delays follow the hero load-in
-  // (after ctas at 1.1s), then two-frame loops and a wave every few seconds
-  narrator: {
-    burst: 1.25,  // the panel window
-    johnny: 1.45,
-    bubble: 1.75,
-    pop: 0.45,
-    bob: 1.1,
-    drift: 3,
-    wiggle: 0.3,
-    hop: 0.32,
-    waveEvery: 6,
-    waveHold: 1.4,
-  },
   distance: {
     xs: 4,
     sm: 8,
     md: 16,
   },
   // Skills keyboard (owner-approved, Nov 2026): entrance once per page load,
-  // pointer tilt, scroll-linked perspective, key lift/press, mascot reactions.
+  // pointer tilt, scroll-linked perspective, key lift/press.
   // Distances in CSS px, angles in degrees.
   keyboard: {
     enter: 0.7,       // board fades in, rises and rotates into its resting angle
@@ -66,14 +52,6 @@ export const motionTokens = {
     scrollTilt: 5,    // extra top-down rotation across the section
     lift: 5,          // hover
     press: 3.5,
-    hop: 28,          // mascot hop height
-  },
-  // Mascot frame timing for a key press: crouch, jump (for the hop), land,
-  // celebrate, then idle. Seconds.
-  mascot: {
-    crouch: 0.08,
-    land: 0.08,
-    celebrate: 0.6,
   },
 };
 

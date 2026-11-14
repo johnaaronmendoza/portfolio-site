@@ -43,20 +43,16 @@ const SHOTS: Shot[] = [
 
 type Level = 'Critical' | 'High' | 'Medium' | 'Low';
 
-// The word carries the meaning; the fill only helps scanning. Ink text on all.
-const LEVEL_FILL: Record<Level, string> = {
-  Critical: 'bg-[var(--yellow)]',
-  High: 'bg-[var(--blue)]',
-  Medium: 'bg-[var(--paper)]',
-  Low: 'bg-[var(--paper)]',
+// The word carries the meaning; the fill only helps scanning (.badge in index.css).
+const LEVEL_BADGE: Record<Level, string> = {
+  Critical: 'badge badge--ink',
+  High: 'badge badge--data',
+  Medium: 'badge badge--paper',
+  Low: 'badge badge--paper',
 };
 
 function LevelBadge({ level }: { level: Level }) {
-  return (
-    <span className={`inline-block border-2 border-black px-2 py-1 font-label text-xs text-black ${LEVEL_FILL[level]}`}>
-      {level}
-    </span>
-  );
+  return <span className={LEVEL_BADGE[level]}>{level}</span>;
 }
 
 const MODULES: { name: string; defects: number; risk: Level }[] = [
@@ -130,7 +126,7 @@ function SeverityList() {
 const RECORD: { label: string; value: ReactNode }[] = [
   { label: 'Code', value: 'TC-022' },
   { label: 'Module', value: 'Notifications' },
-  { label: 'Status', value: <span className="inline-block border-2 border-black bg-[var(--yellow)] px-2 py-1 font-label text-xs text-black">Fail</span> },
+  { label: 'Status', value: <span className="badge badge--ink">Fail</span> },
   { label: 'Linked defect', value: 'DEF-025' },
   { label: 'Title', value: 'Verify Notification Service Stability Under High Load' },
   { label: 'Preconditions', value: 'Active notification queue, 100+ pending items, signed in as QA Tester.' },
@@ -160,7 +156,7 @@ function TestCaseRecord() {
           <p className="font-bold">Expected</p>
           <p>Notifications processed in queue without crash</p>
         </div>
-        <div className="border-2 border-black bg-[var(--yellow)] p-3">
+        <div className="border-2 border-black bg-[var(--bar)] text-[color:var(--paper)] p-3">
           <p className="font-bold">Actual</p>
           <p>Service crashes, all pending notifications lost</p>
         </div>

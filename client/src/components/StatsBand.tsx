@@ -1,20 +1,19 @@
 import PixelArt from './PixelArt';
 import StatStrip, { type Stat } from './StatStrip';
 
-// Only figures already on the site: internships (Experience), the six projects
-// with case studies (GreenLoopFarms was a pitch, not a build), UWB model
-// accuracy and the SCS Awareness Platform's languages (EN/CN/Malay/Tamil).
-// Values scale with their cell (StatStrip), so "89.61%" fits from 320px up and
-// matches the UWB tile, case page and resume.
+// Only figures already on the site and the resume. Work leads (LGA Telecom,
+// Sembcorp, from Experience); the one coursework figure (UWB, a team project)
+// comes last, without the burst. Desk Assist has no figure: it is in progress.
+// Values scale with their cell (StatStrip), so "89.61%" fits from 320px up.
 const STATS: Stat[] = [
-  { value: '2', label: 'internships' },
-  { value: '6', label: 'projects built' },
-  { value: '89.61%', label: 'UWB model accuracy', burst: true },
-  { value: '4', label: 'SCS Awareness Platform languages' },
+  { value: '40%', label: 'fewer manual agent actions', source: 'LGA Telecom', burst: true },
+  { value: '1,000+', label: 'network configurations migrated', source: 'LGA Telecom' },
+  { value: '50+', label: 'UAT defects tracked to resolution', source: 'Sembcorp Solar' },
+  { value: '89.61%', label: 'ML classifier accuracy, 41,996 samples', source: 'UWB team coursework' },
 ];
 
 /**
- * Orange "HELLO!" strip under the hero. The black background shows through
+ * Key figures strip under the hero, with a "HELLO!" sticker from md. The black background shows through
  * 3px gaps, which draws the dividers between cells.
  */
 export default function StatsBand() {

@@ -21,3 +21,6 @@ export function scrollToSection(id: string, reduced: boolean): void {
   if (!el.hasAttribute('tabindex')) el.tabIndex = -1;
   el.focus({ preventScroll: true });
 }
+
+/** The shortcut modifier as the visitor's keyboard labels it (both work everywhere) */
+export const MOD_KEY = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘' : 'Ctrl';

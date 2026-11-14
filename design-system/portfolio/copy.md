@@ -479,3 +479,189 @@ Freshservice–Microsoft Teams escalation alerts. Proposed:
 - **B4.** UWB was a team project (Group CS05). Are you happy for the band to
   show the team model's 89.61% with the tag `UWB project (SIT)`? The tag
   doesn't claim you built the model alone.
+
+---
+
+## 2026-11-13: Copy for review items 8–10
+
+Brief: `design-system/portfolio/review-2026-11-13.md`, items 8–10 (John approved
+8–11 on 13 Nov). John has **not** answered B1–B4, Q1, Q2, Q8 or N1–N9, so every
+string below uses wording or figures already on the site or the resume, as
+worded there. Resume line numbers are from `pdftotext client/public/resume.pdf -`
+(plain mode, not `-layout`).
+
+### Item 8. `desk_assist.exe` in the hero's right column
+
+Replaces the right column's only content today, the narrator panel with the
+bubble `Psst! Got questions about my work? Ask me.` (`comic/HeroNarrator.tsx:128`).
+The hero lead (`Hero.tsx:209`) stays as it is: it says *that* John is building
+Desk Assist, and this window shows *how* it works.
+
+| Element | Copy | Source |
+|---|---|---|
+| Window title | `desk_assist.exe` | Filename style, like `lga_telecom.exe` |
+| Status badge | `In progress` | Same badge as the LGA entry, `Experience.tsx:33`; resume l.28 "· in progress" |
+| Heading (labels the flow `figure`) | `How Desk Assist will draft a reply` | Old flow heading, `git show c38876d:client/src/components/Experience.tsx` l.49 |
+| One-line intro | `A Chrome extension for service desk agents at LGA Telecom.` | Resume l.29 "a Manifest V3 Chrome extension"; `Experience.tsx:35` "an AI Chrome extension"; chat `MascotChatWidget.tsx:36` |
+| Link to Experience | `See experience` (scrolls to `#experience`; `↓` icon aria-hidden) | Same pattern as the hero's `See projects` button (`Hero.tsx:234`) |
+
+The heading says "will" because the tool is in progress. Don't change it to
+"How Desk Assist drafts a reply" unless John confirms it's deployed (Q1).
+
+**Six steps.** These are the exact labels and actor chips from `c38876d`
+(`DESK_ASSIST_FLOW`, l.33–40). Step 5 has one detail line, the only new string,
+and its wording comes from the resume and the chat.
+
+| # | Label | Actor chip | Detail line | Source |
+|---|---|---|---|---|
+| 1 | `Ticket` | none | none | c38876d l.34 |
+| 2 | `Reads the thread` | `AI` | none | c38876d l.35; resume l.30 "reads the Freshservice ticket thread" |
+| 3 | `Finds KB guidance` | `AI` | none | c38876d l.36; resume l.30 "retrieves relevant knowledge-base guidance" |
+| 4 | `Drafts a reply` | `AI` | none | c38876d l.37; resume l.30 "drafts a reply" |
+| 5 | `Agent reviews` (emphasis) | `Agent` | `Every draft, before it's sent.` | c38876d l.38; resume l.31 "for the agent to review before anything is sent"; chat `:36` "The agent always reviews before anything is sent" |
+| 6 | `Sent` | none | none | c38876d l.39 |
+
+Note for the designer, not copy: the review asks for "Agent reviews" to be
+filled yellow, but it also says yellow means AI across the site. Step 5 is the
+one step that is *not* AI, so filling it yellow would mean the opposite.
+Please pick an emphasis colour that doesn't say "AI".
+
+**Lil Johnny's bubble.** This replaces `HeroNarrator.tsx:128`. The service
+desk agents review the drafts, not John, so no option says "I check". All three
+are 60 characters or fewer.
+
+| Option | Text | Chars | Why it's true |
+|---|---|---|---|
+| **A (recommended)** | `The AI drafts, an agent decides. Ask me how.` | 44 | Mirrors the HUMAN key, `skills3d/keys.ts:63`: "The AI drafts, a person decides." Names who reviews. |
+| B | `Every AI draft gets a human review. Ask me how.` | 47 | Resume l.31; chat `:36` |
+| C | `No reply is sent until an agent reviews it. Ask me how.` | 55 | Resume l.31 "before anything is sent" |
+
+The bubble is the button's whole accessible name (Johnny himself is
+aria-hidden), and the button opens the chat. Add sr-only text after the bubble:
+` Opens the chat.` The chat already answers "desk assist" with the review step
+and the guardrails (`MascotChatWidget.tsx:36`), so "Ask me how" leads somewhere
+real.
+
+**Optional "Designed in" caption under the window.** Pick 3 or 4. It goes on one
+line with `·` separators at 1366, or as a short list at 375. The lead word is
+"Designed" because the security model is designed and the tool isn't finished
+(resume l.32 "Defined the security model"; chat `:36` "Security is designed in").
+Don't use "Built to be trusted": "built" claims it is finished.
+
+Caption lead: `Designed in:`
+
+| # | Label | Resume | Already on the site? |
+|---|---|---|---|
+| 1 | `Least-privilege permissions` | l.32 "least-privilege permissions" | Yes: chat `:36`; `keys.ts:62` ("Least-privilege access") |
+| 2 | `No remotely hosted code` | l.32–33 "no remotely hosted code" | Partly: chat `:36` and `keys.ts:62` shorten it to "no remote code" |
+| 3 | `AI calls through a company-controlled backend` | l.33 "AI calls routed through a company-controlled backend" | Yes: chat `:36` |
+| 4 | `Warns if advice relied on an outdated KB article` | l.35–36 "agents are warned when earlier advice relied on an outdated article" | No, resume only (allowed) |
+| alt | `Data-leakage prevention` | l.33 | Yes: `Skills.tsx:14` ("AI guardrails & data-leakage prevention") |
+
+My pick is 1, 3 and 5 at 375 (the shortest, all already on the site), and all
+four at 1366. Never pair this caption with an outcome ("zero leaks", "secure"):
+no source gives one.
+
+Optional consistency fix for the coder: in `keys.ts:62` and chat `:36`, change
+"no remote code" to "no remotely hosted code". The resume uses the longer
+phrase, and "no remote code" can read as "no remote code execution".
+
+### Item 9. Project tile captions: `<year> · <team or course fact>`
+
+This replaces `Issue #{NN}, {year}` in `Projects.tsx:118-119`. Change the comment
+on `:117` to `{/* Year and team context, from projects.ts */}`. Add a
+`caption: string` field (the part after the year) to `Project` in
+`data/projects.ts`. That way the facts stay in the data file, and the caption
+renders `{year} · {caption}`.
+
+| Tile | Caption | Source |
+|---|---|---|
+| SilverLink SG | `2025 · team of 6` | `projects.ts:64-65`; `SilverLinkProject.tsx:59` "Group 20, 6 people"; resume l.66, l.68 "6-person team" |
+| SCS Awareness Platform | `2025 · team of 4` | `projects.ts:82-83`; `SCSProject.tsx:80` "Group D2, 4 people"; resume l.77, l.83 "4-person team" |
+| AI Finance Insights Engine | `2024 · data pipeline` | `projects.ts:101`; `AIFinanceProject.tsx:26` "Data pipeline with NLP". The site never says whether it was solo, team or coursework (**NEEDS JOHN P1**) |
+| UWB Indoor Localization | `2025 · team coursework` | `projects.ts:117`; `UWBProject.tsx:72-73` "CSC3105 Data Analytics, SIT", "Team: Group CS05"; resume l.87. Team size unknown (Q8) |
+| UAT Testing Dashboard | `2024 · coursework` | `projects.ts:131,133` "Course project"; `UATProject.tsx:189`. Team or solo unknown (**NEEDS JOHN P2**) |
+| Fire Safety Drill Companion | `2025 · team coursework` | `projects.ts:149`; `FireSafetyProject.tsx:77-78` "INF2007 Mobile App Development, SIT", "Team: Group 16". Team size unknown (**NEEDS JOHN P3**) |
+| GreenLoopFarms | `2022 · team pitch` | `projects.ts:162,164` "Helped pitch"; chat `:51-52,76` "co-pitched", "We pitched"; resume l.110 |
+
+Don't say the same thing twice on a tile (one job per element):
+
+- **SilverLink and SCS:** the facts lists already show `6-person team`
+  (`projects.ts:64`) and `4-person team` (`:82`). Now that the caption carries
+  team size, remove those two facts. Each tile keeps two facts.
+- **UAT:** the description starts `Course project:` (`projects.ts:131`) and the
+  caption now says `coursework`. Optional change:
+  `Links each failed test to its defect to show what blocks go-live.` The
+  case-study header keeps its own `Course project` chip
+  (`UATProject.tsx:189`), so the honesty flag stays on the case page.
+  `description` is also the case-study lead, so check both places.
+
+The longest caption is `2025 · team coursework`, 23 characters, so it fits
+the `flex-shrink-0` caption at 375. Screen readers may read the `·` aloud, so
+render it as `<span aria-hidden="true"> · </span><span class="sr-only">, </span>`.
+
+### Item 10. Key figures band (supersedes the 2026-11-07 recommended band where they differ)
+
+File: `StatsBand.tsx:4-14`. `StatStrip.tsx:41` still has no `source` field, so
+the 2026-11-07 coder note ("Source tag: coder note", above) still applies. Add
+`source?: string`, render it inside the `dt` as its own line, 15px or larger,
+black on the yellow cell. Limits from `StatStrip.tsx`: values are 6 glyphs at
+most (`:53-54`). Labels wrap inside `max-w-[18ch]` (`:96`), so 2 to 3 lines is
+fine and they line up.
+
+| # | Value | Label (`dt`) | Source tag | Burst | Source |
+|---|---|---|---|---|---|
+| 1 | `40%` | `fewer manual agent actions` | `LGA Telecom` | **yes** | `Experience.tsx:37`; resume l.48 "Reduced manual agent actions by 40%" |
+| 2 | `1,000+` | `network configurations migrated` | `LGA Telecom` | no | `Experience.tsx:36`; resume l.40 |
+| 3 | `50+` | `UAT defects tracked to resolution` | `Sembcorp Solar` | no | `Experience.tsx:48`; resume l.58 "tracking 50+ defects to resolution" |
+| 4 | `89.61%` | `ML classifier accuracy, 41,996 samples` | `UWB team coursework` | no (moves off) | `projects.ts:116`; `UWBProject.tsx:72-73,78`; resume l.89 |
+
+The labels run 26–38 characters and the values 3–6 glyphs, the same envelope
+as the 7 Nov band. `UWB team coursework` is 19 characters, so it wraps to two
+lines at `18ch`, which is acceptable. The burst moves to the 3-glyph `40%`, so
+its padding has more room than it had around `89.61%`.
+
+Replace `StatsBand.tsx:4-14` with:
+
+```ts
+// Only figures already on the site and the resume. Work leads (LGA Telecom,
+// Sembcorp, from Experience); the one coursework figure (UWB, a team project)
+// comes last, without the burst. Desk Assist has no figure: it is in progress.
+const STATS: Stat[] = [
+  { value: '40%', label: 'fewer manual agent actions', source: 'LGA Telecom', burst: true },
+  { value: '1,000+', label: 'network configurations migrated', source: 'LGA Telecom' },
+  { value: '50+', label: 'UAT defects tracked to resolution', source: 'Sembcorp Solar' },
+  { value: '89.61%', label: 'ML classifier accuracy, 41,996 samples', source: 'UWB team coursework' },
+];
+```
+
+Changed from 7 Nov: the UWB tag reads `UWB team coursework` instead of
+`UWB project (SIT)`. That says plainly that it is team coursework, so the band
+works whatever John answers to B4.
+
+**Keep hedged until John answers:**
+
+- **B2 (40%):** keep the label word for word. Don't add a baseline, period or
+  unit ("per ticket", "a month", "cut by"), and don't move 40% into the hero or
+  the bubble. If the lead wants the burst to wait for B2, put it on cell 3 `50+`
+  for now. That figure has no open question.
+- **B1 (1,000+):** keep `network configurations migrated`, the site's wording
+  (`Experience.tsx:36`). If John says configurations and baselines were counted
+  together, use `network configs and baselines migrated`.
+- **B4 (89.61%):** the tag already says team coursework. Don't write "my model"
+  or "I achieved" anywhere this figure appears.
+
+### NEEDS JOHN (items 8–10)
+
+- **P1.** Was the AI Finance Insights Engine (2024) a solo project, a team
+  project or coursework? Its tile caption reads `2024 · data pipeline` until
+  you say.
+- **P2.** Was the UAT Testing Dashboard course project done solo or in a team?
+  If it was solo, the caption becomes `2024 · solo coursework`.
+- **P3.** How many people were in Fire Safety Group 16? If you tell us, the
+  caption can read `2025 · team of N`, like SilverLink and SCS.
+- **N7 (still open):** are you happy for Home to show the "Designed in"
+  guardrails caption? Label 4 (outdated-article warning) is only on your
+  resume today.
+- **B1, B2, B4** as above. **Q8** (UWB team size) would turn `team coursework`
+  into `team of N`.

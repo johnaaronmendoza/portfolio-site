@@ -18,8 +18,6 @@ export const GITHUB_PROFILE: CaseLink = {
   kind: 'profile',
 };
 
-const ROW = '';
-
 interface CaseHeaderProps {
   slug: CaseSlug;
   /** Filename-style window title, e.g. "fire_safety_drill.apk" */
@@ -37,7 +35,7 @@ interface CaseHeaderProps {
 
 /**
  * The project opens as a program: year, name, a one-line lead, fact chips
- * and links, and an orange status bar of key figures along the bottom edge.
+ * and links, and a status bar of key figures along the bottom edge.
  * Name, year and summary come from data/projects.ts; the real screenshot
  * (heroShot) follows straight after.
  */
@@ -50,20 +48,20 @@ export default function CaseHeader({ slug, file, facts, note, links, stats, hero
         <WindowBar title={file} />
         <div className="window-body p-6 sm:p-10 lg:p-14">
           <div className="grid grid-cols-1">
-            <span className="col-start-1 row-start-1 self-start justify-self-start border-2 border-black bg-[var(--yellow)] px-2 py-1 font-label text-xs text-black">
+            <span className="badge badge--paper col-start-1 row-start-1 self-start justify-self-start">
               {project.year}
             </span>
-            <h1 className={`${ROW} mt-4 font-display text-black break-words text-balance text-[length:clamp(30px,8.5vw,38px)] sm:text-[46px] xl:text-[56px]`}>
+            <h1 className="mt-4 font-display text-black break-words text-balance text-[length:clamp(30px,8.5vw,38px)] sm:text-[46px] xl:text-[56px]">
               {project.name}
             </h1>
-            <Lead text={project.description} tone="cream" className={`${ROW} mt-4`} />
-            <FactChips facts={facts} label="Project facts" className={`${ROW} mt-6`} />
+            <Lead text={project.description} tone="paper" className="mt-4" />
+            <FactChips facts={facts} label="Project facts" className="mt-6" />
             {note && (
-              <p className={`${ROW} mt-3 max-w-[60ch] font-sans text-[15px] sm:text-base leading-[1.5] text-[color:var(--text)]`}>
+              <p className="mt-3 max-w-[60ch] font-sans text-[15px] sm:text-base leading-[1.5] text-[color:var(--text)]">
                 {note}
               </p>
             )}
-            <div className={`${ROW} mt-6 flex flex-wrap gap-4`}>
+            <div className="mt-6 flex flex-wrap gap-4">
               {links.map(({ label, href, kind }) => (
                 <a
                   key={href}

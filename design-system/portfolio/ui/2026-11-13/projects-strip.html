@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects strip, one world</title>
+<link rel="stylesheet" href="mock.css">
+<style>
+  /* preview: fact bullet recoloured paper (bullet.svg fill #FFD23F -> #FFFFFF) */
+  .facts img { filter: grayscale(1) brightness(1.6); }
+  .ribbon { overflow: hidden; white-space: nowrap; border-block: 3px solid #000; padding: 12px 0; font: 600 14px/1.3 'IBM Plex Mono', monospace; }
+  @media (min-width: 640px) { .ribbon { padding: 16px 0; font-size: 16px; } }
+  .ribbon span { margin-right: 48px; }
+  /* NEW ribbon tone: ink (was yellow) */
+  .ribbon--ink { background: var(--bar); color: var(--paper); }
+
+  .band { background: var(--blue); color: #000; border-block: 3px solid #000; padding: 80px 16px; margin-top: -3px; }
+  @media (min-width: 640px) { .band { padding: 112px 32px; } }
+  @media (min-width: 1024px) { .band { padding-inline: 64px; } }
+  .wrap { max-width: 1152px; margin: 0 auto; }
+  .sh { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+  .sh h2 { font-family: 'Bangers', sans-serif; font-weight: 400; font-stretch: 100%; letter-spacing: 0.03em; line-height: 1; font-size: clamp(40px, 12vw, 52px); color: #000; text-shadow: 4px 4px 0 var(--paper); }
+  @media (min-width: 640px) { .sh h2 { font-size: 60px; } }
+  @media (min-width: 1024px) { .sh h2 { font-size: 72px; } .sh { margin-bottom: 20px; } }
+  .sh i { flex: 1; height: 6px; background: #000; }
+  .sh img { width: 32px; height: 32px; image-rendering: pixelated; }
+  .lead { max-width: 42ch; font-weight: 700; font-size: 18px; line-height: 1.4; margin-bottom: 24px; }
+  @media (min-width: 1024px) { .lead { font-size: 22px; margin-bottom: 32px; } }
+
+  .wb { padding: 16px; }
+  @media (min-width: 640px) { .wb { padding: 24px; } }
+  @media (min-width: 1024px) { .wb { padding: 32px; } }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  @media (min-width: 640px) { .chips { gap: 12px; margin-bottom: 40px; } }
+  .fchip { font: 600 12px/1.3 'IBM Plex Mono', monospace; color: #000; padding: 6px 12px; min-height: 44px; border: 3px solid #000; background: var(--paper); box-shadow: 3px 3px 0 0 #000; transition-property: translate, box-shadow, background-color, color; transition-duration: 150ms; }
+  /* NEW on-state: ink fill, paper text, pressed (was yellow) */
+  .fchip[aria-pressed="true"] { background: var(--bar); color: var(--paper); translate: 3px 3px; box-shadow: none; }
+
+  .grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+  @media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1024px) { .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } .s3 { grid-column: span 3; } .s2 { grid-column: span 2; } }
+
+  .tile { border: 3px solid #000; background: var(--paper); box-shadow: 4px 4px 0 0 #000; display: flex; flex-direction: column; }
+  .img { position: relative; overflow: hidden; height: 192px; border-bottom: 3px solid #000; background: var(--page); }
+  .featured .img { height: 224px; }
+  @media (min-width: 1024px) { .featured .img { height: 288px; } }
+  .img > img { width: 100%; height: 100%; object-fit: cover; }
+  .badge { position: absolute; top: 8px; left: 8px; }
+  .badge--r { left: auto; right: 8px; }
+  .burst { position: absolute; right: 8px; bottom: 8px; width: 112px; height: 112px; display: grid; place-items: center; pointer-events: none; }
+  @media (min-width: 1024px) { .burst { width: 128px; height: 128px; } }
+  .burst svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .burst b { position: relative; font-family: 'Bangers', sans-serif; font-weight: 400; letter-spacing: 0.03em; font-size: 22px; line-height: 1; color: #000; padding: 0 12px; text-align: center; }
+  @media (min-width: 1024px) { .burst b { font-size: 26px; } }
+
+  .info { display: flex; flex: 1; flex-direction: column; gap: 16px; padding: 20px; }
+  /* NEW caption: a Plex Mono meta line, not a comic box */
+  .cap { font: 600 14px/1.3 'IBM Plex Mono', monospace; color: var(--text); margin-bottom: -8px; }
+  .info h3 { font-size: 22px; }
+  .featured .info h3 { font-size: 24px; }
+  @media (min-width: 1024px) { .featured .info h3 { font-size: 32px; } }
+  .desc { font-size: 15px; line-height: 1.625; }
+  @media (min-width: 640px) { .desc { font-size: 16px; } }
+  .facts { display: flex; flex-wrap: wrap; gap: 4px 16px; font: 700 15px/1.5 'IBM Plex Mono', monospace; color: #000; }
+  .facts li { display: flex; gap: 8px; align-items: flex-start; }
+  .facts img { width: 16px; height: 16px; margin-top: 4px; image-rendering: pixelated; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags span { border: 2px solid #000; padding: 2px 8px; font: 700 14px/1.4 'IBM Plex Mono', monospace; color: #000; }
+  .more { margin-top: auto; padding-top: 8px; font-weight: 700; font-size: 15px; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+</style>
+</head>
+<body>
+<div class="ribbon ribbon--ink" aria-hidden="true"><span>PROJECTS ✦</span><span>SILVERLINK SG ✦</span><span>SCS AWARENESS PLATFORM ✦</span><span>PROJECTS ✦</span><span>SILVERLINK SG ✦</span><span>SCS AWARENESS PLATFORM ✦</span></div>
+<section class="band">
+  <div class="wrap">
+    <div class="sh"><img src="../../../../client/public/assets/pixel/icon-projects.svg" alt=""><h2>PROJECTS</h2><i aria-hidden="true"></i></div>
+    <p class="lead">Start with SilverLink SG and the SCS Awareness Platform.</p>
+    <div class="window">
+      <div class="window-bar"><p>projects/</p><span aria-hidden="true">○□✕</span></div>
+      <div class="window-body wb">
+        <div class="chips" role="group" aria-label="Filter projects by technology">
+          <button class="fchip" aria-pressed="true">All</button>
+          <button class="fchip" aria-pressed="false">AI &amp; ML</button>
+          <button class="fchip" aria-pressed="false">Python</button>
+          <button class="fchip" aria-pressed="false">React</button>
+          <button class="fchip" aria-pressed="false">TypeScript</button>
+          <button class="fchip" aria-pressed="false">Kubernetes</button>
+          <button class="fchip" aria-pressed="false">gRPC</button>
+          <button class="fchip" aria-pressed="false">Kotlin</button>
+        </div>
+        <div class="grid">
+          <article class="tile featured s3">
+            <div class="img"><img src="preview-tile_silverlink-page-ground.webp" alt="">
+              <span class="tag tag--ink badge">Featured</span>
+              <span class="burst" aria-hidden="true"><svg viewBox="0 0 100 100" preserveAspectRatio="none" style="transform:rotate(8deg)"><polygon class="star" fill="#fff" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg><b style="transform:rotate(8deg)">BOOKED!</b></span>
+            </div>
+            <div class="info">
+              <p class="cap">2025<span aria-hidden="true"> · </span><span class="sr-only">, </span>team of 6</p>
+              <h3>SilverLink SG</h3>
+              <p class="desc">Connects seniors and youth through skill-sharing and live events, built to block double-bookings.</p>
+              <ul class="facts"><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">8-node cluster</li><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">4 services</li></ul>
+              <div class="tags"><span>React</span><span>gRPC</span><span>K8s</span><span>PostgreSQL</span></div>
+              <p class="more">Read case study</p>
+            </div>
+          </article>
+          <article class="tile featured s3">
+            <div class="img"><img src="../../../../attached_assets/tile_scs.webp" alt="">
+              <span class="tag tag--ink badge">Featured</span>
+              <span class="burst" aria-hidden="true"><svg viewBox="0 0 100 100" preserveAspectRatio="none" style="transform:rotate(-8deg)"><polygon class="star" fill="#fff" stroke="#000" stroke-width="3" vector-effect="non-scaling-stroke"/></svg><b style="transform:rotate(-8deg)">PLOT TWIST!</b></span>
+            </div>
+            <div class="info">
+              <p class="cap">2025<span aria-hidden="true"> · </span><span class="sr-only">, </span>team of 4</p>
+              <h3>SCS Awareness Platform</h3>
+              <p class="desc">Teaches cancer awareness through a branching story at Singapore Cancer Society booths.</p>
+              <ul class="facts"><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">4 languages</li><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">4 question types</li></ul>
+              <div class="tags"><span>React 19</span><span>TypeScript</span><span>Supabase</span><span>Vercel</span></div>
+              <p class="more">Read case study</p>
+            </div>
+          </article>
+          <article class="tile s2">
+            <div class="img"><img src="../../../../attached_assets/tile_ai_finance.webp" alt=""></div>
+            <div class="info">
+              <p class="cap">2024<span aria-hidden="true"> · </span><span class="sr-only">, </span>data pipeline</p>
+              <h3>AI Finance Insights Engine</h3>
+              <p class="desc">Pulls market data into one Power BI-ready warehouse; NLP flags supply-chain risk.</p>
+              <ul class="facts"><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">5 data sources</li><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">star schema</li><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">100% Pytest coverage</li></ul>
+              <div class="tags"><span>Python</span><span>Pandas</span><span>ETL</span><span>NLP</span><span>Power BI</span></div>
+              <p class="more">Read case study</p>
+            </div>
+          </article>
+          <article class="tile s2">
+            <div class="img"><img src="../../../../attached_assets/tile_uwb.webp" alt=""></div>
+            <div class="info">
+              <p class="cap">2025<span aria-hidden="true"> · </span><span class="sr-only">, </span>team coursework</p>
+              <h3>UWB Indoor Localization</h3>
+              <p class="desc">Tells clear UWB signals from blocked (NLOS) ones with an SVM-RBF model.</p>
+              <ul class="facts"><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">89.61% accuracy</li><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">0.9612 AUC</li><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">41,996 samples</li></ul>
+              <div class="tags"><span>Python</span><span>SVM</span><span>PCA</span><span>scikit-learn</span></div>
+              <p class="more">Read case study</p>
+            </div>
+          </article>
+          <article class="tile s2">
+            <div class="img"><img src="preview-tile_uat-page-ground.webp" alt=""></div>
+            <div class="info">
+              <p class="cap">2024<span aria-hidden="true"> · </span><span class="sr-only">, </span>coursework</p>
+              <h3>UAT Testing Dashboard</h3>
+              <p class="desc">Links each failed test to its defect to show what blocks go-live.</p>
+              <ul class="facts"><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">25 sample defects</li><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">8 modules</li><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">4 roles</li></ul>
+              <div class="tags"><span>React 18</span><span>Node.js</span><span>Express</span><span>SQLite</span></div>
+              <p class="more">Read case study</p>
+            </div>
+          </article>
+          <article class="tile s3">
+            <div class="img"><img src="../../../../attached_assets/greenloop_hero.jpg" alt="">
+              <span class="tag tag--data badge badge--r">Live site</span>
+            </div>
+            <div class="info">
+              <p class="cap">2022<span aria-hidden="true"> · </span><span class="sr-only">, </span>team pitch</p>
+              <h3>GreenLoopFarms</h3>
+              <p class="desc">Helped pitch a Singapore hydroponic urban farm to an industry investor panel.</p>
+              <ul class="facts"><li><img src="../../../../client/public/assets/pixel/bullet.svg" alt="">SGD 10,000 NYP JumpStart Grant</li></ul>
+              <p class="more">Visit site</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="ribbon ribbon--ink" aria-hidden="true" style="margin-top:-3px"><span>SKILLS ✦</span><span>PRESS A KEY ✦</span><span>SKILLS ✦</span><span>PRESS A KEY ✦</span><span>SKILLS ✦</span><span>PRESS A KEY ✦</span><span>SKILLS ✦</span></div>
+<script>
+  // Burst.tsx geometry: 12-point star, outer 48 / inner 33
+  const pts = Array.from({ length: 24 }, (_, i) => { const r = i % 2 ? 33 : 48, a = i * Math.PI / 12; return (50 + r * Math.cos(a)).toFixed(1) + ',' + (50 + r * Math.sin(a)).toFixed(1); }).join(' ');
+  document.querySelectorAll('.star').forEach(p => p.setAttribute('points', pts));
+</script>
+</body>
+</html>

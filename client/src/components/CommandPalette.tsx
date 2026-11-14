@@ -1,13 +1,15 @@
 /**
  * CommandPalette: Ctrl+K / Cmd+K command menu.
  * A `commands.exe` terminal-variant window (MASTER 2.10): section and project
- * navigation, resume and email, and chat shortcuts.
+ * navigation, resume and email, and chat shortcuts. ARIA combobox pattern:
+ * focus stays in the search box, arrows move the active option
+ * (aria-activedescendant), which scrolls into view.
  */
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
-import { scrollToSection } from '@/lib/utils';
+import { MOD_KEY, scrollToSection } from '@/lib/utils';
 import { motionTokens } from '@/lib/motion-tokens';
 import { useModalFocus } from '@/hooks/useModalFocus';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -22,6 +24,9 @@ const SECTIONS = [
   { id: 'skills', name: 'Skills' },
   { id: 'footer', name: 'Contact' },
 ];
+
+const LIST_ID = 'command-list';
+const optionId = (id: string) => `command-${id}`;
 
 interface Command {
   id: string;
@@ -77,7 +82,7 @@ export default function CommandPalette() {
     // Actions
     {
       id: 'action-resume',
-      label: 'Download resume',
+      label: 'Download resume (PDF)',
       description: 'Save John\'s resume as a PDF',
       action: () => {
         const link = document.createElement('a');
@@ -189,6 +194,7 @@ export default function CommandPalette() {
 
       // Only handle keys if palette is open
       if (!isOpen) return;
+      const n = filteredCommands.length;
 
       switch (e.key) {
         case 'Escape':
@@ -196,14 +202,14 @@ export default function CommandPalette() {
           break;
         case 'ArrowDown':
           e.preventDefault();
-          setSelectedIndex(prev => (prev + 1) % filteredCommands.length);
+          if (n) setSelectedIndex(prev => (prev + 1) % n);
           break;
         case 'ArrowUp':
           e.preventDefault();
-          setSelectedIndex(prev => (prev - 1 + filteredCommands.length) % filteredCommands.length);
+          if (n) setSelectedIndex(prev => (prev - 1 + n) % n);
           break;
         case 'Enter':
-          // Buttons (rows, Close) activate natively; this handles Enter in the search box
+          // The Close button activates natively; this handles Enter in the search box
           if (e.target instanceof HTMLButtonElement) break;
           e.preventDefault();
           if (filteredCommands[selectedIndex]) {
@@ -216,6 +222,12 @@ export default function CommandPalette() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, filteredCommands, selectedIndex]);
+
+  // Keep the active option visible as the arrows move it
+  const activeId = filteredCommands[selectedIndex] ? optionId(filteredCommands[selectedIndex].id) : undefined;
+  useEffect(() => {
+    if (activeId) document.getElementById(activeId)?.scrollIntoView({ block: 'nearest' });
+  }, [activeId]);
 
   return (
     <AnimatePresence>
@@ -247,10 +259,10 @@ export default function CommandPalette() {
           >
             <WindowBar title="commands.exe" onClose={() => setIsOpen(false)} closeLabel="Close command menu" />
 
-            <div className="bg-black text-[color:var(--paper)] [--focus:var(--yellow)]">
+            <div className="bg-black text-[color:var(--paper)] [--focus:var(--paper)]">
               {/* Search: the ring sits on the row; the input itself has no outline */}
-              <div className="border-b-2 border-[color:var(--paper)] p-4 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--yellow)] focus-within:outline-offset-[-6px]">
-                <span aria-hidden="true" className="font-mono text-base font-bold text-[color:var(--yellow)]">&gt;</span>
+              <div className="border-b-2 border-[color:var(--paper)] p-4 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--paper)] focus-within:outline-offset-[-6px]">
+                <span aria-hidden="true" className="font-mono text-base font-bold text-[color:var(--paper)]">&gt;</span>
                 <input
                   ref={inputRef}
                   type="text"
@@ -261,29 +273,35 @@ export default function CommandPalette() {
                   }}
                   placeholder="Search commands..."
                   aria-label="Search commands"
-                  className="flex-1 min-w-0 bg-transparent text-[color:var(--paper)] placeholder:text-[color:var(--paper)] placeholder:italic font-mono text-base outline-none caret-[var(--yellow)]"
+                  role="combobox"
+                  aria-expanded="true"
+                  aria-controls={LIST_ID}
+                  aria-autocomplete="list"
+                  aria-activedescendant={activeId}
+                  className="flex-1 min-w-0 bg-transparent text-[color:var(--paper)] placeholder:text-[color:var(--paper)] placeholder:italic font-mono text-base outline-none caret-[var(--paper)]"
                 />
               </div>
 
-              {/* Commands: selected row orange, hover teal; the description inherits the row colour */}
-              <div className="max-h-96 overflow-y-auto" data-lenis-prevent>
-                {filteredCommands.length === 0 ? (
-                  <p className="p-4 text-center font-sans text-sm">No commands found</p>
-                ) : (
-                  filteredCommands.map((cmd, idx) => (
+              {/* Commands: active option paper (inverted), hover blue; the description
+                  inherits the row colour. Options are clicked, not tabbed to. */}
+              <div id={LIST_ID} role="listbox" aria-label="Commands" className="max-h-96 overflow-y-auto" data-lenis-prevent>
+                {filteredCommands.map((cmd, idx) => (
                     <button
                       type="button"
+                      role="option"
+                      id={optionId(cmd.id)}
+                      aria-selected={idx === selectedIndex}
+                      tabIndex={-1}
                       key={cmd.id}
                       onClick={() => {
                         cmd.action();
                         setIsOpen(false);
                       }}
-                      className={`block w-full min-h-[44px] text-left px-4 py-3 outline-offset-[-6px] [--focus:var(--ink)] transition-colors duration-150 ${
+                      className={`block w-full min-h-[44px] text-left px-4 py-3 transition-colors duration-150 ${
                         idx === selectedIndex
-                          ? 'bg-[var(--yellow)] text-black'
+                          ? 'bg-[var(--paper)] text-black'
                           : 'hover:bg-[var(--blue)] hover:text-black'
                       }`}
-                      onFocus={() => setSelectedIndex(idx)}
                     >
                       <span className="flex items-center gap-2 font-sans font-bold text-[15px]">
                         {cmd.id === 'nav-hero' && <PixelArt name="icon-home" size={16} />}
@@ -291,14 +309,17 @@ export default function CommandPalette() {
                       </span>
                       <span className="block font-sans text-sm mt-1">{cmd.description}</span>
                     </button>
-                  ))
-                )}
+                ))}
               </div>
+              {/* Always mounted so screen readers hear it appear */}
+              <p role="status" className="empty:hidden p-4 text-center font-sans text-sm">
+                {filteredCommands.length === 0 ? 'No commands found' : ''}
+              </p>
 
               {/* Footer hints */}
               <div className="border-t-2 border-[color:var(--paper)] p-3 flex flex-wrap justify-between gap-x-4 gap-y-1 text-sm font-mono">
                 <span>↑↓ Navigate | Enter Select | Esc Close</span>
-                <span>Ctrl+K Toggle</span>
+                <span>{MOD_KEY} K Toggle</span>
               </div>
             </div>
           </motion.div>

@@ -11,6 +11,11 @@
 }
 
 @custom-variant dark (&:is(.dark *));
+/* Short phones (320x640): the hero tightens so its buttons end above the dock */
+@custom-variant short-phone (@media (max-width: 639px) and (max-height: 660px));
+/* Short laptops (1024x768, 1280x800): the hero starts higher so desk_assist.exe
+   ends above the chat launcher */
+@custom-variant short-desk (@media (min-width: 1024px) and (max-height: 820px));
 
 /* Animated Grid Background */
 @keyframes panGrid {
@@ -19,16 +24,6 @@
   }
   100% {
     background-position: 0 40px;
-  }
-}
-
-/* CRT Scanlines Animation */
-@keyframes scanlines {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 4px;
   }
 }
 
@@ -117,6 +112,12 @@
   100% { transform: translateX(0); }
 }
 
+/* Hero narrator bob (.johnny-bob): two frames, 2px */
+@keyframes johnny-bob {
+  0% { translate: 0 0; }
+  50% { translate: 0 -2px; }
+}
+
 /* Screen Tear VHS Effect */
 @keyframes screenTear {
   0% {
@@ -194,11 +195,11 @@
   --text: #111111;      /* body text on page and paper */
   --paper: #FFFFFF;     /* window bodies, chips; light text on bar/black */
   --bar: #111111;       /* title bars, footer band, case-study header */
-  --yellow: #FFD23F;    /* accent fill, black text (14.6:1) */
+  --yellow: #FFD23F;    /* AI only (keycaps, AI tags, legend), black text (14.6:1) */
   --blue: #3A66FF;      /* accent fill, black (4.52:1) or white (4.64:1) text */
   --blue-text: #2347D6; /* blue text on page (5.95:1) or paper (7.13:1) */
   /* Focus ring: ink on the light page and paper; dark surfaces (title bars,
-     footer, overlays, hero window) set it to paper or yellow. */
+     footer, overlays, hero window) set it to paper. */
   --focus: var(--ink);
 
   --radius: 0;
@@ -210,32 +211,32 @@
   --card-foreground: var(--text);
   --popover: var(--paper);
   --popover-foreground: var(--text);
-  --primary: var(--yellow);
-  --primary-foreground: var(--ink);
+  --primary: var(--blue);
+  --primary-foreground: #fff;
   --secondary: var(--blue);
   --secondary-foreground: var(--ink);
   --muted: var(--paper);
   --muted-foreground: var(--text);
   --accent: var(--blue);
   --accent-foreground: var(--ink);
-  --destructive: var(--yellow);
-  --destructive-foreground: var(--ink);
+  --destructive: var(--bar);
+  --destructive-foreground: var(--paper);
   --border: var(--ink);
   --input: var(--paper);
-  --ring: var(--yellow);
-  --chart-1: var(--yellow);
-  --chart-2: var(--blue);
+  --ring: var(--ink);
+  --chart-1: var(--blue);
+  --chart-2: var(--bar);
   --chart-3: var(--bar);
   --chart-4: var(--paper);
   --chart-5: var(--text);
   --sidebar: var(--paper);
   --sidebar-foreground: var(--text);
-  --sidebar-primary: var(--yellow);
-  --sidebar-primary-foreground: var(--ink);
+  --sidebar-primary: var(--blue);
+  --sidebar-primary-foreground: #fff;
   --sidebar-accent: var(--blue);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--ink);
-  --sidebar-ring: var(--yellow);
+  --sidebar-ring: var(--ink);
 }
 
 /* Dark mode is not exposed; it uses the same aliases */
@@ -247,32 +248,32 @@
   --card-foreground: var(--text);
   --popover: var(--paper);
   --popover-foreground: var(--text);
-  --primary: var(--yellow);
-  --primary-foreground: var(--ink);
+  --primary: var(--blue);
+  --primary-foreground: #fff;
   --secondary: var(--blue);
   --secondary-foreground: var(--ink);
   --muted: var(--paper);
   --muted-foreground: var(--text);
   --accent: var(--blue);
   --accent-foreground: var(--ink);
-  --destructive: var(--yellow);
-  --destructive-foreground: var(--ink);
+  --destructive: var(--bar);
+  --destructive-foreground: var(--paper);
   --border: var(--ink);
   --input: var(--paper);
-  --ring: var(--yellow);
-  --chart-1: var(--yellow);
-  --chart-2: var(--blue);
+  --ring: var(--ink);
+  --chart-1: var(--blue);
+  --chart-2: var(--bar);
   --chart-3: var(--bar);
   --chart-4: var(--paper);
   --chart-5: var(--text);
   --sidebar: var(--paper);
   --sidebar-foreground: var(--text);
-  --sidebar-primary: var(--yellow);
-  --sidebar-primary-foreground: var(--ink);
+  --sidebar-primary: var(--blue);
+  --sidebar-primary-foreground: #fff;
   --sidebar-accent: var(--blue);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--ink);
-  --sidebar-ring: var(--yellow);
+  --sidebar-ring: var(--ink);
 }
 
 @layer base {
@@ -307,31 +308,6 @@
     z-index: 1;
   }
   
-  /* CRT scanlines: only in the opt-in CRT mode, never over text by default */
-  body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: none;
-    pointer-events: none;
-    z-index: 2;
-  }
-  
-  /* CRT Enhanced mode — cranked up scanlines */
-  body.crt-enhanced::after {
-    background-image: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 1px,
-      rgba(0, 0, 0, 0.25) 1px,
-      rgba(0, 0, 0, 0.25) 3px
-    );
-    animation: scanlines 0.1s steps(1) infinite;
-  }
-
   
   html {
     -webkit-font-smoothing: antialiased;
@@ -389,14 +365,6 @@
     box-shadow: 8px 8px 0 0 var(--ink); /* large plates */
   }
 
-  /* Still used by the chat components and NotFound; restyle there before removing */
-  .border-8bit {
-    border: 2px solid #F59E0B;
-  }
-
-  .border-8bit-blue {
-    border: 2px solid #3B82F6;
-  }
   
   /* Pixel face: the hero name (and the HELLO sticker) only */
   .font-pixel {
@@ -414,8 +382,8 @@
     line-height: 1.15;
   }
 
-  /* Comic lettering (Bangers): section titles, captions and sound effects
-     only, never paragraphs. Bangers is caps-only. */
+  /* Comic lettering (Bangers): section titles and the two featured tiles'
+     sound effects only, never paragraphs. Bangers is caps-only. */
   .font-comic {
     font-family: 'Bangers', 'IBM Plex Sans', ui-sans-serif, sans-serif;
     font-weight: 400;
@@ -423,17 +391,24 @@
     line-height: 1;
   }
 
-  /* Comic narration box: yellow caption with an ink frame */
-  .comic-caption {
+  /* Badges: one shape for every status/meta badge. Yellow marks AI only;
+     blue marks data or a link; ink, paper and dashed (unfinished) are status. */
+  .badge {
     display: inline-block;
-    background-color: var(--yellow);
+    border: 2px solid var(--ink);
+    padding: 4px 8px;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-weight: 600;
+    font-size: 0.75rem;
+    line-height: 1.3;
     color: #000;
-    border: 3px solid var(--ink);
-    font-family: 'Bangers', 'IBM Plex Sans', ui-sans-serif, sans-serif;
-    letter-spacing: 0.04em;
-    line-height: 1;
-    padding: 0.4em 0.65em 0.3em;
+    white-space: nowrap;
   }
+  .badge--ai { background-color: var(--yellow); }
+  .badge--data { background-color: var(--blue); }
+  .badge--ink { background-color: var(--bar); color: var(--paper); }
+  .badge--paper { background-color: var(--paper); }
+  .badge--status { background-color: var(--paper); border-style: dashed; }
 
   /* Speech bubble with a hard-outlined tail; --tail-x moves the tail */
   .comic-bubble {
@@ -489,7 +464,7 @@
     transition: background-color 150ms ease, transform 80ms ease, border-bottom-width 80ms ease;
   }
   @media (hover: hover) {
-    .chat-key:hover { background-color: var(--yellow); }
+    .chat-key:hover { background-color: var(--page); }
   }
   .chat-key:active:not([aria-disabled="true"]) {
     transform: translateY(3px);
@@ -498,7 +473,7 @@
   .chat-key[aria-disabled="true"] { cursor: not-allowed; }
 
   /* Retro OS scrollbar: chunky ink-framed thumb on a paper track */
-  .retro-scroll { scrollbar-color: var(--page) var(--paper); }
+  .retro-scroll { scrollbar-color: var(--ink) var(--paper); }
   .retro-scroll::-webkit-scrollbar { width: 18px; }
   .retro-scroll::-webkit-scrollbar-track { background: var(--paper); box-shadow: inset 3px 0 0 var(--ink); }
   .retro-scroll::-webkit-scrollbar-thumb {
@@ -577,7 +552,7 @@
   }
 
   /* Focus-visible: 3px ring for keyboard nav, invisible for mouse/touch.
-     Orange by default; surfaces where orange is under 3:1 override --focus. */
+     Ink by default; dark surfaces (title bars, the case taskbar) override --focus. */
   :focus-visible {
     outline: 3px solid var(--focus);
     outline-offset: 3px;
@@ -648,6 +623,47 @@
       display: none;
     }
   }
+
+  /* Desk Assist flow (hero): 3px ink connectors between the stacked steps,
+     and a stepped arrow from step 5 (agent review) into step 6, which share
+     the last row. Decorative; the list order carries the sequence. */
+  .da-flow > li { position: relative; }
+  .da-flow > li:not(:first-child):not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: -12px;
+    width: 3px;
+    height: 10px;
+    background: var(--ink);
+  }
+  /* Step 5 has a 3px frame: keep its connector on the same line */
+  .da-flow > li:nth-child(5)::before { left: 21px; top: -13px; }
+  .da-flow > li:nth-child(5)::after {
+    content: '';
+    position: absolute;
+    right: -27px;
+    top: 50%;
+    width: 22px;
+    height: 3px;
+    background: var(--ink);
+  }
+  .da-flow > li:last-child::before {
+    content: '';
+    position: absolute;
+    left: -9px;
+    top: 50%;
+    width: 9px;
+    height: 12px;
+    translate: 0 -50%;
+    background: var(--ink);
+    clip-path: polygon(0 0, 34% 0, 34% 25%, 67% 25%, 67% 42%, 100% 42%, 100% 58%, 67% 58%, 67% 75%, 34% 75%, 34% 100%, 0 100%);
+  }
+
+  /* Hero narrator's one loop: a two-frame, one-art-pixel bob (2px at 2x).
+     Stopped by Pause motion here and by reduced motion (end of file). */
+  .johnny-bob { animation: johnny-bob 1.2s steps(1) infinite; }
+  :root[data-motion="paused"] .johnny-bob { animation: none; }
 
   /* Retro OS window: white body, thick ink frame, hard offset shadow, black
      title bar. Kept in the components layer so utilities passed through
@@ -724,14 +740,14 @@
     cursor: not-allowed;
   }
 
-  /* Primary: cobalt with white text (4.64:1); secondary: yellow with ink */
+  /* Primary: cobalt with white text (4.64:1); secondary: paper with ink */
   .btn-primary {
     background-color: var(--blue);
     color: #fff;
   }
 
   .btn-secondary {
-    background-color: var(--yellow);
+    background-color: var(--paper);
     color: var(--ink);
   }
 
@@ -850,13 +866,82 @@
 }
 
 /* Fixed buttons that float over every band (Pause motion, chat launcher):
-   ink ring with a cream gap and halo, so focus reads over orange, teal, navy
-   and cream alike. Unlayered so it wins over utility shadows; a pressed
+   ink ring with a white gap and halo, so focus reads over yellow, blue, black
+   and the page alike. Unlayered so it wins over utility shadows; a pressed
    button sets --float-shadow to none to stay sunk. */
 .focus-ring-float:focus-visible {
   outline: 3px solid var(--ink);
   outline-offset: 3px;
   box-shadow: var(--float-shadow, 4px 4px 0 0 var(--ink)), 0 0 0 9px var(--paper);
+}
+
+/* Chat window (MascotChatWidget): a fixed height that never grows past the
+   viewport. On short viewports (landscape phones, 200-400% zoom) it becomes a
+   full-viewport sheet that scrolls as a whole (WCAG 1.4.4, 1.4.10): title bar
+   and input pinned, the log keeps a readable height, topic keys in one row
+   that scrolls sideways. Unlayered so it wins over the panel's utilities. */
+.chat-panel {
+  height: min(600px, calc(100dvh - 8rem));
+}
+/* One topic set at a time: the keys below the log; the copy inside an
+   unknown-question reply shows only where the keys are hidden (below) */
+.chat-panel .chat-topics {
+  display: none;
+}
+@media (max-height: 500px) {
+  .chat-panel {
+    inset: 0;
+    width: auto;
+    height: auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .chat-panel > .window-bar,
+  .chat-panel > .chat-input {
+    position: sticky;
+    z-index: 20;
+  }
+  .chat-panel > .window-bar { top: 0; }
+  .chat-panel > .chat-input {
+    bottom: 0;
+    background-color: var(--page);
+  }
+  .chat-panel .chat-log-box {
+    flex: none;
+    height: max(8rem, calc(100dvh - 7.5rem));
+  }
+  .chat-panel .chat-keys {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 0.75rem;
+  }
+  .chat-panel .chat-keys > * {
+    flex: none;
+    width: 7rem;
+  }
+}
+/* 400% zoom (about 341x225): the log gets the height. The prompt line, Lil
+   Johnny, the log's title bar and the topic keys step aside; unknown
+   questions offer the topics inside the reply instead. */
+@media (max-height: 420px) {
+  .chat-panel .chat-prompt,
+  .chat-panel .chat-log-bar,
+  .chat-panel .chat-keys {
+    display: none;
+  }
+  .chat-panel .chat-topics {
+    display: flex;
+  }
+  .chat-panel .chat-log-box {
+    margin-top: 0.5rem;
+    height: max(6rem, calc(100dvh - 8rem));
+  }
+}
+/* Phones: drop the 600px cap so the log can use a tall screen */
+@media (max-width: 639px) and (min-height: 501px) {
+  .chat-panel {
+    height: calc(100dvh - 8rem);
+  }
 }
 
 /* Respect user motion preferences */
@@ -869,8 +954,9 @@
     transition-duration: 0.01ms !important;
   }
 
-  /* Marquee strips stay completely still */
-  .ribbon-track {
+  /* Marquee strips and the narrator stay completely still */
+  .ribbon-track,
+  .johnny-bob {
     animation: none !important;
   }
 }

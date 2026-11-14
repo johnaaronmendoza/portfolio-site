@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import PixelArt, { type PixelArtName } from './PixelArt';
-import SoundToggle, { FLOAT_DOCK } from './SoundToggle';
+import SoundToggle, { DOCK_WORD, DockGlyph, FLOAT_DOCK, dockButton } from './SoundToggle';
+import ShortcutHint from './ShortcutHint';
 import { WindowBar } from './Window';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useModalFocus } from '@/hooks/useModalFocus';
@@ -10,7 +11,7 @@ import { getLenis } from '@/hooks/useLenis';
 import { motionTokens } from '@/lib/motion-tokens';
 import { scrollToSection } from '@/lib/utils';
 
-const SECTIONS: { id: string; label: string; icon: PixelArtName }[] = [
+export const SECTIONS: { id: string; label: string; icon: PixelArtName }[] = [
   { id: 'hero',       label: 'Top',        icon: 'icon-home' },
   { id: 'about',      label: 'About',      icon: 'icon-about' },
   { id: 'experience', label: 'Experience', icon: 'icon-experience' },
@@ -29,6 +30,7 @@ const MENU_ID = 'section-menu';
  */
 function SectionMenu({ active }: { active: string }) {
   const [open, setOpen] = useState(false);
+  const label = SECTIONS.find(s => s.id === active)?.label;
   const reduced = useReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstRef = useRef<HTMLButtonElement>(null);
@@ -78,14 +80,16 @@ function SectionMenu({ active }: { active: string }) {
             aria-modal="true"
             aria-label="Sections"
             tabIndex={-1}
-            className="window fixed bottom-20 left-4 z-[70] w-[min(20rem,calc(100vw-2rem))]"
+            // Never taller than the viewport: the list scrolls inside, and on short
+            // screens (or zoomed in) it drops to the bottom edge, over the button
+            className="window fixed bottom-20 left-4 z-[70] flex w-[min(20rem,calc(100vw-2rem))] max-h-[calc(100dvh-6rem)] flex-col [@media(max-height:500px)]:bottom-2 [@media(max-height:500px)]:max-h-[calc(100dvh-1rem)]"
             initial={{ opacity: 0, y: motionTokens.distance.sm }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: motionTokens.distance.sm }}
             transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
           >
             <WindowBar title="menu.exe" onClose={() => setOpen(false)} closeLabel="Close menu" />
-            <ul className="window-body p-2">
+            <ul className="window-body min-h-0 overflow-y-auto p-2" data-lenis-prevent>
               {SECTIONS.map(({ id, label, icon }, i) => (
                 <li key={id}>
                   <button
@@ -94,7 +98,7 @@ function SectionMenu({ active }: { active: string }) {
                     onClick={() => go(id)}
                     aria-current={active === id ? 'location' : undefined}
                     className={`flex w-full min-h-[44px] items-center gap-3 px-3 font-sans text-base font-bold text-left transition-colors duration-150 hover:bg-[var(--blue)] hover:text-black ${
-                      active === id ? 'bg-[var(--yellow)] text-black' : 'text-[color:var(--text)]'
+                      active === id ? 'bg-[var(--bar)] text-[color:var(--paper)]' : 'text-[color:var(--text)]'
                     }`}
                   >
                     <PixelArt name={icon} size={16} />
@@ -103,6 +107,7 @@ function SectionMenu({ active }: { active: string }) {
                 </li>
               ))}
             </ul>
+            <ShortcutHint className="window-body flex-shrink-0 border-t-[3px] border-black px-3 py-2" />
           </motion.div>
         </>
       )}
@@ -117,10 +122,14 @@ function SectionMenu({ active }: { active: string }) {
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={MENU_ID}
-        className="btn focus-ring-float lg:hidden min-w-[44px] px-3 text-black bg-[var(--paper)]"
+        className={`${dockButton(false)} lg:hidden`}
       >
-        <span aria-hidden="true">☰</span>
-        Menu
+        <DockGlyph name="menu" />
+        {/* Says where the visitor is: "Menu" at the top, then the current section.
+            Glyph only when the screen is very short (400% zoom) */}
+        <span className="whitespace-nowrap [@media(max-height:420px)]:sr-only">
+          {active === 'hero' ? 'Menu' : <><span className="sr-only">Menu: </span>{label}</>}
+        </span>
       </button>
       {/* Portalled out of the floating row so it stacks above the chat launcher */}
       {createPortal(overlay, document.body)}
@@ -154,42 +163,56 @@ export default function SectionNav() {
     try { localStorage.setItem(MOTION_KEY, String(next)); } catch { /* storage blocked: still works this visit */ }
   };
 
+  // Current section: the last one whose top has passed the viewport's middle
+  // (works for sections taller than the screen), or Contact at the very end
   useEffect(() => {
-    const observers = SECTIONS.map(({ id }) => {
-      const el = document.getElementById(id);
-      if (!el) return null;
-      const io = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActive(id); },
-        { threshold: 0.4 }
-      );
-      io.observe(el);
-      return io;
-    });
-    return () => observers.forEach(io => io?.disconnect());
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const doc = document.documentElement;
+      let current = SECTIONS[0].id;
+      for (const { id } of SECTIONS) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= innerHeight / 2) current = id;
+      }
+      if (innerHeight + doc.scrollTop >= doc.scrollHeight - 2) current = 'footer';
+      setActive(current);
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
   }, []);
 
   return (
     <>
-    {/* Bottom-left at every width; the chat launcher owns bottom-right. The focus
-        ring is ink with a cream halo so it reads over every band it floats above.
-        Paused = orange and pressed into its shadow, so the state shows at a glance */}
+    {/* Bottom-left at every width; the chat launcher owns bottom-right. The
+        focus ring is ink with a white halo so it reads over every band it
+        floats above. Paused = ▶ "Paused", ink and pressed into its shadow.
+        Always visible (WCAG 2.2.2): glyph only on very short screens */}
     <div className={FLOAT_DOCK}>
       <SectionMenu active={active} />
       <button
         type="button"
         onClick={toggleMotion}
         aria-pressed={motionPaused}
-        className={`btn focus-ring-float motion-reduce:hidden min-w-[44px] px-3 text-black ${
-          motionPaused ? 'bg-[var(--yellow)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)]'
-        }`}
+        title="Pause motion"
+        className={`${dockButton(motionPaused)} motion-reduce:hidden`}
       >
-        <span aria-hidden="true">❚❚</span>
-        <span className="sr-only sm:not-sr-only">Pause motion</span>
+        <DockGlyph name={motionPaused ? 'play' : 'pause'} />
+        <span className="sr-only">Pause motion</span>
+        {/* As wide as "Paused", so the dock doesn't shift on toggle */}
+        <span aria-hidden="true" className={`${DOCK_WORD} min-w-[6ch] text-center`}>{motionPaused ? 'Paused' : 'Pause'}</span>
       </button>
       <SoundToggle />
     </div>
     {/* Section dots (large screens): 44px targets around 12px dots. Inactive
-        dots are cream outlines, the current section is filled orange. */}
+        dots are white, the current section is filled ink. */}
     <nav aria-label="Sections" className="fixed right-2 top-1/2 -translate-y-1/2 z-40 hidden lg:block">
       <ul className="flex flex-col">
         {SECTIONS.map(({ id, label }) => (
@@ -211,11 +234,11 @@ export default function SectionNav() {
               </span>
               <span
                 aria-hidden="true"
-                // Ink ring keeps the dot visible where it crosses the teal band
+                // Ink ring keeps the dot visible where it crosses the blue band
                 className={`block w-3 h-3 border-2 shadow-[0_0_0_2px_var(--ink)] transition-colors duration-150 ${
                   active === id
-                    ? 'bg-[var(--yellow)] border-[color:var(--yellow)]'
-                    : 'border-black bg-[var(--paper)] group-hover:bg-[var(--yellow)]'
+                    ? 'bg-[var(--bar)] border-black'
+                    : 'border-black bg-[var(--paper)] group-hover:bg-[var(--blue)]'
                 }`}
               />
             </button>

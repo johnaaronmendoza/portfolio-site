@@ -4,7 +4,6 @@ export type PixelArtName =
   | 'chip-team'
   | 'chip-phone'
   | 'bullet'
-  | 'crt-computer'
   | 'starburst'
   | 'sparkle'
   | 'smiley'

@@ -68,7 +68,11 @@ const BOARD_SHADOW = 0.2;     // the board's own hard shadow offset
 const TEX = 256;              // legend canvas width (spans the cap's full width on the front)
 const TOP_TEX_H = Math.round((TEX * TOP_D) / TOP_W);
 const FRONT_TEX_H = 128;
-const FOCUS = '#2347D6';      // focus outline: blue-text, 3:1+ on the page and keys
+// Keyboard focus, two-tone so one tone always reaches 3:1: an ink frame (on the
+// yellow, blue and white caps) inside a white one (on the black caps, the blue
+// caps and the dark board), plus a white outline around the cap
+const FOCUS_INK = '#000000';
+const FOCUS_LIGHT = '#FFFFFF';
 const FONT = '"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace';
 
 const fontAt = (px: number) => `700 ${px}px ${FONT}`;
@@ -153,19 +157,24 @@ function plateGeometry(w: number, d: number, r: number) {
   return new THREE.ShapeGeometry(shape, 4).rotateX(Math.PI / 2);
 }
 
-/** Orange frame laid over the focused key's top face (keyboard focus). */
+/** Ink-and-white frame laid over the focused key's top face (keyboard focus). */
 function focusFrameTexture() {
   const cv = document.createElement('canvas');
   cv.width = TEX;
   cv.height = TOP_TEX_H;
   const ctx = cv.getContext('2d');
   if (ctx) {
-    const lw = TEX * 0.09;
-    ctx.beginPath();
-    ctx.roundRect(lw / 2, lw / 2, TEX - lw, TOP_TEX_H - lw, TEX * 0.13);
-    ctx.lineWidth = lw;
-    ctx.strokeStyle = FOCUS;
-    ctx.stroke();
+    const lw = TEX * 0.05; // each tone; clear of the key number
+    const radius = TEX * 0.13;
+    // Outer ink stroke, then a white stroke just inside it
+    [FOCUS_INK, FOCUS_LIGHT].forEach((colour, n) => {
+      const inset = lw * n + lw / 2;
+      ctx.beginPath();
+      ctx.roundRect(inset, inset, TEX - 2 * inset, TOP_TEX_H - 2 * inset, Math.max(0, radius - lw * n));
+      ctx.lineWidth = lw;
+      ctx.strokeStyle = colour;
+      ctx.stroke();
+    });
   }
   const t = new THREE.CanvasTexture(cv);
   t.colorSpace = THREE.SRGBColorSpace;
@@ -248,10 +257,18 @@ async function loadIcon(url: string) {
   }
 }
 
-// Icons load once per page; a missing file leaves the number and label only.
+// Icons and the legend font load once per page, before any legend is drawn (a
+// canvas draws with whatever font is ready). A missing icon leaves the number
+// and label only; a font that fails or takes over 2s falls back to the stack.
 let iconsPromise: Promise<(HTMLImageElement | null)[]> | null = null;
 function loadIcons() {
-  iconsPromise ??= Promise.all(KEYS.map(k => loadIcon(iconUrl(k))));
+  iconsPromise ??= Promise.all([
+    Promise.all(KEYS.map(k => loadIcon(iconUrl(k)))),
+    Promise.race([
+      document.fonts.load('700 16px "IBM Plex Mono"'),
+      new Promise(resolve => setTimeout(resolve, 2000)),
+    ]).catch(() => null),
+  ]).then(([icons]) => icons);
   return iconsPromise;
 }
 
@@ -370,7 +387,7 @@ function Scene({ cols, icons, wrap, play, focused, open, pulse, filter, entrance
       inkMat: new THREE.MeshBasicMaterial({ color: '#000000', side: THREE.BackSide }),
       // Hard shadows: flat ink, drawn just above the surface they fall on
       shadowMat: new THREE.MeshBasicMaterial({ color: '#000000', polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
-      focusMat: new THREE.MeshBasicMaterial({ color: FOCUS, side: THREE.BackSide, toneMapped: false }),
+      focusMat: new THREE.MeshBasicMaterial({ color: FOCUS_LIGHT, side: THREE.BackSide, toneMapped: false }),
       frameMat: new THREE.MeshBasicMaterial({ map: focusFrameTexture(), transparent: true, depthWrite: false, toneMapped: false }),
       boardMat: new THREE.MeshStandardMaterial({ color: '#17171D', roughness: 0.55, metalness: 0.2 }),
     };
@@ -670,7 +687,7 @@ function Scene({ cols, icons, wrap, play, focused, open, pulse, filter, entrance
                     <mesh geometry={res.sides} material={res.sideMats[m]} raycast={noHit} />
                     <mesh geometry={res.front} material={res.frontMats[m]} raycast={noHit} />
                     <mesh geometry={res.top} material={res.topMats[m]} position={[0, h + 0.002, TOP_Z]} raycast={noHit} />
-                    {/* Keyboard focus: orange outline and an orange frame on the top face */}
+                    {/* Keyboard focus: white outline, and an ink-and-white frame on the top face */}
                     <mesh geometry={res.shell} material={i === focused ? res.focusMat : res.inkMat} scale={[OUTLINE, 1.05, OUTLINE]} {...pointer(i)} />
                     {i === focused && <mesh geometry={res.top} material={res.frameMat} position={[0, h + 0.004, TOP_Z]} raycast={noHit} />}
                   </group>

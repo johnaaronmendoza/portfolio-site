@@ -9,8 +9,8 @@ interface WindowBarProps {
 }
 
 /**
- * Violet title bar. Without onClose the ○ □ ✕ controls are decoration;
- * with it (overlays, MASTER 2.10) the ✕ is a real button with a cream ring.
+ * Black title bar. Without onClose the ○ □ ✕ controls are decoration;
+ * with it (overlays, MASTER 2.10) the ✕ is a real button with a white ring.
  */
 export function WindowBar({ title, onClose, closeLabel }: WindowBarProps) {
   return (
@@ -43,8 +43,8 @@ interface WindowProps {
 }
 
 /**
- * Retro OS window: violet title bar with decorative ○ □ ✕ controls over a
- * cream body. Base styles live in index.css (.window, .window-bar,
+ * Retro OS window: black title bar with decorative ○ □ ✕ controls over a
+ * white body. Base styles live in index.css (.window, .window-bar,
  * .window-body) so utilities passed in here override them.
  */
 export default function Window({ title, children, className = '', bodyClassName = '' }: WindowProps) {

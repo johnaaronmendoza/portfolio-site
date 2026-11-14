@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import FramerReveal from './FramerReveal';
 import { Chip, PixelList } from './Hierarchy';
 import SectionHeading from './SectionHeading';
@@ -12,16 +13,21 @@ type Entry = {
   /** ≤ 3 bullets, outcome or number first; `**…**` marks the key term */
   highlights: string[];
   badges: Badge[];
+  /** Shown after a highlight's text, keyed by the highlight */
+  extras?: Record<string, ReactNode>;
 };
 
-// Black text on orange or teal (approved pairings); sentence case
+// Status badges (index.css .badge): ink with paper text, dashed paper for
+// unfinished work, plain paper; never yellow (yellow marks AI). Sentence case.
 type Badge = 'Internship' | 'In progress' | 'Education';
 
-const BADGE_FILL: Record<Badge, string> = {
-  Internship: 'bg-[var(--yellow)]',
-  'In progress': 'bg-[var(--blue)]',
-  Education: 'bg-[var(--blue)]',
+const BADGE_CLASS: Record<Badge, string> = {
+  Internship: 'badge badge--ink',
+  'In progress': 'badge badge--status',
+  Education: 'badge badge--paper',
 };
+
+const DESK_ASSIST = "Building Desk Assist: an AI Chrome extension that drafts ticket replies for agent review.";
 
 const ENTRIES: Entry[] = [
   {
@@ -29,13 +35,24 @@ const ENTRIES: Entry[] = [
     file: "lga_telecom.exe",
     role: "Service Desk Operations & AI Integration Intern",
     period: "Aug 2026 – Present",
-    // Desk Assist is in progress (CLAUDE.md honesty rule); AI work first
-    badges: ["Internship", "In progress"],
+    badges: ["Internship"],
     highlights: [
-      "Building Desk Assist: an AI Chrome extension that drafts ticket replies for agent review.",
+      DESK_ASSIST,
       "**1,000+ network configurations** migrated while leading the FreeSDN integration across 4+ manufacturers.",
       "**40%** fewer manual agent actions, 15 minutes faster incident resolution, via Freshservice automation.",
     ],
+    // Desk Assist is in progress (CLAUDE.md honesty rule): the badge sits on its
+    // bullet, with its security model in the resume's words under it
+    extras: {
+      [DESK_ASSIST]: (
+        <>
+          {' '}<span className={`${BADGE_CLASS['In progress']} align-middle`}>In progress</span>
+          <span className="mt-2 block text-[15px]">
+            Security model: least-privilege permissions, no remotely hosted code, AI calls through a company-controlled backend.
+          </span>
+        </>
+      ),
+    },
   },
   {
     org: "Sembcorp Solar Singapore",
@@ -74,7 +91,7 @@ export default function Experience() {
               <Window key={entry.org} title={entry.file} bodyClassName="p-6 sm:p-10 lg:p-12">
                 <div className="flex flex-wrap items-center gap-2 mb-4">
                   {entry.badges.map(badge => (
-                    <span key={badge} className={`font-label text-xs text-black border-2 border-black px-2 py-1 ${BADGE_FILL[badge]}`}>
+                    <span key={badge} className={BADGE_CLASS[badge]}>
                       {badge}
                     </span>
                   ))}
@@ -93,7 +110,7 @@ export default function Experience() {
                   <Chip icon="chip-calendar" text={entry.period} className="flex-shrink-0 self-start whitespace-nowrap" />
                 </div>
 
-                <PixelList items={entry.highlights} />
+                <PixelList items={entry.highlights} extras={entry.extras} />
               </Window>
             ))}
           </div>

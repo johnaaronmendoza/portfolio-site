@@ -65,7 +65,7 @@ const GH_ROWS = [
 ];
 
 // Both icons draw in currentColor so they take the text colour of the button
-// or link they sit in (cream on navy, cream on violet, navy on hover).
+// or link they sit in (white on the black footer, ink on the page).
 const SVG_STYLE = { imageRendering: 'pixelated', display: 'block', flexShrink: 0 } as const;
 
 export function PixelLinkedIn({ size = 40 }: { size?: number }) {

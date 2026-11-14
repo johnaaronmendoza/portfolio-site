@@ -9,7 +9,7 @@ One still per case-study project, shown on the Home tiles and the "Next project"
 | SilverLink SG | `silverlink_p21_img0.png` | Event page with sessions and the Cancel booking control |
 | SCS Awareness Platform | `scs_p71_img1.png` | Panel Builder: the staff story editor |
 | AI Finance Insights Engine | none (no confirmed screenshot) | The pipeline from the case study: 5 sources, 2 quality gates, SQLite warehouse, NLP brief |
-| UWB Indoor Localization | `da_p40_img1.png` (right half) | SVM-RBF confusion matrix |
+| UWB Indoor Localization | `../uwb-charts/tile-matrix-svm.svg` (redrawn from the page's alt-text figures; was a crop of `da_p40_img1.png`) | SVM-RBF confusion matrix in Paper & Ink |
 | UAT Testing Dashboard | `uat_dashboard_full.png` | Executive dashboard KPI cards |
 | Fire Safety Drill Companion | `firesafety_p29_img5.png` (top two phones) | AR Drill: arrows to the exit, and the status walkthrough |
 
@@ -18,9 +18,12 @@ The AI Finance tile used to show `aifinance_dashboard.jpg`, an unconfirmed (and 
 Rebuild (from the repo root):
 
 ```bash
+python3 design-system/portfolio/asset-work/uwb-charts/build.py   # writes the UWB tile SVG first
 python3 design-system/portfolio/asset-work/tiles/build.py
 D=design-system/portfolio/asset-work/tiles
 for s in silverlink scs uwb uat firesafety; do node .claude/skills/asset-toolkit/scripts/html2png.mjs $D/$s.html --out $D/renders --name $s --size 1200x660; done
 node .claude/skills/asset-toolkit/scripts/html2png.mjs $D/ai-finance.html --out $D/renders --name ai-finance --size 1200x660 --require-font "Press Start 2P"
-# then save each render as attached_assets/tile_<slug>.webp (quality 82)
+# then save each render as attached_assets/tile_<slug>.webp (Pillow: quality=82, method=6)
 ```
+
+Grounds: page `#EFEAE0` for SilverLink and UAT (not AI; yellow means AI only, John 13 Nov 2026), yellow for AI Finance, blue for SCS and Fire Safety. UWB moved to the page colour on 14 Nov 2026 (its card is a white chart with blue cells; on blue the cells would disappear).

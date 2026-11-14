@@ -38,21 +38,25 @@ export type Project = {
   /** Short facts shown as a list under the description */
   facts: string[];
   year: string;
+  /** Team or course context after the year on the tile ("2025 · team of 6");
+   *  facts already on the case pages and resume */
+  caption: string;
   image: string | null;
-  /** Intrinsic size of `image`, so the box is reserved before it loads */
-  imageWidth: number;
-  imageHeight: number;
   tags: string[];
   link: string;
   externalUrl?: string;
   preloadImages: string[];
-  /** Grid width in the tile grid (sm: 2 cols, lg: 6 cols) */
+  /** Grid width in the tile grid (sm: 2 cols, lg: 6 cols, xl: 12 cols) */
   span: string;
   /** Lead tile: taller image, bigger title, always in colour */
   featured?: boolean;
   /** Comic sound-effect sticker on the tile image; true to what the project does, featured tiles only */
   sfx?: string;
 };
+
+// The three featured tiles share a row from lg (3 x 2 of 6, then 3 x 4 of 12);
+// the other four sit two to a row at lg and four to a row from xl
+const FEATURED_SPAN = 'lg:col-span-2 xl:col-span-4';
 
 export const PROJECTS: Project[] = [
   {
@@ -61,14 +65,13 @@ export const PROJECTS: Project[] = [
     slug: 'silverlink',
     description:
       "Connects seniors and youth through skill-sharing and live events, built to block double-bookings.",
-    facts: ["8-node cluster", "4 services", "6-person team"],
+    facts: ["8-node cluster", "4 services"],
     year: "2025",
+    caption: "team of 6",
     image: silverLinkImg,
-    imageWidth: 1200,
-    imageHeight: 660,
     tags: ["React", "gRPC", "K8s", "PostgreSQL"],
     link: "/projects/silverlink",
-    span: 'lg:col-span-3',
+    span: FEATURED_SPAN,
     preloadImages: [silverLink2, silverLink3],
     featured: true,
     sfx: 'Booked!',
@@ -79,33 +82,16 @@ export const PROJECTS: Project[] = [
     slug: 'scs',
     description:
       "Teaches cancer awareness through a branching story at Singapore Cancer Society booths.",
-    facts: ["4 languages", "4 question types", "4-person team"],
+    facts: ["4 languages", "4 question types"],
     year: "2025",
+    caption: "team of 4",
     image: scsImg,
-    imageWidth: 1200,
-    imageHeight: 660,
     tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
     link: "/projects/scs",
-    span: 'lg:col-span-3',
+    span: FEATURED_SPAN,
     preloadImages: [scs2, scs3],
     featured: true,
-    sfx: 'Plot twist!',
-  },
-  {
-    num: 3,
-    name: "AI Finance Insights Engine",
-    slug: 'ai-finance',
-    description:
-      "Pulls market data into one Power BI-ready warehouse; NLP flags supply-chain risk.",
-    facts: ["5 data sources", "star schema", "100% Pytest coverage"],
-    year: "2024",
-    image: aiFinanceImg,
-    imageWidth: 1200,
-    imageHeight: 660,
-    tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
-    link: "/projects/ai-finance",
-    span: 'lg:col-span-2',
-    preloadImages: [],
+    sfx: 'Your move!',
   },
   {
     num: 4,
@@ -115,28 +101,43 @@ export const PROJECTS: Project[] = [
       "Tells clear UWB signals from blocked (NLOS) ones with an SVM-RBF model.",
     facts: ["89.61% accuracy", "0.9612 AUC", "41,996 samples"],
     year: "2025",
+    caption: "team coursework",
     image: uwbImg,
-    imageWidth: 1200,
-    imageHeight: 660,
     tags: ["Python", "SVM", "PCA", "scikit-learn"],
     link: "/projects/uwb",
-    span: 'lg:col-span-2',
+    // Wide at sm so the 2-column grid has no orphan
+    span: `sm:col-span-2 ${FEATURED_SPAN}`,
     preloadImages: [uwb2, uwb3],
+    featured: true,
+  },
+  {
+    num: 3,
+    name: "AI Finance Insights Engine",
+    slug: 'ai-finance',
+    description:
+      "Pulls market data into one Power BI-ready warehouse; NLP flags supply-chain risk.",
+    facts: ["5 data sources", "star schema", "100% Pytest coverage"],
+    year: "2024",
+    caption: "data pipeline",
+    image: aiFinanceImg,
+    tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
+    link: "/projects/ai-finance",
+    span: 'lg:col-span-3',
+    preloadImages: [],
   },
   {
     num: 5,
     name: "UAT Testing Dashboard",
     slug: 'uat',
     description:
-      "Course project: links each failed test to its defect to show what blocks go-live.",
+      "Links each failed test to its defect to show what blocks go-live.",
     facts: ["25 sample defects", "8 modules", "4 roles"],
     year: "2024",
+    caption: "coursework",
     image: uatImg,
-    imageWidth: 1200,
-    imageHeight: 660,
     tags: ["React 18", "Node.js", "Express", "SQLite"],
     link: "/projects/uat",
-    span: 'lg:col-span-2',
+    span: 'lg:col-span-3',
     preloadImages: [],
   },
   {
@@ -147,9 +148,8 @@ export const PROJECTS: Project[] = [
       "Lets HDB residents rehearse fire evacuation in their own block with AR arrows.",
     facts: ["SUS 79/100", "~80% test coverage", "drill works offline"],
     year: "2025",
+    caption: "team coursework",
     image: fireSafetyImg,
-    imageWidth: 1200,
-    imageHeight: 660,
     tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
     link: "/projects/firesafety",
     span: 'lg:col-span-3',
@@ -162,12 +162,11 @@ export const PROJECTS: Project[] = [
       "Helped pitch a Singapore hydroponic urban farm to an industry investor panel.",
     facts: ["SGD 10,000 NYP JumpStart Grant"],
     year: "2022",
+    caption: "team pitch",
     image: greenloopImg,
-    imageWidth: 1200,
-    imageHeight: 800,
     tags: ["NYP JumpStart", "Urban Farming"],
     link: "external",
-    span: 'sm:col-span-2 lg:col-span-3',
+    span: 'lg:col-span-3',
     externalUrl: "https://greenloopfarms.com/",
     preloadImages: [greenloop2],
   },

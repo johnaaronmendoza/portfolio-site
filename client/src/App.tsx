@@ -20,6 +20,7 @@ const FireSafetyProject = lazy(() => import("./pages/FireSafetyProject"));
 const UWBProject = lazy(() => import("./pages/UWBProject"));
 const UATProject = lazy(() => import("./pages/UATProject"));
 const AIFinanceProject = lazy(() => import("./pages/AIFinanceProject"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 /**
  * On route change: browser Back to Home restores the saved scroll; a link to
@@ -83,8 +84,8 @@ function Router() {
         <Route path={"/projects/uwb"} component={UWBProject} />
         <Route path={"/projects/uat"} component={UATProject} />
         <Route path={"/projects/ai-finance"} component={AIFinanceProject} />
-        {/* Final fallback route */}
-        <Route component={Home} />
+        {/* Any other address */}
+        <Route component={NotFound} />
       </Switch>
     </Suspense>
   );
@@ -99,9 +100,10 @@ function AppInner() {
       <CommandPalette />
       <KeyboardShortcuts />
       {/* Achievement toasts: bottom-left, stacked just above the floating
-          controls (44px buttons 16px / 24px from the edge), clear of the
-          taskbar, breadcrumb and section navigation */}
-      <Toaster position="bottom-left" offset={{ bottom: 84, left: 24 }} mobileOffset={{ bottom: 72, left: 16 }} />
+          controls (a row of 44px buttons 16px from the edge on phones, a
+          column of two from lg), clear of the taskbar, breadcrumb and
+          section navigation */}
+      <Toaster position="bottom-left" offset={{ bottom: 132, left: 24 }} mobileOffset={{ bottom: 72, left: 16 }} />
       <KonamiOverlay />
       <SecretTerminal />
       <Router />

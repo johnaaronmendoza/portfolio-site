@@ -1,12 +1,13 @@
 /**
- * Footer: violet band in three columns, like a retro site footer. Contact CTA
- * with the email button, places to find me, and the SGT clock + terminal hint.
- * Cream text on violet only.
+ * Footer: black band in three columns, like a retro site footer. Contact CTA
+ * with the email button, places to find me, and the SGT clock, terminal and
+ * keyboard hints. White text on black only.
  */
 
 import { useState, useEffect } from 'react';
 import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 import PixelArt from '@/components/PixelArt';
+import ShortcutHint from '@/components/ShortcutHint';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { scrollToSection } from '@/lib/utils';
 
@@ -112,6 +113,7 @@ export default function Footer() {
               {'>'} sudo hire-me
             </button>
           </p>
+          <ShortcutHint />
           <p className="font-sans text-sm">
             © {currentYear} John Aaron Mendoza Branzuela
           </p>

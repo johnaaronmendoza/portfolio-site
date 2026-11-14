@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import PixelArt from '@/components/PixelArt';
 import SectionHeading from '@/components/SectionHeading';
 import SkipLink from '@/components/SkipLink';
-import SoundToggle, { FLOAT_DOCK } from '@/components/SoundToggle';
+import SoundToggle from '@/components/SoundToggle';
 import { ProjectTile } from '@/components/Projects';
 import { getCase, getNextCase, type CaseSlug } from '@/data/projects';
 import { trackProjectVisit } from '@/hooks/useAchievements';
@@ -13,27 +13,30 @@ import { play } from '@/hooks/useSound';
 const HOME_TITLE = 'John Aaron Mendoza Branzuela | Computing Science Portfolio';
 const GUTTERS = 'px-4 sm:px-8 lg:px-16';
 
-/** Sticky violet bar with the one way back to the Projects grid */
+/** Sticky black bar with the one way back to the Projects grid, and Sound
+ *  (in the bar, so no floating button sits over the page's figures) */
 function CaseTaskbar() {
   return (
     <header className={`sticky top-0 z-30 bg-[var(--bar)] border-b-[3px] border-black ${GUTTERS} [--focus:var(--paper)]`}>
-      <div className="max-w-5xl mx-auto h-14 flex items-center">
-        <Link href="/#projects" replace onClick={() => play('back')} className="btn btn-ghost text-[color:var(--paper)] border-[color:var(--paper)] hover:text-[color:var(--text)]">
+      <div className="max-w-5xl mx-auto h-14 flex items-center justify-between gap-3">
+        <Link href="/#projects" replace onClick={() => play('back')} className="btn btn-ghost max-sm:px-3 text-[color:var(--paper)] border-[color:var(--paper)] hover:text-[color:var(--text)]">
           <span aria-hidden="true">←</span>
           <PixelArt name="icon-projects" size={16} />
           All projects
         </Link>
+        <SoundToggle variant="bar" />
       </div>
     </header>
   );
 }
 
-const CRUMB_LINK = 'inline-flex min-h-[44px] items-center underline decoration-2 underline-offset-4';
+// Links in blue-text (5.95:1 on the page); 44px tap targets, even for "Home"
+const CRUMB_LINK = 'inline-flex min-h-[44px] min-w-[44px] items-center text-[color:var(--blue-text)] underline decoration-2 underline-offset-4';
 
 function Breadcrumb({ current }: { current: string }) {
   return (
     <nav aria-label="Breadcrumb" className="mt-6 mb-4">
-      <ol className="flex flex-wrap items-center gap-x-2 font-sans text-[15px] sm:text-base text-[color:var(--paper)]">
+      <ol className="flex flex-wrap items-center gap-x-2 font-sans text-[15px] sm:text-base text-[color:var(--text)]">
         <li className="flex items-center gap-x-2">
           <Link href="/" className={CRUMB_LINK}>Home</Link>
           <span aria-hidden="true">/</span>
@@ -50,7 +53,7 @@ function Breadcrumb({ current }: { current: string }) {
   );
 }
 
-/** Teal band: the next case in Home tile order, and the way back to all projects */
+/** Blue band: the next case in Home tile order, and the way back to all projects */
 function NextProject({ slug }: { slug: CaseSlug }) {
   const next = getNextCase(slug);
   return (
@@ -100,7 +103,8 @@ export default function CaseLayout({ slug, children }: CaseLayoutProps) {
 
   return (
     <div className="min-h-screen text-[color:var(--text)]">
-      <SkipLink />
+      {/* Shows over the black taskbar: white focus ring there (an ink ring would be 1.1:1) */}
+      <SkipLink className="[--focus:var(--paper)]" />
       <CaseTaskbar />
       <main id="main" tabIndex={-1}>
         <div className={`${GUTTERS} pb-16 lg:pb-20`}>
@@ -112,9 +116,6 @@ export default function CaseLayout({ slug, children }: CaseLayoutProps) {
         <NextProject slug={slug} />
       </main>
       <Footer />
-      <div className={FLOAT_DOCK}>
-        <SoundToggle />
-      </div>
     </div>
   );
 }

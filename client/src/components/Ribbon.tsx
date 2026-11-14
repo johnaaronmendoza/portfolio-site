@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import PixelArt from './PixelArt';
 
-type RibbonTone = 'orange' | 'teal';
+type RibbonTone = 'ink' | 'blue';
 
 interface RibbonProps {
   /** Phrases on the strip; each is followed by a sparkle separator */
@@ -11,10 +11,10 @@ interface RibbonProps {
   className?: string;
 }
 
-// Approved pairings: black on orange or teal
+// Approved pairings: paper on ink (18.9:1), black on blue
 const TONES: Record<RibbonTone, string> = {
-  orange: 'bg-[var(--yellow)] text-black',
-  teal: 'bg-[var(--blue)] text-black',
+  ink: 'bg-[var(--bar)] text-[color:var(--paper)]',
+  blue: 'bg-[var(--blue)] text-black',
 };
 
 // Lower-bound glyph advance: IBM Plex Mono is 0.6em wide (8.4px at text-sm,
@@ -30,7 +30,7 @@ const SPEED_PX_PER_S = 60; // same scroll speed whatever the text length
  */
 export default function Ribbon({
   items,
-  tone = 'orange',
+  tone = 'ink',
   reverse = false,
   className = '',
 }: RibbonProps) {

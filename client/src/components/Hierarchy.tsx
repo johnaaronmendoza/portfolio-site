@@ -26,7 +26,7 @@ const FIGURE = /^\d/;
 
 /**
  * Renders marked words as key terms, up to `max`; later marks render as plain
- * text. Figures get the solid block (ink on blue or paper), other terms are
+ * text. Figures get the solid block (white on blue, ink on paper; John, 14 Nov), other terms are
  * bold only, so the fill always means "a number". Odd runs of a split on "**"
  * are the marked words; unbalanced markers fall back to plain text.
  */
@@ -43,7 +43,7 @@ export function KeyText({ text, max = 1, surface = 'blue' }: KeyTextProps) {
         return (
           <strong
             key={i}
-            className={`font-bold text-black ${FIGURE.test(run) ? `px-[0.25em] py-[0.05em] box-decoration-clone ${KEY_FILL[surface]}` : ''}`}
+            className={`font-bold ${FIGURE.test(run) && surface === 'blue' ? 'text-white' : 'text-black'} ${FIGURE.test(run) ? `px-[0.25em] py-[0.05em] box-decoration-clone ${KEY_FILL[surface]}` : ''}`}
           >
             {run}
           </strong>

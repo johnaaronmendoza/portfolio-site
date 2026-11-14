@@ -10,10 +10,8 @@ technology John has worked with. Their use does not imply endorsement.
 | --- | --- | --- | --- |
 | python.svg | Python logo | simple-icons 16.36.0 (`python`) | CC0 1.0 (icon data); trademark of the Python Software Foundation |
 | pandas.svg | pandas logo | simple-icons 16.36.0 (`pandas`) | CC0 1.0; trademark of its owner |
-| sklrn.svg | scikit-learn logo | simple-icons 16.36.0 (`scikitlearn`) | CC0 1.0; trademark of its owner |
 | numpy.svg | NumPy logo | simple-icons 16.36.0 (`numpy`) | CC0 1.0; trademark of its owner |
 | node.svg | Node.js logo | simple-icons 16.36.0 (`nodedotjs`) | CC0 1.0; trademark of the OpenJS Foundation |
-| grpc.svg | gRPC logo (wordmark) | devicon 2.16.0 (`grpc/grpc-plain`) | MIT (devicon); trademark of The Linux Foundation |
 | pgsql.svg | PostgreSQL logo | simple-icons 16.36.0 (`postgresql`) | CC0 1.0; trademark of the PostgreSQL Community Association of Canada |
 | supa.svg | Supabase logo | simple-icons 16.36.0 (`supabase`) | CC0 1.0; trademark of Supabase Inc. |
 | docker.svg | Docker logo | simple-icons 16.36.0 (`docker`) | CC0 1.0; trademark of Docker, Inc. |
@@ -24,6 +22,8 @@ technology John has worked with. Their use does not imply endorsement.
 | next.svg | Next.js logo | simple-icons 16.36.0 (`nextdotjs`) | CC0 1.0; trademark of Vercel Inc. |
 | twind.svg | Tailwind CSS logo | simple-icons 16.36.0 (`tailwindcss`) | CC0 1.0; trademark of Tailwind Labs Inc. |
 | kotlin.svg | Kotlin logo | simple-icons 16.36.0 (`kotlin`) | CC0 1.0; trademark of its owner (Kotlin Foundation / JetBrains) |
+| sklrn.svg | Scatter plot of two classes split by a decision line (replaced the scikit-learn wordmark, which was unreadable on a keycap) | original pixel glyph | MIT (this repo) |
+| grpc.svg | Two service boxes, a call one way and the reply back (replaced the gRPC wordmark, which was unreadable on a keycap) | original pixel glyph | MIT (this repo) |
 | sql.svg | Database cylinder (SQL is a language, not a brand) | original pixel glyph | MIT (this repo) |
 | arcore.svg | Cube in AR corner brackets (no ARCore mark in simple-icons or devicon) | original pixel glyph | MIT (this repo) |
 | prompt.svg | Terminal prompt `>_` | original pixel glyph | MIT (this repo) |
@@ -37,6 +37,6 @@ technology John has worked with. Their use does not imply endorsement.
 | uat.svg | Badge with a tick | original pixel glyph | MIT (this repo) |
 | reqs.svg | Clipboard with lines | original pixel glyph | MIT (this repo) |
 
-Licence texts: simple-icons is CC0 1.0 Universal (https://github.com/simple-icons/simple-icons);
-devicon is MIT, Copyright (c) 2015 konpa (https://github.com/devicons/devicon).
+Licence text: simple-icons is CC0 1.0 Universal (https://github.com/simple-icons/simple-icons).
+No devicon files are used any more.
 The original glyphs are drawn on a 13x13 grid of 8px cells.

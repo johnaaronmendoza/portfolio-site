@@ -9,7 +9,7 @@ type Step = { label: string; ai?: boolean; detail?: string };
 const STEPS: Step[] = [
   { label: 'Ticket' },
   { label: 'Reads the thread', ai: true },
-  { label: 'Finds KB guidance', ai: true },
+  { label: 'Finds knowledge-base guidance', ai: true },
   { label: 'Drafts a reply', ai: true },
   { label: 'Agent reviews', detail: "Every draft, before it's sent." }, // the human step
   { label: 'Sent' },
@@ -37,14 +37,6 @@ export default function DeskAssistWindow() {
         <p className="hidden lg:block font-sans text-[15px] leading-normal text-pretty">
           A Chrome extension for service desk agents at LGA Telecom.
         </p>
-        <a
-          href="#experience"
-          onClick={e => { e.preventDefault(); scrollToSection('experience', reduced); }}
-          className="justify-self-start inline-flex min-h-11 items-center gap-2 font-sans text-[15px] font-bold underline underline-offset-4 decoration-2"
-        >
-          See experience
-          <span aria-hidden="true" className="block size-[9px] border-r-[3px] border-b-[3px] border-current rotate-45 -translate-y-0.5" />
-        </a>
       </div>
       <figure aria-labelledby="desk-assist-flow" className="mt-1">
         <ol className="da-flow grid grid-cols-[minmax(0,1fr)_22px_auto] gap-y-2.5">
@@ -69,6 +61,15 @@ export default function DeskAssistWindow() {
           )}
         </ol>
       </figure>
+      {/* After the flow, so the steps are read before the way out */}
+      <a
+        href="#experience"
+        onClick={e => { e.preventDefault(); scrollToSection('experience', reduced); }}
+        className="mt-3 inline-flex min-h-11 items-center gap-2 font-sans text-[15px] font-bold underline underline-offset-4 decoration-2"
+      >
+        See experience
+        <span aria-hidden="true" className="block size-[9px] border-r-[3px] border-b-[3px] border-current rotate-45 -translate-y-0.5" />
+      </a>
     </Window>
   );
 }

@@ -85,7 +85,7 @@ function process(raw: string, navigate: (p: string) => void): Result {
         '  clear               Clear terminal',
         '  exit                Close terminal',
         '',
-        'SHORTCUTS: ` (backtick) or Esc to toggle',
+        'SHORTCUTS: Ctrl+` to toggle, Esc to close',
       ];
 
     case 'whoami':
@@ -247,12 +247,10 @@ export default function SecretTerminal() {
   // Focus the input on open, trap Tab, return focus to the opener on close
   useModalFocus(open, dialogRef, inputRef);
 
-  // Backtick / HUD event toggle
+  // Ctrl+` / Cmd+` (a modifier, so typing a backtick never opens it) or the footer button
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === '`' && !e.ctrlKey && !e.metaKey) {
-        const tag = (e.target as HTMLElement).tagName;
-        if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if ((e.ctrlKey || e.metaKey) && e.key === '`') {
         e.preventDefault();
         setOpen(v => !v);
       }

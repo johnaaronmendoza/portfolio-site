@@ -910,6 +910,26 @@
     width: 7rem;
   }
 }
+/* 400% zoom (about 341x225): the log gets the height. The prompt line, Lil
+   Johnny, the log's title bar and the topic keys step aside; unknown
+   questions still offer the topics inside the reply. */
+@media (max-height: 420px) {
+  .chat-panel .chat-prompt,
+  .chat-panel .chat-log-bar,
+  .chat-panel .chat-keys {
+    display: none;
+  }
+  .chat-panel .chat-log-box {
+    margin-top: 0.5rem;
+    height: max(6rem, calc(100dvh - 8rem));
+  }
+}
+/* Phones: drop the 600px cap so the log can use a tall screen */
+@media (max-width: 639px) and (min-height: 501px) {
+  .chat-panel {
+    height: calc(100dvh - 8rem);
+  }
+}
 
 /* Respect user motion preferences */
 @media (prefers-reduced-motion: reduce) {

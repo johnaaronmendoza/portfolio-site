@@ -3,6 +3,7 @@
  * bullets, fact chips and spot plates. Copy marks key terms with **double
  * asterisks**; they are parsed here into <strong>, never injected as HTML.
  */
+import type { ReactNode } from 'react';
 import PixelArt, { type PixelArtName } from './PixelArt';
 
 /** The key term's fill. blue: on white windows and the page. paper: on the blue band or inside a blue/yellow block */
@@ -20,10 +21,14 @@ interface KeyTextProps {
   surface?: KeySurface;
 }
 
+// A key term that opens with a number ("1,000+", "40%", "4 languages") is a figure
+const FIGURE = /^\d/;
+
 /**
- * Renders marked words as key terms (ink on a solid block, bold), up to `max`;
- * later marks render as plain text. Odd runs of a split on "**" are the marked
- * words; unbalanced markers fall back to plain text.
+ * Renders marked words as key terms, up to `max`; later marks render as plain
+ * text. Figures get the solid block (ink on blue or paper), other terms are
+ * bold only, so the fill always means "a number". Odd runs of a split on "**"
+ * are the marked words; unbalanced markers fall back to plain text.
  */
 export function KeyText({ text, max = 1, surface = 'blue' }: KeyTextProps) {
   let used = 0;
@@ -38,7 +43,7 @@ export function KeyText({ text, max = 1, surface = 'blue' }: KeyTextProps) {
         return (
           <strong
             key={i}
-            className={`font-bold text-black px-[0.25em] py-[0.05em] box-decoration-clone ${KEY_FILL[surface]}`}
+            className={`font-bold text-black ${FIGURE.test(run) ? `px-[0.25em] py-[0.05em] box-decoration-clone ${KEY_FILL[surface]}` : ''}`}
           >
             {run}
           </strong>
@@ -88,8 +93,14 @@ export function Lead({
   );
 }
 
-/** Pixel-arrow bullets (bullet.svg), key term first; wrapped lines align with the text */
-export function PixelList({ items, columns = 1, className = '' }: { items: string[]; columns?: 1 | 2; className?: string }) {
+/** Pixel-arrow bullets (bullet.svg), key term first; wrapped lines align with the text.
+ *  `extras` adds content after an item's text, keyed by the item. */
+export function PixelList({ items, extras, columns = 1, className = '' }: {
+  items: string[];
+  extras?: Record<string, ReactNode>;
+  columns?: 1 | 2;
+  className?: string;
+}) {
   return (
     <ul
       className={`font-sans text-[15px] sm:text-base leading-[1.65] ${
@@ -101,6 +112,7 @@ export function PixelList({ items, columns = 1, className = '' }: { items: strin
           <PixelArt name="bullet" size={16} lazy className="line-mark" />
           <span className="min-w-0 break-words">
             <KeyText text={item} max={1} />
+            {extras?.[item]}
           </span>
         </li>
       ))}

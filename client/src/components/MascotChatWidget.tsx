@@ -14,6 +14,7 @@ import { MASCOT, preloadMascot } from '@/lib/mascot';
 import { motionTokens } from '@/lib/motion-tokens';
 import { WindowBar } from './Window';
 import PixelArt, { type PixelArtName } from './PixelArt';
+import { chipClass } from './Projects';
 
 const PANEL_ID = 'chat-panel';
 
@@ -33,7 +34,7 @@ const KNOWLEDGE_BASE: [string, string][] = [
   ['internship', 'I am currently interning at LGA Telecom (Aug 2026 – Present) in service desk operations and AI integration. Previously I interned at Sembcorp Solar Singapore as a Digitization Analyst, owning the Momens CRM rollout and its UAT.'],
   // LGA Telecom
   ['lga', 'I am a Service Desk Operations & AI Integration Intern at LGA Telecom (Aug 2026 – Present). I handle Level 1 tickets in Freshservice and support Microsoft 365 customers. I am building Desk Assist (in progress), a Chrome extension that reads a ticket, pulls relevant Knowledge Base guidance and drafts a reply for the agent to review. I also set up Freshservice closure and escalation automations that cut manual agent actions by 40%, Microsoft Teams escalation alerts that cut incident resolution time by 15 minutes, and an automated weekly PagerDuty incident report (Google Apps Script) that saves 4 hours of manual reporting a week.'],
-  ['desk assist', 'Desk Assist is an AI assistant for service desk agents that I am building at LGA Telecom; it is still in progress. It is a Manifest V3 Chrome extension: the agent clicks Analyse conversation, it reads the ticket thread, retrieves Knowledge Base guidance and proposes a draft reply. The agent always reviews before anything is sent. Security is designed in: least-privilege permissions, no remote code, and AI calls routed through a company-controlled backend.'],
+  ['desk assist', 'Desk Assist is an AI assistant for service desk agents that I am building at LGA Telecom; it is still in progress. It is a Manifest V3 Chrome extension: the agent clicks Analyse conversation, it reads the ticket thread, retrieves Knowledge Base guidance and proposes a draft reply. The agent always reviews before anything is sent. Security is designed in: least-privilege permissions, no remotely hosted code, and AI calls routed through a company-controlled backend.'],
   ['momens', 'Momens is a project management CRM used at Sembcorp Solar. I led its company-wide rollout, trained stakeholders across divisions, and acted as a liaison between users and the vendor to implement UI enhancements and fix bugs.'],
 
   // SilverLink
@@ -104,8 +105,10 @@ function keywordPattern(key: string): RegExp {
 
 const ANSWERS = KNOWLEDGE_BASE.map(([key, answer]) => ({ pattern: keywordPattern(key), answer }));
 
+// Unknown questions get the topic keys again, inside the reply (they are
+// hidden on very short screens, e.g. 400% zoom)
 const FALLBACK =
-  "I don't have an answer for that yet. Try projects, experience, skills or education, or email johnaaronmb@gmail.com.";
+  "I don't have an answer for that yet. Try one of these topics, or email johnaaronmb@gmail.com.";
 
 function findResponse(query: string): string {
   return ANSWERS.find(({ pattern }) => pattern.test(query))?.answer ?? FALLBACK;
@@ -155,13 +158,8 @@ function TypingMessage({ content, role }: { content: string; role: 'user' | 'sys
       <span className="sr-only">{content}</span>
       <span aria-hidden="true">
         {visibleText}
-        {visibleText.length < content.length && (
-          <motion.span
-            animate={{ opacity: [1, 0] }}
-            transition={{ duration: motionTokens.loop.blink, repeat: Infinity }}
-            className="inline-block w-1 h-3 bg-current ml-1"
-          />
-        )}
+        {/* Solid, not blinking: the hero name keeps the page's one blinking cursor */}
+        {visibleText.length < content.length && <span className="inline-block w-1 h-3 bg-current ml-1" />}
       </span>
     </div>
   );
@@ -172,6 +170,8 @@ interface Message {
   role: 'user' | 'system';
   content: string;
   timestamp: Date;
+  /** The fallback reply: offer the topic keys under it */
+  topics?: boolean;
 }
 
 export default function MascotChatWidget() {
@@ -194,7 +194,6 @@ export default function MascotChatWidget() {
   const logRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const refocusRef = useRef(false);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const openerRef = useRef<Element | null>(null);
 
@@ -262,14 +261,6 @@ export default function MascotChatWidget() {
     else panelRef.current?.focus();
   }, [isOpen]);
 
-  // The input is disabled while typing; give focus back if it had focus when the message was sent
-  useEffect(() => {
-    if (!isTyping && refocusRef.current) {
-      refocusRef.current = false;
-      inputRef.current?.focus();
-    }
-  }, [isTyping]);
-
   // Ask a queued question once the panel is open and the bot has finished replying
   useEffect(() => {
     if (!pendingQuery || !isOpen || isTyping) return;
@@ -277,6 +268,8 @@ export default function MascotChatWidget() {
     sendMessage(pendingQuery);
   }, [pendingQuery, isOpen, isTyping]);
 
+  // The input stays usable while the bot replies; a submit then is ignored
+  // (the text stays in the box) and Ask is marked unavailable
   const sendMessage = async (text: string) => {
     if (!text.trim() || isTyping) return;
 
@@ -284,13 +277,13 @@ export default function MascotChatWidget() {
     setInput('');
 
     // Short pause so the reply reads as a reply
-    refocusRef.current = document.activeElement === inputRef.current;
     setIsTyping(true);
     await new Promise(resolve => setTimeout(resolve, 800));
 
+    const content = findResponse(text);
     setMessages(prev => [
       ...prev,
-      { id: (Date.now() + 1).toString(), role: 'system', content: findResponse(text), timestamp: new Date() },
+      { id: (Date.now() + 1).toString(), role: 'system', content, timestamp: new Date(), topics: content === FALLBACK },
     ]);
     setIsTyping(false);
   };
@@ -342,7 +335,7 @@ export default function MascotChatWidget() {
 
             {/* Prompt line, with Lil Johnny leaning on the dialog's top edge
                 (he worries while the bot types) */}
-            <div className="relative flex-shrink-0 flex items-end justify-between gap-3 px-4 pt-3">
+            <div className="chat-prompt relative flex-shrink-0 flex items-end justify-between gap-3 px-4 pt-3">
               <p className="font-sans text-[15px] font-bold text-[color:var(--text)] pb-2">
                 Pick a topic or type a question
               </p>
@@ -357,7 +350,7 @@ export default function MascotChatWidget() {
 
             {/* conversation.log dialog: flex-1 + min-h-0 lets the log scroll inside */}
             <div className="chat-log-box relative z-10 mx-3 flex-1 min-h-0 flex flex-col border-[3px] border-black bg-[var(--paper)] shadow-[4px_4px_0_#000]">
-              <div aria-hidden="true" className="flex-shrink-0 flex items-center justify-between bg-[var(--bar)] text-[color:var(--paper)] font-label text-xs px-2.5 py-1.5">
+              <div aria-hidden="true" className="chat-log-bar flex-shrink-0 flex items-center justify-between bg-[var(--bar)] text-[color:var(--paper)] font-label text-xs px-2.5 py-1.5">
                 <span>conversation.log</span>
                 <span>○□✕</span>
               </div>
@@ -379,6 +372,17 @@ export default function MascotChatWidget() {
                 >
                   <div className="max-w-[88%]">
                     <TypingMessage content={msg.content} role={msg.role} />
+                    {msg.topics && (
+                      <ul aria-label="Topics" className="mt-2 flex flex-wrap gap-2">
+                        {QUICK_ACTIONS.map(({ label, query }) => (
+                          <li key={label}>
+                            <button type="button" onClick={() => sendMessage(query)} aria-disabled={isTyping} className={chipClass(false)}>
+                              {label}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                     <p className={`font-sans text-sm text-[color:var(--text)] mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
                       {msg.timestamp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
                     </p>
@@ -386,12 +390,7 @@ export default function MascotChatWidget() {
                 </motion.div>
               ))}
               {isTyping && (
-                <div className="flex justify-start">
-                  <div className={`border-2 border-black px-4 py-3 font-sans text-[15px] ${BUBBLE.system}`}>
-                    <span className="sr-only">Typing</span>
-                    <span aria-hidden="true" className="animate-pulse">▌▌▌</span>
-                  </div>
-                </div>
+                <p className="font-sans text-[15px] italic text-[color:var(--text)]">Johnny is typing…</p>
               )}
             </div>
             </div>
@@ -427,7 +426,6 @@ export default function MascotChatWidget() {
                   placeholder="Ask about a project or skill"
                   aria-label="Ask about a project or skill"
                   className="flex-1 min-w-0 bg-transparent text-[color:var(--text)] placeholder:text-[color:var(--text)] placeholder:italic font-sans text-base outline-none"
-                  disabled={isTyping}
                 />
               </div>
               <button type="submit" aria-disabled={isTyping} className="btn btn-primary px-4">

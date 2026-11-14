@@ -29,6 +29,7 @@ const MENU_ID = 'section-menu';
  */
 function SectionMenu({ active }: { active: string }) {
   const [open, setOpen] = useState(false);
+  const label = SECTIONS.find(s => s.id === active)?.label;
   const reduced = useReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstRef = useRef<HTMLButtonElement>(null);
@@ -122,7 +123,8 @@ function SectionMenu({ active }: { active: string }) {
         className="btn focus-ring-float lg:hidden min-w-[44px] px-3 text-black bg-[var(--paper)]"
       >
         <span aria-hidden="true">☰</span>
-        Menu
+        {/* Says where the visitor is: "Menu" at the top, then the current section */}
+        {active === 'hero' ? 'Menu' : <><span className="sr-only">Menu: </span>{label}</>}
       </button>
       {/* Portalled out of the floating row so it stacks above the chat launcher */}
       {createPortal(overlay, document.body)}
@@ -156,37 +158,51 @@ export default function SectionNav() {
     try { localStorage.setItem(MOTION_KEY, String(next)); } catch { /* storage blocked: still works this visit */ }
   };
 
+  // Current section: the last one whose top has passed the viewport's middle
+  // (works for sections taller than the screen), or Contact at the very end
   useEffect(() => {
-    const observers = SECTIONS.map(({ id }) => {
-      const el = document.getElementById(id);
-      if (!el) return null;
-      const io = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActive(id); },
-        { threshold: 0.4 }
-      );
-      io.observe(el);
-      return io;
-    });
-    return () => observers.forEach(io => io?.disconnect());
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const doc = document.documentElement;
+      let current = SECTIONS[0].id;
+      for (const { id } of SECTIONS) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= innerHeight / 2) current = id;
+      }
+      if (innerHeight + doc.scrollTop >= doc.scrollHeight - 2) current = 'footer';
+      setActive(current);
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
   }, []);
 
   return (
     <>
-    {/* Bottom-left at every width; the chat launcher owns bottom-right. The focus
-        ring is ink with a white halo so it reads over every band it floats above.
-        Paused = ink and pressed into its shadow, so the state shows at a glance */}
+    {/* Bottom-left at every width; the chat launcher owns bottom-right. Icon-only
+        below 1536px so the dock covers less of the page (names stay for screen
+        readers). The focus ring is ink with a white halo so it reads over every
+        band it floats above. Paused = ink and pressed into its shadow */}
     <div className={FLOAT_DOCK}>
       <SectionMenu active={active} />
       <button
         type="button"
         onClick={toggleMotion}
         aria-pressed={motionPaused}
+        title="Pause motion"
         className={`btn focus-ring-float motion-reduce:hidden min-w-[44px] px-3 ${
           motionPaused ? 'bg-[var(--bar)] text-[color:var(--paper)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)] text-black'
         }`}
       >
         <span aria-hidden="true">❚❚</span>
-        <span className="sr-only sm:not-sr-only">Pause motion</span>
+        <span className="sr-only 2xl:not-sr-only">Pause motion</span>
       </button>
       <SoundToggle />
     </div>

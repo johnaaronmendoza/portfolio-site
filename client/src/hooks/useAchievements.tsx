@@ -33,7 +33,7 @@ function saveVisited(list: string[]) {
 }
 
 // ── Fire a toast ──────────────────────────────────────────────────────────
-// A small achievement.txt window (MASTER 2.1): violet bar, cream body, navy
+// A small achievement.txt window (MASTER 2.1): black bar, white body, dark
 // text, ink frame and hard shadow. Sonner keeps it non-blocking, pauses it on
 // hover and lets it be dismissed; reduced motion is handled by the global
 // prefers-reduced-motion rule in index.css. Position (bottom-left, above the

@@ -29,9 +29,9 @@ function FullSizeLink({ src, caption }: { src: string; caption: string }) {
 }
 
 /**
- * One screenshot as a small window: violet bar, image flush to the frame,
+ * One screenshot as a small window: black bar, image flush to the frame,
  * caption and an "Open full size" link (dashboard text is unreadable at 375).
- * Portrait shots are centred in cream padding with a height cap. Wide shots
+ * Portrait shots are centred in white padding with a height cap. Wide shots
  * (aspect ≥ 1.4 and ≥ 860px, so never upscaled) span both columns from md.
  *
  * `hero`: the first figure under the case header. Loads eagerly at high
@@ -97,7 +97,7 @@ interface ScreenGalleryProps {
   shots: Shot[];
 }
 
-/** Screenshot windows on the navy page (not inside a section window) */
+/** Screenshot windows on the page (not inside a section window) */
 export default function ScreenGallery({ heading = 'Screens', shots }: ScreenGalleryProps) {
   return (
     <section aria-labelledby="screens-heading">

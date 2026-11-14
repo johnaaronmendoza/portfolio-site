@@ -42,11 +42,11 @@ const GROUPS: { id: GroupId; skills: string[]; usedIn: string }[] = [
 ];
 
 // What the keycap colours mean, in words (colour is never the only cue)
-const LEGEND: { way: keyof typeof WAYS; label: string }[] = [
-  { way: 'yellow', label: 'AI' },
-  { way: 'blue', label: 'Data' },
-  { way: 'paper', label: 'Frontend, Backend, Infrastructure' },
-  { way: 'ink', label: 'Workflow' },
+const LEGEND: { way: keyof typeof WAYS; colour: string; label: string }[] = [
+  { way: 'yellow', colour: 'Yellow', label: 'AI' },
+  { way: 'blue', colour: 'Blue', label: 'Data' },
+  { way: 'paper', colour: 'White', label: 'Frontend, Backend, Infrastructure' },
+  { way: 'ink', colour: 'Black', label: 'Workflow' },
 ];
 
 /** A keycap colour sample; the ink rim keeps the white swatch visible on the page */
@@ -59,21 +59,26 @@ export default function Skills() {
     <FramerReveal>
       <section className="text-[color:var(--text)] px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-5xl mx-auto">
-          <SectionHeading text="SKILLS" icon="icon-skills" className="mb-12" />
+          <SectionHeading text="SKILLS" icon="icon-skills" className="mb-10" />
 
-          <p className="font-sans text-[15px] sm:text-base leading-relaxed max-w-[60ch]">
-            Press or hover a key for details. Key colours:
+          <p className="mb-6 font-sans text-[15px] sm:text-base leading-relaxed max-w-[60ch]">
+            Press or hover a key for details.
           </p>
-          <ul className="mt-2 mb-8 flex flex-wrap gap-x-5 gap-y-1 font-sans text-[15px] sm:text-base leading-relaxed">
-            {LEGEND.map(({ way, label }) => (
-              <li key={way} className="flex items-center gap-2">
-                <Swatch way={way} />
-                <span><span className="capitalize">{way}</span>: {label}</span>
-              </li>
-            ))}
-          </ul>
 
-          <SkillKeyboard listId={LIST_ID} />
+          {/* The colour legend sits right under the filters it explains */}
+          <SkillKeyboard
+            listId={LIST_ID}
+            legend={
+              <ul aria-label="Key colours" className="flex flex-wrap gap-x-5 gap-y-1 font-sans text-[15px] sm:text-base leading-relaxed">
+                {LEGEND.map(({ way, colour, label }) => (
+                  <li key={way} className="flex items-center gap-2">
+                    <Swatch way={way} />
+                    <span>{colour}: {label}</span>
+                  </li>
+                ))}
+              </ul>
+            }
+          />
 
           {/* Plain list: for skimmers, screen readers and search engines. Collapsed,
               since the keyboard's tooltips and detail windows already say this. */}

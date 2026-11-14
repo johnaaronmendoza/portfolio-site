@@ -65,10 +65,10 @@ export default function StatStrip({ stats, variant, className = '' }: StatStripP
             {label}
             {source && <span className="mt-2 block w-fit border-2 border-black px-2 py-0.5 font-label text-[15px] leading-[1.35]">{source}</span>}
           </dt>
-          <dd className={`relative isolate self-start font-label font-bold tracking-[-0.02em] leading-none tabular-nums ${pow ? 'px-[0.8em] pt-[0.5em] pb-[0.45em] -ml-[0.4em] -mt-[0.5em]' : ''} ${VALUE[variant]}`}>
+          <dd className={`relative isolate self-start font-label font-bold tracking-[-0.02em] leading-none tabular-nums ${pow ? 'px-[0.8em] pt-[0.5em] pb-[0.45em] -mt-[0.5em]' : ''} ${VALUE[variant]}`}>
             {/* POW star behind the number only. The padding gives the digits room
-                inside the star's inner points; the negative margins stay inside
-                the cell's padding, so the star never reaches the cell edge */}
+                inside the star's inner points; the negative top margin stays inside
+                the cell's padding, and no side margin keeps the star 14px+ from the edge */}
             {pow && (
               <Burst
                 fill="var(--blue)"

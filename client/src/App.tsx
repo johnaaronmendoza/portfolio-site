@@ -20,6 +20,7 @@ const FireSafetyProject = lazy(() => import("./pages/FireSafetyProject"));
 const UWBProject = lazy(() => import("./pages/UWBProject"));
 const UATProject = lazy(() => import("./pages/UATProject"));
 const AIFinanceProject = lazy(() => import("./pages/AIFinanceProject"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 /**
  * On route change: browser Back to Home restores the saved scroll; a link to
@@ -83,8 +84,8 @@ function Router() {
         <Route path={"/projects/uwb"} component={UWBProject} />
         <Route path={"/projects/uat"} component={UATProject} />
         <Route path={"/projects/ai-finance"} component={AIFinanceProject} />
-        {/* Final fallback route */}
-        <Route component={Home} />
+        {/* Any other address */}
+        <Route component={NotFound} />
       </Switch>
     </Suspense>
   );

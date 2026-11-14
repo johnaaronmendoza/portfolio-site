@@ -46,13 +46,17 @@ export type Project = {
   link: string;
   externalUrl?: string;
   preloadImages: string[];
-  /** Grid width in the tile grid (sm: 2 cols, lg: 6 cols) */
+  /** Grid width in the tile grid (sm: 2 cols, lg: 6 cols, xl: 12 cols) */
   span: string;
   /** Lead tile: taller image, bigger title, always in colour */
   featured?: boolean;
   /** Comic sound-effect sticker on the tile image; true to what the project does, featured tiles only */
   sfx?: string;
 };
+
+// The three featured tiles share a row from lg (3 x 2 of 6, then 3 x 4 of 12);
+// the other four sit two to a row at lg and four to a row from xl
+const FEATURED_SPAN = 'lg:col-span-2 xl:col-span-4';
 
 export const PROJECTS: Project[] = [
   {
@@ -67,7 +71,7 @@ export const PROJECTS: Project[] = [
     image: silverLinkImg,
     tags: ["React", "gRPC", "K8s", "PostgreSQL"],
     link: "/projects/silverlink",
-    span: 'lg:col-span-3',
+    span: FEATURED_SPAN,
     preloadImages: [silverLink2, silverLink3],
     featured: true,
     sfx: 'Booked!',
@@ -84,25 +88,10 @@ export const PROJECTS: Project[] = [
     image: scsImg,
     tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
     link: "/projects/scs",
-    span: 'lg:col-span-3',
+    span: FEATURED_SPAN,
     preloadImages: [scs2, scs3],
     featured: true,
-    sfx: 'Plot twist!',
-  },
-  {
-    num: 3,
-    name: "AI Finance Insights Engine",
-    slug: 'ai-finance',
-    description:
-      "Pulls market data into one Power BI-ready warehouse; NLP flags supply-chain risk.",
-    facts: ["5 data sources", "star schema", "100% Pytest coverage"],
-    year: "2024",
-    caption: "data pipeline",
-    image: aiFinanceImg,
-    tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
-    link: "/projects/ai-finance",
-    span: 'lg:col-span-2',
-    preloadImages: [],
+    sfx: 'Your move!',
   },
   {
     num: 4,
@@ -116,8 +105,25 @@ export const PROJECTS: Project[] = [
     image: uwbImg,
     tags: ["Python", "SVM", "PCA", "scikit-learn"],
     link: "/projects/uwb",
-    span: 'lg:col-span-2',
+    // Wide at sm so the 2-column grid has no orphan
+    span: `sm:col-span-2 ${FEATURED_SPAN}`,
     preloadImages: [uwb2, uwb3],
+    featured: true,
+  },
+  {
+    num: 3,
+    name: "AI Finance Insights Engine",
+    slug: 'ai-finance',
+    description:
+      "Pulls market data into one Power BI-ready warehouse; NLP flags supply-chain risk.",
+    facts: ["5 data sources", "star schema", "100% Pytest coverage"],
+    year: "2024",
+    caption: "data pipeline",
+    image: aiFinanceImg,
+    tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
+    link: "/projects/ai-finance",
+    span: 'lg:col-span-3',
+    preloadImages: [],
   },
   {
     num: 5,
@@ -131,7 +137,7 @@ export const PROJECTS: Project[] = [
     image: uatImg,
     tags: ["React 18", "Node.js", "Express", "SQLite"],
     link: "/projects/uat",
-    span: 'lg:col-span-2',
+    span: 'lg:col-span-3',
     preloadImages: [],
   },
   {
@@ -160,7 +166,7 @@ export const PROJECTS: Project[] = [
     image: greenloopImg,
     tags: ["NYP JumpStart", "Urban Farming"],
     link: "external",
-    span: 'sm:col-span-2 lg:col-span-3',
+    span: 'lg:col-span-3',
     externalUrl: "https://greenloopfarms.com/",
     preloadImages: [greenloop2],
   },

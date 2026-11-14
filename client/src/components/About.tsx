@@ -1,6 +1,6 @@
 /**
- * About Section: the lead on navy, then one "about_me.txt" window holding the
- * framed photo, fact chips and a two-paragraph bio. Navy text on cream.
+ * About Section: the lead on the page, then one "about_me.txt" window holding
+ * the framed photo beside a two-paragraph bio and the fact chips. Text on paper.
  */
 
 import FramerReveal from './FramerReveal';
@@ -33,8 +33,8 @@ export default function About() {
 
         <FramerReveal delay={0.1}>
           <Window title="about_me.txt" bodyClassName="flex flex-col md:flex-row gap-8 md:gap-12 items-start p-6 sm:p-10 lg:p-14">
-            {/* Photo + facts */}
-            <div className="flex-shrink-0 w-full md:w-auto flex flex-col items-center md:items-start gap-8">
+            {/* Photo */}
+            <div className="flex-shrink-0 w-full md:w-auto flex justify-center md:justify-start">
               <div className="border-[3px] border-black shadow-[4px_4px_0_0_var(--ink)] w-56 h-56 sm:w-72 sm:h-72 overflow-hidden">
                 <PixelatedImage
                   src={profileImg}
@@ -42,16 +42,16 @@ export default function About() {
                   className="w-full h-full"
                 />
               </div>
-              <FactChips facts={FACTS} label="Quick facts" className="w-full sm:w-72" />
             </div>
 
-            {/* Bio Text */}
-            <div className="space-y-4 flex-1">
+            {/* Bio, then the facts under it, so the column beside the photo is full */}
+            <div className="flex-1 min-w-0 space-y-4">
               {BIO.map(text => (
                 <p key={text} className="font-sans text-[15px] sm:text-base leading-relaxed max-w-[60ch]">
                   <KeyText text={text} max={2} />
                 </p>
               ))}
+              <FactChips facts={FACTS} label="Quick facts" className="pt-4" />
             </div>
           </Window>
         </FramerReveal>

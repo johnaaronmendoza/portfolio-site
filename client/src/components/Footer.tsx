@@ -1,7 +1,7 @@
 /**
- * Footer: violet band in three columns, like a retro site footer. Contact CTA
- * with the email button, places to find me, and the SGT clock + terminal hint.
- * Cream text on violet only.
+ * Footer: black band in three columns, like a retro site footer. Contact CTA
+ * with the email button, places to find me, and the SGT clock, terminal and
+ * keyboard hints. White text on black only.
  */
 
 import { useState, useEffect } from 'react';
@@ -111,6 +111,11 @@ export default function Footer() {
             >
               {'>'} sudo hire-me
             </button>
+          </p>
+          {/* The keyboard shortcuts, findable without knowing them first */}
+          <p className="font-label text-sm leading-relaxed">
+            <kbd className="font-bold">Ctrl K</kbd> commands<span aria-hidden="true"> · </span><span className="sr-only">, </span>
+            <kbd className="font-bold">Ctrl /</kbd> shortcuts
           </p>
           <p className="font-sans text-sm">
             © {currentYear} John Aaron Mendoza Branzuela

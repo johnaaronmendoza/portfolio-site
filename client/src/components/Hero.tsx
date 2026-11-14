@@ -29,17 +29,31 @@ const NAME_LINES = [
 const BLUE = 'bg-[var(--blue)]';
 const INK = 'bg-black';
 
-const PIXELS = [
-  { top: '12%',  right: '8%',   size: 4, color: BLUE,   delay: 0 },
-  { top: '20%',  right: '18%',  size: 3, color: BLUE,   delay: 0.5 },
-  { top: '45%',  right: '6%',   size: 2, color: INK,    delay: 1 },
-  { top: '65%',  right: '22%',  size: 3, color: BLUE,   delay: 1.5 },
-  { top: '80%',  right: '10%',  size: 2, color: INK,    delay: 0.8 },
-  { top: '15%',  left: '5%',    size: 2, color: BLUE,   delay: 0.3 },
-  { top: '35%',  left: '8%',    size: 3, color: BLUE,   delay: 1.2 },
-  { top: '55%',  left: '4%',    size: 2, color: INK,    delay: 0.7 },
-  { top: '72%',  left: '12%',   size: 4, color: BLUE,   delay: 1.8 },
+// Floating pixels live in the outer gutters only, never near text (John, 14 Nov).
+// G = the gutter beside the max-w-6xl content (the lg:px-16 padding at least);
+// `at` (0-1) places a pixel across the free part of its gutter. Right-side
+// pixels also clear the section dots (8-52px from the right edge), so they
+// show only where that gutter is wide enough (1360px+).
+const G = 'max(64px, (100% - 1152px) / 2)';
+const PIXELS: { top: string; side: 'left' | 'right'; at: number; size: number; color: string; delay: number }[] = [
+  { top: '12%', side: 'right', at: 0.3, size: 4, color: BLUE, delay: 0 },
+  { top: '24%', side: 'right', at: 0.9, size: 3, color: BLUE, delay: 0.5 },
+  { top: '48%', side: 'right', at: 0.1, size: 2, color: INK,  delay: 1 },
+  { top: '66%', side: 'right', at: 0.7, size: 3, color: BLUE, delay: 1.5 },
+  { top: '82%', side: 'right', at: 0.4, size: 2, color: INK,  delay: 0.8 },
+  { top: '15%', side: 'left',  at: 0.5, size: 2, color: BLUE, delay: 0.3 },
+  { top: '35%', side: 'left',  at: 0.2, size: 3, color: BLUE, delay: 1.2 },
+  { top: '55%', side: 'left',  at: 0.6, size: 2, color: INK,  delay: 0.7 },
+  { top: '72%', side: 'left',  at: 0.1, size: 4, color: BLUE, delay: 1.8 },
 ];
+
+/** Offset from the screen edge: left gutters keep 12px each side free,
+ *  right ones start past the section dots (60px) and keep 16px to the content */
+function pixelEdge(side: 'left' | 'right', at: number, size: number) {
+  return side === 'left'
+    ? `calc(12px + (${G} - ${24 + size * 4}px) * ${at})`
+    : `calc(60px + (${G} - ${76 + size * 4}px) * ${at})`;
+}
 
 const NEW_TAB = <span className="sr-only"> (opens in a new tab)</span>;
 
@@ -110,7 +124,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--text)] px-4 sm:px-8 lg:px-16 pt-12 pb-6 sm:pt-20">
+    <section ref={sectionRef} className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--text)] px-4 sm:px-8 lg:px-16 pt-12 pb-6 sm:pt-20 lg:pt-14 lg:pb-24 xl:pt-20 xl:pb-6">
       {/* WebGL particles (skipped with reduced motion, frozen by Pause motion) */}
       {!reduced && (
         <div className="absolute inset-0 z-0 pointer-events-none">
@@ -131,16 +145,16 @@ export default function Hero() {
         </div>
       )}
 
-      {/* Floating pixels: behind the content, and only where the gutters are
-          wide enough that they don't sit on text */}
+      {/* Floating pixels: behind the content, in the outer gutters only (none
+          below 1024px, where the column runs nearly edge to edge) */}
       {PIXELS.map((p, i) => (
         <motion.div
           key={i}
           aria-hidden="true"
-          className={`hidden sm:block absolute z-0 ${p.color}`}
+          className={`hidden ${p.side === 'left' ? 'lg:block' : 'min-[1360px]:block'} absolute z-0 ${p.color}`}
           style={{
             top: p.top,
-            ...(p.right ? { right: p.right } : { left: p.left }),
+            [p.side]: pixelEdge(p.side, p.at, p.size),
             width: `${p.size * 4}px`,
             height: `${p.size * 4}px`,
           }}
@@ -155,7 +169,9 @@ export default function Hero() {
 
       <div className="relative z-10 flex-1 flex items-center">
         <div className="w-full max-w-4xl lg:max-w-6xl mx-auto lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-center">
-          <div className="lg:col-span-7">
+          {/* Phones: the name and buttons fill the first screen, so the fixed
+              dock sits on empty page and desk_assist.exe starts below the fold */}
+          <div className="lg:col-span-7 max-sm:min-h-[calc(100svh-3rem)]">
             <motion.div
               className="mb-8 sm:mb-10"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -226,7 +242,7 @@ export default function Hero() {
                 className="btn btn-primary w-full sm:w-auto"
               >
                 <PixelArt name="floppy" size={16} />
-                Download resume
+                Download resume (PDF)
               </a>
               <a
                 href="#projects"
@@ -295,7 +311,8 @@ export default function Hero() {
           aria-hidden="true"
           className="block w-4 h-4 border-r-[3px] border-b-[3px] border-current rotate-45"
           animate={calm ? { y: 0 } : { y: [0, 6, 0] }}
-          transition={calm ? { duration: 0 } : { duration: LOOP.bounce, repeat: Infinity, ease: 'easeInOut' }}
+          // Three bounces once it shows, then still: fewer endless loops in the hero
+          transition={calm ? { duration: 0 } : { duration: LOOP.bounce, repeat: 3, delay: HERO.cue, ease: 'easeInOut' }}
         />
       </motion.button>
     </section>

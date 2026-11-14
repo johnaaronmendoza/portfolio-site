@@ -6,13 +6,14 @@ import { WindowBar } from './Window';
 
 const SHORTCUTS = [
   { keys: ['Ctrl', 'K'],    desc: 'Open command palette'       },
-  { keys: ['`'],             desc: 'Open secret terminal'       },
-  { keys: ['?'],             desc: 'Show keyboard shortcuts'    },
+  { keys: ['Ctrl', '`'],    desc: 'Open secret terminal'       },
+  { keys: ['Ctrl', '/'],    desc: 'Show keyboard shortcuts'    },
   { keys: ['↑↑↓↓←→←→BA'],  desc: 'Konami code easter egg'     },
   { keys: ['Esc'],           desc: 'Close any overlay'          },
 ];
 
-/** shortcuts.txt: terminal-variant window opened with "?" (MASTER 2.10) */
+/** shortcuts.txt: terminal-variant window opened with Ctrl+/ or Cmd+/ (a
+ *  modifier, so typing "?" never opens it: WCAG 2.1.4) */
 export default function KeyboardShortcuts() {
   const [open, setOpen] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -22,9 +23,7 @@ export default function KeyboardShortcuts() {
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      const tag = (e.target as HTMLElement).tagName;
-      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-      if (e.key === '?') { e.preventDefault(); setOpen(v => !v); }
+      if ((e.ctrlKey || e.metaKey) && e.key === '/') { e.preventDefault(); setOpen(v => !v); }
       if (e.key === 'Escape') setOpen(false);
     };
     window.addEventListener('keydown', handler);
@@ -75,7 +74,7 @@ export default function KeyboardShortcuts() {
               </dl>
 
               <p className="border-t-2 border-[color:var(--paper)] px-4 py-2 font-mono text-sm text-center">
-                Press <kbd className="font-bold text-[color:var(--paper)]">?</kbd> to toggle
+                Press <kbd className="font-bold text-[color:var(--paper)]">Ctrl /</kbd> to toggle
               </p>
             </div>
           </motion.div>

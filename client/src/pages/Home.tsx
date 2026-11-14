@@ -55,7 +55,6 @@ export default function Home() {
   return (
     <div className="min-h-screen text-[color:var(--text)]">
       <SkipLink />
-      <SectionNav />
       <main id="main" tabIndex={-1}>
         <div id="hero" tabIndex={-1} className={SECTION_CLASS}>
           <Hero />
@@ -84,6 +83,9 @@ export default function Home() {
           <Skills />
         </div>
       </main>
+      {/* Fixed dock and section dots: after <main> in the DOM so Tab reaches
+          the hero's resume link right after the skip link */}
+      <SectionNav />
       <div id="footer" tabIndex={-1} className={SECTION_CLASS}>
         <Footer />
       </div>

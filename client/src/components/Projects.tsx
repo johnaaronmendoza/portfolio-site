@@ -16,7 +16,7 @@ import { PROJECTS, type Project } from '@/data/projects';
 // Display label and the key matched against project tags (kept separate so a
 // friendlier label doesn't change which projects match)
 const FILTERS: { label: string; match: string }[] = [
-  { label: 'AI & ML', match: 'ML/AI' },
+  { label: 'AI', match: 'ML/AI' }, // same name as the Skills filter
   { label: 'Python', match: 'Python' },
   { label: 'React', match: 'React' },
   { label: 'TypeScript', match: 'TypeScript' },
@@ -40,7 +40,7 @@ function matchesFilter(p: Project, filter: string | null): boolean {
 }
 
 // ── ProjectTile — own component so hooks are called once per card ─────────
-// Wide outline offset leaves a cream gap outside the tile's border and shadow
+// Wide outline offset leaves a gap outside the tile's border and shadow
 const CARD_LINK_CLASS = 'flex h-full flex-col outline-offset-[10px]';
 
 interface ProjectTileProps {
@@ -200,34 +200,26 @@ export function chipClass(active: boolean) {
 // ── Projects section ──────────────────────────────────────────────────────
 export default function Projects() {
   const [activeFilter, setActiveFilter] = useState<string | null>(null); // a filter label
-  const [touched, setTouched] = useState(false); // announce results only after a change
 
   const active = FILTERS.find(f => f.label === activeFilter) ?? null;
   const visible = PROJECTS.filter(p => matchesFilter(p, active?.match ?? null));
-  const count = `${visible.length} project${visible.length === 1 ? '' : 's'}`;
-  const status = active
-    ? `${count} ${visible.length === 1 ? 'matches' : 'match'} ${active.label}`
-    : `Showing all ${count}`;
-
-  const choose = (label: string | null) => {
-    setActiveFilter(label);
-    setTouched(true);
-  };
+  // Visible status; a live region, so a change is announced but the first render is not
+  const status = `Showing ${visible.length} of ${PROJECTS.length} projects${active ? `: ${active.label}` : ''}`;
 
   return (
     <FramerReveal>
-      {/* Full-width teal band; all text on it is black or sits on cream */}
+      {/* Full-width blue band; all text on it is black or sits on paper */}
       <section className="bg-[var(--blue)] text-black border-y-[3px] border-black px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
           <SectionHeading text="PROJECTS" tone="ink" icon="icon-projects" className="mb-4 lg:mb-5" />
-          <Lead text="Start with **SilverLink SG** and the SCS Awareness Platform." tone="blue" className="mb-6 lg:mb-8" />
+          <Lead text="Start with **SilverLink SG**, the SCS Awareness Platform and UWB Indoor Localization." tone="blue" className="mb-6 lg:mb-8" />
 
           <Window title="projects/" bodyClassName="p-4 sm:p-6 lg:p-8">
             {/* Filter chips */}
-            <div role="group" aria-label="Filter projects by technology" className="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-10">
+            <div role="group" aria-label="Filter projects by technology" className="flex flex-wrap gap-2 sm:gap-3">
               <button
                 type="button"
-                onClick={() => choose(null)}
+                onClick={() => setActiveFilter(null)}
                 aria-pressed={activeFilter === null}
                 className={chipClass(activeFilter === null)}
               >
@@ -237,7 +229,7 @@ export default function Projects() {
                 <button
                   type="button"
                   key={label}
-                  onClick={() => choose(activeFilter === label ? null : label)}
+                  onClick={() => setActiveFilter(activeFilter === label ? null : label)}
                   aria-pressed={activeFilter === label}
                   className={chipClass(activeFilter === label)}
                 >
@@ -245,11 +237,12 @@ export default function Projects() {
                 </button>
               ))}
             </div>
-            <p className="sr-only" aria-live="polite">{touched ? status : ''}</p>
+            <p aria-live="polite" className="mt-4 mb-6 sm:mb-8 font-label text-sm text-black tabular-nums">{status}</p>
 
-            {/* Tile grid: rows of 3+3, 2+2+2, 3+3 on large screens; GreenLoop
-                spans both columns at sm so the 7th tile is never orphaned */}
-            <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
+            {/* Tile grid: the three featured tiles in one row from lg, then the
+                rest two to a row (lg) or four (xl); UWB spans both columns at sm
+                so the 2-column grid has no orphan */}
+            <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 xl:grid-cols-12 gap-6">
               <AnimatePresence initial={false} mode="popLayout">
                 {visible.map(project => (
                   <ProjectTile key={project.num} project={project} />
@@ -266,7 +259,7 @@ export default function Projects() {
                   <p className="font-sans text-[15px] sm:text-base">No projects match {active.label}.</p>
                   <button
                     type="button"
-                    onClick={() => choose(null)}
+                    onClick={() => setActiveFilter(null)}
                     className="btn btn-secondary mt-4"
                   >
                     Show all projects

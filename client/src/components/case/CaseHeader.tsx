@@ -35,7 +35,7 @@ interface CaseHeaderProps {
 
 /**
  * The project opens as a program: year, name, a one-line lead, fact chips
- * and links, and an orange status bar of key figures along the bottom edge.
+ * and links, and a status bar of key figures along the bottom edge.
  * Name, year and summary come from data/projects.ts; the real screenshot
  * (heroShot) follows straight after.
  */

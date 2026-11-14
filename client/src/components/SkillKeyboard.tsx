@@ -266,7 +266,8 @@ function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps)
 }
 
 /** listId: the plain skills list the skip link jumps to (its <summary> takes focus) */
-export default function SkillKeyboard({ listId }: { listId: string }) {
+/** `legend` (what the key colours mean) renders right under the filters */
+export default function SkillKeyboard({ listId, legend }: { listId: string; legend?: ReactNode }) {
   const reduced = useReducedMotion();
   const wide = useMediaQuery('(min-width: 640px)');
   const cols = wide ? 7 : 4;
@@ -386,9 +387,10 @@ export default function SkillKeyboard({ listId }: { listId: string }) {
         Skip the skills keyboard
       </a>
       <Filters value={filter} onChange={chooseFilter} />
+      {legend}
       <p className="sr-only" aria-live="polite">{announce}</p>
 
-      <div ref={boardRef} className="relative pt-6 sm:pt-8">
+      <div ref={boardRef} className="relative pt-2">
         {flat ? (
           <FlatKeys {...handlers} />
         ) : (
@@ -410,7 +412,7 @@ export default function SkillKeyboard({ listId }: { listId: string }) {
               ))}
             </div>
             <div
-              className={`relative aspect-[2/3] sm:aspect-[2/1] lg:aspect-[16/9] rounded-[10px] outline-offset-4 outline-[color:var(--ink)] ${focus?.visible ? 'outline-3' : ''}`}
+              className={`relative aspect-[2/3] sm:aspect-[2/1] rounded-[10px] outline-offset-4 outline-[color:var(--ink)] ${focus?.visible ? 'outline-3' : ''}`}
             >
               {stage === '3d' && (
                 <Boundary onError={() => setStage('2d')}>

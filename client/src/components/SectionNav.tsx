@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import PixelArt, { type PixelArtName } from './PixelArt';
-import SoundToggle, { FLOAT_DOCK } from './SoundToggle';
+import SoundToggle, { DOCK_WORD, DockGlyph, FLOAT_DOCK, dockButton } from './SoundToggle';
+import ShortcutHint from './ShortcutHint';
 import { WindowBar } from './Window';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useModalFocus } from '@/hooks/useModalFocus';
@@ -10,7 +11,7 @@ import { getLenis } from '@/hooks/useLenis';
 import { motionTokens } from '@/lib/motion-tokens';
 import { scrollToSection } from '@/lib/utils';
 
-const SECTIONS: { id: string; label: string; icon: PixelArtName }[] = [
+export const SECTIONS: { id: string; label: string; icon: PixelArtName }[] = [
   { id: 'hero',       label: 'Top',        icon: 'icon-home' },
   { id: 'about',      label: 'About',      icon: 'icon-about' },
   { id: 'experience', label: 'Experience', icon: 'icon-experience' },
@@ -106,6 +107,7 @@ function SectionMenu({ active }: { active: string }) {
                 </li>
               ))}
             </ul>
+            <ShortcutHint className="window-body flex-shrink-0 border-t-[3px] border-black px-3 py-2" />
           </motion.div>
         </>
       )}
@@ -120,11 +122,14 @@ function SectionMenu({ active }: { active: string }) {
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={MENU_ID}
-        className="btn focus-ring-float lg:hidden min-w-[44px] px-3 text-black bg-[var(--paper)]"
+        className={`${dockButton(false)} lg:hidden`}
       >
-        <span aria-hidden="true">☰</span>
-        {/* Says where the visitor is: "Menu" at the top, then the current section */}
-        {active === 'hero' ? 'Menu' : <><span className="sr-only">Menu: </span>{label}</>}
+        <DockGlyph name="menu" />
+        {/* Says where the visitor is: "Menu" at the top, then the current section.
+            Glyph only when the screen is very short (400% zoom) */}
+        <span className="whitespace-nowrap [@media(max-height:420px)]:sr-only">
+          {active === 'hero' ? 'Menu' : <><span className="sr-only">Menu: </span>{label}</>}
+        </span>
       </button>
       {/* Portalled out of the floating row so it stacks above the chat launcher */}
       {createPortal(overlay, document.body)}
@@ -186,10 +191,10 @@ export default function SectionNav() {
 
   return (
     <>
-    {/* Bottom-left at every width; the chat launcher owns bottom-right. Icon-only
-        below 1536px so the dock covers less of the page (names stay for screen
-        readers). The focus ring is ink with a white halo so it reads over every
-        band it floats above. Paused = ink and pressed into its shadow */}
+    {/* Bottom-left at every width; the chat launcher owns bottom-right. The
+        focus ring is ink with a white halo so it reads over every band it
+        floats above. Paused = ▶ "Paused", ink and pressed into its shadow.
+        Always visible (WCAG 2.2.2): glyph only on very short screens */}
     <div className={FLOAT_DOCK}>
       <SectionMenu active={active} />
       <button
@@ -197,12 +202,12 @@ export default function SectionNav() {
         onClick={toggleMotion}
         aria-pressed={motionPaused}
         title="Pause motion"
-        className={`btn focus-ring-float motion-reduce:hidden min-w-[44px] px-3 ${
-          motionPaused ? 'bg-[var(--bar)] text-[color:var(--paper)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)] text-black'
-        }`}
+        className={`${dockButton(motionPaused)} motion-reduce:hidden`}
       >
-        <span aria-hidden="true">❚❚</span>
-        <span className="sr-only 2xl:not-sr-only">Pause motion</span>
+        <DockGlyph name={motionPaused ? 'play' : 'pause'} />
+        <span className="sr-only">Pause motion</span>
+        {/* As wide as "Paused", so the dock doesn't shift on toggle */}
+        <span aria-hidden="true" className={`${DOCK_WORD} min-w-[6ch] text-center`}>{motionPaused ? 'Paused' : 'Pause'}</span>
       </button>
       <SoundToggle />
     </div>

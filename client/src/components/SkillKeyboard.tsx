@@ -411,8 +411,11 @@ export default function SkillKeyboard({ listId, legend }: { listId: string; lege
                 </button>
               ))}
             </div>
+            {/* The camera fit keeps room around the board for every pose it can
+                take (about 5% of the width above it), so the stage tucks up
+                under the legend by that much; the legend stays on top */}
             <div
-              className={`relative aspect-[2/3] sm:aspect-[2/1] rounded-[10px] outline-offset-4 outline-[color:var(--ink)] ${focus?.visible ? 'outline-3' : ''}`}
+              className={`relative aspect-[2/3] sm:aspect-[2/1] sm:-mt-[5.2%] rounded-[10px] outline-offset-4 outline-[color:var(--ink)] ${focus?.visible ? 'outline-3' : ''}`}
             >
               {stage === '3d' && (
                 <Boundary onError={() => setStage('2d')}>

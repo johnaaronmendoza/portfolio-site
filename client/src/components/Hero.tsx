@@ -18,7 +18,8 @@ import Window from '@/components/Window';
 
 const { hero: HERO, loop: LOOP, easing } = motionTokens;
 
-const ROLE_LINE = 'AI, data and full-stack developer';
+// U+2011 non-breaking hyphen: "full-stack" never splits across lines
+const ROLE_LINE = 'AI, data and full\u2011stack developer';
 
 // Two-tone name on the black window: white, then yellow (21:1 and 14:1 on black)
 const NAME_LINES = [
@@ -56,6 +57,10 @@ function pixelEdge(side: 'left' | 'right', at: number, size: number) {
 }
 
 const NEW_TAB = <span className="sr-only"> (opens in a new tab)</span>;
+
+// Email, GitHub, LinkedIn: one row of three icon-over-label buttons on phones,
+// so the first screen ends above the floating dock
+const SOCIAL = 'btn btn-ghost max-sm:flex-col max-sm:gap-1 max-sm:px-1 max-sm:py-1 max-sm:text-sm max-sm:leading-none';
 
 /** Blinking block cursor; solid when motion is calmed */
 function Cursor({ calm, className }: { calm: boolean; className: string }) {
@@ -124,7 +129,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--text)] px-4 sm:px-8 lg:px-16 pt-12 pb-6 sm:pt-20 lg:pt-14 lg:pb-24 xl:pt-20 xl:pb-6">
+    <section ref={sectionRef} className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--text)] px-4 sm:px-8 lg:px-16 pt-8 pb-6 sm:pt-20 lg:pt-14 lg:pb-28 xl:pt-20 xl:pb-6 short-desk:pt-3">
       {/* WebGL particles (skipped with reduced motion, frozen by Pause motion) */}
       {!reduced && (
         <div className="absolute inset-0 z-0 pointer-events-none">
@@ -173,7 +178,7 @@ export default function Hero() {
               dock sits on empty page and desk_assist.exe starts below the fold */}
           <div className="lg:col-span-7 max-sm:min-h-[calc(100svh-3rem)]">
             <motion.div
-              className="mb-8 sm:mb-10"
+              className="mb-6 sm:mb-10"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: HERO.window, ease: 'easeOut' }}
@@ -181,7 +186,7 @@ export default function Hero() {
               {/* Terminal variant: black body so the two-tone name reads */}
               <Window
                 title="welcome.exe"
-                bodyClassName="bg-black text-[color:var(--paper)] [--focus:var(--paper)] p-6 sm:p-10 xl:p-12"
+                bodyClassName="bg-black text-[color:var(--paper)] [--focus:var(--paper)] p-6 short-phone:p-4 sm:p-10 xl:p-12"
               >
                 {/* Sized so BRANZUELA plus the cursor fits from 320px up */}
                 <h1 className="font-pixel leading-[1.25] text-[length:clamp(20px,7vw,30px)] sm:text-4xl lg:text-[40px] xl:text-5xl">
@@ -208,7 +213,7 @@ export default function Hero() {
 
             {/* Role line */}
             <motion.div
-              className="mb-4 flex items-center gap-3"
+              className="mb-4 short-phone:mb-3 flex items-center gap-3"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: motionTokens.duration.slow, delay: HERO.role }}
@@ -219,7 +224,7 @@ export default function Hero() {
 
             {/* Positioning: the L2 lead (no prompt: the role line above has it) + study chip */}
             <motion.div
-              className="mb-8 sm:mb-10 space-y-4"
+              className="mb-6 short-phone:mb-4 sm:mb-10 space-y-4"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: HERO.line, delay: HERO.body, ease: easing.out }}
@@ -230,7 +235,7 @@ export default function Hero() {
 
             {/* CTAs: resume first; email beside the profiles so contact is above the fold */}
             <motion.div
-              className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-4"
+              className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 short-phone:gap-2 sm:gap-4"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: HERO.line, delay: HERO.ctas, ease: easing.out }}
@@ -251,8 +256,8 @@ export default function Hero() {
               >
                 See projects
               </a>
-              <div className="flex flex-wrap items-center gap-3">
-                <a href="mailto:johnaaronmb@gmail.com" className="btn btn-ghost">
+              <div className="grid grid-cols-3 gap-3 sm:flex sm:flex-wrap sm:items-center">
+                <a href="mailto:johnaaronmb@gmail.com" className={SOCIAL}>
                   <PixelArt name="icon-contact" size={16} />
                   Email me
                 </a>
@@ -261,7 +266,7 @@ export default function Hero() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
-                  className="btn btn-ghost"
+                  className={SOCIAL}
                 >
                   <PixelGitHub size={16} />
                   GitHub{NEW_TAB}
@@ -271,7 +276,7 @@ export default function Hero() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
-                  className="btn btn-ghost"
+                  className={SOCIAL}
                 >
                   <PixelLinkedIn size={16} />
                   LinkedIn{NEW_TAB}

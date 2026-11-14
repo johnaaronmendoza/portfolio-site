@@ -2,12 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useModalFocus } from '@/hooks/useModalFocus';
 import { motionTokens } from '@/lib/motion-tokens';
+import { MOD_KEY } from '@/lib/utils';
 import { WindowBar } from './Window';
 
 const SHORTCUTS = [
-  { keys: ['Ctrl', 'K'],    desc: 'Open command palette'       },
-  { keys: ['Ctrl', '`'],    desc: 'Open secret terminal'       },
-  { keys: ['Ctrl', '/'],    desc: 'Show keyboard shortcuts'    },
+  { keys: [MOD_KEY, 'K'],    desc: 'Open command palette'       },
+  { keys: [MOD_KEY, '`'],    desc: 'Open secret terminal'       },
+  { keys: [MOD_KEY, '/'],    desc: 'Show keyboard shortcuts'    },
   { keys: ['↑↑↓↓←→←→BA'],  desc: 'Konami code easter egg'     },
   { keys: ['Esc'],           desc: 'Close any overlay'          },
 ];
@@ -74,7 +75,7 @@ export default function KeyboardShortcuts() {
               </dl>
 
               <p className="border-t-2 border-[color:var(--paper)] px-4 py-2 font-mono text-sm text-center">
-                Press <kbd className="font-bold text-[color:var(--paper)]">Ctrl /</kbd> to toggle
+                Press <kbd className="font-bold text-[color:var(--paper)]">{MOD_KEY} /</kbd> to toggle
               </p>
             </div>
           </motion.div>

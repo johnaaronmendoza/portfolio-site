@@ -11,6 +11,12 @@ export type Shot = {
   /** What the screen shows (not a repeat of the caption) */
   alt: string;
   caption: string;
+  /** Art for phones (below 640px), with its own intrinsic size */
+  srcMobile?: string;
+  mobileWidth?: number;
+  mobileHeight?: number;
+  /** What "Open full size" opens, when not `src` (e.g. a vector original) */
+  fullSrc?: string;
 };
 
 const CAPTION_TEXT = 'font-sans text-[15px] sm:text-base leading-[1.5] text-[color:var(--text)]';
@@ -37,12 +43,14 @@ function FullSizeLink({ src, caption }: { src: string; caption: string }) {
  * `hero`: the first figure under the case header. Loads eagerly at high
  * priority; a portrait hero sits beside its caption from md.
  */
-export function ScreenFigure({ file, src, width, height, alt, caption, hero = false }: Shot & { hero?: boolean }) {
+export function ScreenFigure({
+  file, src, width, height, alt, caption, srcMobile, mobileWidth, mobileHeight, fullSrc, hero = false,
+}: Shot & { hero?: boolean }) {
   const portrait = width / height < 0.9;
   const full = width / height >= 1.4 && width >= 860;
   const besideCaption = hero && portrait;
 
-  const img = (
+  const image = (
     <img
       src={src}
       width={width}
@@ -60,6 +68,13 @@ export function ScreenFigure({ file, src, width, height, alt, caption, hero = fa
       }
     />
   );
+  const img = srcMobile ? (
+    <picture>
+      <source media="(max-width: 639px)" srcSet={srcMobile} width={mobileWidth} height={mobileHeight} />
+      {image}
+    </picture>
+  ) : image;
+  const fullLink = <FullSizeLink src={fullSrc ?? src} caption={caption} />;
 
   if (besideCaption) {
     return (
@@ -72,7 +87,7 @@ export function ScreenFigure({ file, src, width, height, alt, caption, hero = fa
           className={`flex flex-col gap-y-1 border-t-[3px] md:border-t-0 md:border-l-[3px] border-black px-4 pt-3 pb-1 md:p-6 md:justify-end ${CAPTION_TEXT}`}
         >
           <span className="text-pretty max-w-[40ch]">{caption}</span>
-          <FullSizeLink src={src} caption={caption} />
+          {fullLink}
         </figcaption>
       </figure>
     );
@@ -86,7 +101,7 @@ export function ScreenFigure({ file, src, width, height, alt, caption, hero = fa
         className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-x-6 gap-y-1 border-t-[3px] border-black px-4 pt-3 pb-1 sm:py-1 ${CAPTION_TEXT}`}
       >
         <span className="text-pretty sm:py-2">{caption}</span>
-        <FullSizeLink src={src} caption={caption} />
+        {fullLink}
       </figcaption>
     </figure>
   );

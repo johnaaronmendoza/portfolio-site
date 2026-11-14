@@ -7,6 +7,7 @@
 import { useState, useEffect } from 'react';
 import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
 import PixelArt from '@/components/PixelArt';
+import ShortcutHint from '@/components/ShortcutHint';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { scrollToSection } from '@/lib/utils';
 
@@ -112,11 +113,7 @@ export default function Footer() {
               {'>'} sudo hire-me
             </button>
           </p>
-          {/* The keyboard shortcuts, findable without knowing them first */}
-          <p className="font-label text-sm leading-relaxed">
-            <kbd className="font-bold">Ctrl K</kbd> commands<span aria-hidden="true"> · </span><span className="sr-only">, </span>
-            <kbd className="font-bold">Ctrl /</kbd> shortcuts
-          </p>
+          <ShortcutHint />
           <p className="font-sans text-sm">
             © {currentYear} John Aaron Mendoza Branzuela
           </p>

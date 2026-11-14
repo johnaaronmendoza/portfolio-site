@@ -5,14 +5,15 @@ import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
 import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
 import { PixelList } from '@/components/Hierarchy';
 import StatStrip from '@/components/StatStrip';
-import confusionImg from '@assets/da_p40_img1.png';
 import decisionBoundaryImg from '@assets/da_p39_img2.png';
 import dtAccuracyImg from '@assets/da_p35_img1.png';
 import pcaImg from '@assets/da_p9_img1.png';
-import comparisonImg from '@assets/da_p41_img1.png';
 
 const HERO_SHOT: Shot = {
-  file: 'model_comparison.png', src: comparisonImg, width: 1389, height: 490,
+  file: 'model_comparison.png',
+  src: '/assets/case/uwb/model-comparison-desktop@2x.webp', width: 1018, height: 527,
+  srcMobile: '/assets/case/uwb/model-comparison-mobile@2x.webp', mobileWidth: 360, mobileHeight: 561,
+  fullSrc: '/assets/case/uwb/model-comparison-desktop.svg',
   caption: 'SVM-RBF wins on every metric; range RMSE 1.757 m on both paths.',
   alt: 'Bar charts. Logistic regression vs SVM-RBF: accuracy 0.8575 vs 0.8961, precision 0.8967 vs 0.9297, recall 0.8081 vs 0.8569, F1 0.8501 vs 0.8918. Range RMSE 1.7566 m for path 1 and path 2.',
 };
@@ -24,9 +25,12 @@ const SHOTS: Shot[] = [
     alt: 'Line chart of cumulative explained variance by number of principal components, crossing 95% at 848 components and 99% at 963.',
   },
   {
-    file: 'confusion_matrices.png', src: confusionImg, width: 1229, height: 490,
+    file: 'confusion_matrices.png',
+    src: '/assets/case/uwb/confusion-matrices-desktop@2x.webp', width: 1018, height: 509,
+    srcMobile: '/assets/case/uwb/confusion-matrices-mobile@2x.webp', mobileWidth: 360, mobileHeight: 712,
+    fullSrc: '/assets/case/uwb/confusion-matrices-desktop.svg',
     caption: 'Correct of 8,400: SVM-RBF 7,527; baseline 7,203.',
-    alt: 'Two confusion matrices. Logistic regression: 3,809 and 3,394 correct, 391 and 806 wrong. SVM-RBF: 3,928 and 3,599 correct, 272 and 601 wrong.',
+    alt: 'Two confusion matrices, true label by predicted label (LOS+NLOS, NLOS+NLOS). Logistic regression: 3,809 and 3,394 correct, 391 and 806 wrong. SVM-RBF: 3,928 and 3,599 correct, 272 and 601 wrong.',
   },
   {
     file: 'tree_depth.png', src: dtAccuracyImg, width: 1013, height: 646,

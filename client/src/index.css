@@ -11,6 +11,11 @@
 }
 
 @custom-variant dark (&:is(.dark *));
+/* Short phones (320x640): the hero tightens so its buttons end above the dock */
+@custom-variant short-phone (@media (max-width: 639px) and (max-height: 660px));
+/* Short laptops (1024x768, 1280x800): the hero starts higher so desk_assist.exe
+   ends above the chat launcher */
+@custom-variant short-desk (@media (min-width: 1024px) and (max-height: 820px));
 
 /* Animated Grid Background */
 @keyframes panGrid {
@@ -878,6 +883,11 @@
 .chat-panel {
   height: min(600px, calc(100dvh - 8rem));
 }
+/* One topic set at a time: the keys below the log; the copy inside an
+   unknown-question reply shows only where the keys are hidden (below) */
+.chat-panel .chat-topics {
+  display: none;
+}
 @media (max-height: 500px) {
   .chat-panel {
     inset: 0;
@@ -912,12 +922,15 @@
 }
 /* 400% zoom (about 341x225): the log gets the height. The prompt line, Lil
    Johnny, the log's title bar and the topic keys step aside; unknown
-   questions still offer the topics inside the reply. */
+   questions offer the topics inside the reply instead. */
 @media (max-height: 420px) {
   .chat-panel .chat-prompt,
   .chat-panel .chat-log-bar,
   .chat-panel .chat-keys {
     display: none;
+  }
+  .chat-panel .chat-topics {
+    display: flex;
   }
   .chat-panel .chat-log-box {
     margin-top: 0.5rem;

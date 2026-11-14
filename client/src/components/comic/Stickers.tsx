@@ -41,7 +41,8 @@ const MIN_EDGE = { left: 8, right: 60 };
 
 // Content width per section (max-w-5xl = 1024, Projects max-w-6xl = 1152) and,
 // per side, the smallest viewport whose gutter, (viewport - width) / 2, fits
-// the edge gap + a 72px sticker + 16px to the content (96px left, 148px right)
+// the edge gap + a 72px sticker + 16px to the content (96px left, 148px right);
+// placed 24px short of the content, so a rotated sticker still clears it by 16px
 const LAYOUT: Record<string, { width: number; show: Record<Sticker['side'], string> }> = {
   about: { width: 1024, show: { left: 'xl:grid', right: 'min-[1320px]:grid' } },
   experience: { width: 1024, show: { left: 'xl:grid', right: 'min-[1320px]:grid' } },
@@ -51,8 +52,8 @@ const LAYOUT: Record<string, { width: number; show: Record<Sticker['side'], stri
 
 export default function Stickers({ set }: { set: keyof typeof SETS }) {
   const { width, show } = LAYOUT[set];
-  // Offset from the screen edge: a 72px sticker ends 16px short of the content
-  const edge = (side: Sticker['side']) => `max(${MIN_EDGE[side]}px, calc((100% - ${width}px) / 2 - 88px))`;
+  // Offset from the screen edge: a 72px sticker ends 24px short of the content
+  const edge = (side: Sticker['side']) => `max(${MIN_EDGE[side]}px, calc((100% - ${width}px) / 2 - 96px))`;
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
       {SETS[set].map(s => (

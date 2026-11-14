@@ -9,7 +9,7 @@ type Step = { label: string; ai?: boolean; detail?: string };
 const STEPS: Step[] = [
   { label: 'Ticket' },
   { label: 'Reads the thread', ai: true },
-  { label: 'Finds knowledge-base guidance', ai: true },
+  { label: 'Finds knowledge\u2011base guidance', ai: true }, // U+2011: never splits
   { label: 'Drafts a reply', ai: true },
   { label: 'Agent reviews', detail: "Every draft, before it's sent." }, // the human step
   { label: 'Sent' },

@@ -69,7 +69,7 @@ export default function Skills() {
           <SkillKeyboard
             listId={LIST_ID}
             legend={
-              <ul aria-label="Key colours" className="flex flex-wrap gap-x-5 gap-y-1 font-sans text-[15px] sm:text-base leading-relaxed">
+              <ul aria-label="Key colours" className="relative z-10 flex flex-wrap gap-x-5 gap-y-1 font-sans text-[15px] sm:text-base leading-relaxed">
                 {LEGEND.map(({ way, colour, label }) => (
                   <li key={way} className="flex items-center gap-2">
                     <Swatch way={way} />

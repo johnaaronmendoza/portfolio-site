@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import PixelArt from '@/components/PixelArt';
 import SectionHeading from '@/components/SectionHeading';
 import SkipLink from '@/components/SkipLink';
-import SoundToggle, { FLOAT_DOCK } from '@/components/SoundToggle';
+import SoundToggle from '@/components/SoundToggle';
 import { ProjectTile } from '@/components/Projects';
 import { getCase, getNextCase, type CaseSlug } from '@/data/projects';
 import { trackProjectVisit } from '@/hooks/useAchievements';
@@ -13,16 +13,18 @@ import { play } from '@/hooks/useSound';
 const HOME_TITLE = 'John Aaron Mendoza Branzuela | Computing Science Portfolio';
 const GUTTERS = 'px-4 sm:px-8 lg:px-16';
 
-/** Sticky black bar with the one way back to the Projects grid */
+/** Sticky black bar with the one way back to the Projects grid, and Sound
+ *  (in the bar, so no floating button sits over the page's figures) */
 function CaseTaskbar() {
   return (
     <header className={`sticky top-0 z-30 bg-[var(--bar)] border-b-[3px] border-black ${GUTTERS} [--focus:var(--paper)]`}>
-      <div className="max-w-5xl mx-auto h-14 flex items-center">
-        <Link href="/#projects" replace onClick={() => play('back')} className="btn btn-ghost text-[color:var(--paper)] border-[color:var(--paper)] hover:text-[color:var(--text)]">
+      <div className="max-w-5xl mx-auto h-14 flex items-center justify-between gap-3">
+        <Link href="/#projects" replace onClick={() => play('back')} className="btn btn-ghost max-sm:px-3 text-[color:var(--paper)] border-[color:var(--paper)] hover:text-[color:var(--text)]">
           <span aria-hidden="true">←</span>
           <PixelArt name="icon-projects" size={16} />
           All projects
         </Link>
+        <SoundToggle variant="bar" />
       </div>
     </header>
   );
@@ -114,9 +116,6 @@ export default function CaseLayout({ slug, children }: CaseLayoutProps) {
         <NextProject slug={slug} />
       </main>
       <Footer />
-      <div className={FLOAT_DOCK}>
-        <SoundToggle />
-      </div>
     </div>
   );
 }

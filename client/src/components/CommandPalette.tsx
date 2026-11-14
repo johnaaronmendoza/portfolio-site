@@ -9,7 +9,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
-import { scrollToSection } from '@/lib/utils';
+import { MOD_KEY, scrollToSection } from '@/lib/utils';
 import { motionTokens } from '@/lib/motion-tokens';
 import { useModalFocus } from '@/hooks/useModalFocus';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -319,7 +319,7 @@ export default function CommandPalette() {
               {/* Footer hints */}
               <div className="border-t-2 border-[color:var(--paper)] p-3 flex flex-wrap justify-between gap-x-4 gap-y-1 text-sm font-mono">
                 <span>↑↓ Navigate | Enter Select | Esc Close</span>
-                <span>Ctrl+K Toggle</span>
+                <span>{MOD_KEY} K Toggle</span>
               </div>
             </div>
           </motion.div>

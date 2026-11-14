@@ -241,11 +241,12 @@ export default function Projects() {
 
             {/* Tile grid: the three featured tiles in one row from lg, then the
                 rest two to a row (lg) or four (xl); UWB spans both columns at sm
-                so the 2-column grid has no orphan */}
+                so the 2-column grid has no orphan. Filtered, every tile takes a
+                third at xl so the rows close up */}
             <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 xl:grid-cols-12 gap-6">
               <AnimatePresence initial={false} mode="popLayout">
                 {visible.map(project => (
-                  <ProjectTile key={project.num} project={project} />
+                  <ProjectTile key={project.num} project={project} span={active ? `${project.span} xl:col-span-4` : undefined} />
                 ))}
               </AnimatePresence>
 

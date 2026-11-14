@@ -1,0 +1,5 @@
+client/public/assets/case/uwb/confusion-matrices-desktop.svg 1018x509
+client/public/assets/case/uwb/confusion-matrices-mobile.svg 360x712
+client/public/assets/case/uwb/model-comparison-desktop.svg 1018x527
+client/public/assets/case/uwb/model-comparison-mobile.svg 360x561
+design-system/portfolio/asset-work/uwb-charts/tile-matrix-svm.svg 760x540

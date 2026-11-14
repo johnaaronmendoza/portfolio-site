@@ -21,7 +21,9 @@ TILES = {
     'silverlink': (PAGE,   'bleed', [('silverlink_p21_img0.png', (100, 30, 640, 428))]),
     'scs':        (TEAL,   'bleed', [('scs_p71_img1.png', (0, 0, 1400, 1006))]),
     'uat':        (PAGE,   'bleed', [('uat_dashboard_full.png', (256, 16, 1440, 922))]),
-    'uwb':        (TEAL,   'fit',   [('da_p40_img1.png', (640, 0, 1229, 490))]),
+    # UWB: the SVM-RBF matrix redrawn in Paper & Ink (uwb-charts/build.py) on the page colour;
+    # it replaces the matplotlib crop of da_p40_img1.png (640, 0, 1229, 490) on blue.
+    'uwb':        (PAGE,   'svg',   [HERE.parent / 'uwb-charts' / 'tile-matrix-svm.svg']),
     'firesafety': (TEAL,   'phones', [('firesafety_p29_img5.png', (31, 26, 177, 345)),
                                       ('firesafety_p29_img5.png', (257, 26, 403, 345))]),
 }
@@ -41,6 +43,13 @@ def crop(slug, i, f, box):
     return out.as_uri(), box[2] - box[0], box[3] - box[1]
 
 for slug, (ground, kind, parts) in TILES.items():
+    if kind == 'svg':  # a self-contained chart SVG (fonts embedded), set in the card at its own size
+        svg = parts[0]
+        import re
+        w, h = map(int, re.search(r'viewBox="0 0 (\d+) (\d+)"', svg.read_text()).groups())
+        body = f'<img class="shot" src="{svg.as_uri()}" style="left:{(1200-w-8)//2}px;top:{(660-h-8)//2 - 6}px;width:{w}px;height:{h}px;background:#fff">'
+        (HERE / f'{slug}.html').write_text(f'{HEAD}<body style="background:{ground}">{body}</body></html>')
+        continue
     imgs = [crop(slug, i, f, b) for i, (f, b) in enumerate(parts)]
     if kind == 'bleed':
         uri, w, h = imgs[0]

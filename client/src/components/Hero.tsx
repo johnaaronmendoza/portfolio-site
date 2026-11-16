@@ -14,6 +14,7 @@ import { Chip, Lead } from '@/components/Hierarchy';
 import PixelArt from '@/components/PixelArt';
 import HeroNarrator from '@/components/comic/HeroNarrator';
 import DeskAssistWindow from '@/components/DeskAssistWindow';
+import ProofPoints from '@/components/ProofPoints';
 import Window from '@/components/Window';
 
 const { hero: HERO, loop: LOOP, easing } = motionTokens;
@@ -297,6 +298,17 @@ export default function Hero() {
           >
             {xl && <HeroNarrator />}
             <DeskAssistWindow />
+          </motion.div>
+
+          {/* Proof points: three figures, each with what it means and a link to
+              the evidence (replaced the stats band, John, 16 Nov) */}
+          <motion.div
+            className="mt-12 lg:col-span-12 lg:mt-14"
+            initial={{ opacity: 0, y: reduced ? 0 : motionTokens.distance.sm }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: HERO.line, delay: HERO.ctas, ease: easing.out }}
+          >
+            <ProofPoints />
           </motion.div>
         </div>
       </div>

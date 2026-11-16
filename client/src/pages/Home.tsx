@@ -14,7 +14,6 @@ import Projects from '@/components/Projects';
 import Skills from '@/components/Skills';
 import Footer from '@/components/Footer';
 import Ribbon from '@/components/Ribbon';
-import StatsBand from '@/components/StatsBand';
 import SectionNav from '@/components/SectionNav';
 import SkipLink from '@/components/SkipLink';
 import Stickers from '@/components/comic/Stickers';
@@ -59,9 +58,8 @@ export default function Home() {
         <div id="hero" tabIndex={-1} className={SECTION_CLASS}>
           <Hero />
         </div>
-        <StatsBand />
-        {/* Negative margins overlap touching 3px borders so bands share one rule */}
-        <Ribbon tone="blue" className="-mt-[3px]" items={['ABOUT ME', 'AI', 'DATA', 'FULL-STACK']} />
+        {/* Negative margins elsewhere overlap touching 3px borders so bands share one rule */}
+        <Ribbon tone="blue" items={['ABOUT ME', 'AI', 'DATA', 'FULL-STACK']} />
         <div id="about" tabIndex={-1} className={SECTION_CLASS}>
           <Stickers set="about" />
           <About />

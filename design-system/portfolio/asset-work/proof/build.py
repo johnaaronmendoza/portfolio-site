@@ -22,7 +22,7 @@ body{{background:#EFEAE0;background-image:radial-gradient(rgb(0 0 0 / .08) 1.1px
 .proof .head{{background:#111;color:#fff;font:600 13px "Plex Mono";padding:7px 12px;display:flex;justify-content:space-between}}
 .row{{display:flex;align-items:center;gap:14px;padding:12px 14px;border-top:3px solid #000}}
 .row:first-of-type{{border-top:0}}
-.fig{{flex:none;min-width:118px;text-align:center;font:700 22px "Plex Mono";letter-spacing:-.02em;background:#FFD23F;border:3px solid #000;padding:6px 8px}}
+.fig{{flex:none;min-width:118px;text-align:center;font:700 22px "Plex Mono";letter-spacing:-.02em;background:#111;color:#fff;border:3px solid #000;padding:6px 8px}}
 .fig.b{{background:#3A66FF;color:#fff}}
 .txt{{flex:1;font:500 16px/1.4 "Plex Sans"}}
 .txt b{{font-weight:700}}
@@ -45,16 +45,14 @@ desk = f'''<!doctype html><html><head><meta charset="utf-8"><style>{CSS}body{{wi
    <div class="name" style="padding:34px 36px;font-size:40px"><div style="color:#fff">JOHN AARON</div><div style="color:#FFD23F">BRANZUELA</div></div></div>
   <div class="role" style="margin-top:26px">&gt; AI, data and full-stack developer</div>
   <div class="lead" style="margin-top:10px">I build AI and data tools people can trust, now building Desk Assist at LGA Telecom.</div>
-  <div style="margin-top:22px;display:flex;gap:14px"><span class="btn" style="background:#3A66FF;color:#fff">Download resume</span><span class="btn" style="background:#FFD23F">See projects</span><span class="btn" style="background:transparent">Email me</span></div>
+  <div style="margin-top:22px;display:flex;gap:14px"><span class="btn" style="background:#3A66FF;color:#fff">Download resume</span><span class="btn" style="background:#fff">See projects</span><span class="btn" style="background:transparent">Email me</span></div>
  </div>
- <div style="display:grid;place-items:center"><div style="width:330px;height:380px;border:4px solid #000;background:#3A66FF;box-shadow:10px 10px 0 #000;position:relative;background-image:radial-gradient(rgb(255 255 255/.28) 2px,transparent 2.4px);background-size:12px 12px">
-   <div style="background:#111;color:#fff;font:600 14px 'Plex Mono';padding:7px 12px">lil_johnny.gif</div>
-   <img src="{(ROOT/'client/public/assets/mascot/poses/point-right.png').as_uri()}" style="position:absolute;left:50%;bottom:36px;height:230px;transform:translateX(-50%) scaleX(-1);image-rendering:pixelated">
-   <div style="position:absolute;left:0;right:0;bottom:0;height:40px;background:#FFD23F;border-top:3px solid #000"></div></div></div>
+ <div style="padding-top:4px"><div class="win" style="background:#fff"><div class="bar"><span>desk_assist.exe</span><span>○□✕</span></div>
+   <div style="padding:14px 16px 16px"><div style="font:700 20px 'Plex Sans';font-stretch:85%">How Desk Assist will draft a reply</div><div style="display:flex;align-items:center;gap:10px;border:3px solid #000;padding:7px 10px;margin-top:8px;background:#fff;color:#111;font:600 15px Plex Sans"><span style="font:700 12px Plex Mono;border:2px solid #000;padding:1px 5px;background:#EFEAE0;color:#000">1</span>Ticket</div><div style="display:flex;align-items:center;gap:10px;border:3px solid #000;padding:7px 10px;margin-top:8px;background:#fff;color:#111;font:600 15px Plex Sans"><span style="font:700 12px Plex Mono;border:2px solid #000;padding:1px 5px;background:#FFD23F;color:#000">AI</span>Reads the thread</div><div style="display:flex;align-items:center;gap:10px;border:3px solid #000;padding:7px 10px;margin-top:8px;background:#fff;color:#111;font:600 15px Plex Sans"><span style="font:700 12px Plex Mono;border:2px solid #000;padding:1px 5px;background:#FFD23F;color:#000">AI</span>Finds knowledge-base guidance</div><div style="display:flex;align-items:center;gap:10px;border:3px solid #000;padding:7px 10px;margin-top:8px;background:#fff;color:#111;font:600 15px Plex Sans"><span style="font:700 12px Plex Mono;border:2px solid #000;padding:1px 5px;background:#FFD23F;color:#000">AI</span>Drafts a reply</div><div style="display:flex;align-items:center;gap:10px;border:3px solid #000;padding:7px 10px;margin-top:8px;background:#111;color:#fff;font:600 15px Plex Sans"><span style="font:700 12px Plex Mono;border:2px solid #000;padding:1px 5px;background:#fff;color:#000">AGENT</span>Agent reviews</div><div style="display:flex;align-items:center;gap:10px;border:3px solid #000;padding:7px 10px;margin-top:8px;background:#fff;color:#111;font:600 15px Plex Sans"><span style="font:700 12px Plex Mono;border:2px solid #000;padding:1px 5px;background:#EFEAE0;color:#000">6</span>Sent</div></div></div></div>
  <div style="grid-column:1 / -1;margin-top:10px">{proof()}</div>
 </div>
 <div class="ribbon" style="margin-top:40px">&nbsp; ABOUT ME ✦ AI ✦ DATA ✦ FULL-STACK ✦ ABOUT ME ✦ AI ✦ DATA ✦ FULL-STACK ✦ ABOUT ME ✦ AI ✦ DATA</div>
-<div class="label">OPTION 2 MOCKUP · desktop 1366</div></body></html>'''
+<div class="label">OPTION 2 MOCKUP · desktop 1366 (hero as live after PR #7)</div></body></html>'''
 mob = f'''<!doctype html><html><head><meta charset="utf-8"><style>{CSS}body{{width:375px;height:1180px}}
 .row{{flex-wrap:wrap;gap:10px}} .fig{{min-width:0;font-size:20px}} .txt{{flex-basis:100%;font-size:16px}}</style></head><body>
 <div style="padding:28px 16px 0">
@@ -62,7 +60,7 @@ mob = f'''<!doctype html><html><head><meta charset="utf-8"><style>{CSS}body{{wid
   <div class="name" style="padding:22px 18px;font-size:22px"><div style="color:#fff">JOHN AARON</div><div style="color:#FFD23F">BRANZUELA</div></div></div>
  <div class="role" style="margin-top:22px;font-size:15px">&gt; AI, data and full-stack developer</div>
  <div class="lead" style="margin-top:8px;font-size:18px">I build AI and data tools people can trust, now building Desk Assist at LGA Telecom.</div>
- <div style="margin-top:18px;display:grid;gap:12px"><span class="btn" style="background:#3A66FF;color:#fff;text-align:center">Download resume</span><span class="btn" style="background:#FFD23F;text-align:center">See projects</span></div>
+ <div style="margin-top:18px;display:grid;gap:12px"><span class="btn" style="background:#3A66FF;color:#fff;text-align:center">Download resume</span><span class="btn" style="background:#fff;text-align:center">See projects</span></div>
  <div style="margin-top:26px">{proof(compact=True)}</div>
 </div>
 <div class="ribbon" style="margin-top:30px">&nbsp; ABOUT ME ✦ AI ✦ DATA ✦ FULL-STACK</div>

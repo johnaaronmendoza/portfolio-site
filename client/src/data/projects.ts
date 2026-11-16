@@ -91,7 +91,6 @@ export const PROJECTS: Project[] = [
     span: FEATURED_SPAN,
     preloadImages: [scs2, scs3],
     featured: true,
-    sfx: 'Your move!',
   },
   {
     num: 4,

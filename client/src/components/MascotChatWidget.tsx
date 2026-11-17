@@ -1,7 +1,7 @@
 /**
  * MascotChatWidget: floating keyword-bot chat (bottom-right).
  * An `ask_johnny.exe` window styled as a retro OS dialog (John, Nov 2026):
- * a conversation.log dialog with a chunky scrollbar, Lil Johnny leaning on its
+ * one window holding a framed log with a chunky scrollbar, Lil Johnny standing on its
  * top edge, the visitor's questions as blue "selected" rows, and topic keycaps.
  * Answers come from the local knowledge base below; there is no backend.
  */
@@ -319,14 +319,16 @@ export default function MascotChatWidget() {
         aria-controls={PANEL_ID}
         className={`btn focus-ring-float fixed bottom-4 right-4 sm:bottom-6 z-40 p-0 text-black ${isOpen ? 'bg-[var(--page)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)]'}`}
       >
-        <div className="flex items-center gap-2 p-1 sm:px-3 sm:py-1.5">
+        {/* Icon only below 1440px, where a wider launcher would sit over the
+            content column (proof.txt's links) */}
+        <div className="flex items-center gap-2 p-1 min-[1440px]:px-3 min-[1440px]:py-1.5">
           <img
             src={isTyping ? MASCOT_WORRY : MASCOT_HAPPY}
             alt=""
-            className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
+            className="w-8 h-8 min-[1440px]:w-10 min-[1440px]:h-10 object-contain"
             style={{ imageRendering: 'pixelated' }}
           />
-          <span className="hidden sm:inline font-label text-xs">
+          <span className="hidden min-[1440px]:inline font-label text-xs">
             {isOpen ? 'Close' : 'Chat'}
           </span>
         </div>
@@ -352,7 +354,7 @@ export default function MascotChatWidget() {
           >
             <WindowBar title="ask_johnny.exe" onClose={closeChat} closeLabel="Close chat" />
 
-            {/* Prompt line, with Lil Johnny leaning on the dialog's top edge
+            {/* Prompt line, with Lil Johnny standing whole on the log's top edge
                 (he worries while the bot types) */}
             <div className="chat-prompt relative flex-shrink-0 flex items-end justify-between gap-3 px-4 pt-3">
               <p className="font-sans text-[15px] font-bold text-[color:var(--text)] pb-2">
@@ -363,16 +365,13 @@ export default function MascotChatWidget() {
                 alt=""
                 width={47}
                 height={64}
-                className="relative z-0 h-16 w-auto translate-y-5 -mt-6 [image-rendering:pixelated]"
+                className="h-16 w-auto [image-rendering:pixelated]"
               />
             </div>
 
-            {/* conversation.log dialog: flex-1 + min-h-0 lets the log scroll inside */}
-            <div className="chat-log-box relative z-10 mx-3 flex-1 min-h-0 flex flex-col border-[3px] border-black bg-[var(--paper)] shadow-[4px_4px_0_#000]">
-              <div aria-hidden="true" className="chat-log-bar flex-shrink-0 flex items-center justify-between bg-[var(--bar)] text-[color:var(--paper)] font-label text-xs px-2.5 py-1.5">
-                <span>conversation.log</span>
-                <span>○□✕</span>
-              </div>
+            {/* The log: a framed area inside the one chat window; flex-1 +
+                min-h-0 lets it scroll inside */}
+            <div className="chat-log-box mx-3 flex-1 min-h-0 flex flex-col border-[3px] border-black bg-[var(--paper)]">
             <div
               ref={logRef}
               className="retro-scroll flex-1 min-h-0 overflow-y-auto p-3 space-y-3"

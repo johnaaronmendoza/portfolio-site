@@ -27,16 +27,6 @@
   }
 }
 
-/* Floating Pixel Animation */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
 /* Sovereign Console — blinking cursor keyframes */
 @keyframes blinker {
   50% { opacity: 0; }
@@ -751,8 +741,10 @@
     color: var(--ink);
   }
 
+  /* Paper like the secondary buttons, so particles and halftone never show
+     through; the hover fill tells it apart */
   .btn-ghost {
-    background-color: transparent;
+    background-color: var(--paper);
     color: var(--text);
     border-color: var(--ink);
   }
@@ -773,8 +765,8 @@
     }
 
     .btn-ghost:hover {
-      background-color: var(--paper);
-      color: var(--text);
+      background-color: var(--blue);
+      color: var(--ink);
     }
 
     .btn-ghost-ink:hover {
@@ -921,11 +913,10 @@
   }
 }
 /* 400% zoom (about 341x225): the log gets the height. The prompt line, Lil
-   Johnny, the log's title bar and the topic keys step aside; unknown
-   questions offer the topics inside the reply instead. */
+   Johnny and the topic keys step aside; unknown questions offer the topics
+   inside the reply instead. */
 @media (max-height: 420px) {
   .chat-panel .chat-prompt,
-  .chat-panel .chat-log-bar,
   .chat-panel .chat-keys {
     display: none;
   }

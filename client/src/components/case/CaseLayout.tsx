@@ -19,7 +19,7 @@ function CaseTaskbar() {
   return (
     <header className={`sticky top-0 z-30 bg-[var(--bar)] border-b-[3px] border-black ${GUTTERS} [--focus:var(--paper)]`}>
       <div className="max-w-5xl mx-auto h-14 flex items-center justify-between gap-3">
-        <Link href="/#projects" replace onClick={() => play('back')} className="btn btn-ghost max-sm:px-3 text-[color:var(--paper)] border-[color:var(--paper)] hover:text-[color:var(--text)]">
+        <Link href="/#projects" replace onClick={() => play('back')} className="btn btn-ghost max-sm:px-3 bg-transparent text-[color:var(--paper)] border-[color:var(--paper)] hover:bg-[var(--paper)] hover:text-[color:var(--text)]">
           <span aria-hidden="true">←</span>
           <PixelArt name="icon-projects" size={16} />
           All projects

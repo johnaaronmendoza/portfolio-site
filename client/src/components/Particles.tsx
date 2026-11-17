@@ -5,13 +5,15 @@ import './Particles.css';
 
 const P = motionTokens.particles;
 
-// Look of the three depth steps, [far, near]: far pixels are small and faint
-const SIZE = [3, 7]; // CSS px, drawn as whole canvas pixels
-const ALPHA = [0.36, 0.68];
-const NEAR_SHARE = 0.15;
+// Look of the three depth steps, [far, near]: 4, 6 and 8px squares, near
+// opaque so every pixel stays on its palette token
+const SIZE = [4, 8]; // CSS px, drawn as whole canvas pixels
+const ALPHA = [0.9, 1.0];
+const NEAR_SHARE = 0.25;
 const MID_SHARE = 0.35;
-// Boxes kept free of particles (reading text), and how far the fade reaches
-const CLEAR_MAX = 4;
+const STEP = 2; // CSS px: pixels move on a 2px lattice, so drift reads 8-bit
+// Boxes kept free of particles (reading text, buttons), and how far the fade reaches
+const CLEAR_MAX = 6;
 const CLEAR_FEATHER = 28;
 const CLEAR_NONE = -1e4;
 const CLEAR_RECHECK = 1; // seconds between re-measuring the boxes while running
@@ -50,6 +52,7 @@ const vertex = /* glsl */ `
 
     p.x += sin(uTime * ${num((2 * Math.PI) / P.swayPeriod)} * mix(0.7, 1.3, seed.w) + seed.z * 6.2832) * ${range(P.sway)};
     p -= uPointer * ${range(P.shift)};
+    p = floor(p / ${num(STEP)}) * ${num(STEP)};
 
     for (int i = 0; i < ${CLEAR_MAX}; i++) {
       vec2 outside = max(max(uClear[i].xy - p, p - uClear[i].zw), 0.0);
@@ -96,12 +99,14 @@ const seeded = (a: number) => () => {
 interface ParticlesProps {
   /** Palette tokens (CSS custom properties holding hex colours); repeat one to weight it */
   colors: string[];
+  /** Tokens for the near (largest) step; defaults to `colors` */
+  nearColors?: string[];
   /** Particles per 100,000 CSS px² of the container */
   density?: number;
   maxCount?: number;
   /** Pixels lean a few px away from a mouse pointer */
   followPointer?: boolean;
-  /** Elements whose boxes stay free of particles (at most 4) */
+  /** Elements whose boxes stay free of particles (at most 6) */
   clearSelector?: string;
   /** Freeze on the current frame (the viewer's "Pause motion" toggle) */
   paused?: boolean;
@@ -110,6 +115,7 @@ interface ParticlesProps {
 
 const Particles = ({
   colors,
+  nearColors = colors,
   density = 10,
   maxCount = 240,
   followPointer = false,
@@ -142,14 +148,18 @@ const Particles = ({
     // Even spread (R2 sequence), so any first `n` particles cover the field
     const random = seeded(7);
     const styles = getComputedStyle(container);
-    const palette = colors.map(name => hexToRgb(styles.getPropertyValue(name)));
+    const toRgb = (names: string[]) => names.map(name => hexToRgb(styles.getPropertyValue(name)));
+    const palette = toRgb(colors);
+    const nearPalette = toRgb(nearColors);
     const seeds = new Float32Array(maxCount * 4);
     const tints = new Float32Array(maxCount * 4);
     for (let i = 0; i < maxCount; i++) {
       const layer = random();
       seeds.set([(0.5 + i * 0.7548776662) % 1, (0.5 + i * 0.569840291) % 1, random(), random()], i * 4);
-      tints.set(palette[Math.floor(random() * palette.length)], i * 4);
-      tints[i * 4 + 3] = layer < NEAR_SHARE ? 1 : layer < NEAR_SHARE + MID_SHARE ? 0.5 : 0;
+      const near = layer < NEAR_SHARE;
+      const tones = near ? nearPalette : palette;
+      tints.set(tones[Math.floor(random() * tones.length)], i * 4);
+      tints[i * 4 + 3] = near ? 1 : layer < NEAR_SHARE + MID_SHARE ? 0.5 : 0;
     }
 
     const geometry = new Geometry(gl, {
@@ -259,7 +269,7 @@ const Particles = ({
       canvas.remove();
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
-    // `colors` is read once per scene; pass a stable palette
+    // `colors` and `nearColors` are read once per scene; pass stable palettes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [density, maxCount, followPointer, clearSelector]);
 

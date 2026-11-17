@@ -28,15 +28,19 @@ interface Props {
   src: string;
   alt: string;
   className?: string;
+  /** Crop anchor, like CSS object-position (0-1 per axis); centred by default */
+  position?: readonly [number, number];
 }
 
-export default function PixelatedImage({ src, alt, className }: Props) {
+export default function PixelatedImage({ src, alt, className, position }: Props) {
   const canvasRef  = useRef<HTMLCanvasElement>(null);
   const imgRef     = useRef<HTMLImageElement | null>(null);
   const reduced    = useReducedMotion();
   const sizeRef    = useRef(CRISP_SIZE);     // current (animated) block size
   const targetRef  = useRef(CRISP_SIZE);     // where we're heading
   const rafRef     = useRef(0);
+  const positionRef = useRef(position);
+  positionRef.current = position;
 
   // ── Animation loop ────────────────────────────────────────────────────
   const tick = useCallback(() => {
@@ -51,7 +55,7 @@ export default function PixelatedImage({ src, alt, className }: Props) {
     // to keep the same on-screen block size on retina displays.
     const ps = Math.max(CRISP_SIZE, Math.round(sizeRef.current));
     const dpr = window.devicePixelRatio || 1;
-    manager.draw(img, canvas, ps <= CRISP_SIZE ? CRISP_SIZE : ps * dpr);
+    manager.draw(img, canvas, ps <= CRISP_SIZE ? CRISP_SIZE : ps * dpr, positionRef.current);
 
     if (Math.abs(sizeRef.current - targetRef.current) > DONE_THRESH) {
       rafRef.current = requestAnimationFrame(tick);

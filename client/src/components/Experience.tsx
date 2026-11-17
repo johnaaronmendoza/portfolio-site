@@ -79,40 +79,58 @@ const ENTRIES: Entry[] = [
   },
 ];
 
+/** One role as a window. The lead (LGA, the current role) is full width and,
+ *  from lg, splits into a 12-column body: who/when on the left, outcomes on
+ *  the right, with a heavier shadow like the Projects window. */
+function ExperienceWindow({ entry, lead = false }: { entry: Entry; lead?: boolean }) {
+  return (
+    <Window
+      title={entry.file}
+      className={lead ? 'lg:shadow-[12px_12px_0_0_var(--ink)]' : 'flex h-full flex-col'}
+      bodyClassName={lead ? 'p-6 sm:p-10 lg:p-12 lg:grid lg:grid-cols-12 lg:gap-x-12' : 'flex-1 p-6 sm:p-10'}
+    >
+      <div
+        className={`mb-8 pb-6 border-b-[3px] border-black ${
+          lead ? 'lg:col-span-4 lg:mb-0 lg:pb-0 lg:border-b-0 lg:border-r-[3px] lg:pr-10' : ''
+        }`}
+      >
+        <div className="flex flex-wrap items-center gap-2 mb-4">
+          {entry.badges.map(badge => (
+            <span key={badge} className={BADGE_CLASS[badge]}>
+              {badge}
+            </span>
+          ))}
+        </div>
+        <h3 className={`font-display text-black mb-2 text-balance ${lead ? 'text-[28px] sm:text-[32px] lg:text-[40px] leading-[1.1]' : 'text-2xl sm:text-[28px]'}`}>
+          {entry.org}
+        </h3>
+        <p className="font-sans text-[15px] sm:text-base font-bold text-pretty">
+          {entry.role}
+        </p>
+        <Chip icon="chip-calendar" text={entry.period} className="mt-4 whitespace-nowrap" />
+      </div>
+
+      <PixelList items={entry.highlights} extras={entry.extras} className={lead ? 'lg:col-span-8 lg:self-center' : ''} />
+    </Window>
+  );
+}
+
 export default function Experience() {
+  const [lead, ...rest] = ENTRIES;
   return (
     <FramerReveal>
       <section className="px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <SectionHeading text="EXPERIENCE" icon="icon-experience" className="mb-16" />
 
-          <div className="space-y-10">
-            {ENTRIES.map((entry) => (
-              <Window key={entry.org} title={entry.file} bodyClassName="p-6 sm:p-10 lg:p-12">
-                <div className="flex flex-wrap items-center gap-2 mb-4">
-                  {entry.badges.map(badge => (
-                    <span key={badge} className={BADGE_CLASS[badge]}>
-                      {badge}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Header Row */}
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-8 pb-6 border-b-[3px] border-black">
-                  <div>
-                    <h3 className="font-display text-2xl sm:text-[28px] text-black mb-2">
-                      {entry.org}
-                    </h3>
-                    <p className="font-sans text-[15px] sm:text-base font-bold">
-                      {entry.role}
-                    </p>
-                  </div>
-                  <Chip icon="chip-calendar" text={entry.period} className="flex-shrink-0 self-start whitespace-nowrap" />
-                </div>
-
-                <PixelList items={entry.highlights} extras={entry.extras} />
-              </Window>
-            ))}
+          {/* LGA leads; Sembcorp and the degree sit side by side from lg */}
+          <div className="space-y-10 lg:space-y-14">
+            <ExperienceWindow entry={lead} lead />
+            <div className="grid gap-10 lg:grid-cols-2 lg:gap-x-10">
+              {rest.map(entry => (
+                <ExperienceWindow key={entry.org} entry={entry} />
+              ))}
+            </div>
           </div>
         </div>
       </section>

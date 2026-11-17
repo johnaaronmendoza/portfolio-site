@@ -13,8 +13,8 @@ const PRESSED = 'translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_tra
 
 /**
  * A dock button: glyph over a short word, so the state reads without hover.
- * The word hides between lg and 1360px, where the gutter is 64px and only the
- * glyph fits; the glyph and the pressed (ink) fill still show the state there.
+ * The word hides between lg and 1440px, where the gutter is too narrow for it
+ * and the dock would cover content; only the glyph shows there, and the glyph and the pressed (ink) fill still show the state there.
  * Glyph only, too, on very short screens (400% zoom), where the dock hugs the
  * bottom edge so it covers as little of the page as it can.
  */
@@ -23,7 +23,7 @@ export function dockButton(pressed: boolean): string {
     pressed ? `${PRESSED} bg-[var(--bar)] text-[color:var(--paper)]` : 'bg-[var(--paper)] text-black'
   }`;
 }
-export const DOCK_WORD = 'whitespace-nowrap lg:max-[1359px]:hidden [@media(max-height:500px)]:hidden';
+export const DOCK_WORD = 'whitespace-nowrap lg:max-[1439px]:hidden [@media(max-height:500px)]:hidden';
 
 /** 8x7 pixel glyphs in currentColor, so they invert with the button fill */
 const SPEAKER = 'M0 2h2v3H0zM2 1h1v5H2zM3 0h1v7H3z';
@@ -66,7 +66,7 @@ export default function SoundToggle({ variant = 'dock' }: { variant?: 'dock' | '
       title="Sound"
       className={
         bar
-          ? `btn px-3 ${on ? 'bg-[var(--paper)] text-black border-[color:var(--paper)] shadow-none' : 'btn-ghost text-[color:var(--paper)] border-[color:var(--paper)] hover:text-[color:var(--text)]'}`
+          ? `btn px-3 ${on ? 'bg-[var(--paper)] text-black border-[color:var(--paper)] shadow-none' : 'btn-ghost bg-transparent text-[color:var(--paper)] border-[color:var(--paper)] hover:bg-[var(--paper)] hover:text-[color:var(--text)]'}`
           : dockButton(on)
       }
     >
@@ -74,8 +74,8 @@ export default function SoundToggle({ variant = 'dock' }: { variant?: 'dock' | '
       <span className="sr-only">Sound</span>
       {/* "Off" / "On" where space is short, "Sound off" where it fits */}
       <span aria-hidden="true" className={bar ? 'whitespace-nowrap' : DOCK_WORD}>
-        <span className={bar ? 'max-sm:hidden' : 'hidden min-[1360px]:inline'}>Sound </span>
-        <span className={bar ? 'max-sm:capitalize' : 'max-[1359px]:capitalize'}>{on ? 'on' : 'off'}</span>
+        <span className={bar ? 'max-sm:hidden' : 'hidden min-[1440px]:inline'}>Sound </span>
+        <span className={bar ? 'max-sm:capitalize' : 'max-[1439px]:capitalize'}>{on ? 'on' : 'off'}</span>
       </span>
     </button>
   );

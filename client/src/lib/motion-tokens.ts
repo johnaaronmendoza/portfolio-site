@@ -28,7 +28,6 @@ export const motionTokens = {
   // Hero loops (stopped by reduced motion and the Pause motion toggle)
   loop: {
     blink: 0.5,
-    float: 3,
     bounce: 1.2,
   },
   // Hero particle field: square pixels rising slowly behind the windows, in

@@ -234,8 +234,9 @@ export default function SectionNav() {
               </span>
               <span
                 aria-hidden="true"
-                // Ink ring keeps the dot visible where it crosses the blue band
-                className={`block w-3 h-3 border-2 shadow-[0_0_0_2px_var(--ink)] transition-colors duration-150 ${
+                // Ink ring, then a paper outline: the dot reads on the page,
+                // the blue band and the black footer alike
+                className={`block w-3 h-3 border-2 shadow-[0_0_0_2px_var(--ink),0_0_0_4px_var(--paper)] transition-colors duration-150 ${
                   active === id
                     ? 'bg-[var(--bar)] border-black'
                     : 'border-black bg-[var(--paper)] group-hover:bg-[var(--blue)]'

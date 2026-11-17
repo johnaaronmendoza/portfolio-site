@@ -71,6 +71,7 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
           <PixelatedImage
             src={project.image}
             alt=""
+            position={project.imagePosition}
             className={`w-full h-full transition-[filter,scale] duration-200 ${
               isComingSoon
                 ? 'opacity-50 grayscale'
@@ -87,9 +88,6 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
             <span className="badge badge--paper">COMING SOON</span>
           </div>
         )}
-        {project.featured && (
-          <span className="badge badge--ink absolute top-2 left-2">Featured</span>
-        )}
         {isExternal && (
           <span className="badge badge--data absolute top-2 right-2">Live site</span>
         )}
@@ -98,18 +96,22 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
           <Burst
             fill="var(--paper)"
             rotate={project.num % 2 ? 8 : -8}
-            className="absolute bottom-2 right-2 size-28 lg:size-32 pointer-events-none text-black"
+            className="absolute bottom-2 right-2 size-24 pointer-events-none text-black"
           >
-            <span aria-hidden="true" className="block px-3 text-[22px] lg:text-[26px]">{project.sfx}</span>
+            <span aria-hidden="true" className="block px-2 text-[19px]">{project.sfx}</span>
           </Burst>
         )}
       </div>
 
       {/* Project Info */}
       <div className="flex flex-1 flex-col gap-4 p-5">
-        {/* Year and team context, from projects.ts */}
-        <p className="font-label text-sm text-[color:var(--text)] -mb-2">
-          {project.year}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{project.caption}
+        {/* Featured badge, then year and team context, from projects.ts. The
+            badge sits here, not on the image, so it never covers a screenshot */}
+        <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-label text-sm text-[color:var(--text)] -mb-2">
+          {project.featured && <span className="badge badge--ink">Featured</span>}
+          <span>
+            {project.year}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{project.caption}
+          </span>
         </p>
         <h3 className={`font-display break-words min-w-0 text-[color:var(--text)] ${project.featured ? 'text-2xl lg:text-[32px]' : 'text-[22px]'}`}>
           {project.name}

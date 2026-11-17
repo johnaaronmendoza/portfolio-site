@@ -42,6 +42,9 @@ export type Project = {
    *  facts already on the case pages and resume */
   caption: string;
   image: string | null;
+  /** Where the tile crops the image, like CSS object-position (0-1 per axis):
+   *  chosen so the crop starts at a clean UI edge, not mid-word */
+  imagePosition?: readonly [number, number];
   tags: string[];
   link: string;
   externalUrl?: string;
@@ -69,6 +72,7 @@ export const PROJECTS: Project[] = [
     year: "2025",
     caption: "team of 6",
     image: silverLinkImg,
+    imagePosition: [0.13, 0], // window edge and the full event title
     tags: ["React", "gRPC", "K8s", "PostgreSQL"],
     link: "/projects/silverlink",
     span: FEATURED_SPAN,
@@ -86,6 +90,7 @@ export const PROJECTS: Project[] = [
     year: "2025",
     caption: "team of 4",
     image: scsImg,
+    imagePosition: [0, 0], // window edge, sidebar and "Main Story"
     tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
     link: "/projects/scs",
     span: FEATURED_SPAN,
@@ -102,6 +107,7 @@ export const PROJECTS: Project[] = [
     year: "2025",
     caption: "team coursework",
     image: uwbImg,
+    imagePosition: [0.5, 0.33], // the chart window, title to matrix
     tags: ["Python", "SVM", "PCA", "scikit-learn"],
     link: "/projects/uwb",
     // Wide at sm so the 2-column grid has no orphan
@@ -119,6 +125,7 @@ export const PROJECTS: Project[] = [
     year: "2024",
     caption: "data pipeline",
     image: aiFinanceImg,
+    imagePosition: [0.05, 0.5], // the flow from its first step
     tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
     link: "/projects/ai-finance",
     span: 'lg:col-span-3',
@@ -134,6 +141,7 @@ export const PROJECTS: Project[] = [
     year: "2024",
     caption: "coursework",
     image: uatImg,
+    imagePosition: [0, 0], // window edge and the dashboard title
     tags: ["React 18", "Node.js", "Express", "SQLite"],
     link: "/projects/uat",
     span: 'lg:col-span-3',
@@ -149,6 +157,7 @@ export const PROJECTS: Project[] = [
     year: "2025",
     caption: "team coursework",
     image: fireSafetyImg,
+    imagePosition: [0.47, 0.5], // both phones whole
     tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
     link: "/projects/firesafety",
     span: 'lg:col-span-3',

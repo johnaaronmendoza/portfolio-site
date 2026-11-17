@@ -8,6 +8,8 @@
  * then upscale back to display canvas with imageSmoothingEnabled=false
  * to get the crisp "blocky pixel" look.
  */
+const CENTRE = [0.5, 0.5] as const;
+
 export class PixelationManager {
   private static _instance: PixelationManager | null = null;
   private offscreen: HTMLCanvasElement;
@@ -30,8 +32,10 @@ export class PixelationManager {
    * Draw `image` onto `target` canvas at the given pixelation block size.
    * pixelSize=1 → crisp full-resolution.
    * pixelSize=20 → very blocky 8-bit look.
+   * `position` is the cover crop's anchor, like CSS object-position:
+   * [0, 0] keeps the top-left, [0.5, 0.5] centres.
    */
-  draw(image: HTMLImageElement, target: HTMLCanvasElement, pixelSize: number): void {
+  draw(image: HTMLImageElement, target: HTMLCanvasElement, pixelSize: number, position: readonly [number, number] = CENTRE): void {
     if (!image.complete || image.naturalWidth === 0) return;
     const W = target.width;
     const H = target.height;
@@ -40,7 +44,7 @@ export class PixelationManager {
     const ctx = target.getContext('2d');
     if (!ctx) return;
 
-    // ── Object-cover crop: centre the image and fill without stretching ───
+    // ── Object-cover crop: fill without stretching, anchored at `position` ─
     const iw = image.naturalWidth;
     const ih = image.naturalHeight;
     const imgAspect    = iw / ih;
@@ -50,11 +54,11 @@ export class PixelationManager {
     if (imgAspect > canvasAspect) {
       // Image wider → crop left/right
       sw = ih * canvasAspect;
-      sx = (iw - sw) / 2;
+      sx = (iw - sw) * position[0];
     } else {
       // Image taller → crop top/bottom
       sh = iw / canvasAspect;
-      sy = (ih - sh) / 2;
+      sy = (ih - sh) * position[1];
     }
 
     if (pixelSize <= 1) {

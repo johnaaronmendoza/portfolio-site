@@ -19,7 +19,7 @@ Served from `/assets/pixel/<file>`.
 
 | File | Grid | Depicts | Placement (size) | Accessibility |
 |---|---|---|---|---|
-| `starburst.svg` | 48×48 | Orange 16-point burst with slightly uneven points and an empty cream centre disc | Footer sign-off sticker (96px, `md`+) | Decorative, `alt=""` |
+| `starburst.svg` | 48×48 | Blue 16-point burst with slightly uneven points and an empty white centre disc (blue, not yellow: yellow marks AI only) | Footer sign-off sticker (96px, `md`+) | Decorative, `alt=""` |
 | `sparkle.svg` | 16×16 | Cream four-point sparkle with stepped, pinched centre | Marquee separator (16px); two in the hero art (32px) | Decorative, `alt=""` |
 | `smiley.svg` | 16×16 | Orange face, 1×2 eyes, slightly tilted smile, one cream highlight | Above "HELLO!" in the stats strip (32px, `md`+) | Decorative, `alt=""` |
 | `floppy.svg` | 16×16 | Teal diskette with clipped corner, cream shutter with ink slot, blank cream label | Left of "Resume (PDF)" in the hero button (16px) | Decorative, `alt=""` |

@@ -31,6 +31,17 @@ export const motionTokens = {
     float: 3,
     bounce: 1.2,
   },
+  // Hero particle field: square pixels rising slowly behind the windows, in
+  // three depth steps. Pairs are [far, near] and the middle step sits halfway.
+  // CSS px and seconds.
+  particles: {
+    rise: [3, 10],   // px per second, each pixel within ±20%
+    sway: [2, 6],    // side-to-side drift either way
+    swayPeriod: 9,
+    shift: [1, 6],   // most a pixel moves away from the pointer
+    follow: 0.6,     // time constant of the pointer smoothing
+    fade: 72,        // fades in and out over this distance at the top and bottom
+  },
   distance: {
     xs: 4,
     sm: 8,

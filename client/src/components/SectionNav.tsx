@@ -127,7 +127,7 @@ function SectionMenu({ active }: { active: string }) {
         <DockGlyph name="menu" />
         {/* Says where the visitor is: "Menu" at the top, then the current section.
             Glyph only when the screen is very short (400% zoom) */}
-        <span className="whitespace-nowrap [@media(max-height:420px)]:sr-only">
+        <span className="whitespace-nowrap [@media(max-height:500px)]:sr-only">
           {active === 'hero' ? 'Menu' : <><span className="sr-only">Menu: </span>{label}</>}
         </span>
       </button>

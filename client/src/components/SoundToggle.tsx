@@ -7,7 +7,7 @@ import { play, setSoundOn, useSoundOn } from '@/hooks/useSound';
  * dots). The case pages have no dock: Sound sits in their header.
  */
 export const FLOAT_DOCK =
-  'fixed bottom-4 left-4 sm:bottom-6 sm:left-6 lg:left-4 z-40 flex items-center gap-2 lg:flex-col lg:items-stretch [@media(max-height:420px)]:bottom-1';
+  'fixed bottom-4 left-4 sm:bottom-6 sm:left-6 lg:left-4 z-40 flex items-center gap-2 lg:flex-col lg:items-stretch [@media(max-height:500px)]:bottom-1';
 
 const PRESSED = 'translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]';
 
@@ -23,7 +23,7 @@ export function dockButton(pressed: boolean): string {
     pressed ? `${PRESSED} bg-[var(--bar)] text-[color:var(--paper)]` : 'bg-[var(--paper)] text-black'
   }`;
 }
-export const DOCK_WORD = 'whitespace-nowrap lg:max-[1359px]:hidden [@media(max-height:420px)]:hidden';
+export const DOCK_WORD = 'whitespace-nowrap lg:max-[1359px]:hidden [@media(max-height:500px)]:hidden';
 
 /** 8x7 pixel glyphs in currentColor, so they invert with the button fill */
 const SPEAKER = 'M0 2h2v3H0zM2 1h1v5H2zM3 0h1v7H3z';

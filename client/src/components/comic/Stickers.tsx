@@ -31,7 +31,7 @@ const SETS: Record<string, Sticker[]> = {
   ],
   skills: [
     { src: J('cursor-arrow'), side: 'left', top: 15, rotate: -4 },
-    { src: P('phone'), side: 'right', top: 70, rotate: -5, pixel: true },
+    { src: P('phone'), side: 'right', top: 45, rotate: -5, pixel: true },
   ],
 };
 

@@ -38,7 +38,7 @@ const SHOTS: Shot[] = [
     alt: 'Line chart of decision tree training and test accuracy for depths 2 to 50. Training accuracy climbs to 1.0; test accuracy peaks near depth 10 and settles around 0.87. Depth 4 is marked.',
   },
   {
-    file: 'decision_boundaries.png', src: decisionBoundaryImg, width: 1097, height: 1120,
+    file: 'decision_boundaries.png', src: decisionBoundaryImg, width: 1097, height: 1120, span: true,
     caption: 'Boundaries: range vs first-path index.',
     alt: 'Six panels of decision boundaries on scaled RANGE and FP_IDX for KNN, naive Bayes, logistic regression, linear SVM, non-linear SVM and an MLP.',
   },
@@ -63,7 +63,7 @@ const PIPELINE: FlowStep[] = [
       { label: 'Estimate range', detail: 'Linear regression' },
     ],
   },
-  { label: 'Evaluate', detail: 'Accuracy, ROC-AUC, RMSE' },
+  { label: 'Evaluate', detail: 'Accuracy, ROC\u2011AUC, RMSE' },
 ];
 
 export default function UWBProject() {
@@ -80,7 +80,7 @@ export default function UWBProject() {
         links={[GITHUB_PROFILE]}
         stats={[
           { value: '89.61%', label: 'SVM-RBF accuracy' },
-          { value: '0.9612', label: 'ROC-AUC' },
+          { value: '0.9612', label: 'ROC\u2011AUC' },
           { value: '41,996', label: 'samples' },
           { value: '7', label: 'indoor environments' },
         ]}
@@ -145,7 +145,7 @@ export default function UWBProject() {
         <StatStrip
           variant="inline"
           stats={[
-            { value: '0.9195', label: 'logistic regression ROC-AUC' },
+            { value: '0.9195', label: 'logistic regression ROC\u2011AUC' },
             { value: '1.757 m', label: 'range RMSE' },
             { value: '0.458', label: 'path 1 R²' },
             { value: '0.6809', label: 'path 2 R²' },

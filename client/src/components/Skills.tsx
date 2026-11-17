@@ -62,7 +62,7 @@ export default function Skills() {
           <SectionHeading text="SKILLS" icon="icon-skills" className="mb-10" />
 
           <p className="mb-6 font-sans text-[15px] sm:text-base leading-relaxed max-w-[60ch]">
-            Press or hover a key for details.
+            Press a key for details.
           </p>
 
           {/* The colour legend sits right under the filters it explains */}

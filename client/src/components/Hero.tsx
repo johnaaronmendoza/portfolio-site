@@ -28,6 +28,9 @@ const NAME_LINES = [
   { text: 'BRANZUELA', color: 'text-[color:var(--yellow)]' },
 ];
 
+// Particle field over the page ground: blue twice as often as ink
+const PARTICLE_COLORS = ['--blue', '--blue', '--ink'];
+
 const BLUE = 'bg-[var(--blue)]';
 const INK = 'bg-black';
 
@@ -131,21 +134,14 @@ export default function Hero() {
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--text)] px-4 sm:px-8 lg:px-16 pt-8 pb-6 sm:pt-20 lg:pt-14 lg:pb-28 xl:pt-20 xl:pb-6 short-desk:pt-3">
-      {/* WebGL particles (skipped with reduced motion, frozen by Pause motion) */}
+      {/* WebGL particles (skipped with reduced motion, frozen by Pause motion);
+          they fade out around the text marked `particles-clear` */}
       {!reduced && (
         <div className="absolute inset-0 z-0 pointer-events-none">
           <Particles
-            particleColors={['#3A66FF', '#111111']}
-            particleCount={120}
-            particleSpread={8}
-            speed={0.05}
-            particleBaseSize={60}
-            sizeRandomness={1.2}
-            alphaParticles={true}
-            moveParticlesOnHover={true}
-            particleHoverFactor={0.4}
-            cameraDistance={22}
-            disableRotation={false}
+            colors={PARTICLE_COLORS}
+            followPointer
+            clearSelector=".particles-clear"
             paused={calm || !onScreen}
           />
         </div>
@@ -220,7 +216,7 @@ export default function Hero() {
               transition={{ duration: motionTokens.duration.slow, delay: HERO.role }}
             >
               <span aria-hidden="true" className="font-mono text-[15px] sm:text-base text-[color:var(--text)] flex-shrink-0">{'>'}</span>
-              <p className="font-mono text-[15px] sm:text-base font-bold text-[color:var(--blue-text)]">{ROLE_LINE}</p>
+              <p className="font-mono text-[15px] sm:text-base font-bold text-[color:var(--blue-text)] particles-clear">{ROLE_LINE}</p>
             </motion.div>
 
             {/* Positioning: the L2 lead (no prompt: the role line above has it) + study chip */}
@@ -230,7 +226,7 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: HERO.line, delay: HERO.body, ease: easing.out }}
             >
-              <Lead text="I build AI and data tools people can trust, now building Desk Assist at LGA Telecom." prompt={false} />
+              <Lead text="I build AI and data tools people can trust, now building Desk Assist at LGA Telecom." prompt={false} className="particles-clear" />
               <Chip icon="chip-school" text="SIT × Glasgow · graduating Apr 2027" />
             </motion.div>
 
@@ -318,7 +314,7 @@ export default function Hero() {
         type="button"
         aria-label="Scroll to About"
         onClick={() => scrollToSection('about', reduced)}
-        className="relative z-10 self-center mt-8 min-h-[44px] min-w-[44px] px-3 flex flex-col items-center justify-center gap-1 text-[color:var(--text)]"
+        className="relative z-10 self-center mt-8 min-h-[44px] min-w-[44px] px-3 flex flex-col items-center justify-center gap-1 text-[color:var(--text)] particles-clear"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: HERO.cue, duration: motionTokens.duration.slow }}

@@ -107,7 +107,8 @@ function SectionMenu({ active }: { active: string }) {
                 </li>
               ))}
             </ul>
-            <ShortcutHint className="window-body flex-shrink-0 border-t-[3px] border-black px-3 py-2" />
+            {/* Keyboard shortcuts mean nothing on a touch screen */}
+            <ShortcutHint className="window-body flex-shrink-0 border-t-[3px] border-black px-3 py-2 [@media(pointer:coarse)]:hidden" />
           </motion.div>
         </>
       )}
@@ -122,12 +123,13 @@ function SectionMenu({ active }: { active: string }) {
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={MENU_ID}
-        className={`${dockButton(false)} lg:hidden`}
+        // Fixed width, so the dock doesn't shift as the section name changes
+        className={`${dockButton(false)} w-[7.5rem] lg:hidden`}
       >
         <DockGlyph name="menu" />
         {/* Says where the visitor is: "Menu" at the top, then the current section.
             Glyph only when the screen is very short (400% zoom) */}
-        <span className="whitespace-nowrap [@media(max-height:420px)]:sr-only">
+        <span className="whitespace-nowrap [@media(max-height:500px)]:sr-only">
           {active === 'hero' ? 'Menu' : <><span className="sr-only">Menu: </span>{label}</>}
         </span>
       </button>
@@ -234,8 +236,9 @@ export default function SectionNav() {
               </span>
               <span
                 aria-hidden="true"
-                // Ink ring keeps the dot visible where it crosses the blue band
-                className={`block w-3 h-3 border-2 shadow-[0_0_0_2px_var(--ink)] transition-colors duration-150 ${
+                // Ink ring, then a paper outline: the dot reads on the page,
+                // the blue band and the black footer alike
+                className={`block w-3 h-3 border-2 shadow-[0_0_0_2px_var(--ink),0_0_0_4px_var(--paper)] transition-colors duration-150 ${
                   active === id
                     ? 'bg-[var(--bar)] border-black'
                     : 'border-black bg-[var(--paper)] group-hover:bg-[var(--blue)]'

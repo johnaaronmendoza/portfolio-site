@@ -6,8 +6,6 @@ import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
 import { PixelList } from '@/components/Hierarchy';
 import StatStrip from '@/components/StatStrip';
 import decisionBoundaryImg from '@assets/da_p39_img2.png';
-import dtAccuracyImg from '@assets/da_p35_img1.png';
-import pcaImg from '@assets/da_p9_img1.png';
 
 const HERO_SHOT: Shot = {
   file: 'model_comparison.png',
@@ -20,7 +18,10 @@ const HERO_SHOT: Shot = {
 
 const SHOTS: Shot[] = [
   {
-    file: 'pca_variance.png', src: pcaImg, width: 989, height: 490,
+    file: 'pca_variance.png',
+    src: '/assets/case/uwb/pca-variance-desktop@2x.webp', width: 1018, height: 580,
+    srcMobile: '/assets/case/uwb/pca-variance-mobile@2x.webp', mobileWidth: 360, mobileHeight: 403,
+    fullSrc: '/assets/case/uwb/pca-variance-desktop.svg',
     caption: 'PCA: 848 components, 95% variance.',
     alt: 'Line chart of cumulative explained variance by number of principal components, crossing 95% at 848 components and 99% at 963.',
   },
@@ -33,12 +34,15 @@ const SHOTS: Shot[] = [
     alt: 'Two confusion matrices, true label by predicted label (LOS+NLOS, NLOS+NLOS). Logistic regression: 3,809 and 3,394 correct, 391 and 806 wrong. SVM-RBF: 3,928 and 3,599 correct, 272 and 601 wrong.',
   },
   {
-    file: 'tree_depth.png', src: dtAccuracyImg, width: 1013, height: 646,
+    file: 'tree_depth.png',
+    src: '/assets/case/uwb/tree-depth-desktop@2x.webp', width: 1018, height: 602,
+    srcMobile: '/assets/case/uwb/tree-depth-mobile@2x.webp', mobileWidth: 360, mobileHeight: 461,
+    fullSrc: '/assets/case/uwb/tree-depth-desktop.svg',
     caption: 'Tree depth 4 chosen (test 0.867).',
     alt: 'Line chart of decision tree training and test accuracy for depths 2 to 50. Training accuracy climbs to 1.0; test accuracy peaks near depth 10 and settles around 0.87. Depth 4 is marked.',
   },
   {
-    file: 'decision_boundaries.png', src: decisionBoundaryImg, width: 1097, height: 1120,
+    file: 'decision_boundaries.png', src: decisionBoundaryImg, width: 1097, height: 1120, span: true,
     caption: 'Boundaries: range vs first-path index.',
     alt: 'Six panels of decision boundaries on scaled RANGE and FP_IDX for KNN, naive Bayes, logistic regression, linear SVM, non-linear SVM and an MLP.',
   },
@@ -63,7 +67,7 @@ const PIPELINE: FlowStep[] = [
       { label: 'Estimate range', detail: 'Linear regression' },
     ],
   },
-  { label: 'Evaluate', detail: 'Accuracy, ROC-AUC, RMSE' },
+  { label: 'Evaluate', detail: 'Accuracy, ROC\u2011AUC, RMSE' },
 ];
 
 export default function UWBProject() {
@@ -80,7 +84,7 @@ export default function UWBProject() {
         links={[GITHUB_PROFILE]}
         stats={[
           { value: '89.61%', label: 'SVM-RBF accuracy' },
-          { value: '0.9612', label: 'ROC-AUC' },
+          { value: '0.9612', label: 'ROC\u2011AUC' },
           { value: '41,996', label: 'samples' },
           { value: '7', label: 'indoor environments' },
         ]}
@@ -145,7 +149,7 @@ export default function UWBProject() {
         <StatStrip
           variant="inline"
           stats={[
-            { value: '0.9195', label: 'logistic regression ROC-AUC' },
+            { value: '0.9195', label: 'logistic regression ROC\u2011AUC' },
             { value: '1.757 m', label: 'range RMSE' },
             { value: '0.458', label: 'path 1 R²' },
             { value: '0.6809', label: 'path 2 R²' },

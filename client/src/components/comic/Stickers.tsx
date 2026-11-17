@@ -31,7 +31,7 @@ const SETS: Record<string, Sticker[]> = {
   ],
   skills: [
     { src: J('cursor-arrow'), side: 'left', top: 15, rotate: -4 },
-    { src: P('phone'), side: 'right', top: 70, rotate: -5, pixel: true },
+    { src: P('phone'), side: 'right', top: 45, rotate: -5, pixel: true },
   ],
 };
 
@@ -39,27 +39,22 @@ const SETS: Record<string, Sticker[]> = {
 // (fixed, 8-52px from the right edge at lg+)
 const MIN_EDGE = { left: 8, right: 60 };
 
-// Content width per section (max-w-5xl = 1024, Projects max-w-6xl = 1152) and,
-// per side, the smallest viewport whose gutter, (viewport - width) / 2, fits
-// the edge gap + a 72px sticker + 16px to the content (96px left, 148px right);
-// placed 24px short of the content, so a rotated sticker still clears it by 16px
-const LAYOUT: Record<string, { width: number; show: Record<Sticker['side'], string> }> = {
-  about: { width: 1024, show: { left: 'xl:grid', right: 'min-[1320px]:grid' } },
-  experience: { width: 1024, show: { left: 'xl:grid', right: 'min-[1320px]:grid' } },
-  projects: { width: 1152, show: { left: 'min-[1360px]:grid', right: 'min-[1450px]:grid' } },
-  skills: { width: 1024, show: { left: 'xl:grid', right: 'min-[1320px]:grid' } },
-};
+// Every section's content is max-w-6xl (1152px). Per side, the smallest
+// viewport whose gutter, (viewport - 1152) / 2, fits the edge gap + a 72px
+// sticker + 16px to the content (96px left, 148px right); placed 24px short of
+// the content, so a rotated sticker still clears it by 16px
+const WIDTH = 1152;
+const SHOW: Record<Sticker['side'], string> = { left: 'min-[1360px]:grid', right: 'min-[1450px]:grid' };
 
 export default function Stickers({ set }: { set: keyof typeof SETS }) {
-  const { width, show } = LAYOUT[set];
   // Offset from the screen edge: a 72px sticker ends 24px short of the content
-  const edge = (side: Sticker['side']) => `max(${MIN_EDGE[side]}px, calc((100% - ${width}px) / 2 - 96px))`;
+  const edge = (side: Sticker['side']) => `max(${MIN_EDGE[side]}px, calc((100% - ${WIDTH}px) / 2 - 96px))`;
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
       {SETS[set].map(s => (
         <span
           key={s.src}
-          className={`absolute hidden ${show[s.side]} place-items-center size-[72px]`}
+          className={`absolute hidden ${SHOW[s.side]} place-items-center size-[72px]`}
           style={{ top: `${s.top}%`, [s.side]: edge(s.side), transform: `rotate(${s.rotate}deg)` }}
         >
           <img

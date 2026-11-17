@@ -3,3 +3,9 @@
   width: 100%;
   height: 100%;
 }
+
+/* Hard pixel edges even where the canvas is scaled (screens above 2x) */
+.particles-container canvas {
+  display: block;
+  image-rendering: pixelated;
+}

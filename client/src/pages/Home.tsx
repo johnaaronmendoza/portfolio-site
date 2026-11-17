@@ -70,7 +70,7 @@ export default function Home() {
           <Experience />
         </div>
         {/* Ink either side of the blue Projects band so strips never merge into it */}
-        <Ribbon tone="ink" className="-mb-[3px]" items={['PROJECTS', 'SILVERLINK SG', 'SCS AWARENESS PLATFORM']} />
+        <Ribbon tone="ink" className="-mb-[3px]" items={['PROJECTS', 'SILVERLINK SG', 'SCS AWARENESS PLATFORM', 'UWB INDOOR LOCALIZATION']} />
         <div id="projects" tabIndex={-1} className={SECTION_CLASS}>
           <Stickers set="projects" />
           <Projects />

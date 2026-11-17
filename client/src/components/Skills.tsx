@@ -1,6 +1,7 @@
 import FramerReveal from './FramerReveal';
 import SectionHeading from './SectionHeading';
 import SkillKeyboard from './SkillKeyboard';
+import Window from './Window';
 import { GROUP_NAME, GROUP_WAY, WAYS, type GroupId } from './skills3d/keys';
 
 const LIST_ID = 'skills-list';
@@ -57,50 +58,57 @@ function Swatch({ way }: { way: keyof typeof WAYS }) {
 export default function Skills() {
   return (
     <FramerReveal>
-      <section className="text-[color:var(--text)] px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
-        <div className="max-w-5xl mx-auto">
+      <section className="text-[color:var(--text)] px-4 sm:px-8 lg:px-[88px] 2xl:px-16 py-20 sm:py-28">
+        <div className="max-w-6xl mx-auto">
           <SectionHeading text="SKILLS" icon="icon-skills" className="mb-10" />
 
-          <p className="mb-6 font-sans text-[15px] sm:text-base leading-relaxed max-w-[60ch]">
-            Press or hover a key for details.
-          </p>
+          {/* keyboard.exe: the board in a window like every other section, with
+              the plain list in its status bar (John, 17 Nov) */}
+          <Window title="keyboard.exe" bodyClassName="p-0">
+            <div className="p-4 sm:p-6 lg:p-8">
+              <p className="mb-6 font-sans text-[15px] sm:text-base leading-relaxed max-w-[60ch]">
+                Press a key for details.
+              </p>
 
-          {/* The colour legend sits right under the filters it explains */}
-          <SkillKeyboard
-            listId={LIST_ID}
-            legend={
-              <ul aria-label="Key colours" className="relative z-10 flex flex-wrap gap-x-5 gap-y-1 font-sans text-[15px] sm:text-base leading-relaxed">
-                {LEGEND.map(({ way, colour, label }) => (
-                  <li key={way} className="flex items-center gap-2">
-                    <Swatch way={way} />
-                    <span>{colour}: {label}</span>
-                  </li>
+              {/* The colour legend sits right under the filters it explains */}
+              <SkillKeyboard
+                listId={LIST_ID}
+                legend={
+                  <ul aria-label="Key colours" className="relative z-10 flex flex-wrap gap-x-5 gap-y-1 font-sans text-[15px] sm:text-base leading-relaxed">
+                    {LEGEND.map(({ way, colour, label }) => (
+                      <li key={way} className="flex items-center gap-2">
+                        <Swatch way={way} />
+                        <span>{colour}: {label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                }
+              />
+            </div>
+
+            {/* Status bar: the plain list, for skimmers, screen readers and search
+                engines. Collapsed, since the keyboard's tooltips and detail
+                windows already say this; it opens inside the window. */}
+            <details id={LIST_ID} className="border-t-[3px] border-black bg-[var(--page)]">
+              <summary className="cursor-pointer px-4 sm:px-6 lg:px-8 py-2.5 leading-6 font-sans text-[15px] sm:text-base font-bold text-[color:var(--blue-text)] outline-offset-[-4px]">
+                All skills as a list
+              </summary>
+              <dl className="space-y-4 border-t-[3px] border-black bg-[var(--paper)] px-4 sm:px-6 lg:px-8 py-6">
+                {GROUPS.map(group => (
+                  <div key={group.id} className="grid grid-cols-1 sm:grid-cols-[11rem_1fr] gap-1 sm:gap-6">
+                    <dt className={`flex items-center gap-2 self-start font-sans text-[15px] sm:text-base font-bold ${group.id === 'ai' ? 'text-[color:var(--text)]' : 'text-[color:var(--blue-text)]'}`}>
+                      <Swatch way={GROUP_WAY[group.id]} />
+                      {GROUP_NAME[group.id]}
+                    </dt>
+                    <dd className="font-sans text-[15px] sm:text-base leading-relaxed">
+                      {group.skills.join(', ')}
+                      <span className="block text-sm text-[color:var(--text)] mt-1">Used in: {group.usedIn}</span>
+                    </dd>
+                  </div>
                 ))}
-              </ul>
-            }
-          />
-
-          {/* Plain list: for skimmers, screen readers and search engines. Collapsed,
-              since the keyboard's tooltips and detail windows already say this. */}
-          <details id={LIST_ID} className="mt-14 border-t-[3px] border-black pt-4">
-            <summary className="cursor-pointer py-2.5 leading-6 font-sans text-[15px] sm:text-base font-bold text-[color:var(--blue-text)]">
-              All skills as a list
-            </summary>
-            <dl className="mt-4 space-y-4">
-              {GROUPS.map(group => (
-                <div key={group.id} className="grid grid-cols-1 sm:grid-cols-[11rem_1fr] gap-1 sm:gap-6">
-                  <dt className={`flex items-center gap-2 self-start font-sans text-[15px] sm:text-base font-bold ${group.id === 'ai' ? 'text-[color:var(--text)]' : 'text-[color:var(--blue-text)]'}`}>
-                    <Swatch way={GROUP_WAY[group.id]} />
-                    {GROUP_NAME[group.id]}
-                  </dt>
-                  <dd className="font-sans text-[15px] sm:text-base leading-relaxed">
-                    {group.skills.join(', ')}
-                    <span className="block text-sm text-[color:var(--text)] mt-1">Used in: {group.usedIn}</span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </details>
+              </dl>
+            </details>
+          </Window>
         </div>
       </section>
     </FramerReveal>

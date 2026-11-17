@@ -17,6 +17,8 @@ export type Shot = {
   mobileHeight?: number;
   /** What "Open full size" opens, when not `src` (e.g. a vector original) */
   fullSrc?: string;
+  /** Take both columns from md: for a half-width shot left alone in its row */
+  span?: boolean;
 };
 
 const CAPTION_TEXT = 'font-sans text-[15px] sm:text-base leading-[1.5] text-[color:var(--text)]';
@@ -44,10 +46,10 @@ function FullSizeLink({ src, caption }: { src: string; caption: string }) {
  * priority; a portrait hero sits beside its caption from md.
  */
 export function ScreenFigure({
-  file, src, width, height, alt, caption, srcMobile, mobileWidth, mobileHeight, fullSrc, hero = false,
+  file, src, width, height, alt, caption, srcMobile, mobileWidth, mobileHeight, fullSrc, span, hero = false,
 }: Shot & { hero?: boolean }) {
   const portrait = width / height < 0.9;
-  const full = width / height >= 1.4 && width >= 860;
+  const full = span || (width / height >= 1.4 && width >= 860);
   const besideCaption = hero && portrait;
 
   const image = (

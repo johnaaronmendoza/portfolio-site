@@ -40,7 +40,7 @@ export class PixelationManager {
     const ctx = target.getContext('2d');
     if (!ctx) return;
 
-    // ── Object-cover crop: centre the image and fill without stretching ───
+    // ── Object-cover crop: fill without stretching, centred ──────────────
     const iw = image.naturalWidth;
     const ih = image.naturalHeight;
     const imgAspect    = iw / ih;

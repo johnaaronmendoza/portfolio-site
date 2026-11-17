@@ -28,34 +28,10 @@ const NAME_LINES = [
   { text: 'BRANZUELA', color: 'text-[color:var(--yellow)]' },
 ];
 
-const BLUE = 'bg-[var(--blue)]';
-const INK = 'bg-black';
-
-// Floating pixels live in the outer gutters only, never near text (John, 14 Nov).
-// G = the gutter beside the max-w-6xl content (the lg:px-16 padding at least);
-// `at` (0-1) places a pixel across the free part of its gutter. Right-side
-// pixels also clear the section dots (8-52px from the right edge), so they
-// show only where that gutter is wide enough (1360px+).
-const G = 'max(64px, (100% - 1152px) / 2)';
-const PIXELS: { top: string; side: 'left' | 'right'; at: number; size: number; color: string; delay: number }[] = [
-  { top: '12%', side: 'right', at: 0.3, size: 4, color: BLUE, delay: 0 },
-  { top: '24%', side: 'right', at: 0.9, size: 3, color: BLUE, delay: 0.5 },
-  { top: '48%', side: 'right', at: 0.1, size: 2, color: INK,  delay: 1 },
-  { top: '66%', side: 'right', at: 0.7, size: 3, color: BLUE, delay: 1.5 },
-  { top: '82%', side: 'right', at: 0.4, size: 2, color: INK,  delay: 0.8 },
-  { top: '15%', side: 'left',  at: 0.5, size: 2, color: BLUE, delay: 0.3 },
-  { top: '35%', side: 'left',  at: 0.2, size: 3, color: BLUE, delay: 1.2 },
-  { top: '55%', side: 'left',  at: 0.6, size: 2, color: INK,  delay: 0.7 },
-  { top: '72%', side: 'left',  at: 0.1, size: 4, color: BLUE, delay: 1.8 },
-];
-
-/** Offset from the screen edge: left gutters keep 12px each side free,
- *  right ones start past the section dots (60px) and keep 16px to the content */
-function pixelEdge(side: 'left' | 'right', at: number, size: number) {
-  return side === 'left'
-    ? `calc(12px + (${G} - ${24 + size * 4}px) * ${at})`
-    : `calc(60px + (${G} - ${76 + size * 4}px) * ${at})`;
-}
+// Particle field over the page ground: blue, with ink only among the largest
+// (near) pixels, so the field reads as one colour with a few dark accents
+const PARTICLE_COLORS = ['--blue'];
+const PARTICLE_NEAR = ['--blue', '--blue', '--ink'];
 
 const NEW_TAB = <span className="sr-only"> (opens in a new tab)</span>;
 
@@ -130,54 +106,28 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--text)] px-4 sm:px-8 lg:px-16 pt-8 pb-6 sm:pt-20 lg:pt-14 lg:pb-28 xl:pt-20 xl:pb-6 short-desk:pt-3">
-      {/* WebGL particles (skipped with reduced motion, frozen by Pause motion) */}
+    <section ref={sectionRef} className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--text)] px-4 sm:px-8 lg:px-[88px] 2xl:px-16 pt-8 pb-6 sm:pt-20 lg:pt-14 lg:pb-28 xl:pt-20 xl:pb-6 short-desk:pt-3">
+      {/* WebGL particles (skipped with reduced motion, frozen by Pause motion);
+          they fade out around the text marked `particles-clear` */}
       {!reduced && (
         <div className="absolute inset-0 z-0 pointer-events-none">
           <Particles
-            particleColors={['#3A66FF', '#111111']}
-            particleCount={120}
-            particleSpread={8}
-            speed={0.05}
-            particleBaseSize={60}
-            sizeRandomness={1.2}
-            alphaParticles={true}
-            moveParticlesOnHover={true}
-            particleHoverFactor={0.4}
-            cameraDistance={22}
-            disableRotation={false}
+            colors={PARTICLE_COLORS}
+            nearColors={PARTICLE_NEAR}
+            density={5}
+            maxCount={110}
+            followPointer
+            clearSelector=".particles-clear"
             paused={calm || !onScreen}
           />
         </div>
       )}
 
-      {/* Floating pixels: behind the content, in the outer gutters only (none
-          below 1024px, where the column runs nearly edge to edge) */}
-      {PIXELS.map((p, i) => (
-        <motion.div
-          key={i}
-          aria-hidden="true"
-          className={`hidden ${p.side === 'left' ? 'lg:block' : 'min-[1360px]:block'} absolute z-0 ${p.color}`}
-          style={{
-            top: p.top,
-            [p.side]: pixelEdge(p.side, p.at, p.size),
-            width: `${p.size * 4}px`,
-            height: `${p.size * 4}px`,
-          }}
-          animate={calm ? { y: 0, opacity: 0.7 } : { y: [0, -18, 0], opacity: [0.7, 0.3, 0.7] }}
-          transition={
-            calm
-              ? { duration: 0 }
-              : { delay: p.delay, duration: LOOP.float + p.delay * 0.4, repeat: Infinity, ease: 'easeInOut' }
-          }
-        />
-      ))}
-
       <div className="relative z-10 flex-1 flex items-center">
-        <div className="w-full max-w-4xl lg:max-w-6xl mx-auto lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-center">
-          {/* Phones: the name and buttons fill the first screen, so the fixed
-              dock sits on empty page and desk_assist.exe starts below the fold */}
-          <div className="lg:col-span-7 max-sm:min-h-[calc(100svh-3rem)]">
+        <div className="w-full max-w-4xl lg:max-w-6xl mx-auto lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-start">
+          {/* Phones: no full-height intro, so desk_assist.exe's title bar peeks
+              above the fold (John, 17 Nov) */}
+          <div className="lg:col-span-7">
             <motion.div
               className="mb-6 sm:mb-10"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -190,7 +140,7 @@ export default function Hero() {
                 bodyClassName="bg-black text-[color:var(--paper)] [--focus:var(--paper)] p-6 short-phone:p-4 sm:p-10 xl:p-12"
               >
                 {/* Sized so BRANZUELA plus the cursor fits from 320px up */}
-                <h1 className="font-pixel leading-[1.25] text-[length:clamp(20px,7vw,30px)] sm:text-4xl lg:text-[40px] xl:text-5xl">
+                <h1 className="font-pixel leading-[1.25] text-[length:clamp(20px,7vw,30px)] sm:text-4xl lg:text-[36px] xl:text-5xl">
                   <span className="sr-only">John Aaron Mendoza Branzuela</span>
                   <span aria-hidden="true">
                     {NAME_LINES.map((line, i) => (
@@ -220,7 +170,7 @@ export default function Hero() {
               transition={{ duration: motionTokens.duration.slow, delay: HERO.role }}
             >
               <span aria-hidden="true" className="font-mono text-[15px] sm:text-base text-[color:var(--text)] flex-shrink-0">{'>'}</span>
-              <p className="font-mono text-[15px] sm:text-base font-bold text-[color:var(--blue-text)]">{ROLE_LINE}</p>
+              <p className="font-mono text-[15px] sm:text-base font-bold text-[color:var(--blue-text)] particles-clear">{ROLE_LINE}</p>
             </motion.div>
 
             {/* Positioning: the L2 lead (no prompt: the role line above has it) + study chip */}
@@ -230,13 +180,13 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: HERO.line, delay: HERO.body, ease: easing.out }}
             >
-              <Lead text="I build AI and data tools people can trust, now building Desk Assist at LGA Telecom." prompt={false} />
-              <Chip icon="chip-school" text="SIT × Glasgow · graduating Apr 2027" />
+              <Lead text="I build AI and data tools people can trust, now building Desk Assist at LGA Telecom." prompt={false} className="particles-clear" />
+              <Chip icon="chip-school" text={'SIT × Glasgow · graduating\u00a0Apr\u00a02027'} className="particles-clear" />
             </motion.div>
 
             {/* CTAs: resume first; email beside the profiles so contact is above the fold */}
             <motion.div
-              className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 short-phone:gap-2 sm:gap-4"
+              className="particles-clear flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 short-phone:gap-2 sm:gap-4"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: HERO.line, delay: HERO.ctas, ease: easing.out }}
@@ -313,12 +263,13 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll cue: in the flow so it never covers the buttons on short screens */}
+      {/* Scroll cue: in the flow so it never covers the buttons on short screens;
+          not on phones, where desk_assist.exe peeking above the fold says it */}
       <motion.button
         type="button"
         aria-label="Scroll to About"
         onClick={() => scrollToSection('about', reduced)}
-        className="relative z-10 self-center mt-8 min-h-[44px] min-w-[44px] px-3 flex flex-col items-center justify-center gap-1 text-[color:var(--text)]"
+        className="relative z-10 self-center mt-8 min-h-[44px] min-w-[44px] px-3 hidden sm:flex flex-col items-center justify-center gap-1 text-[color:var(--text)] particles-clear"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: HERO.cue, duration: motionTokens.duration.slow }}

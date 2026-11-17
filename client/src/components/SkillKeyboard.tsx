@@ -196,7 +196,9 @@ function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps)
   // Focus moves into the window, Tab stays inside, and focus returns to the key on close
   const keepFocus = useModalFocus(true, ref);
 
-  // Below the key if it fits on screen, else above, else as low as fits. Set on
+  // Below the key if it fits on screen, else above it but never higher than the
+  // board's top (so it stays clear of the filters, legend and the marquee
+  // above the section), else as low as fits. Set on
   // the element before the first paint, so no hidden state is needed (a hidden
   // window couldn't take focus).
   useLayoutEffect(() => {
@@ -209,9 +211,10 @@ function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps)
     const r = locate(index) ?? { x: b.left + b.width / 2, top: b.top, bottom: b.top };
     const [w, hgt] = [el.offsetWidth, el.offsetHeight];
     const left = Math.max(Math.max(EDGE, b.left), Math.min(Math.min(vw - EDGE, b.right) - w, r.x - w / 2));
+    const floor = Math.max(EDGE, b.top);
     let top = r.bottom + GAP;
     if (top + hgt > vh - EDGE) top = r.top - GAP - hgt;
-    if (top < EDGE) top = Math.max(EDGE, vh - EDGE - hgt);
+    if (top < floor) top = Math.max(floor, vh - EDGE - hgt);
     el.style.left = `${Math.round(left - b.left)}px`;
     el.style.top = `${Math.round(top - b.top)}px`;
   }, [index, boardRef, locate]);
@@ -413,9 +416,10 @@ export default function SkillKeyboard({ listId, legend }: { listId: string; lege
             </div>
             {/* The camera fit keeps room around the board for every pose it can
                 take (about 5% of the width above it), so the stage tucks up
-                under the legend by that much; the legend stays on top */}
+                under the legend by that much (the legend stays on top), and
+                lets the window's status bar come up by 3% below it */}
             <div
-              className={`relative aspect-[2/3] sm:aspect-[2/1] sm:-mt-[5.2%] rounded-[10px] outline-offset-4 outline-[color:var(--ink)] ${focus?.visible ? 'outline-3' : ''}`}
+              className={`relative aspect-[2/3] sm:aspect-[2/1] sm:-mt-[5.2%] sm:-mb-[3%] rounded-[10px] outline-offset-4 outline-[color:var(--ink)] ${focus?.visible ? 'outline-3' : ''}`}
             >
               {stage === '3d' && (
                 <Boundary onError={() => setStage('2d')}>

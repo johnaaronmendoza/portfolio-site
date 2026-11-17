@@ -1,7 +1,7 @@
 /**
  * MascotChatWidget: floating keyword-bot chat (bottom-right).
  * An `ask_johnny.exe` window styled as a retro OS dialog (John, Nov 2026):
- * a conversation.log dialog with a chunky scrollbar, Lil Johnny leaning on its
+ * one window holding a framed log with a chunky scrollbar, Lil Johnny standing on its
  * top edge, the visitor's questions as blue "selected" rows, and topic keycaps.
  * Answers come from the local knowledge base below; there is no backend.
  */
@@ -177,7 +177,8 @@ interface Message {
   id: string;
   role: 'user' | 'system';
   content: string;
-  timestamp: Date;
+  /** Not on the greeting, which no one sent at a time */
+  timestamp?: Date;
   /** The fallback reply: offer the topic keys under it */
   topics?: boolean;
   /** Where the answer lives on the home page */
@@ -187,6 +188,8 @@ interface Message {
 export default function MascotChatWidget() {
   const reduced = useReducedMotion();
   const [location, navigate] = useLocation();
+  // On Home below lg the launcher sits in the dock band (SoundToggle FLOAT_DOCK)
+  const onHome = location === '/';
   const [isOpen, setIsOpen] = useState(false);
   // The launcher swaps happy/worry while the bot types: have both frames ready
   useEffect(preloadMascot, []);
@@ -195,7 +198,6 @@ export default function MascotChatWidget() {
       id: '1',
       role: 'system',
       content: "Hi! I'm a small bot that knows John's projects, experience and skills. Pick a topic below or type a question.",
-      timestamp: new Date(),
     },
   ]);
   const [input, setInput] = useState('');
@@ -283,7 +285,7 @@ export default function MascotChatWidget() {
   // phones, where it covers the page), or open Home at that section
   const goToSection = (id: SectionId) => {
     if (!window.matchMedia('(min-width: 640px)').matches) setIsOpen(false);
-    if (location === '/') scrollToSection(id, reduced);
+    if (onHome) scrollToSection(id, reduced);
     else navigate(`/#${id}`);
   };
 
@@ -317,16 +319,18 @@ export default function MascotChatWidget() {
         aria-label={isOpen ? 'Close chat' : "Chat about John's work"}
         aria-expanded={isOpen}
         aria-controls={PANEL_ID}
-        className={`btn focus-ring-float fixed bottom-4 right-4 sm:bottom-6 z-40 p-0 text-black ${isOpen ? 'bg-[var(--page)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)]'}`}
+        className={`btn focus-ring-float fixed right-4 z-40 ${onHome ? 'bottom-2 lg:bottom-6' : 'bottom-4 sm:bottom-6'} p-0 text-black ${isOpen ? 'bg-[var(--page)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)]'}`}
       >
-        <div className="flex items-center gap-2 p-1 sm:px-3 sm:py-1.5">
+        {/* Icon only below 1440px, where a wider launcher would sit over the
+            content column (proof.txt's links) */}
+        <div className="flex items-center gap-2 p-1 min-[1440px]:px-3 min-[1440px]:py-1.5">
           <img
             src={isTyping ? MASCOT_WORRY : MASCOT_HAPPY}
             alt=""
-            className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
+            className="w-8 h-8 min-[1440px]:w-10 min-[1440px]:h-10 object-contain"
             style={{ imageRendering: 'pixelated' }}
           />
-          <span className="hidden sm:inline font-label text-xs">
+          <span className="hidden min-[1440px]:inline font-label text-xs">
             {isOpen ? 'Close' : 'Chat'}
           </span>
         </div>
@@ -348,11 +352,11 @@ export default function MascotChatWidget() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: motionTokens.distance.sm }}
             transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
-            className="chat-panel window fixed bottom-24 left-2 right-2 sm:left-auto sm:right-4 z-50 sm:w-[26rem] flex flex-col bg-[var(--page)]"
+            className="chat-panel window fixed bottom-24 left-2 right-2 sm:left-auto sm:right-4 z-50 sm:w-[26rem] flex flex-col"
           >
             <WindowBar title="ask_johnny.exe" onClose={closeChat} closeLabel="Close chat" />
 
-            {/* Prompt line, with Lil Johnny leaning on the dialog's top edge
+            {/* Prompt line, with Lil Johnny standing whole on the log's top edge
                 (he worries while the bot types) */}
             <div className="chat-prompt relative flex-shrink-0 flex items-end justify-between gap-3 px-4 pt-3">
               <p className="font-sans text-[15px] font-bold text-[color:var(--text)] pb-2">
@@ -363,16 +367,13 @@ export default function MascotChatWidget() {
                 alt=""
                 width={47}
                 height={64}
-                className="relative z-0 h-16 w-auto translate-y-5 -mt-6 [image-rendering:pixelated]"
+                className="h-16 w-auto [image-rendering:pixelated]"
               />
             </div>
 
-            {/* conversation.log dialog: flex-1 + min-h-0 lets the log scroll inside */}
-            <div className="chat-log-box relative z-10 mx-3 flex-1 min-h-0 flex flex-col border-[3px] border-black bg-[var(--paper)] shadow-[4px_4px_0_#000]">
-              <div aria-hidden="true" className="chat-log-bar flex-shrink-0 flex items-center justify-between bg-[var(--bar)] text-[color:var(--paper)] font-label text-xs px-2.5 py-1.5">
-                <span>conversation.log</span>
-                <span>○□✕</span>
-              </div>
+            {/* The log: part of the one window body, under a 3px rule; flex-1 +
+                min-h-0 lets it scroll inside */}
+            <div className="chat-log-box flex-1 min-h-0 flex flex-col border-t-[3px] border-black">
             <div
               ref={logRef}
               className="retro-scroll flex-1 min-h-0 overflow-y-auto p-3 space-y-3"
@@ -411,9 +412,11 @@ export default function MascotChatWidget() {
                         Go to {SECTION_LABEL[msg.section]} <span aria-hidden="true">↓</span>
                       </a>
                     )}
-                    <p className={`font-sans text-sm text-[color:var(--text)] mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-                      {msg.timestamp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
-                    </p>
+                    {msg.timestamp && (
+                      <p className={`font-sans text-sm text-[color:var(--text)] mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+                        {msg.timestamp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
+                      </p>
+                    )}
                   </div>
                 </motion.div>
               ))}

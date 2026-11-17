@@ -19,7 +19,6 @@ import scs3             from '@assets/scs_p72_img0.png';
 import fireSafety2      from '@assets/firesafety_p29_img1.png';
 import fireSafety3      from '@assets/firesafety_p29_img3.png';
 import uwb2             from '@assets/da_p39_img2.png';
-import uwb3             from '@assets/da_p35_img1.png';
 import greenloop2       from '@assets/greenloop_tour.jpg';
 
 
@@ -31,6 +30,8 @@ export type Project = {
   name: string;
   /** Case-study pages only */
   slug?: CaseSlug;
+  /** Short file name for the tile's browser.exe title bar when there is no case slug */
+  file?: string;
   /** One line, ≤ 14 words: the Home tile text and the lead under the case-study
    *  h1 (one string, so they can't drift). No key terms:
    *  the tile's facts carry the emphasis. */
@@ -41,6 +42,7 @@ export type Project = {
   /** Team or course context after the year on the tile ("2025 · team of 6");
    *  facts already on the case pages and resume */
   caption: string;
+  /** Tile still, cut at 2:1 (asset-work/tiles/screens.py) */
   image: string | null;
   tags: string[];
   link: string;
@@ -106,7 +108,7 @@ export const PROJECTS: Project[] = [
     link: "/projects/uwb",
     // Wide at sm so the 2-column grid has no orphan
     span: `sm:col-span-2 ${FEATURED_SPAN}`,
-    preloadImages: [uwb2, uwb3],
+    preloadImages: [uwb2, '/assets/case/uwb/tree-depth-desktop@2x.webp'],
     featured: true,
   },
   {
@@ -157,6 +159,7 @@ export const PROJECTS: Project[] = [
   {
     num: 7,
     name: "GreenLoopFarms",
+    file: "greenloop",
     description:
       "Helped pitch a Singapore hydroponic urban farm to an industry investor panel.",
     facts: ["SGD 10,000 NYP JumpStart Grant"],

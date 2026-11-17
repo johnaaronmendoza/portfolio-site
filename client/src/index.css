@@ -27,16 +27,6 @@
   }
 }
 
-/* Floating Pixel Animation */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
 /* Sovereign Console — blinking cursor keyframes */
 @keyframes blinker {
   50% { opacity: 0; }
@@ -687,6 +677,12 @@
     --focus: var(--ink);
   }
 
+  /* Project tile still (Projects.tsx): a small browser window, so a slimmer bar */
+  .window--thumb > .window-bar {
+    min-height: 1.75rem;
+    padding: 0.125rem 0.5rem;
+  }
+
   .window-bar {
     display: flex;
     align-items: center;
@@ -751,8 +747,10 @@
     color: var(--ink);
   }
 
+  /* Paper like the secondary buttons, so particles and halftone never show
+     through; the hover fill tells it apart */
   .btn-ghost {
-    background-color: transparent;
+    background-color: var(--paper);
     color: var(--text);
     border-color: var(--ink);
   }
@@ -773,8 +771,8 @@
     }
 
     .btn-ghost:hover {
-      background-color: var(--paper);
-      color: var(--text);
+      background-color: var(--blue);
+      color: var(--ink);
     }
 
     .btn-ghost-ink:hover {
@@ -881,7 +879,8 @@
    and input pinned, the log keeps a readable height, topic keys in one row
    that scrolls sideways. Unlayered so it wins over the panel's utilities. */
 .chat-panel {
-  height: min(600px, calc(100dvh - 8rem));
+  height: auto;
+  max-height: min(680px, calc(100dvh - 7rem));
 }
 /* One topic set at a time: the keys below the log; the copy inside an
    unknown-question reply shows only where the keys are hidden (below) */
@@ -904,7 +903,7 @@
   .chat-panel > .window-bar { top: 0; }
   .chat-panel > .chat-input {
     bottom: 0;
-    background-color: var(--page);
+    background-color: var(--paper);
   }
   .chat-panel .chat-log-box {
     flex: none;
@@ -921,11 +920,10 @@
   }
 }
 /* 400% zoom (about 341x225): the log gets the height. The prompt line, Lil
-   Johnny, the log's title bar and the topic keys step aside; unknown
-   questions offer the topics inside the reply instead. */
+   Johnny and the topic keys step aside; unknown questions offer the topics
+   inside the reply instead. */
 @media (max-height: 420px) {
   .chat-panel .chat-prompt,
-  .chat-panel .chat-log-bar,
   .chat-panel .chat-keys {
     display: none;
   }

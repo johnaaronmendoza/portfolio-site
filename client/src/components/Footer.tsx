@@ -41,7 +41,7 @@ export default function Footer() {
 
   return (
     // Extra bottom padding so the floating controls and chat button never cover the last row
-    <footer className="bg-[var(--bar)] text-[color:var(--paper)] border-t-[3px] border-black px-4 sm:px-8 lg:px-16 pt-16 pb-28 sm:pt-20 [--focus:var(--paper)]">
+    <footer className="bg-[var(--bar)] text-[color:var(--paper)] border-t-[3px] border-black px-4 sm:px-8 lg:px-[88px] 2xl:px-16 pt-16 pb-28 sm:pt-20 [--focus:var(--paper)]">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr] gap-12 md:gap-10">
         {/* Contact CTA */}
         <div className="space-y-5">
@@ -113,7 +113,7 @@ export default function Footer() {
               {'>'} sudo hire-me
             </button>
           </p>
-          <ShortcutHint />
+          <ShortcutHint className="[@media(pointer:coarse)]:hidden" />
           <p className="font-sans text-sm">
             © {currentYear} John Aaron Mendoza Branzuela
           </p>
@@ -126,8 +126,6 @@ export default function Footer() {
             <span aria-hidden="true">↑</span>
             Back to top
           </a>
-          {/* Sign-off sticker, in the flow below the copyright (not over text) */}
-          <PixelArt name="starburst" size={96} lazy className="hidden md:block" />
         </div>
       </div>
     </footer>

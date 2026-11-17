@@ -27,3 +27,14 @@ node .claude/skills/asset-toolkit/scripts/html2png.mjs $D/ai-finance.html --out 
 ```
 
 Grounds: page `#EFEAE0` for SilverLink and UAT (not AI; yellow means AI only, John 13 Nov 2026), yellow for AI Finance, blue for SCS and Fire Safety. UWB moved to the page colour on 14 Nov 2026 (its card is a white chart with blue cells; on blue the cells would disappear).
+
+## browser.exe stills (John, 17 Nov 2026)
+
+The Home tiles and the "Next project" card now show each still inside a small `browser.exe` window (drawn by the page) at one fixed 2:1 crop, so the files in `attached_assets/tile_*.webp` are the bare screens: no ground, border or shadow. `screens.py` cuts them: full screen width, bottom edge in a gap between rows, so no word is cut. UWB is the matrix SVG on paper (`uwb-thumb.html`, written by `screens.py --html`); AI Finance and Fire Safety are 2:1 crops of the renders above.
+
+```bash
+D=design-system/portfolio/asset-work/tiles
+python3 $D/screens.py --html
+node .claude/skills/asset-toolkit/scripts/html2png.mjs $D/uwb-thumb.html --out $D/renders --name uwb-thumb --size 1200x600
+python3 $D/screens.py
+```

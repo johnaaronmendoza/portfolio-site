@@ -113,7 +113,7 @@ export default function Footer() {
               {'>'} sudo hire-me
             </button>
           </p>
-          <ShortcutHint />
+          <ShortcutHint className="[@media(pointer:coarse)]:hidden" />
           <p className="font-sans text-sm">
             © {currentYear} John Aaron Mendoza Branzuela
           </p>

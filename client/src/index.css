@@ -879,7 +879,8 @@
    and input pinned, the log keeps a readable height, topic keys in one row
    that scrolls sideways. Unlayered so it wins over the panel's utilities. */
 .chat-panel {
-  height: min(680px, calc(100dvh - 7rem));
+  height: auto;
+  max-height: min(680px, calc(100dvh - 7rem));
 }
 /* One topic set at a time: the keys below the log; the copy inside an
    unknown-question reply shows only where the keys are hidden (below) */

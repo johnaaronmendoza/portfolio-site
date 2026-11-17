@@ -32,10 +32,10 @@ export default function About() {
         <Lead text="From Electrical Engineering at Nanyang Polytechnic to Computing Science at SIT × Glasgow." className="mb-6 lg:mb-8" />
 
         <FramerReveal delay={0.1}>
-          {/* Fills the content width: photo, bio at 60ch, then the two facts in
-              their own column from xl (under the bio below xl, where 1024px has no room) */}
-          <Window title="about_me.txt" bodyClassName="grid gap-6 md:grid-cols-[auto_minmax(0,1fr)] xl:grid-cols-[auto_minmax(0,60ch)_minmax(0,1fr)] md:gap-x-10 items-start p-6 sm:p-8 lg:p-10">
-            <div className="md:row-span-2 xl:row-span-1 border-[3px] border-black shadow-[4px_4px_0_0_var(--ink)] w-48 h-48 sm:w-52 sm:h-52 overflow-hidden">
+          {/* Fills the content width: photo, then the bio at 60ch with the two
+              facts right under it at every width */}
+          <Window title="about_me.txt" bodyClassName="grid gap-6 md:grid-cols-[auto_minmax(0,1fr)] md:gap-x-10 items-start p-6 sm:p-8 lg:p-10">
+            <div className="md:row-span-2 border-[3px] border-black shadow-[4px_4px_0_0_var(--ink)] w-48 h-48 sm:w-52 sm:h-52 overflow-hidden">
               <PixelatedImage
                 src={profileImg}
                 alt="Portrait of John Aaron Branzuela"
@@ -50,7 +50,7 @@ export default function About() {
                 </p>
               ))}
             </div>
-            <ul aria-label="Quick facts" className="flex flex-wrap gap-x-6 gap-y-2 xl:flex-col xl:gap-y-3 border-t-2 xl:border-t-0 xl:border-l-2 border-black pt-4 xl:pt-0 xl:pl-8 font-sans text-[15px] sm:text-base text-[color:var(--text)]">
+            <ul aria-label="Quick facts" className="flex flex-wrap gap-x-6 gap-y-2 max-w-[60ch] border-t-2 border-black pt-4 font-sans text-[15px] sm:text-base text-[color:var(--text)]">
               {FACTS.map(({ icon, text }) => (
                 <li key={text} className="flex items-center gap-2">
                   <PixelArt name={icon} size={16} lazy />

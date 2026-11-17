@@ -140,7 +140,7 @@ export default function Hero() {
                 bodyClassName="bg-black text-[color:var(--paper)] [--focus:var(--paper)] p-6 short-phone:p-4 sm:p-10 xl:p-12"
               >
                 {/* Sized so BRANZUELA plus the cursor fits from 320px up */}
-                <h1 className="font-pixel leading-[1.25] text-[length:clamp(20px,7vw,30px)] sm:text-4xl lg:text-[40px] xl:text-5xl">
+                <h1 className="font-pixel leading-[1.25] text-[length:clamp(20px,7vw,30px)] sm:text-4xl lg:text-[36px] xl:text-5xl">
                   <span className="sr-only">John Aaron Mendoza Branzuela</span>
                   <span aria-hidden="true">
                     {NAME_LINES.map((line, i) => (

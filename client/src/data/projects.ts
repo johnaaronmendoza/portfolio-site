@@ -30,6 +30,8 @@ export type Project = {
   name: string;
   /** Case-study pages only */
   slug?: CaseSlug;
+  /** Short file name for the tile's browser.exe title bar when there is no case slug */
+  file?: string;
   /** One line, ≤ 14 words: the Home tile text and the lead under the case-study
    *  h1 (one string, so they can't drift). No key terms:
    *  the tile's facts carry the emphasis. */
@@ -157,6 +159,7 @@ export const PROJECTS: Project[] = [
   {
     num: 7,
     name: "GreenLoopFarms",
+    file: "greenloop",
     description:
       "Helped pitch a Singapore hydroponic urban farm to an industry investor panel.",
     facts: ["SGD 10,000 NYP JumpStart Grant"],

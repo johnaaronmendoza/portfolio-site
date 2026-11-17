@@ -66,7 +66,7 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
           Every tile still is cut at 2:1 (asset-work/tiles/screens.py), so the
           window shows it whole at every width (John, 17 Nov) */}
       <div className="relative border-b-[3px] border-black bg-[var(--page)] p-4">
-        <Window title={`${project.slug ?? project.name.toLowerCase()}.png`} className="window--figure window--thumb" bodyClassName="relative aspect-[2/1] overflow-hidden">
+        <Window title={`${project.slug ?? project.file ?? project.name.toLowerCase()}.png`} className="window--figure window--thumb" bodyClassName="relative aspect-[2/1] overflow-hidden">
           {/* alt="" because the tile's link already names the project */}
           {project.image && (
             <PixelatedImage
@@ -107,7 +107,7 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
       <div className="flex flex-1 flex-col gap-4 p-5">
         {/* Featured badge, then year and team context, from projects.ts. The
             badge sits here, not on the image, so it never covers a screenshot */}
-        <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-label text-sm text-[color:var(--text)] -mb-2">
+        <p className={`flex flex-wrap items-center gap-x-3 gap-y-1 font-label text-sm text-[color:var(--text)] -mb-2 ${project.sfx ? 'pr-16' : ''}`}>
           {project.featured && <span className="badge badge--ink">Featured</span>}
           <span>
             {project.year}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{project.caption}

@@ -17,3 +17,8 @@ Skills: cut the ~160px dead space and the stray rule at the end.
 1. Playable Desk Assist demo (illustrative sample ticket; stops at "Agent reviews" with an Approve button the visitor presses; labelled as how it "will" work). Where: inline in the hero window / modal / LGA case page.
 3. One ambient pixel system: drop the 9 floating pixels / keep both with different roles / add a sparse field inside welcome.exe.
 10. Skills ending: frame the board in a keyboard.exe window with "All skills as a list" in its status bar / keep frameless and end on a short lead-in to the footer.
+
+## John's decisions (17 Nov)
+- Desk Assist demo: not now.
+- Floating pixels: drop the 9 Framer floating pixels; keep only the retuned particle field.
+- Skills ending: frame the 3D board in a `keyboard.exe` Window; "All skills as a list" moves into its status bar.

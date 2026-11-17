@@ -677,6 +677,12 @@
     --focus: var(--ink);
   }
 
+  /* Project tile still (Projects.tsx): a small browser window, so a slimmer bar */
+  .window--thumb > .window-bar {
+    min-height: 1.75rem;
+    padding: 0.125rem 0.5rem;
+  }
+
   .window-bar {
     display: flex;
     align-items: center;
@@ -896,7 +902,7 @@
   .chat-panel > .window-bar { top: 0; }
   .chat-panel > .chat-input {
     bottom: 0;
-    background-color: var(--page);
+    background-color: var(--paper);
   }
   .chat-panel .chat-log-box {
     flex: none;

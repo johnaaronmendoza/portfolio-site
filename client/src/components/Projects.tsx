@@ -48,14 +48,12 @@ interface ProjectTileProps {
   ref?: Ref<HTMLDivElement>;
   /** Grid span; defaults to the project's Home span */
   span?: string;
-  /** Image box height; defaults to the Home sizes (featured taller) */
-  imageHeight?: string;
 }
 
 // `ref` is a plain prop in React 19; AnimatePresence popLayout needs it on the
 // motion element to measure the exiting tile. Also used by the case-study
 // "Next project" band.
-export function ProjectTile({ project, ref, span = project.span, imageHeight }: ProjectTileProps) {
+export function ProjectTile({ project, ref, span = project.span }: ProjectTileProps) {
   const isComingSoon = project.link === '#';
   const isExternal   = project.link === 'external';
 
@@ -64,41 +62,43 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
 
   const body = (
     <>
-      {/* Project image on top, framed by the tile border and a 3px rule */}
-      <div className={`relative overflow-hidden border-b-[3px] border-black bg-[var(--page)] ${imageHeight ?? (project.featured ? 'h-56 lg:h-72' : 'h-48')}`}>
-        {/* alt="" because the tile's link already names the project */}
-        {project.image ? (
-          <PixelatedImage
-            src={project.image}
-            alt=""
-            position={project.imagePosition}
-            className={`w-full h-full transition-[filter,scale] duration-200 ${
-              isComingSoon
-                ? 'opacity-50 grayscale'
-                // Every tile in colour: greyscale made the non-featured
-                // projects (AI Finance, UWB, UAT) look disabled
-                : '[@media(hover:hover)]:group-hover:scale-[1.03]'
-            }`}
-          />
-        ) : (
-          <div className="w-full h-full" />
-        )}
-        {isComingSoon && (
-          <div className="absolute inset-0 flex items-end justify-end p-3">
-            <span className="badge badge--paper">COMING SOON</span>
-          </div>
-        )}
-        {isExternal && (
-          <span className="badge badge--data absolute top-2 right-2">Live site</span>
-        )}
-        {/* Comic sound effect, decorative (the description says the same) */}
+      {/* The real screen in a small browser window, inset on the page colour.
+          Every tile still is cut at 2:1 (asset-work/tiles/screens.py), so the
+          window shows it whole at every width (John, 17 Nov) */}
+      <div className="relative border-b-[3px] border-black bg-[var(--page)] p-4">
+        <Window title={`${project.slug ?? project.name.toLowerCase()}.png`} className="window--figure window--thumb" bodyClassName="relative aspect-[2/1] overflow-hidden">
+          {/* alt="" because the tile's link already names the project */}
+          {project.image && (
+            <PixelatedImage
+              src={project.image}
+              alt=""
+              className={`w-full h-full transition-[filter,scale] duration-200 ${
+                isComingSoon
+                  ? 'opacity-50 grayscale'
+                  // Every tile in colour: greyscale made the non-featured
+                  // projects (AI Finance, UWB, UAT) look disabled
+                  : '[@media(hover:hover)]:group-hover:scale-[1.03]'
+              }`}
+            />
+          )}
+          {isComingSoon && (
+            <div className="absolute inset-0 flex items-end justify-end p-3">
+              <span className="badge badge--paper">COMING SOON</span>
+            </div>
+          )}
+          {isExternal && (
+            <span className="badge badge--data absolute top-2 right-2">Live site</span>
+          )}
+        </Window>
+        {/* Comic sound effect, decorative (the description says the same). It
+            hangs off the tile's edge across the rule, clear of the screen */}
         {project.sfx && (
           <Burst
             fill="var(--paper)"
             rotate={project.num % 2 ? 8 : -8}
-            className="absolute bottom-2 right-2 size-24 pointer-events-none text-black"
+            className="absolute -right-3 bottom-0 translate-y-[72%] z-10 size-20 pointer-events-none text-black"
           >
-            <span aria-hidden="true" className="block px-2 text-[19px]">{project.sfx}</span>
+            <span aria-hidden="true" className="block px-1 text-[17px]">{project.sfx}</span>
           </Burst>
         )}
       </div>
@@ -134,8 +134,10 @@ export function ProjectTile({ project, ref, span = project.span, imageHeight }: 
             </span>
           ))}
         </div>
+        {/* Featured: right under the tags (mt-auto left a dead band beside
+            the taller neighbours); regular tiles keep it on the bottom edge */}
         {!isComingSoon && (
-          <div className="mt-auto pt-2 font-sans text-[15px] text-black font-bold underline underline-offset-4 decoration-2">
+          <div className={`${project.featured ? 'mt-5' : 'mt-auto'} pt-2 font-sans text-[15px] text-black font-bold underline underline-offset-4 decoration-2`}>
             {isExternal ? 'Visit site' : 'Read case study'}
           </div>
         )}
@@ -211,7 +213,7 @@ export default function Projects() {
   return (
     <FramerReveal>
       {/* Full-width blue band; all text on it is black or sits on paper */}
-      <section className="bg-[var(--blue)] text-black border-y-[3px] border-black px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
+      <section className="bg-[var(--blue)] text-black border-y-[3px] border-black px-4 sm:px-8 lg:px-[88px] 2xl:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
           <SectionHeading text="PROJECTS" tone="ink" icon="icon-projects" className="mb-4 lg:mb-5" />
           <Lead text="Start with **SilverLink SG**, the SCS Awareness Platform and UWB Indoor Localization." tone="blue" className="mb-6 lg:mb-8" />

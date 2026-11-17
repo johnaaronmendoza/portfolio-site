@@ -107,7 +107,8 @@ function SectionMenu({ active }: { active: string }) {
                 </li>
               ))}
             </ul>
-            <ShortcutHint className="window-body flex-shrink-0 border-t-[3px] border-black px-3 py-2" />
+            {/* Keyboard shortcuts mean nothing on a touch screen */}
+            <ShortcutHint className="window-body flex-shrink-0 border-t-[3px] border-black px-3 py-2 [@media(pointer:coarse)]:hidden" />
           </motion.div>
         </>
       )}
@@ -122,7 +123,8 @@ function SectionMenu({ active }: { active: string }) {
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={MENU_ID}
-        className={`${dockButton(false)} lg:hidden`}
+        // Fixed width, so the dock doesn't shift as the section name changes
+        className={`${dockButton(false)} w-[7.5rem] lg:hidden`}
       >
         <DockGlyph name="menu" />
         {/* Says where the visitor is: "Menu" at the top, then the current section.

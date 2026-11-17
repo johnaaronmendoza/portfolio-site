@@ -177,7 +177,8 @@ interface Message {
   id: string;
   role: 'user' | 'system';
   content: string;
-  timestamp: Date;
+  /** Not on the greeting, which no one sent at a time */
+  timestamp?: Date;
   /** The fallback reply: offer the topic keys under it */
   topics?: boolean;
   /** Where the answer lives on the home page */
@@ -187,6 +188,8 @@ interface Message {
 export default function MascotChatWidget() {
   const reduced = useReducedMotion();
   const [location, navigate] = useLocation();
+  // On Home below lg the launcher sits in the dock band (SoundToggle FLOAT_DOCK)
+  const onHome = location === '/';
   const [isOpen, setIsOpen] = useState(false);
   // The launcher swaps happy/worry while the bot types: have both frames ready
   useEffect(preloadMascot, []);
@@ -195,7 +198,6 @@ export default function MascotChatWidget() {
       id: '1',
       role: 'system',
       content: "Hi! I'm a small bot that knows John's projects, experience and skills. Pick a topic below or type a question.",
-      timestamp: new Date(),
     },
   ]);
   const [input, setInput] = useState('');
@@ -283,7 +285,7 @@ export default function MascotChatWidget() {
   // phones, where it covers the page), or open Home at that section
   const goToSection = (id: SectionId) => {
     if (!window.matchMedia('(min-width: 640px)').matches) setIsOpen(false);
-    if (location === '/') scrollToSection(id, reduced);
+    if (onHome) scrollToSection(id, reduced);
     else navigate(`/#${id}`);
   };
 
@@ -317,7 +319,7 @@ export default function MascotChatWidget() {
         aria-label={isOpen ? 'Close chat' : "Chat about John's work"}
         aria-expanded={isOpen}
         aria-controls={PANEL_ID}
-        className={`btn focus-ring-float fixed bottom-4 right-4 sm:bottom-6 z-40 p-0 text-black ${isOpen ? 'bg-[var(--page)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)]'}`}
+        className={`btn focus-ring-float fixed right-4 z-40 ${onHome ? 'bottom-2 lg:bottom-6' : 'bottom-4 sm:bottom-6'} p-0 text-black ${isOpen ? 'bg-[var(--page)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)]'}`}
       >
         {/* Icon only below 1440px, where a wider launcher would sit over the
             content column (proof.txt's links) */}
@@ -350,7 +352,7 @@ export default function MascotChatWidget() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: motionTokens.distance.sm }}
             transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
-            className="chat-panel window fixed bottom-24 left-2 right-2 sm:left-auto sm:right-4 z-50 sm:w-[26rem] flex flex-col bg-[var(--page)]"
+            className="chat-panel window fixed bottom-24 left-2 right-2 sm:left-auto sm:right-4 z-50 sm:w-[26rem] flex flex-col"
           >
             <WindowBar title="ask_johnny.exe" onClose={closeChat} closeLabel="Close chat" />
 
@@ -369,9 +371,9 @@ export default function MascotChatWidget() {
               />
             </div>
 
-            {/* The log: a framed area inside the one chat window; flex-1 +
+            {/* The log: part of the one window body, under a 3px rule; flex-1 +
                 min-h-0 lets it scroll inside */}
-            <div className="chat-log-box mx-3 flex-1 min-h-0 flex flex-col border-[3px] border-black bg-[var(--paper)]">
+            <div className="chat-log-box flex-1 min-h-0 flex flex-col border-t-[3px] border-black">
             <div
               ref={logRef}
               className="retro-scroll flex-1 min-h-0 overflow-y-auto p-3 space-y-3"
@@ -410,9 +412,11 @@ export default function MascotChatWidget() {
                         Go to {SECTION_LABEL[msg.section]} <span aria-hidden="true">↓</span>
                       </a>
                     )}
-                    <p className={`font-sans text-sm text-[color:var(--text)] mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-                      {msg.timestamp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
-                    </p>
+                    {msg.timestamp && (
+                      <p className={`font-sans text-sm text-[color:var(--text)] mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+                        {msg.timestamp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
+                      </p>
+                    )}
                   </div>
                 </motion.div>
               ))}

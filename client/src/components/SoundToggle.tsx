@@ -1,13 +1,15 @@
 import { play, setSoundOn, useSoundOn } from '@/hooks/useSound';
 
 /**
- * Floating controls (menu, Pause motion, Sound), bottom-left; the chat
- * launcher owns bottom-right and toasts stack above (App.tsx). A row below
- * lg; from lg a column in the left gutter (the menu gives way to the section
- * dots). The case pages have no dock: Sound sits in their header.
+ * Floating controls (menu, Pause motion, Sound). Below lg a full-width band
+ * on the page colour along the bottom edge, so content scrolls under a solid
+ * strip rather than between loose buttons; the chat launcher sits at its right
+ * end and toasts stack above (App.tsx). From lg a column in the left gutter
+ * (the menu gives way to the section dots). The case pages have no dock:
+ * Sound sits in their header.
  */
 export const FLOAT_DOCK =
-  'fixed bottom-4 left-4 sm:bottom-6 sm:left-6 lg:left-4 z-40 flex items-center gap-2 lg:flex-col lg:items-stretch [@media(max-height:500px)]:bottom-1';
+  'fixed z-40 flex items-center gap-2 max-lg:inset-x-0 max-lg:bottom-0 max-lg:px-4 max-lg:py-2 max-lg:bg-[var(--page)] max-lg:border-t-[3px] max-lg:border-black lg:bottom-6 lg:left-4 lg:flex-col lg:items-stretch [@media(max-height:500px)]:py-1 lg:[@media(max-height:500px)]:bottom-1';
 
 const PRESSED = 'translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]';
 
@@ -72,10 +74,11 @@ export default function SoundToggle({ variant = 'dock' }: { variant?: 'dock' | '
     >
       <DockGlyph name={on ? 'sound' : 'mute'} />
       <span className="sr-only">Sound</span>
-      {/* "Off" / "On" where space is short, "Sound off" where it fits */}
+      {/* Dock: "Off" / "On" where space is short, "Sound off" where it fits;
+          the case-page header always says "Sound off" */}
       <span aria-hidden="true" className={bar ? 'whitespace-nowrap' : DOCK_WORD}>
-        <span className={bar ? 'max-sm:hidden' : 'hidden min-[1440px]:inline'}>Sound </span>
-        <span className={bar ? 'max-sm:capitalize' : 'max-[1439px]:capitalize'}>{on ? 'on' : 'off'}</span>
+        <span className={bar ? undefined : 'hidden min-[1440px]:inline'}>Sound </span>
+        <span className={bar ? undefined : 'max-[1439px]:capitalize'}>{on ? 'on' : 'off'}</span>
       </span>
     </button>
   );

@@ -119,7 +119,7 @@ export default function Experience() {
   const [lead, ...rest] = ENTRIES;
   return (
     <FramerReveal>
-      <section className="px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
+      <section className="px-4 sm:px-8 lg:px-[88px] 2xl:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
           <SectionHeading text="EXPERIENCE" icon="icon-experience" className="mb-16" />
 

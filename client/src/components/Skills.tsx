@@ -58,7 +58,7 @@ function Swatch({ way }: { way: keyof typeof WAYS }) {
 export default function Skills() {
   return (
     <FramerReveal>
-      <section className="text-[color:var(--text)] px-4 sm:px-8 lg:px-16 py-20 sm:py-28">
+      <section className="text-[color:var(--text)] px-4 sm:px-8 lg:px-[88px] 2xl:px-16 py-20 sm:py-28">
         <div className="max-w-6xl mx-auto">
           <SectionHeading text="SKILLS" icon="icon-skills" className="mb-10" />
 

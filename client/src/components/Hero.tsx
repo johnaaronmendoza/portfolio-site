@@ -106,7 +106,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--text)] px-4 sm:px-8 lg:px-16 pt-8 pb-6 sm:pt-20 lg:pt-14 lg:pb-28 xl:pt-20 xl:pb-6 short-desk:pt-3">
+    <section ref={sectionRef} className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--text)] px-4 sm:px-8 lg:px-[88px] 2xl:px-16 pt-8 pb-6 sm:pt-20 lg:pt-14 lg:pb-28 xl:pt-20 xl:pb-6 short-desk:pt-3">
       {/* WebGL particles (skipped with reduced motion, frozen by Pause motion);
           they fade out around the text marked `particles-clear` */}
       {!reduced && (
@@ -124,10 +124,10 @@ export default function Hero() {
       )}
 
       <div className="relative z-10 flex-1 flex items-center">
-        <div className="w-full max-w-4xl lg:max-w-6xl mx-auto lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-center">
-          {/* Phones: the name and buttons fill the first screen, so the fixed
-              dock sits on empty page and desk_assist.exe starts below the fold */}
-          <div className="lg:col-span-7 max-sm:min-h-[calc(100svh-3rem)]">
+        <div className="w-full max-w-4xl lg:max-w-6xl mx-auto lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-start">
+          {/* Phones: no full-height intro, so desk_assist.exe's title bar peeks
+              above the fold (John, 17 Nov) */}
+          <div className="lg:col-span-7">
             <motion.div
               className="mb-6 sm:mb-10"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -263,12 +263,13 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll cue: in the flow so it never covers the buttons on short screens */}
+      {/* Scroll cue: in the flow so it never covers the buttons on short screens;
+          not on phones, where desk_assist.exe peeking above the fold says it */}
       <motion.button
         type="button"
         aria-label="Scroll to About"
         onClick={() => scrollToSection('about', reduced)}
-        className="relative z-10 self-center mt-8 min-h-[44px] min-w-[44px] px-3 flex flex-col items-center justify-center gap-1 text-[color:var(--text)] particles-clear"
+        className="relative z-10 self-center mt-8 min-h-[44px] min-w-[44px] px-3 hidden sm:flex flex-col items-center justify-center gap-1 text-[color:var(--text)] particles-clear"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: HERO.cue, duration: motionTokens.duration.slow }}

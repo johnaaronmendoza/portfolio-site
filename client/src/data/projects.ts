@@ -19,7 +19,6 @@ import scs3             from '@assets/scs_p72_img0.png';
 import fireSafety2      from '@assets/firesafety_p29_img1.png';
 import fireSafety3      from '@assets/firesafety_p29_img3.png';
 import uwb2             from '@assets/da_p39_img2.png';
-import uwb3             from '@assets/da_p35_img1.png';
 import greenloop2       from '@assets/greenloop_tour.jpg';
 
 
@@ -41,10 +40,8 @@ export type Project = {
   /** Team or course context after the year on the tile ("2025 · team of 6");
    *  facts already on the case pages and resume */
   caption: string;
+  /** Tile still, cut at 2:1 (asset-work/tiles/screens.py) */
   image: string | null;
-  /** Where the tile crops the image, like CSS object-position (0-1 per axis):
-   *  chosen so the crop starts at a clean UI edge, not mid-word */
-  imagePosition?: readonly [number, number];
   tags: string[];
   link: string;
   externalUrl?: string;
@@ -72,7 +69,6 @@ export const PROJECTS: Project[] = [
     year: "2025",
     caption: "team of 6",
     image: silverLinkImg,
-    imagePosition: [0.13, 0], // window edge and the full event title
     tags: ["React", "gRPC", "K8s", "PostgreSQL"],
     link: "/projects/silverlink",
     span: FEATURED_SPAN,
@@ -90,7 +86,6 @@ export const PROJECTS: Project[] = [
     year: "2025",
     caption: "team of 4",
     image: scsImg,
-    imagePosition: [0, 0], // window edge, sidebar and "Main Story"
     tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
     link: "/projects/scs",
     span: FEATURED_SPAN,
@@ -107,12 +102,11 @@ export const PROJECTS: Project[] = [
     year: "2025",
     caption: "team coursework",
     image: uwbImg,
-    imagePosition: [0.5, 0.33], // the chart window, title to matrix
     tags: ["Python", "SVM", "PCA", "scikit-learn"],
     link: "/projects/uwb",
     // Wide at sm so the 2-column grid has no orphan
     span: `sm:col-span-2 ${FEATURED_SPAN}`,
-    preloadImages: [uwb2, uwb3],
+    preloadImages: [uwb2, '/assets/case/uwb/tree-depth-desktop@2x.webp'],
     featured: true,
   },
   {
@@ -125,7 +119,6 @@ export const PROJECTS: Project[] = [
     year: "2024",
     caption: "data pipeline",
     image: aiFinanceImg,
-    imagePosition: [0.05, 0.5], // the flow from its first step
     tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
     link: "/projects/ai-finance",
     span: 'lg:col-span-3',
@@ -141,7 +134,6 @@ export const PROJECTS: Project[] = [
     year: "2024",
     caption: "coursework",
     image: uatImg,
-    imagePosition: [0, 0], // window edge and the dashboard title
     tags: ["React 18", "Node.js", "Express", "SQLite"],
     link: "/projects/uat",
     span: 'lg:col-span-3',
@@ -157,7 +149,6 @@ export const PROJECTS: Project[] = [
     year: "2025",
     caption: "team coursework",
     image: fireSafetyImg,
-    imagePosition: [0.47, 0.5], // both phones whole
     tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
     link: "/projects/firesafety",
     span: 'lg:col-span-3',

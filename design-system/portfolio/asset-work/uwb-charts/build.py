@@ -304,6 +304,235 @@ def comparison_mobile():
     return svg(W, H, top + bot, 'Logistic regression vs SVM-RBF metrics, and range RMSE', CMP_DESC), W, H
 
 
+# ---- line charts: PCA variance and tree depth (round 3) -------------------------------
+# Data: pca-trace.csv and tree-depth.csv, read off the originals by trace.py (method, axis
+# calibration and checks in its docstring). Strings and marked values copied from the originals
+# (da_p9_img1.png, da_p35_img1.png) and the page (UWBProject.tsx l.23-25, l.36-38):
+#   PCA: 95 % threshold, 99 % threshold, 848 components, 963 components (legend + page alt).
+#   Tree: Training / Test accuracy, Optimal depth=4, "Optimal: depth=4",
+#         "Train=0.874, Test=0.867" (annotation; printed 0.8737 / 0.8674).
+import csv
+
+
+def read_csv(name):
+    with open(HERE / name) as f:
+        return list(csv.DictReader(f))
+
+
+PCA_RAW = [(float(r['components']), float(r['cumulative_variance_pct'])) for r in read_csv('pca-trace.csv')]
+
+
+def pca_curve(raw, window=9):
+    """The traced curve, cleaned of pixel noise only. A cumulative share is non-decreasing, so:
+    1. one value per pixel column (the top of the span where the start rises steeply), keeping
+       the very first point (the curve's foot at component 0);
+    2. isotonic (pool-adjacent-violators) fit: removes the dips where the threshold lines cross;
+    3. a 15-column moving average (about 18 components) on the shallow part only (n >= 16),
+       narrowing at its ends, which smooths the 0.27-point pixel staircase. Max change vs the trace is printed by build.py."""
+    cols = {}
+    for n, v in raw:
+        cols[n] = max(v, cols.get(n, v))
+    xs = sorted(cols)
+    ys = [cols[x] for x in xs]
+    blocks = []  # PAVA
+    for y in ys:
+        blocks.append([y, 1])
+        while len(blocks) > 1 and blocks[-2][0] > blocks[-1][0]:
+            b = blocks.pop()
+            a = blocks[-1]
+            a[0] = (a[0] * a[1] + b[0] * b[1]) / (a[1] + b[1])
+            a[1] += b[1]
+    iso = [v for v, k in blocks for _ in range(k)]
+    out = []
+    i0 = next(i for i, x in enumerate(xs) if x >= 16)
+    for i, x in enumerate(xs):
+        # the window narrows towards the ends of the shallow part, so it joins without a step
+        h = min(window // 2, max(0, i - i0), len(xs) - 1 - i) if i >= i0 else 0
+        out.append((x, sum(iso[i - h:i + h + 1]) / (2 * h + 1)))
+    return [raw[0]] + out
+
+
+PCA = pca_curve(PCA_RAW, window=15)
+
+
+def pca_at(n):
+    for (x0, y0), (x1, y1) in zip(PCA, PCA[1:]):
+        if x0 <= n <= x1 and x1 > x0:
+            return y0 + (y1 - y0) * (n - x0) / (x1 - x0)
+PCA_MARKS = [(95, '95% threshold', 848, '848 components'), (99, '99% threshold', 963, '963 components')]
+TREE = [(int(r['depth']), float(r['train']), float(r['test'])) for r in read_csv('tree-depth.csv')]
+OPT = (4, 0.8737, 0.8674)
+OPT_TEXT = ('Optimal: depth=4', 'Train=0.874, Test=0.867')
+FILL = '#DCE3FF'  # 18 % blue on paper: the area under the PCA curve (ink text on it 18.6:1)
+
+
+class Scale:
+    def __init__(self, d0, d1, r0, r1):
+        self.d0, self.d1, self.r0, self.r1 = d0, d1, r0, r1
+
+    def __call__(self, v):
+        return self.r0 + (v - self.d0) * (self.r1 - self.r0) / (self.d1 - self.d0)
+
+
+def path(pts):
+    return 'M' + ' L'.join(f'{x:.1f} {y:.1f}' for x, y in pts)
+
+
+def dline(x1, y1, x2, y2, sw, dash, color=INK):
+    return (f'<line x1="{x1:g}" y1="{y1:g}" x2="{x2:g}" y2="{y2:g}" stroke="{color}" '
+            f'stroke-width="{sw}" stroke-dasharray="{dash}"/>')
+
+
+def frame(sx, sy, xt, yt, s, xtitle, ytitle, ytitle_top=False):
+    """Ink axes (left + bottom, 3px), ticks, Plex Mono tick labels and axis titles."""
+    LAB, TL = s['lab'], s['tick']
+    x0, x1, y0, y1 = sx.r0, sx.r1, sy.r0, sy.r1  # y0 = bottom
+    out = [line(x0, y0, x1, y0, 3), line(x0, y0 + 1.5, x0, y1, 3)]
+    for v, lab in xt:
+        x = sx(v)
+        out.append(line(x, y0, x, y0 + TL, 2))
+        out.append(text(x, y0 + TL + LAB + 2, lab, 'mono', LAB, 'middle'))
+    for v, lab in yt:
+        y = sy(v)
+        out.append(line(x0 - TL, y, x0, y, 2))
+        out.append(text(x0 - TL - 6, y + LAB * 0.36, lab, 'mono', LAB, 'end'))
+    out.append(text((x0 + x1) / 2, y0 + TL + LAB * 2 + s['xt_gap'], xtitle, 'mono', LAB, 'middle'))
+    if ytitle_top:
+        out.append(text(s['pad'], y1 - s['yt_gap'], ytitle, 'mono', LAB))
+    else:
+        out.append(rot_label(s['pad'] + LAB * 0.8, (y0 + y1) / 2, ytitle, LAB))
+    return ''.join(out)
+
+
+def wrap_title(x, y, lines, size, lh):
+    return ''.join(text(x, y + i * lh, t, 'sans', size) for i, t in enumerate(lines))
+
+
+PCA_DESC = ('Line chart, cumulative explained variance (%) against number of principal components, '
+            '0 to about 1,016. The curve starts near 20% at the first component, rises steeply over '
+            'the first few dozen components to just under 50%, then climbs steadily, crossing the 95% threshold at 848 '
+            'components and the 99% threshold at 963, and reaches 100% at the last component.')
+
+
+def pca_chart(W, s, title_lines, mobile):
+    P, LAB = s['pad'], s['lab']
+    top = P + s['tt'] + (len(title_lines) - 1) * s['tlh']
+    plot_top = top + s['title_gap'] + LAB + s['yt_gap']
+    left = P + len('100') * LAB * 0.6 + 6 + s['tick']
+    sx = Scale(-30, 1050, left, W - P - s['right'])
+    sy = Scale(0, 108, plot_top + s['plot_h'], plot_top)
+    out = [wrap_title(P, P + s['tt'], title_lines, s['tt'], s['tlh'])]
+    pts = [(sx(n), sy(v)) for n, v in PCA]
+    base = sy(0)
+    out.append(f'<path d="{path(pts)} L{pts[-1][0]:.1f} {base:.1f} L{pts[0][0]:.1f} {base:.1f} Z" fill="{FILL}"/>')
+    # threshold lines (dashed) and component lines (dotted) span the plot, as in the original
+    for pct, plab, n, nlab in PCA_MARKS:
+        out.append(dline(sx.r0, sy(pct), sx.r1, sy(pct), 2, s['dash']))
+        out.append(dline(sx(n), base, sx(n), sy.r1, 2, s['dot']))
+    out.append(f'<path d="{path(pts)}" fill="none" stroke="{BLUE}" stroke-width="{s["curve"]}" '
+               f'stroke-linejoin="round" stroke-linecap="round"/>')
+    lx = sx(30)
+    out.append(text(lx, sy(99) - s['lab_gap'], PCA_MARKS[1][1], 'mono', LAB))
+    out.append(text(lx, sy(95) + s['lab_gap'] + LAB * 0.72, PCA_MARKS[0][1], 'mono', LAB))
+    for _, _, n, nlab in PCA_MARKS:  # read bottom-to-top, just left of each dotted line
+        USED['mono'].update(nlab)
+        out.append(f'<text transform="translate({sx(n) - s["lab_gap"]:g} {base - s["lab_gap"] - 4:g}) rotate(-90)" '
+                   f'class="mono" font-size="{LAB}">{esc(nlab)}</text>')
+    out.append(frame(sx, sy, [(v, str(v)) for v in range(0, 1001, 200)],
+                     [(v, str(v)) for v in range(0, 101, 20)], s,
+                     'Number of principal components', 'Cumulative explained variance (%)', True))
+    H = round(base + s['tick'] + LAB * 2 + s['xt_gap'] + P)
+    return svg(W, H, ''.join(out), 'PCA on CIR: explained variance vs number of components', PCA_DESC), W, H
+
+
+def pca_desktop():
+    s = dict(pad=24, lab=22, tt=28, tlh=34, title_gap=30, yt_side=20, yt_gap=14, tick=8, right=8,
+             plot_h=372, dash='12 8', dot='3 6', curve=4, lab_gap=10, xt_gap=14)
+    return pca_chart(1018, s, ['PCA on CIR: explained variance vs number of components'], False)
+
+
+def pca_mobile():
+    s = dict(pad=16, lab=13, tt=18, tlh=22, title_gap=18, yt_side=0, yt_gap=10, tick=6, right=12,
+             plot_h=250, dash='8 5', dot='2 4', curve=3, lab_gap=6, xt_gap=8)
+    return pca_chart(360, s, ['PCA on CIR: explained variance', 'vs number of components'], True)
+
+
+TREE_DESC = ('Line chart of decision tree accuracy against max depth (2 to 10, then every 5 to 50). '
+             'Training accuracy (black circles, solid line) climbs from about 0.85 at depth 2 to 1.0 by '
+             'depth 25 and stays there. Test accuracy (blue triangles, dashed line) climbs to a peak of '
+             'about 0.896 at depths 9 and 10, then falls and settles around 0.873. A dashed vertical line '
+             'marks the optimal depth, 4: train 0.874, test 0.867.')
+
+
+def tri(cx, cy, r, sw):
+    # triangle pointing down, centred on its bounding box like matplotlib's 'v' marker
+    pts = [(cx - r, cy - r * 0.9), (cx + r, cy - r * 0.9), (cx, cy + r * 0.9)]
+    return (f'<polygon points="{" ".join(f"{x:.1f},{y:.1f}" for x, y in pts)}" fill="{BLUE}" '
+            f'stroke="{INK}" stroke-width="{sw}" stroke-linejoin="miter"/>')
+
+
+def tree_chart(W, s, mobile):
+    P, LAB = s['pad'], s['lab']
+    plot_top = P + s['tt'] + s['title_gap'] + (LAB + s['yt_gap'] if mobile else 0)
+    left = P + (0 if mobile else LAB + s['yt_side']) + len('0.86') * LAB * 0.6 + 6 + s['tick']
+    sx = Scale(-1, 52, left, W - P - s['right'])
+    sy = Scale(s['ymin'], 1.012, plot_top + s['plot_h'], plot_top)
+    out = [text(P, P + s['tt'], 'Decision tree: accuracy vs max depth', 'sans', s['tt'])]
+    base = sy(s['ymin'])
+    ox = sx(OPT[0])
+    out.append(dline(ox, base, ox, sy.r1, s['opt_w'], s['opt_dash']))
+    tr = [(sx(d), sy(a)) for d, a, _ in TREE]
+    te = [(sx(d), sy(b)) for d, _, b in TREE]
+    out.append(f'<path d="{path(tr)}" fill="none" stroke="{INK}" stroke-width="{s["lw"]}" stroke-linejoin="round"/>')
+    out.append(f'<path d="{path(te)}" fill="none" stroke="{BLUE}" stroke-width="{s["lw"]}" '
+               f'stroke-dasharray="{s["dash"]}" stroke-linejoin="round"/>')
+    for x, y in tr:
+        out.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{s["mr"]}" fill="{INK}"/>')
+    for x, y in te:
+        out.append(tri(x, y, s['tr'], s['tsw']))
+    # direct labels in the flat stretch (depth 30-50), replacing the legend
+    out.append(text(sx(50), sy(1.0) + s['mr'] + LAB + 6, 'Training accuracy', 'mono', LAB, 'end'))
+    out.append(text(sx(50), sy(0.875) - s['tr'] - LAB * 0.3 - 6, 'Test accuracy', 'mono', LAB, 'end'))
+    # the optimal-depth callout: paper box, 3px ink, leader to the depth-4 test marker
+    bw = len(OPT_TEXT[1]) * LAB * 0.6 + 2 * s['bpad']
+    bh = 2 * s['blh'] + 2 * s['bpad'] - (s['blh'] - LAB)
+    bx = sx(50) - bw if mobile else sx(s['box_d'])
+    by = base - s['box_gap'] - bh
+    tx, ty = sx(OPT[0]), sy(OPT[2])
+    lx, ly = bx, by + bh / 2
+    # arrowhead stops short of the marker
+    import math
+    ang = math.atan2(ty - ly, tx - lx)
+    stop = s['tr'] + s['stop']
+    ex, ey = tx - stop * math.cos(ang), ty - stop * math.sin(ang)
+    ah = s['ah']
+    a1 = (ex - ah * math.cos(ang - 0.45), ey - ah * math.sin(ang - 0.45))
+    a2 = (ex - ah * math.cos(ang + 0.45), ey - ah * math.sin(ang + 0.45))
+    out.append(line(lx, ly, ex - ah * 0.6 * math.cos(ang), ey - ah * 0.6 * math.sin(ang), 2))
+    out.append(f'<polygon points="{ex:.1f},{ey:.1f} {a1[0]:.1f},{a1[1]:.1f} {a2[0]:.1f},{a2[1]:.1f}" fill="{INK}"/>')
+    out.append(rect(bx, by, bw, bh, PAPER))
+    out.append(text(bx + s['bpad'], by + s['bpad'] + LAB * 0.8, OPT_TEXT[0], 'mono', LAB))
+    out.append(text(bx + s['bpad'], by + s['bpad'] + LAB * 0.8 + s['blh'], OPT_TEXT[1], 'mono', LAB))
+    ticks_y = [(round(0.86 + 0.02 * i, 2), f'{0.86 + 0.02 * i:.2f}') for i in range(8)]
+    out.append(frame(sx, sy, [(v, str(v)) for v in range(0, 51, 10)], ticks_y, s, 'Max depth', 'Accuracy', mobile))
+    H = round(base + s['tick'] + LAB * 2 + s['xt_gap'] + P)
+    return svg(W, H, ''.join(out), 'Decision tree: accuracy vs max depth', TREE_DESC), W, H
+
+
+def tree_desktop():
+    s = dict(pad=24, lab=22, tt=28, title_gap=30, yt_side=20, yt_gap=14, tick=8, right=8, plot_h=430,
+             ymin=0.826, lw=3, dash='10 6', mr=6, tr=8, tsw=2, opt_w=2, opt_dash='4 6',
+             bpad=12, blh=30, box_d=17, box_gap=12, ah=12, xt_gap=14, stop=6)
+    return tree_chart(1018, s, False)
+
+
+def tree_mobile():
+    s = dict(pad=16, lab=13, tt=18, title_gap=18, yt_side=0, yt_gap=10, tick=6, right=10, plot_h=330,
+             ymin=0.828, lw=2, dash='6 4', mr=3.5, tr=4.5, tsw=1.5, opt_w=2, opt_dash='3 4',
+             bpad=8, blh=18, box_d=0, box_gap=6, ah=8, xt_gap=8, stop=3)
+    return tree_chart(360, s, True)
+
+
 # ---- tile: the SVM-RBF matrix alone, set into the tile card by tiles/build.py ------------
 def tile_matrix():
     W, H, cell, sw = 760, 540, 196, 3
@@ -326,21 +555,48 @@ def tile_matrix():
                'SVM-RBF confusion matrix: 3,928 and 3,599 correct, 272 and 601 wrong.'), W, H
 
 
+def strip_fonts(doc):
+    import re
+    return re.sub(r'base64,[A-Za-z0-9+/=]+', '', doc)
+
+
 if __name__ == '__main__':
-    jobs = {
-        OUT / 'confusion-matrices-desktop.svg': confusion_desktop,
-        OUT / 'confusion-matrices-mobile.svg': confusion_mobile,
-        OUT / 'model-comparison-desktop.svg': comparison_desktop,
-        OUT / 'model-comparison-mobile.svg': comparison_mobile,
-        HERE / 'tile-matrix-svm.svg': tile_matrix,
-    }
-    built = {p: fn() for p, fn in jobs.items()}
-    st = style(USED)  # one subset covering every string in the set
+    # Two groups, each with its own font subset, so adding round-3 charts leaves the
+    # round-2 files byte-identical.
+    groups = [
+        {
+            OUT / 'confusion-matrices-desktop.svg': confusion_desktop,
+            OUT / 'confusion-matrices-mobile.svg': confusion_mobile,
+            OUT / 'model-comparison-desktop.svg': comparison_desktop,
+            OUT / 'model-comparison-mobile.svg': comparison_mobile,
+            HERE / 'tile-matrix-svm.svg': tile_matrix,
+        },
+        {
+            OUT / 'pca-variance-desktop.svg': pca_desktop,
+            OUT / 'pca-variance-mobile.svg': pca_mobile,
+            OUT / 'tree-depth-desktop.svg': tree_desktop,
+            OUT / 'tree-depth-mobile.svg': tree_mobile,
+        },
+    ]
     sizes = []
-    for p, (doc, w, h) in built.items():
-        p.write_text(doc.replace('@@STYLE@@', st))
-        sizes.append(f'{p.relative_to(ROOT)} {w}x{h}')
+    for jobs in groups:
+        for k in USED:
+            USED[k] = set()
+        built = {p: fn() for p, fn in jobs.items()}
+        st = style(USED)  # one subset covering every string in the group
+        for p, (doc, w, h) in built.items():
+            doc = doc.replace('@@STYLE@@', st)
+            # woff2 bytes can differ between fontTools/brotli builds; keep a file whose art
+            # (everything but the embedded font data) is unchanged, so reruns don't churn it
+            if not (p.exists() and strip_fonts(p.read_text()) == strip_fonts(doc)):
+                p.write_text(doc)
+            sizes.append(f'{p.relative_to(ROOT)} {w}x{h}')
     (HERE / 'sizes.txt').write_text('\n'.join(sizes) + '\n')
     print('\n'.join(sizes))
+    raw = {}
+    for n, v in PCA_RAW:
+        raw[n] = max(v, raw.get(n, v))
+    print('pca: max change vs trace %.2f points; at 848 = %.2f %%, at 963 = %.2f %%' % (
+        max(abs(v - raw[n]) for n, v in PCA[1:]), pca_at(848), pca_at(963)))
     # contrast evidence for every cell fill (ink text #111 on fill)
     print('cell fills:', {v: tint(v) for m in CM.values() for row in m for v in row})

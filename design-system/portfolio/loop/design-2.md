@@ -18,3 +18,8 @@ Ceiling for this direction with excellent execution ≈ 80–82; execution can s
 10. Featured imagery: (a) one pixel-art key image per featured project for tiles (screenshots stay on case pages); (b) screenshots framed as browser.exe windows at one fixed crop; (c) as is.
 11. Hero name window weight: (a) shrink welcome.exe to fit and move the role line inside it; (b) sparse particles inside the black body; (c) keep.
 12. Phone first screen: (a) drop the full-height intro so desk_assist.exe's title peeks above the fold; (b) keep.
+
+## John's decisions (17 Nov)
+- 10 Featured imagery: (b) real screenshots framed as small `browser.exe` windows at one fixed crop on every project tile (consistent; replaces item 3's plain frame).
+- 11 Hero name window: keep as is.
+- 12 Phone first screen: drop the full-height intro so the desk_assist.exe title bar peeks above the fold.

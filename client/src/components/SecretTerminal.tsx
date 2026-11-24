@@ -350,7 +350,7 @@ export default function SecretTerminal({ defaultOpen = false }: { defaultOpen?: 
                 role="log"
                 aria-live="polite"
                 aria-label="Terminal output"
-                className="h-80 max-h-[50dvh] overflow-y-auto overscroll-contain p-4 space-y-0.5 font-mono text-[15px] leading-relaxed whitespace-pre-wrap break-words"
+                className="h-80 max-h-[50dvh] overflow-y-auto overscroll-contain p-4 space-y-0.5 font-mono text-body-sm leading-relaxed whitespace-pre-wrap break-words"
               >
                 {lines.map((l, i) => (
                   <div key={i}>

@@ -16,8 +16,9 @@ interface Props {
 }
 
 const SIZE = {
-  section: 'text-[length:clamp(40px,12vw,52px)] sm:text-6xl lg:text-7xl',
-  case: 'text-[length:clamp(32px,9vw,38px)] sm:text-[44px] lg:text-[52px]',
+  // Below sm the title scales so a 10-letter word plus the icon fits from 320px
+  section: 'text-[length:clamp(40px,12vw,52px)] sm:text-section',
+  case: 'text-card-title sm:text-card-lead',
 };
 
 /**

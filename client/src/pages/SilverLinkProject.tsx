@@ -4,6 +4,7 @@ import { CaseSection, TechStack } from '@/components/case/CaseBlocks';
 import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
 import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
 import { PixelList } from '@/components/Hierarchy';
+import { caseWebp } from '@/lib/images';
 import eventsImg from '@assets/silverlink_p19_img0.png';
 import eventDetailImg from '@assets/silverlink_p21_img0.png';
 import livestreamImg from '@assets/silverlink_p22_img0.png';
@@ -11,29 +12,29 @@ import metricsImg from '@assets/silverlink_p23_img0.png';
 import onboardingImg from '@assets/silverlink_p14_img0.png';
 
 const HERO_SHOT: Shot = {
-  file: 'events_discovery.png', src: eventsImg, width: 873, height: 560,
+  file: 'events_discovery.png', src: eventsImg, webp: caseWebp('silverlink/silverlink_p19_img0', 873), width: 873, height: 560,
   caption: 'Events: workshops and livestreams.',
   alt: 'Grid of SilverLink event cards, such as Online Morning Tai Chi (livestream) and Smartphone Basics for Seniors at Yishun Community Centre, with View details and Watch live buttons.',
 };
 
 const SHOTS: Shot[] = [
   {
-    file: 'onboarding_flow.png', src: onboardingImg, width: 1172, height: 599,
+    file: 'onboarding_flow.png', src: onboardingImg, webp: caseWebp('silverlink/silverlink_p14_img0', 1018), width: 1172, height: 599,
     caption: 'Five-step onboarding.',
     alt: "SilverLink onboarding, step 1 of 5: a 'Welcome to SilverLink!' card with a progress bar and Back and Next buttons.",
   },
   {
-    file: 'event_detail.png', src: eventDetailImg, width: 640, height: 428,
+    file: 'event_detail.png', src: eventDetailImg, webp: caseWebp('silverlink/silverlink_p21_img0', 640), width: 640, height: 428,
     caption: 'Book or cancel a session; capacity shown.',
     alt: 'Event page for a Traditional Peranakan Cooking Workshop at Toa Payoh Community Centre, listing three sessions with capacity counts and Book or Cancel booking buttons.',
   },
   {
-    file: 'livestream_studio.png', src: livestreamImg, width: 700, height: 392,
+    file: 'livestream_studio.png', src: livestreamImg, webp: caseWebp('silverlink/silverlink_p22_img0', 697), width: 700, height: 392,
     caption: 'Livestream studio with live chat.',
     alt: 'Livestream Studio page with a live camera preview, Stop broadcast, Mute and Camera off controls, and a live chat panel.',
   },
   {
-    file: 'system_metrics.png', src: metricsImg, width: 862, height: 415,
+    file: 'system_metrics.png', src: metricsImg, webp: caseWebp('silverlink/silverlink_p23_img0', 862), width: 862, height: 415, span: true,
     caption: 'Load forecast and recommended replica count.',
     alt: 'System Metrics dashboard showing requests per second, queue length, 212 ms average response time, a load forecast and an autoscaling recommendation of 1 replica (min 1, max 10).',
   },
@@ -61,10 +62,10 @@ export default function SilverLinkProject() {
         note="Team: Danish, John, Thomas, Hanaa, Habib, Joshua"
         links={[GITHUB_PROFILE]}
         stats={[
-          { value: '4', label: 'gRPC microservices' },
-          { value: '8', label: 'Kubernetes nodes' },
-          { value: '8', label: 'isolated database schemas' },
-          { value: '7', label: 'Agile sprints' },
+          { value: '4', label: 'gRPC services behind one REST gateway' },
+          { value: '8', label: 'Kubernetes nodes running the services' },
+          { value: '8', label: 'isolated schemas on Neon PostgreSQL' },
+          { value: '7', label: 'Agile sprints with planning and reviews' },
         ]}
         heroShot={HERO_SHOT}
       />

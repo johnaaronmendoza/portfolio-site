@@ -28,9 +28,9 @@ export default function AIFinanceProject() {
         ]}
         links={[GITHUB_PROFILE]}
         stats={[
-          { value: '5', label: 'data sources' },
-          { value: '9', label: 'news sectors' },
-          { value: '2', label: 'data-quality gates' },
+          { value: '5', label: 'sources: S&P\u00a0500, oil, FX, Maersk, news' },
+          { value: '9', label: 'sectors the NLP sorts headlines into' },
+          { value: '2', label: 'quality gates that stop bad data' },
           { value: '100%', label: 'Pytest coverage on extract and transform' },
         ]}
       />

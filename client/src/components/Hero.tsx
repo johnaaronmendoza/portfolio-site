@@ -15,6 +15,7 @@ import PixelArt from '@/components/PixelArt';
 import HeroNarrator from '@/components/comic/HeroNarrator';
 import DeskAssistWindow from '@/components/DeskAssistWindow';
 import ProofPoints from '@/components/ProofPoints';
+import { GUTTERS } from '@/components/Section';
 import Window from '@/components/Window';
 
 const { hero: HERO, loop: LOOP, easing } = motionTokens;
@@ -35,9 +36,9 @@ const PARTICLE_NEAR = ['--blue', '--blue', '--ink'];
 
 const NEW_TAB = <span className="sr-only"> (opens in a new tab)</span>;
 
-// Email, GitHub, LinkedIn: one row of three icon-over-label buttons on phones,
-// so the first screen ends above the floating dock
-const SOCIAL = 'btn btn-ghost max-sm:flex-col max-sm:gap-1 max-sm:px-1 max-sm:py-1 max-sm:text-sm max-sm:leading-none';
+// Email, GitHub, LinkedIn: one row of Plex Mono text links under the two
+// buttons, each a 44px target, with the house pixel icons (no brand logos)
+const CONTACT_LINK = 'inline-flex min-h-11 items-center gap-2 font-label text-body-sm sm:text-body text-[color:var(--text)] underline underline-offset-4 decoration-2 hover:no-underline';
 
 /** Blinking block cursor; solid when motion is calmed */
 function Cursor({ calm, className }: { calm: boolean; className: string }) {
@@ -106,7 +107,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--text)] px-4 sm:px-8 lg:px-[88px] 2xl:px-16 pt-8 pb-6 sm:pt-20 lg:pt-14 lg:pb-28 xl:pt-20 xl:pb-6 short-desk:pt-3">
+    <section ref={sectionRef} className={`relative overflow-hidden min-h-[100svh] flex flex-col text-[color:var(--text)] ${GUTTERS} pt-8 pb-6 sm:pt-20 lg:pt-14 lg:pb-28 xl:pt-20 xl:pb-6 short-desk:pt-3 hero-fold:pt-0`}>
       {/* WebGL particles (skipped with reduced motion, frozen by Pause motion);
           they fade out around the text marked `particles-clear` */}
       {!reduced && (
@@ -124,136 +125,148 @@ export default function Hero() {
       )}
 
       <div className="relative z-10 flex-1 flex items-center">
-        <div className="w-full max-w-4xl lg:max-w-6xl mx-auto lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-start">
-          {/* Phones: no full-height intro, so desk_assist.exe's title bar peeks
-              above the fold (John, 17 Nov) */}
-          <div className="lg:col-span-7">
-            <motion.div
-              className="mb-6 sm:mb-10"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: HERO.window, ease: 'easeOut' }}
-            >
-              {/* Terminal variant: black body so the two-tone name reads */}
-              <Window
-                title="welcome.exe"
-                bodyClassName="bg-black text-[color:var(--paper)] [--focus:var(--paper)] p-6 short-phone:p-4 sm:p-10 xl:p-12"
+        <div className="w-full max-w-4xl lg:max-w-6xl mx-auto">
+          {/* hero-fold (index.css): fills the first screen, content centred */}
+          <div className="lg:grid lg:grid-cols-12 lg:gap-x-8 lg:items-start hero-fold:min-h-svh hero-fold:content-center">
+            {/* Phones: no full-height intro, so desk_assist.exe's title bar peeks
+                above the fold (John, 17 Nov) */}
+            <div className="lg:col-span-7">
+              <motion.div
+                className="mb-6 sm:mb-10"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: HERO.window, ease: 'easeOut' }}
               >
-                {/* Sized so BRANZUELA plus the cursor fits from 320px up */}
-                <h1 className="font-pixel leading-[1.25] text-[length:clamp(20px,7vw,30px)] sm:text-4xl lg:text-[36px] xl:text-5xl">
-                  <span className="sr-only">John Aaron Mendoza Branzuela</span>
-                  <span aria-hidden="true">
-                    {NAME_LINES.map((line, i) => (
-                      <ScrambleLine
-                        key={line.text}
-                        text={line.text}
-                        color={line.color}
-                        delay={HERO.lineStart + i * HERO.lineStagger}
-                        reduced={reduced}
-                        calm={calm}
-                      >
-                        {i === NAME_LINES.length - 1 && (
-                          <Cursor calm={calm} className="w-2 h-[0.9em] ml-1 align-[-0.05em]" />
-                        )}
-                      </ScrambleLine>
-                    ))}
-                  </span>
-                </h1>
-              </Window>
-            </motion.div>
+                {/* Terminal variant: black body so the two-tone name reads */}
+                <Window
+                  title="welcome.exe"
+                  bodyClassName="bg-black text-[color:var(--paper)] [--focus:var(--paper)] p-6 short-phone:p-4 sm:p-10 xl:p-12"
+                >
+                  {/* Sized so BRANZUELA plus the cursor fits from 320px up */}
+                  <h1 className="font-pixel leading-[1.25] text-[length:clamp(20px,7vw,30px)] sm:text-4xl lg:text-[36px] xl:text-5xl">
+                    <span className="sr-only">John Aaron Mendoza Branzuela</span>
+                    <span aria-hidden="true">
+                      {NAME_LINES.map((line, i) => (
+                        <ScrambleLine
+                          key={line.text}
+                          text={line.text}
+                          color={line.color}
+                          delay={HERO.lineStart + i * HERO.lineStagger}
+                          reduced={reduced}
+                          calm={calm}
+                        >
+                          {i === NAME_LINES.length - 1 && (
+                            <Cursor calm={calm} className="w-2 h-[0.9em] ml-1 align-[-0.05em]" />
+                          )}
+                        </ScrambleLine>
+                      ))}
+                    </span>
+                  </h1>
+                </Window>
+              </motion.div>
 
-            {/* Role line */}
-            <motion.div
-              className="mb-4 short-phone:mb-3 flex items-center gap-3"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: motionTokens.duration.slow, delay: HERO.role }}
-            >
-              <span aria-hidden="true" className="font-mono text-[15px] sm:text-base text-[color:var(--text)] flex-shrink-0">{'>'}</span>
-              <p className="font-mono text-[15px] sm:text-base font-bold text-[color:var(--blue-text)] particles-clear">{ROLE_LINE}</p>
-            </motion.div>
+              {/* Role line */}
+              <motion.div
+                className="mb-4 short-phone:mb-3 flex items-center gap-3"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: motionTokens.duration.slow, delay: HERO.role }}
+              >
+                <span aria-hidden="true" className="font-mono text-body-sm sm:text-body text-[color:var(--text)] flex-shrink-0">{'>'}</span>
+                <p className="font-mono text-body-sm sm:text-body font-bold text-[color:var(--blue-text)] particles-clear">{ROLE_LINE}</p>
+              </motion.div>
 
-            {/* Positioning: the L2 lead (no prompt: the role line above has it) + study chip */}
-            <motion.div
-              className="mb-6 short-phone:mb-4 sm:mb-10 space-y-4"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: HERO.line, delay: HERO.body, ease: easing.out }}
-            >
-              <Lead text="I build AI and data tools people can trust, now building Desk Assist at LGA Telecom." prompt={false} className="particles-clear" />
-              <Chip icon="chip-school" text={'SIT × Glasgow · graduating\u00a0Apr\u00a02027'} className="particles-clear" lazy={false} />
-            </motion.div>
+              {/* Positioning: the L2 lead (no prompt: the role line above has it) + study chip */}
+              <motion.div
+                className="mb-6 short-phone:mb-4 sm:mb-10 space-y-4"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: HERO.line, delay: HERO.body, ease: easing.out }}
+              >
+                <Lead text="I build AI and data tools people can trust, now building Desk Assist at LGA Telecom." prompt={false} className="particles-clear" />
+                <Chip icon="chip-school" text={'SIT × Glasgow · graduating\u00a0Apr\u00a02027'} className="particles-clear" lazy={false} />
+              </motion.div>
 
-            {/* CTAs: resume first; email beside the profiles so contact is above the fold */}
+              {/* Two actions: resume first, then the projects; contact and
+                  profiles as one row of text links under them */}
+              <motion.div
+                className="particles-clear space-y-3 short-phone:space-y-2 sm:space-y-4"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: HERO.line, delay: HERO.ctas, ease: easing.out }}
+              >
+                <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 short-phone:gap-2 sm:gap-4">
+                  <a
+                    href="/resume.pdf"
+                    download="John_Aaron_Branzuela_Resume.pdf"
+                    onClick={() => play('click')}
+                    className="btn btn-primary w-full sm:w-auto"
+                  >
+                    <PixelArt name="floppy" size={16} />
+                    Download resume (PDF)
+                  </a>
+                  <a
+                    href="#projects"
+                    onClick={(e) => { e.preventDefault(); scrollToSection('projects', reduced); }}
+                    className="btn btn-secondary w-full sm:w-auto"
+                  >
+                    See projects
+                  </a>
+                </div>
+                <ul aria-label="Contact and profiles" className="flex flex-wrap items-center gap-x-6 sm:gap-x-8">
+                  <li>
+                    <a href="mailto:johnaaronmb@gmail.com" className={CONTACT_LINK}>
+                      <PixelArt name="icon-contact" size={16} />
+                      Email me
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://github.com/johnaaronmendoza"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
+                      className={CONTACT_LINK}
+                    >
+                      <PixelGitHub size={16} />
+                      GitHub{NEW_TAB}
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://www.linkedin.com/in/john-branzuela/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
+                      className={CONTACT_LINK}
+                    >
+                      <PixelLinkedIn size={16} />
+                      LinkedIn{NEW_TAB}
+                    </a>
+                  </li>
+                </ul>
+              </motion.div>
+            </div>
+
+            {/* The AI proof: desk_assist.exe. From 1280px the column borrows 64px of
+                the gutter on its left so Lil Johnny can stand on the window's edge,
+                pointing at the agent-review step (his bubble opens the chat). After
+                the left column, so tab order runs name, CTAs, narrator, flow link. */}
             <motion.div
-              className="particles-clear flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 short-phone:gap-2 sm:gap-4"
-              initial={{ opacity: 0, y: 16 }}
+              className="mt-12 lg:mt-0 lg:col-span-5 xl:-ml-16 xl:grid xl:grid-cols-[148px_minmax(0,1fr)] xl:gap-x-3 xl:items-end"
+              initial={{ opacity: 0, y: reduced ? 0 : motionTokens.distance.sm }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: HERO.line, delay: HERO.ctas, ease: easing.out }}
             >
-              <a
-                href="/resume.pdf"
-                download="John_Aaron_Branzuela_Resume.pdf"
-                onClick={() => play('click')}
-                className="btn btn-primary w-full sm:w-auto"
-              >
-                <PixelArt name="floppy" size={16} />
-                Download resume (PDF)
-              </a>
-              <a
-                href="#projects"
-                onClick={(e) => { e.preventDefault(); scrollToSection('projects', reduced); }}
-                className="btn btn-secondary w-full sm:w-auto"
-              >
-                See projects
-              </a>
-              <div className="grid grid-cols-3 gap-3 sm:flex sm:flex-wrap sm:items-center">
-                <a href="mailto:johnaaronmb@gmail.com" className={SOCIAL}>
-                  <PixelArt name="icon-contact" size={16} />
-                  Email me
-                </a>
-                <a
-                  href="https://github.com/johnaaronmendoza"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
-                  className={SOCIAL}
-                >
-                  <PixelGitHub size={16} />
-                  GitHub{NEW_TAB}
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/john-branzuela/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => { unlockAchievement('NETWORKER'); play('click'); }}
-                  className={SOCIAL}
-                >
-                  <PixelLinkedIn size={16} />
-                  LinkedIn{NEW_TAB}
-                </a>
-              </div>
+              {xl && <HeroNarrator />}
+              <DeskAssistWindow />
             </motion.div>
           </div>
-
-          {/* The AI proof: desk_assist.exe. From 1280px the column borrows 64px of
-              the gutter on its left so Lil Johnny can stand on the window's edge,
-              pointing at the agent-review step (his bubble opens the chat). After
-              the left column, so tab order runs name, CTAs, narrator, flow link. */}
-          <motion.div
-            className="mt-12 lg:mt-0 lg:col-span-5 xl:-ml-16 xl:grid xl:grid-cols-[148px_minmax(0,1fr)] xl:gap-x-3 xl:items-end"
-            initial={{ opacity: 0, y: reduced ? 0 : motionTokens.distance.sm }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: HERO.line, delay: HERO.ctas, ease: easing.out }}
-          >
-            {xl && <HeroNarrator />}
-            <DeskAssistWindow />
-          </motion.div>
 
           {/* Proof points: three figures, each with what it means and a link to
               the evidence (replaced the stats band, John, 16 Nov) */}
           <motion.div
-            className="mt-12 lg:col-span-12 lg:mt-14"
+            className="mt-12 lg:mt-14"
             initial={{ opacity: 0, y: reduced ? 0 : motionTokens.distance.sm }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: HERO.line, delay: HERO.ctas, ease: easing.out }}
@@ -274,7 +287,7 @@ export default function Hero() {
         animate={{ opacity: 1 }}
         transition={{ delay: HERO.cue, duration: motionTokens.duration.slow }}
       >
-        <span className="font-mono text-[15px]">Scroll</span>
+        <span className="font-mono text-body-sm">Scroll</span>
         <motion.span
           aria-hidden="true"
           className="block w-4 h-4 border-r-[3px] border-b-[3px] border-current rotate-45"

@@ -15,8 +15,9 @@
  * so nothing runs while idle.
  */
 import { useRef, useEffect, useCallback } from 'react';
-import { PixelationManager } from '@/utils/PixelationManager';
+import { PixelationManager, type ImageCrop } from '@/utils/PixelationManager';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { pickSource, type ImageSource } from '@/lib/images';
 
 const manager = PixelationManager.getInstance();
 const EASE = 0.10;          // lerp factor per frame
@@ -26,17 +27,24 @@ const DONE_THRESH  = 0.08;  // stop RAF when this close
 
 interface Props {
   src: string;
+  /** 1x/2x files, sorted by width: the canvas loads the smallest that covers
+   *  its box at the screen's DPR (falls back to the largest) */
+  srcSet?: readonly ImageSource[];
+  /** Focus and zoom of the cover crop (default: centred, whole) */
+  crop?: ImageCrop;
   alt: string;
   className?: string;
 }
 
-export default function PixelatedImage({ src, alt, className }: Props) {
+export default function PixelatedImage({ src, srcSet, crop, alt, className }: Props) {
   const canvasRef  = useRef<HTMLCanvasElement>(null);
   const imgRef     = useRef<HTMLImageElement | null>(null);
   const reduced    = useReducedMotion();
   const sizeRef    = useRef(CRISP_SIZE);     // current (animated) block size
   const targetRef  = useRef(CRISP_SIZE);     // where we're heading
   const rafRef     = useRef(0);
+  const cropRef    = useRef(crop);
+  cropRef.current  = crop;
 
   // ── Animation loop ────────────────────────────────────────────────────
   const tick = useCallback(() => {
@@ -51,7 +59,7 @@ export default function PixelatedImage({ src, alt, className }: Props) {
     // to keep the same on-screen block size on retina displays.
     const ps = Math.max(CRISP_SIZE, Math.round(sizeRef.current));
     const dpr = window.devicePixelRatio || 1;
-    manager.draw(img, canvas, ps <= CRISP_SIZE ? CRISP_SIZE : ps * dpr);
+    manager.draw(img, canvas, ps <= CRISP_SIZE ? CRISP_SIZE : ps * dpr, cropRef.current);
 
     if (Math.abs(sizeRef.current - targetRef.current) > DONE_THRESH) {
       rafRef.current = requestAnimationFrame(tick);
@@ -87,7 +95,7 @@ export default function PixelatedImage({ src, alt, className }: Props) {
     };
 
     img.onload = onReady;
-    img.src = src;
+    img.src = srcSet?.length ? pickSource(srcSet, canvas.offsetWidth) : src;
 
     // Vite-bundled assets are typically already decoded in browser cache.
     // If img.complete is already true when we check, onload won't fire.
@@ -124,7 +132,7 @@ export default function PixelatedImage({ src, alt, className }: Props) {
       dprQuery?.removeEventListener('change', onDprChange);
       img.onload = null;
     };
-  }, [src, startLoop]);
+  }, [src, srcSet, startLoop]);
 
   // ── Hover handlers ────────────────────────────────────────────────────
   const handleMouseEnter = useCallback(() => {

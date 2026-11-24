@@ -64,7 +64,7 @@ export default function KeyboardShortcuts({ defaultOpen = false }: { defaultOpen
               <dl className="p-4 space-y-1">
                 {SHORTCUTS.map(({ keys, desc }) => (
                   <div key={desc} className="flex items-center justify-between gap-4 py-2">
-                    <dt className="font-sans text-[15px]">{desc}</dt>
+                    <dt className="font-sans text-body-sm">{desc}</dt>
                     <dd className="flex flex-shrink-0 items-center gap-1">
                       {keys.map((k) => (
                         <kbd key={k} className="font-mono text-sm font-bold text-black bg-[var(--paper)] border-2 border-[color:var(--paper)] px-1.5 py-0.5 leading-none">

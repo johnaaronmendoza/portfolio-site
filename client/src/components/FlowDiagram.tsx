@@ -43,7 +43,7 @@ const ACTOR_FILL: Record<FlowActor, string> = {
   Agent: 'bg-[var(--paper)]',
 };
 
-const LABEL = 'font-sans font-bold text-[15px] sm:text-base leading-[1.4] text-balance';
+const LABEL = 'font-sans font-bold text-body-sm sm:text-body leading-[1.4] text-balance';
 
 export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols = 1, className = '' }: FlowDiagramProps) {
   const row = lgCols > 1;
@@ -62,7 +62,7 @@ export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols
             <div
               className={`flex-1 min-h-14 px-3.5 py-3 border-black ${
                 emphasis
-                  ? 'border-[3px] bg-[var(--bar)] text-[color:var(--paper)] shadow-[4px_4px_0_0_var(--ink)]'
+                  ? 'border-[3px] bg-[var(--bar)] text-[color:var(--paper)] shadow-8bit'
                   : 'border-2 bg-[var(--paper)] text-black'
               }`}
             >
@@ -82,7 +82,7 @@ export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols
                 )}
               </div>
               {detail && (
-                <p className={`mt-1 font-sans text-[15px] leading-[1.5] ${emphasis ? 'text-[color:var(--paper)]' : 'text-[color:var(--text)]'}`}>
+                <p className={`mt-1 font-sans text-body-sm leading-[1.5] ${emphasis ? 'text-[color:var(--paper)]' : 'text-[color:var(--text)]'}`}>
                   {detail}
                 </p>
               )}
@@ -92,7 +92,7 @@ export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols
                     <li key={item.label} className="min-w-0 border-2 border-black bg-[var(--paper)] px-2.5 py-2">
                       <span className={`block break-words text-black ${LABEL}`}>{item.label}</span>
                       {item.detail && (
-                        <span className="block mt-1 font-sans text-[15px] leading-[1.5] text-[color:var(--text)]">{item.detail}</span>
+                        <span className="block mt-1 font-sans text-body-sm leading-[1.5] text-[color:var(--text)]">{item.detail}</span>
                       )}
                     </li>
                   ))}
@@ -100,7 +100,7 @@ export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols
               )}
             </div>
             {loop && (
-              <p className="mt-2 flex items-start gap-2 border-2 border-black bg-[var(--paper)] px-2.5 py-1.5 font-sans text-[15px] leading-[1.5] text-black">
+              <p className="mt-2 flex items-start gap-2 border-2 border-black bg-[var(--paper)] px-2.5 py-1.5 font-sans text-body-sm leading-[1.5] text-black">
                 <span aria-hidden="true" className="font-bold">↺</span>
                 {loop}
               </p>

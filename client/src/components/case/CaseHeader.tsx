@@ -51,13 +51,13 @@ export default function CaseHeader({ slug, file, facts, note, links, stats, hero
             <span className="badge badge--paper col-start-1 row-start-1 self-start justify-self-start">
               {project.year}
             </span>
-            <h1 className="mt-4 font-display text-black break-words text-balance text-[length:clamp(30px,8.5vw,38px)] sm:text-[46px] xl:text-[56px]">
+            <h1 className="mt-4 font-display text-black break-words text-balance text-card-lead sm:text-h1">
               {project.name}
             </h1>
             <Lead text={project.description} tone="paper" className="mt-4" />
             <FactChips facts={facts} label="Project facts" className="mt-6" />
             {note && (
-              <p className="mt-3 max-w-[60ch] font-sans text-[15px] sm:text-base leading-[1.5] text-[color:var(--text)]">
+              <p className="mt-3 max-w-[60ch] font-sans text-body-sm sm:text-body leading-[1.5] text-[color:var(--text)]">
                 {note}
               </p>
             )}

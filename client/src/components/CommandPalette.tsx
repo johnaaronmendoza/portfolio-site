@@ -306,7 +306,7 @@ export default function CommandPalette({ defaultOpen = false }: { defaultOpen?: 
                           : 'hover:bg-[var(--blue)] hover:text-black'
                       }`}
                     >
-                      <span className="flex items-center gap-2 font-sans font-bold text-[15px]">
+                      <span className="flex items-center gap-2 font-sans font-bold text-body-sm">
                         {cmd.id === 'nav-hero' && <PixelArt name="icon-home" size={16} />}
                         {cmd.label}
                       </span>

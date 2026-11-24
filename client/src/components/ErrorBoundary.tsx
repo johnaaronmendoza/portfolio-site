@@ -31,7 +31,7 @@ class ErrorBoundary extends Component<Props, State> {
     return (
       <main className="flex min-h-screen items-center justify-center px-4 py-8 text-[color:var(--text)]">
         <Window title="error.exe" className="w-full max-w-lg" bodyClassName="space-y-4 p-6 sm:p-8">
-          <h1 className="font-display text-2xl sm:text-[28px]">Something went wrong</h1>
+          <h1 className="font-display text-card-title sm:text-card-lead">Something went wrong</h1>
           <p className="font-sans text-base leading-relaxed">
             This page stopped working. Reload to try again, or go to the home page.
           </p>

@@ -69,7 +69,7 @@ export default function ProofPoints() {
               >
                 {p.value}
               </span>
-              <span className="basis-full sm:basis-auto sm:flex-1 font-sans text-[15px] sm:text-base leading-snug text-[color:var(--text)]">
+              <span className="basis-full sm:basis-auto sm:flex-1 font-sans text-body-sm sm:text-body leading-snug text-[color:var(--text)]">
                 <strong className="font-bold">{p.lead}</strong>
                 {p.rest}
               </span>

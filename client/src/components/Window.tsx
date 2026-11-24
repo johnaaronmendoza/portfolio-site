@@ -15,7 +15,7 @@ interface WindowBarProps {
 export function WindowBar({ title, onClose, closeLabel }: WindowBarProps) {
   return (
     <div className="window-bar">
-      <p translate="no" className="font-label text-xs leading-normal truncate min-w-0">{title}</p>
+      <p translate="no" className="font-label text-label leading-normal truncate min-w-0">{title}</p>
       {onClose ? (
         <button
           type="button"

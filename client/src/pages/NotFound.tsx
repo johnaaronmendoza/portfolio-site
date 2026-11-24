@@ -27,7 +27,7 @@ export default function NotFound() {
       <SkipLink />
       <main id="main" tabIndex={-1} className="min-h-screen grid place-items-center px-4 py-20 sm:px-8">
         <Window title="404.exe" className="w-full max-w-lg" bodyClassName="p-6 sm:p-10">
-          <h1 className="font-display text-[28px] sm:text-[36px] leading-tight text-black">Page not found</h1>
+          <h1 className="font-display text-card-title sm:text-card-lead leading-tight text-black">Page not found</h1>
           <p className="mt-3 font-sans text-base leading-relaxed">
             There is no page at this address. It may have moved, or the link has a typo.
           </p>

@@ -36,7 +36,7 @@ export default function KonamiOverlay() {
               <p className="font-label text-xs leading-loose">
                 ↑↑↓↓←→←→BA
               </p>
-              <p className="font-sans text-[15px] mt-3">
+              <p className="font-sans text-body-sm mt-3">
                 +30 lives. Enjoy the portfolio.
               </p>
             </div>

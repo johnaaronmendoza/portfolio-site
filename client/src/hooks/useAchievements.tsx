@@ -45,9 +45,9 @@ function showToast(id: string) {
   play('achievement');
   toast.custom(
     (toastId) => (
-      <div role="status" className="window w-72 max-w-[calc(100vw-2rem)] shadow-[4px_4px_0_0_var(--ink)]">
+      <div role="status" className="window w-72 max-w-[calc(100vw-2rem)] shadow-8bit">
         <WindowBar title="achievement.txt" onClose={() => toast.dismiss(toastId)} closeLabel="Dismiss achievement" />
-        <div className="window-body px-4 py-3 font-sans text-[15px] leading-snug">
+        <div className="window-body px-4 py-3 font-sans text-body-sm leading-snug">
           <p className="font-bold text-black">
             <span aria-hidden="true">{ach.icon} </span>Achievement unlocked: {ach.title}
           </p>

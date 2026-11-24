@@ -74,7 +74,7 @@ export const KEYS: Key[] = [
   { label: 'GRPC', name: 'gRPC', group: 'backend', blurb: 'Fast, typed communication between four microservices.', usedIn: 'SilverLink SG' },
 
   // Row 3
-  { label: 'PGSQL', name: 'PostgreSQL', group: 'backend', blurb: 'Relational data with eight isolated schemas, one per service.', usedIn: 'SilverLink SG, SCS Awareness Platform' },
+  { label: 'PGSQL', name: 'PostgreSQL', group: 'backend', blurb: 'Relational data with eight isolated schemas.', usedIn: 'SilverLink SG, SCS Awareness Platform' },
   { label: 'SUPA', name: 'Supabase', group: 'backend', blurb: 'Auth, storage and row-level security for a public-facing app.', usedIn: 'SCS Awareness Platform' },
   { label: 'DOCKER', name: 'Docker', group: 'infra', blurb: 'Packaging services so they run the same everywhere.', usedIn: 'SilverLink SG' },
   { label: 'KUBE', name: 'Kubernetes', group: 'infra', blurb: 'Running services on an 8-node cluster, with an EMA load forecast recommending replicas.', usedIn: 'SilverLink SG' },

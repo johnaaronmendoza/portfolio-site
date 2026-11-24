@@ -8,6 +8,10 @@
  * then upscale back to display canvas with imageSmoothingEnabled=false
  * to get the crisp "blocky pixel" look.
  */
+/** Which part of the image a cover crop keeps, like object-position plus a
+ *  zoom: x and y run 0 (left/top) to 1 (right/bottom); zoom > 1 cuts in further */
+export type ImageCrop = { x?: number; y?: number; zoom?: number };
+
 export class PixelationManager {
   private static _instance: PixelationManager | null = null;
   private offscreen: HTMLCanvasElement;
@@ -31,7 +35,7 @@ export class PixelationManager {
    * pixelSize=1 → crisp full-resolution.
    * pixelSize=20 → very blocky 8-bit look.
    */
-  draw(image: HTMLImageElement, target: HTMLCanvasElement, pixelSize: number): void {
+  draw(image: HTMLImageElement, target: HTMLCanvasElement, pixelSize: number, crop: ImageCrop = {}): void {
     if (!image.complete || image.naturalWidth === 0) return;
     const W = target.width;
     const H = target.height;
@@ -40,22 +44,20 @@ export class PixelationManager {
     const ctx = target.getContext('2d');
     if (!ctx) return;
 
-    // ── Object-cover crop: fill without stretching, centred ──────────────
+    // ── Object-cover crop: fill without stretching, at the crop's focus ──
+    const { x = 0.5, y = 0.5, zoom = 1 } = crop;
     const iw = image.naturalWidth;
     const ih = image.naturalHeight;
     const imgAspect    = iw / ih;
     const canvasAspect = W / H;
 
-    let sx = 0, sy = 0, sw = iw, sh = ih;
-    if (imgAspect > canvasAspect) {
-      // Image wider → crop left/right
-      sw = ih * canvasAspect;
-      sx = (iw - sw) / 2;
-    } else {
-      // Image taller → crop top/bottom
-      sh = iw / canvasAspect;
-      sy = (ih - sh) / 2;
-    }
+    let sw = iw, sh = ih;
+    if (imgAspect > canvasAspect) sw = ih * canvasAspect; // wider: crop left/right
+    else sh = iw / canvasAspect;                          // taller: crop top/bottom
+    sw /= zoom;
+    sh /= zoom;
+    const sx = (iw - sw) * x;
+    const sy = (ih - sh) * y;
 
     if (pixelSize <= 1) {
       // Full-resolution — bypass offscreen pass entirely.

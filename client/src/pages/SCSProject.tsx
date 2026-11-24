@@ -4,6 +4,7 @@ import { CaseSection, LeadS, SubHeading, TechStack } from '@/components/case/Cas
 import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
 import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
 import { PixelList } from '@/components/Hierarchy';
+import { caseWebp } from '@/lib/images';
 import storyPlayerImg from '@assets/scs_p65_img0.png';
 import adminDashImg from '@assets/scs_p71_img1.png';
 import panelEditorImg from '@assets/scs_p72_img0.png';
@@ -13,34 +14,34 @@ import assetManagerImg from '@assets/scs_p73_img0.png';
 import adminMgmtImg from '@assets/scs_p74_img1.png';
 
 const HERO_SHOT: Shot = {
-  file: 'story_player.png', src: storyPlayerImg, width: 532, height: 843,
+  file: 'story_player.png', src: storyPlayerImg, webp: caseWebp('scs/scs_p65_img0', 353, ['@full', 532]), width: 532, height: 843,
   caption: 'Story player on a booth tablet (template text).',
   alt: 'Story player on a tablet: a pixel-art boy in an office scene above a text box, with back and next arrows.',
 };
 
 const SHOTS: Shot[] = [
   {
-    file: 'panel_editor.png', src: panelEditorImg, width: 1278, height: 985,
+    file: 'panel_editor.png', src: panelEditorImg, webp: caseWebp('scs/scs_p72_img0', 697, ['@full', 1278]), width: 1278, height: 985,
     caption: 'Panel editor: 4 language tabs and a tablet preview.',
     alt: "Editor for a true/false question, 'I exercise often I do not need to go for screening!', with English, Chinese, Malay and Tamil tabs and a live tablet preview.",
   },
   {
-    file: 'admin_dashboard.png', src: adminDashImg, width: 1887, height: 1006,
+    file: 'admin_dashboard.png', src: adminDashImg, webp: caseWebp('scs/scs_p71_img1', 1018, ['@full', 1887]), width: 1887, height: 1006,
     caption: 'Story editor: every panel in order.',
     alt: "Panel Builder screen for 'Main Story' showing 7 panels, 2 text panels and 3 questions, including a single-choice question about colorectal cancer screening.",
   },
   {
-    file: 'story_stats.png', src: statsImg, width: 1915, height: 1003,
+    file: 'story_stats.png', src: statsImg, webp: caseWebp('scs/scs_p72_img1', 1018, ['@full', 1915]), width: 1915, height: 1003,
     caption: 'Story statistics, exportable as CSV.',
     alt: 'Story Statistics page with total attempts, average score and max score, and an Export CSV button.',
   },
   {
-    file: 'asset_manager.png', src: assetManagerImg, width: 1884, height: 1005,
+    file: 'asset_manager.png', src: assetManagerImg, webp: caseWebp('scs/scs_p73_img0', 1018, ['@full', 1884]), width: 1884, height: 1005,
     caption: 'Drag-and-drop asset manager.',
     alt: 'Asset Manager with a drag-and-drop upload area, filter tabs and pixel-art sprites of an elderly man.',
   },
   {
-    file: 'admin_accounts.png', src: adminMgmtImg, width: 1917, height: 1003,
+    file: 'admin_accounts.png', src: adminMgmtImg, webp: caseWebp('scs/scs_p74_img1', 1018, ['@full', 1917]), width: 1917, height: 1003,
     caption: 'Admin accounts: verify, promote or remove.',
     alt: 'Admin Management table of admin accounts with roles, verification status and Promote, Demote and Delete actions.',
   },
@@ -82,10 +83,10 @@ export default function SCSProject() {
         ]}
         links={[GITHUB_PROFILE]}
         stats={[
-          { value: '4', label: 'languages' },
-          { value: '4', label: 'question types' },
-          { value: '4', label: 'people on the team' },
-          { value: '7', label: 'Agile sprints' },
+          { value: '4', label: 'languages: English, Chinese, Malay, Tamil' },
+          { value: '4', label: 'question types, all validated in the editor' },
+          { value: '4', label: 'people; I built the core engine' },
+          { value: '7', label: 'Agile sprints with planning and reviews' },
         ]}
         heroShot={HERO_SHOT}
       />

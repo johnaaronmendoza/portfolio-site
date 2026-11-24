@@ -48,8 +48,11 @@ export default function StatStrip({ stats, variant, className = '' }: StatStripP
   const headingId = useId();
   const inline = variant === 'inline';
   const lgCols = inline ? INLINE_LG_COLS[Math.min(stats.length, 4)] : 'lg:grid-cols-4';
+  // Status on phones: one column, labels held to 18ch on the left, so the
+  // fixed chat launcher's lane on the right only ever sits over empty cell space
+  const cols = variant === 'status' ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-2';
   const list = (
-    <dl className={`grid grid-cols-2 ${lgCols} gap-[3px] bg-black text-black ${FRAME[variant]} ${className}`}>
+    <dl className={`grid ${cols} ${lgCols} gap-[3px] bg-black text-black ${FRAME[variant]} ${className}`}>
       {stats.map(({ value, label, source, burst }, i) => {
         // Bursts only in Home's band: its cell padding holds the star's overhang
         const pow = burst && variant === 'band';
@@ -61,9 +64,9 @@ export default function StatStrip({ stats, variant, className = '' }: StatStripP
             inline && stats.length % 2 === 1 && i === stats.length - 1 ? 'col-span-2 lg:col-span-1' : ''
           }`}
         >
-          <dt className="font-mono text-[15px] sm:text-base leading-snug max-w-[18ch]">
+          <dt className="font-mono text-body-sm sm:text-body leading-snug max-w-[18ch]">
             {label}
-            {source && <span className="mt-2 block w-fit border-2 border-black px-2 py-0.5 font-label text-[15px] leading-[1.35]">{source}</span>}
+            {source && <span className="mt-2 block w-fit border-2 border-black px-2 py-0.5 font-label text-body-sm leading-[1.35]">{source}</span>}
           </dt>
           <dd className={`relative isolate self-start font-label font-bold tracking-[-0.02em] leading-none tabular-nums ${pow ? 'px-[0.8em] pt-[0.5em] pb-[0.45em] -mt-[0.5em]' : ''} ${VALUE[variant]}`}>
             {/* POW star behind the number only. The padding gives the digits room

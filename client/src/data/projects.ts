@@ -7,19 +7,20 @@ import silverLinkImg    from '@assets/tile_silverlink.webp';
 import scsImg           from '@assets/tile_scs.webp';
 import fireSafetyImg    from '@assets/tile_firesafety.webp';
 import uwbImg           from '@assets/tile_uwb.webp';
-import greenloopImg     from '@assets/greenloop_hero.jpg';
 import uatImg           from '@assets/tile_uat.webp';
 import aiFinanceImg     from '@assets/tile_ai_finance.webp';
 
-// ── Secondary images to preload on hover (detail-page screenshots) ─────────
-import silverLink2      from '@assets/silverlink_p21_img0.png';
-import silverLink3      from '@assets/silverlink_p22_img0.png';
-import scs2             from '@assets/scs_p71_img1.png';
-import scs3             from '@assets/scs_p72_img0.png';
-import fireSafety2      from '@assets/firesafety_p29_img1.png';
-import fireSafety3      from '@assets/firesafety_p29_img3.png';
-import uwb2             from '@assets/da_p39_img2.png';
-import greenloop2       from '@assets/greenloop_tour.jpg';
+import type { ImageSource } from '@/lib/images';
+import type { ImageCrop } from '@/utils/PixelationManager';
+
+// GreenLoop's tile as WebP 1x/2x (asset-work/webp-manifest.md); the canvas picks one
+const GREENLOOP_SET: ImageSource[] = [
+  { src: '/assets/tiles/greenloop_hero.webp', w: 525 },
+  { src: '/assets/tiles/greenloop_hero@2x.webp', w: 1050 },
+];
+
+// Secondary images to preload on hover: the case pages' 1x WebP screenshots
+const caseShot = (path: string) => `/assets/case/${path}.webp`;
 
 
 /** Route segment of a case-study page: /projects/{slug} */
@@ -44,6 +45,10 @@ export type Project = {
   caption: string;
   /** Tile still, cut at 2:1 (asset-work/tiles/screens.py) */
   image: string | null;
+  /** 1x/2x files for the tile still, when it has them */
+  imageSet?: ImageSource[];
+  /** Zoom into the still's most legible part at tile size */
+  crop?: ImageCrop;
   tags: string[];
   link: string;
   externalUrl?: string;
@@ -71,10 +76,12 @@ export const PROJECTS: Project[] = [
     year: "2025",
     caption: "team of 6",
     image: silverLinkImg,
+    // Event title and the session with Cancel booking
+    crop: { x: 0.1, y: 0.8, zoom: 1.35 },
     tags: ["React", "gRPC", "K8s", "PostgreSQL"],
     link: "/projects/silverlink",
     span: FEATURED_SPAN,
-    preloadImages: [silverLink2, silverLink3],
+    preloadImages: [caseShot('silverlink/silverlink_p21_img0'), caseShot('silverlink/silverlink_p22_img0')],
     featured: true,
     sfx: 'Booked!',
   },
@@ -88,10 +95,12 @@ export const PROJECTS: Project[] = [
     year: "2025",
     caption: "team of 4",
     image: scsImg,
+    // The story editor's title, panel counts and first panels, without the sidebar
+    crop: { x: 0.85, y: 0, zoom: 1.4 },
     tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
     link: "/projects/scs",
     span: FEATURED_SPAN,
-    preloadImages: [scs2, scs3],
+    preloadImages: [caseShot('scs/scs_p71_img1'), caseShot('scs/scs_p72_img0')],
     featured: true,
   },
   {
@@ -108,7 +117,7 @@ export const PROJECTS: Project[] = [
     link: "/projects/uwb",
     // Wide at sm so the 2-column grid has no orphan
     span: `sm:col-span-2 ${FEATURED_SPAN}`,
-    preloadImages: [uwb2, '/assets/case/uwb/tree-depth-desktop@2x.webp'],
+    preloadImages: [caseShot('uwb/da_p39_img2'), '/assets/case/uwb/tree-depth-desktop@2x.webp'],
     featured: true,
   },
   {
@@ -136,6 +145,8 @@ export const PROJECTS: Project[] = [
     year: "2024",
     caption: "coursework",
     image: uatImg,
+    // Dashboard title and the defect and test-case figures, without the sidebar
+    crop: { x: 0.65, y: 0, zoom: 1.4 },
     tags: ["React 18", "Node.js", "Express", "SQLite"],
     link: "/projects/uat",
     span: 'lg:col-span-3',
@@ -151,10 +162,12 @@ export const PROJECTS: Project[] = [
     year: "2025",
     caption: "team coursework",
     image: fireSafetyImg,
+    // Both phones' AR Drill screens, a little closer
+    crop: { x: 0.4, y: 0, zoom: 1.25 },
     tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
     link: "/projects/firesafety",
     span: 'lg:col-span-3',
-    preloadImages: [fireSafety2, fireSafety3],
+    preloadImages: [caseShot('firesafety/firesafety_p29_img1'), caseShot('firesafety/firesafety_p29_img3')],
   },
   {
     num: 7,
@@ -165,12 +178,14 @@ export const PROJECTS: Project[] = [
     facts: ["SGD 10,000 NYP JumpStart Grant"],
     year: "2022",
     caption: "team pitch",
-    image: greenloopImg,
+    image: GREENLOOP_SET[0].src,
+    imageSet: GREENLOOP_SET,
     tags: ["NYP JumpStart", "Urban Farming"],
     link: "external",
     span: 'lg:col-span-3',
     externalUrl: "https://greenloopfarms.com/",
-    preloadImages: [greenloop2],
+    // Links out, so there is no case page to preload
+    preloadImages: [],
   },
 ];
 

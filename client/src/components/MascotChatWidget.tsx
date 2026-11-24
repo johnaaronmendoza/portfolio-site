@@ -165,7 +165,7 @@ function TypingMessage({ content, role }: { content: string; role: 'user' | 'sys
   const visibleText = instant ? content : displayedText;
 
   return (
-    <div className={`p-2.5 border-2 border-black font-sans text-[15px] leading-relaxed break-words [overflow-wrap:anywhere] ${BUBBLE[role]}`}>
+    <div className={`p-2.5 border-2 border-black font-sans text-body-sm leading-relaxed break-words [overflow-wrap:anywhere] ${BUBBLE[role]}`}>
       <span className="sr-only">{content}</span>
       <span aria-hidden="true">
         {visibleText}
@@ -363,7 +363,7 @@ export default function MascotChatWidget() {
             {/* Prompt line, with Lil Johnny standing whole on the log's top edge
                 (he worries while the bot types) */}
             <div className="chat-prompt relative flex-shrink-0 flex items-end justify-between gap-3 px-4 pt-3">
-              <p className="font-sans text-[15px] font-bold text-[color:var(--text)] pb-2">
+              <p className="font-sans text-body-sm font-bold text-[color:var(--text)] pb-2">
                 Pick a topic or type a question
               </p>
               <img
@@ -410,7 +410,7 @@ export default function MascotChatWidget() {
                       <a
                         href={`/#${msg.section}`}
                         onClick={(e) => { e.preventDefault(); goToSection(msg.section!); }}
-                        className="inline-flex min-h-[44px] items-center gap-1 font-sans text-[15px] font-bold text-[color:var(--blue-text)] underline decoration-2 underline-offset-4"
+                        className="inline-flex min-h-[44px] items-center gap-1 font-sans text-body-sm font-bold text-[color:var(--blue-text)] underline decoration-2 underline-offset-4"
                       >
                         Go to {SECTION_LABEL[msg.section]} <span aria-hidden="true">↓</span>
                       </a>
@@ -424,7 +424,7 @@ export default function MascotChatWidget() {
                 </motion.div>
               ))}
               {isTyping && (
-                <p className="font-sans text-[15px] italic text-[color:var(--text)]">Johnny is typing…</p>
+                <p className="font-sans text-body-sm italic text-[color:var(--text)]">Johnny is typing…</p>
               )}
             </div>
             </div>
@@ -460,7 +460,7 @@ export default function MascotChatWidget() {
                   enterKeyHint="send"
                   value={input}
                   onChange={e => setInput(e.target.value)}
-                  placeholder="Ask about a project or skill…"
+                  placeholder="Ask about my work…"
                   aria-label="Ask about a project or skill"
                   className="flex-1 min-w-0 bg-transparent text-[color:var(--text)] placeholder:text-[color:var(--text)] placeholder:italic font-sans text-base outline-none"
                 />

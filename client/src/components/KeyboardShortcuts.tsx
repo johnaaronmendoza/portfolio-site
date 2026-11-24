@@ -14,9 +14,10 @@ const SHORTCUTS = [
 ];
 
 /** shortcuts.txt: terminal-variant window opened with Ctrl+/ or Cmd+/ (a
- *  modifier, so typing "?" never opens it: WCAG 2.1.4) */
-export default function KeyboardShortcuts() {
-  const [open, setOpen] = useState(false);
+ *  modifier, so typing "?" never opens it: WCAG 2.1.4). Loaded on first use
+ *  (App.tsx): `defaultOpen` honours the press that loaded it */
+export default function KeyboardShortcuts({ defaultOpen = false }: { defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   const dialogRef = useRef<HTMLDivElement>(null);
 
   // Focus the dialog on open, trap Tab, return focus to the opener on close
@@ -37,7 +38,8 @@ export default function KeyboardShortcuts() {
         <>
           <motion.div
             key="shortcuts-backdrop"
-            className="fixed inset-0 bg-black/70 z-[80]"
+            aria-hidden="true"
+            className="fixed inset-0 bg-black/70 z-[80] touch-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -75,7 +77,7 @@ export default function KeyboardShortcuts() {
               </dl>
 
               <p className="border-t-2 border-[color:var(--paper)] px-4 py-2 font-mono text-sm text-center">
-                Press <kbd className="font-bold text-[color:var(--paper)]">{MOD_KEY} /</kbd> to toggle
+                Press <kbd className="font-bold text-[color:var(--paper)]">{MOD_KEY}&nbsp;/</kbd> to toggle
               </p>
             </div>
           </motion.div>

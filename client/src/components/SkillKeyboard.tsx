@@ -140,7 +140,7 @@ function Filters({ value, onChange }: { value: Filter; onChange: (f: Filter) => 
     <div
       role="group"
       aria-label="Highlight skills by category"
-      className="-mx-4 flex gap-2 overflow-x-auto pl-4 pr-12 pt-1.5 pb-2.5 [mask-image:linear-gradient(to_right,#000_calc(100%-2.5rem),transparent)] sm:mx-0 sm:flex-wrap sm:gap-3 sm:overflow-visible sm:p-0 sm:[mask-image:none]"
+      className="-mx-4 flex gap-2 overflow-x-auto overscroll-x-contain pl-4 pr-12 pt-1.5 pb-2.5 [mask-image:linear-gradient(to_right,#000_calc(100%-2.5rem),transparent)] sm:mx-0 sm:flex-wrap sm:gap-3 sm:overflow-visible sm:p-0 sm:[mask-image:none]"
     >
       {FILTERS.map(f => (
         <button

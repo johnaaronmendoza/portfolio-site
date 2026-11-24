@@ -18,7 +18,6 @@ import SectionNav from '@/components/SectionNav';
 import SkipLink from '@/components/SkipLink';
 import Stickers from '@/components/comic/Stickers';
 import { useHomeAchievements } from '@/hooks/useAchievements';
-import { getLenis } from '@/hooks/useLenis';
 import { saveHomeScroll } from '@/lib/scroll-memory';
 
 // Section wrappers take focus (without a ring) when a link lands on them
@@ -31,13 +30,7 @@ function useScrollToHash() {
     const target = id ? document.getElementById(id) : null;
     if (!target) return;
     const frame = requestAnimationFrame(() => {
-      const lenis = getLenis();
-      if (lenis) {
-        lenis.resize();
-        lenis.scrollTo(target, { immediate: true });
-      } else {
-        target.scrollIntoView();
-      }
+      target.scrollIntoView();
       target.focus({ preventScroll: true });
     });
     return () => cancelAnimationFrame(frame);

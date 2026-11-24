@@ -65,7 +65,7 @@ export function TagList({ tags }: { tags: string[] }) {
   return (
     <ul className="flex flex-wrap gap-2">
       {tags.map(tag => (
-        <li key={tag} className="border-2 border-black px-2 py-0.5 font-mono text-sm font-bold text-black">
+        <li key={tag} translate="no" className="border-2 border-black px-2 py-0.5 font-mono text-sm font-bold text-black">
           {tag}
         </li>
       ))}

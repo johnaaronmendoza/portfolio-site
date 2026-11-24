@@ -12,6 +12,9 @@ type Sticker = {
   rotate: number;
   /** pixel icons drawn on a 16px grid stay crisp; John's art is downscaled */
   pixel?: boolean;
+  /** John's PNGs: intrinsic size, so the box is reserved before they load */
+  w?: number;
+  h?: number;
 };
 
 const J = (n: string) => `/assets/stickers/${n}.png`;
@@ -22,7 +25,7 @@ const P = (n: string) => `/assets/pixel/sticker-${n}.svg`;
 const SETS: Record<string, Sticker[]> = {
   about: [{ src: P('notepad'), side: 'right', top: 30, rotate: 6, pixel: true }],
   experience: [
-    { src: J('retro-computer'), side: 'right', top: 8, rotate: 6 },
+    { src: J('retro-computer'), side: 'right', top: 8, rotate: 6, w: 159, h: 160 },
     { src: P('folder'), side: 'left', top: 45, rotate: -6, pixel: true },
   ],
   projects: [
@@ -30,7 +33,7 @@ const SETS: Record<string, Sticker[]> = {
     { src: P('magnifier'), side: 'left', top: 65, rotate: -6, pixel: true },
   ],
   skills: [
-    { src: J('cursor-arrow'), side: 'left', top: 15, rotate: -4 },
+    { src: J('cursor-arrow'), side: 'left', top: 15, rotate: -4, w: 92, h: 160 },
     { src: P('phone'), side: 'right', top: 45, rotate: -5, pixel: true },
   ],
 };
@@ -60,9 +63,12 @@ export default function Stickers({ set }: { set: keyof typeof SETS }) {
           <img
             src={s.src}
             alt=""
+            width={s.w ?? 16}
+            height={s.h ?? 16}
             loading="lazy"
             decoding="async"
-            className={`max-w-full max-h-full [filter:drop-shadow(3px_3px_0_#000)] ${s.pixel ? 'size-16 [image-rendering:pixelated]' : ''}`}
+            // object-contain: the PNGs keep their shape inside the 72px box
+            className={`[filter:drop-shadow(3px_3px_0_#000)] ${s.pixel ? 'size-16 [image-rendering:pixelated]' : 'size-full object-contain'}`}
           />
         </span>
       ))}

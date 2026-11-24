@@ -20,7 +20,7 @@ const FACTS: Fact[] = [
 ];
 
 const BIO = [
-  "At LGA Telecom I'm building **Desk Assist**, which drafts ticket replies for an agent to review.",
+  "At LGA Telecom I’m building **Desk Assist**, which drafts ticket replies for an agent to review.",
   'I listen first, write **clear requirements**, then build and test until the tool helps.',
 ];
 

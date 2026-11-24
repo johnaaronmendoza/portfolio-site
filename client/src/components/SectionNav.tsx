@@ -7,7 +7,6 @@ import ShortcutHint from './ShortcutHint';
 import { WindowBar } from './Window';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useModalFocus } from '@/hooks/useModalFocus';
-import { getLenis } from '@/hooks/useLenis';
 import { motionTokens } from '@/lib/motion-tokens';
 import { scrollToSection } from '@/lib/utils';
 
@@ -36,25 +35,18 @@ function SectionMenu({ active }: { active: string }) {
   const firstRef = useRef<HTMLButtonElement>(null);
   const keepFocus = useModalFocus(open, dialogRef, firstRef);
 
-  // Escape closes; the page behind holds still while the menu is open
+  // Escape closes (useModalFocus holds the page behind still while it is open)
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
     window.addEventListener('keydown', onKey);
-    const root = document.documentElement;
-    root.style.overflow = 'hidden';
-    getLenis()?.stop();
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      root.style.overflow = '';
-      getLenis()?.start();
-    };
+    return () => window.removeEventListener('keydown', onKey);
   }, [open]);
 
   const go = (id: string) => {
     keepFocus(); // the section takes focus, not the menu button
     setOpen(false);
-    // Next frame: the scroll lock above has been released
+    // Next frame: the menu has closed and released the scroll lock
     requestAnimationFrame(() => scrollToSection(id, reduced));
   };
 
@@ -89,7 +81,7 @@ function SectionMenu({ active }: { active: string }) {
             transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
           >
             <WindowBar title="menu.exe" onClose={() => setOpen(false)} closeLabel="Close menu" />
-            <ul className="window-body min-h-0 overflow-y-auto p-2" data-lenis-prevent>
+            <ul className="window-body min-h-0 overflow-y-auto overscroll-contain p-2">
               {SECTIONS.map(({ id, label, icon }, i) => (
                 <li key={id}>
                   <button

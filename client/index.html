@@ -70,19 +70,18 @@
     }
     </script>
 
-    <!-- IBM Plex Sans (reading, headings), Plex Mono (labels) and Bangers (comic lettering) from Google Fonts; Press Start 2P is self-hosted -->
+    <!-- Press Start 2P (the hero name) is self-hosted: fetch it with the HTML so the name paints at once -->
+    <link rel="preload" href="/fonts/PressStart2P.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- IBM Plex Sans (reading, headings), Plex Mono (labels) and Bangers (comic lettering) from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:ital,wdth,wght@0,85..100,400..700;1,100,400&display=swap" rel="stylesheet" />
   </head>
 
   <body>
-    <div id="root" suppresshydrationwarning="true"></div>
+    <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script
-      defer
-      src="%VITE_ANALYTICS_ENDPOINT%/umami"
-      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
   </body>
 
 </html>

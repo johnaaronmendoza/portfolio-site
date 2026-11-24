@@ -1,13 +1,14 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* Self-hosted Press Start 2P — eliminates Google Fonts DNS lookup + FOUT */
+/* Self-hosted Press Start 2P, preloaded in index.html; swap so the hero name
+   is never invisible while it loads */
 @font-face {
   font-family: 'Press Start 2P';
   src: url('/fonts/PressStart2P.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
-  font-display: block;
+  font-display: swap;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -16,80 +17,6 @@
 /* Short laptops (1024x768, 1280x800): the hero starts higher so desk_assist.exe
    ends above the chat launcher */
 @custom-variant short-desk (@media (min-width: 1024px) and (max-height: 820px));
-
-/* Animated Grid Background */
-@keyframes panGrid {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 40px;
-  }
-}
-
-/* Sovereign Console — blinking cursor keyframes */
-@keyframes blinker {
-  50% { opacity: 0; }
-}
-
-/* Blink Animation */
-@keyframes blink {
-  0%, 49%, 100% {
-    opacity: 1;
-  }
-  50%, 99% {
-    opacity: 0.3;
-  }
-}
-
-/* Glitch Effect - CRT-style text distortion */
-@keyframes glitch-1 {
-  0% {
-    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
-    transform: translate(-2px, -2px);
-    opacity: 0.8;
-  }
-  50% {
-    clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
-    transform: translate(2px, 2px);
-    opacity: 0.8;
-  }
-  100% {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-    transform: translate(0, 0);
-    opacity: 0;
-  }
-}
-
-@keyframes glitch-2 {
-  0% {
-    clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
-    transform: translate(2px, 2px);
-    opacity: 0.8;
-  }
-  50% {
-    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
-    transform: translate(-2px, -2px);
-    opacity: 0.8;
-  }
-  100% {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-    transform: translate(0, 0);
-    opacity: 0;
-  }
-}
-
-/* Section Transition - Fade in from bottom */
-@keyframes sectionFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 /* Marquee scroll animations */
 @keyframes marquee {
@@ -106,24 +33,6 @@
 @keyframes johnny-bob {
   0% { translate: 0 0; }
   50% { translate: 0 -2px; }
-}
-
-/* Screen Tear VHS Effect */
-@keyframes screenTear {
-  0% {
-    transform: translateX(0);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.8;
-  }
-  90% {
-    opacity: 0.8;
-  }
-  100% {
-    transform: translateX(100vw);
-    opacity: 0;
-  }
 }
 
 /* Emil Kowalski custom easing curves */
@@ -163,22 +72,11 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 :root {
+  /* Light only: native controls and scrollbars stay light under OS dark mode */
+  color-scheme: light;
   /* Paper & Ink palette (John, Nov 2026; see CLAUDE.md Design rules for pairings) */
   --page: #EFEAE0;      /* page ground: warm off-white */
   --ink: #000;          /* outlines, hard shadows */
@@ -214,19 +112,6 @@
   --border: var(--ink);
   --input: var(--paper);
   --ring: var(--ink);
-  --chart-1: var(--blue);
-  --chart-2: var(--bar);
-  --chart-3: var(--bar);
-  --chart-4: var(--paper);
-  --chart-5: var(--text);
-  --sidebar: var(--paper);
-  --sidebar-foreground: var(--text);
-  --sidebar-primary: var(--blue);
-  --sidebar-primary-foreground: #fff;
-  --sidebar-accent: var(--blue);
-  --sidebar-accent-foreground: var(--ink);
-  --sidebar-border: var(--ink);
-  --sidebar-ring: var(--ink);
 }
 
 /* Dark mode is not exposed; it uses the same aliases */
@@ -251,19 +136,6 @@
   --border: var(--ink);
   --input: var(--paper);
   --ring: var(--ink);
-  --chart-1: var(--blue);
-  --chart-2: var(--bar);
-  --chart-3: var(--bar);
-  --chart-4: var(--paper);
-  --chart-5: var(--text);
-  --sidebar: var(--paper);
-  --sidebar-foreground: var(--text);
-  --sidebar-primary: var(--blue);
-  --sidebar-primary-foreground: #fff;
-  --sidebar-accent: var(--blue);
-  --sidebar-accent-foreground: var(--ink);
-  --sidebar-border: var(--ink);
-  --sidebar-ring: var(--ink);
 }
 
 @layer base {
@@ -304,6 +176,8 @@
     -moz-osx-font-smoothing: grayscale;
     /* Keep tabbed-to controls clear of the fixed Pause and chat buttons (WCAG 2.4.11) */
     scroll-padding-bottom: 88px;
+    /* The page doesn't shift sideways when a modal locks scrolling (useModalFocus) */
+    scrollbar-gutter: stable;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
@@ -482,63 +356,9 @@
     line-height: 1.3;
   }
   
-  /* Glitch Effect - CRT-style text distortion on hover */
-  .glitch {
-    position: relative;
-    display: inline-block;
-  }
-
-  .glitch::before,
-  .glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-  }
-
-  .glitch::before {
-    color: #ff00ff;
-    z-index: -1;
-  }
-
-  .glitch::after {
-    color: #00ffff;
-    z-index: -2;
-  }
-
-  .glitch:hover::before {
-    animation: glitch-1 0.3s infinite;
-    opacity: 0.8;
-  }
-
-  .glitch:hover::after {
-    animation: glitch-2 0.3s infinite;
-    opacity: 0.8;
-  }
-
   /* Section Transition Animation */
   .section-transition {
     /* intentionally static: one load-in moment lives in the hero */
-  }
-
-  /* Sovereign Console — grain texture overlay */
-  .grain {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 9998;
-    opacity: 0.04;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  }
-
-  /* Sovereign Console — blinking block cursor */
-  .blink-cursor {
-    animation: blinker 1s step-end 4; /* a few blinks, then stays visible */
-    display: inline-block;
-    margin-left: 2px;
   }
 
   /* Focus-visible: 3px ring for keyboard nav, invisible for mouse/touch.
@@ -781,24 +601,6 @@
     }
   }
 
-  /* Marquee utilities */
-  .animate-marquee {
-    animation: marquee 28s linear infinite;
-    display: flex;
-    gap: 0.75rem;
-  }
-
-  .animate-marquee-reverse {
-    animation: marquee-reverse 28s linear infinite;
-    display: flex;
-    gap: 0.75rem;
-  }
-
-  .animate-marquee:hover,
-  .animate-marquee-reverse:hover {
-    animation-play-state: paused;
-  }
-
   /* Marquee strips between sections. Transform only, pauses on hover, fully
      static under reduced motion (see the end of this file).
      The track holds two identical halves, so -50% loops seamlessly. */
@@ -810,6 +612,14 @@
 
   .ribbon-track--reverse {
     animation-name: marquee-reverse;
+  }
+
+  /* Each phrase, then a 16px sparkle with a 16px gap either side (Ribbon
+     SEPARATOR_PX), drawn as a background so the strips hold no images */
+  .ribbon-item {
+    padding-right: 3rem;
+    background: url('/assets/pixel/sparkle.svg') no-repeat right 1rem center / 1rem 1rem;
+    image-rendering: pixelated;
   }
 
   .ribbon-track:hover {

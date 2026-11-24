@@ -16,16 +16,18 @@ const LINK_CLASS =
 
 const NEW_TAB = <span className="sr-only"> (opens in a new tab)</span>;
 
+const SGT = new Intl.DateTimeFormat('en-SG', {
+  timeZone: 'Asia/Singapore',
+  hour: '2-digit', minute: '2-digit', hour12: false,
+});
+
 function useSGTClock() {
   const [time, setTime] = useState('');
   useEffect(() => {
     let id: ReturnType<typeof setTimeout>;
     // Update once a minute, aligned to the minute boundary
     const tick = () => {
-      setTime(new Date().toLocaleTimeString('en-SG', {
-        timeZone: 'Asia/Singapore',
-        hour: '2-digit', minute: '2-digit', hour12: false,
-      }));
+      setTime(SGT.format(new Date()));
       id = setTimeout(tick, 60_000 - (Date.now() % 60_000));
     };
     tick();
@@ -48,7 +50,7 @@ export default function Footer() {
           <div className="flex items-start gap-4">
             <PixelArt name="icon-contact" size={32} lazy className="mt-1" />
             <h2 className="font-display text-[28px] sm:text-[36px]">
-              Hiring for 2027? Let's talk.
+              Hiring for 2027? Let’s talk.
             </h2>
           </div>
           <p className="font-sans text-[15px] sm:text-base max-w-[40ch] leading-relaxed">
@@ -107,6 +109,7 @@ export default function Footer() {
             Open the terminal and try{' '}
             <button
               type="button"
+              translate="no"
               className="min-h-[44px] inline-flex items-center px-1 font-bold underline underline-offset-4 decoration-2 transition-[background-color,color] duration-150 hover:bg-[var(--paper)] hover:text-[color:var(--bar)]"
               onClick={() => window.dispatchEvent(new Event('toggle-terminal'))}
             >

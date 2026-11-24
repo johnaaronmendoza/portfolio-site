@@ -4,8 +4,8 @@ import { MOD_KEY } from '@/lib/utils';
 export default function ShortcutHint({ className = '' }: { className?: string }) {
   return (
     <p className={`font-label text-sm leading-relaxed ${className}`}>
-      <kbd className="font-bold">{MOD_KEY} K</kbd> commands<span aria-hidden="true"> · </span><span className="sr-only">, </span>
-      <kbd className="font-bold">{MOD_KEY} /</kbd> shortcuts
+      <kbd className="font-bold">{MOD_KEY}&nbsp;K</kbd> commands<span aria-hidden="true"> · </span><span className="sr-only">, </span>
+      <kbd className="font-bold">{MOD_KEY}&nbsp;/</kbd> shortcuts
     </p>
   );
 }

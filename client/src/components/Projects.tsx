@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, type ReactNode, type Ref } from 'react';
-import { Link } from 'wouter';
+import type { ReactNode, Ref } from 'react';
+import { Link, useLocation, useSearch } from 'wouter';
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
 import PixelArt from './PixelArt';
@@ -13,16 +13,16 @@ import SectionHeading from './SectionHeading';
 import Window from './Window';
 import { PROJECTS, type Project } from '@/data/projects';
 
-// Display label and the key matched against project tags (kept separate so a
-// friendlier label doesn't change which projects match)
-const FILTERS: { label: string; match: string }[] = [
-  { label: 'AI', match: 'ML/AI' }, // same name as the Skills filter
-  { label: 'Python', match: 'Python' },
-  { label: 'React', match: 'React' },
-  { label: 'TypeScript', match: 'TypeScript' },
-  { label: 'Kubernetes', match: 'K8s' },
-  { label: 'gRPC', match: 'gRPC' },
-  { label: 'Kotlin', match: 'Kotlin' },
+// URL id (?filter=ai), display label and the key matched against project tags
+// (kept separate so a friendlier label doesn't change which projects match)
+const FILTERS: { id: string; label: string; match: string }[] = [
+  { id: 'ai', label: 'AI', match: 'ML/AI' }, // same name as the Skills filter
+  { id: 'python', label: 'Python', match: 'Python' },
+  { id: 'react', label: 'React', match: 'React' },
+  { id: 'typescript', label: 'TypeScript', match: 'TypeScript' },
+  { id: 'kubernetes', label: 'Kubernetes', match: 'K8s' },
+  { id: 'grpc', label: 'gRPC', match: 'gRPC' },
+  { id: 'kotlin', label: 'Kotlin', match: 'Kotlin' },
 ];
 
 function matchesFilter(p: Project, filter: string | null): boolean {
@@ -129,7 +129,7 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
         </ul>
         <div className="flex flex-wrap gap-1.5">
           {project.tags.map(tag => (
-            <span key={tag} className="border-2 border-black px-2 py-0.5 font-mono text-sm font-bold text-black">
+            <span key={tag} translate="no" className="border-2 border-black px-2 py-0.5 font-mono text-sm font-bold text-black">
               {tag}
             </span>
           ))}
@@ -203,9 +203,19 @@ export function chipClass(active: boolean) {
 
 // ── Projects section ──────────────────────────────────────────────────────
 export default function Projects() {
-  const [activeFilter, setActiveFilter] = useState<string | null>(null); // a filter label
+  // The filter lives in the URL (?filter=ai), so a filtered view can be shared;
+  // no param means All. Replace, not push: chips don't add history entries
+  const [location, navigate] = useLocation();
+  const search = useSearch();
+  const active = FILTERS.find(f => f.id === new URLSearchParams(search).get('filter')) ?? null;
+  const setFilter = (id: string | null) => {
+    const params = new URLSearchParams(search);
+    if (id) params.set('filter', id);
+    else params.delete('filter');
+    const query = params.toString();
+    navigate(`${location}${query ? `?${query}` : ''}${window.location.hash}`, { replace: true });
+  };
 
-  const active = FILTERS.find(f => f.label === activeFilter) ?? null;
   const visible = PROJECTS.filter(p => matchesFilter(p, active?.match ?? null));
   // Visible status; a live region, so a change is announced but the first render is not
   const status = `Showing ${visible.length} of ${PROJECTS.length} projects${active ? `: ${active.label}` : ''}`;
@@ -223,19 +233,19 @@ export default function Projects() {
             <div role="group" aria-label="Filter projects by technology" className="flex flex-wrap gap-2 sm:gap-3">
               <button
                 type="button"
-                onClick={() => setActiveFilter(null)}
-                aria-pressed={activeFilter === null}
-                className={chipClass(activeFilter === null)}
+                onClick={() => setFilter(null)}
+                aria-pressed={active === null}
+                className={chipClass(active === null)}
               >
                 All
               </button>
-              {FILTERS.map(({ label }) => (
+              {FILTERS.map(({ id, label }) => (
                 <button
                   type="button"
-                  key={label}
-                  onClick={() => setActiveFilter(activeFilter === label ? null : label)}
-                  aria-pressed={activeFilter === label}
-                  className={chipClass(activeFilter === label)}
+                  key={id}
+                  onClick={() => setFilter(active?.id === id ? null : id)}
+                  aria-pressed={active?.id === id}
+                  className={chipClass(active?.id === id)}
                 >
                   {label}
                 </button>
@@ -264,7 +274,7 @@ export default function Projects() {
                   <p className="font-sans text-[15px] sm:text-base">No projects match {active.label}.</p>
                   <button
                     type="button"
-                    onClick={() => setActiveFilter(null)}
+                    onClick={() => setFilter(null)}
                     className="btn btn-secondary mt-4"
                   >
                     Show all projects

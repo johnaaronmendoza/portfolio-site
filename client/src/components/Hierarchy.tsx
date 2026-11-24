@@ -125,11 +125,12 @@ export type Fact = { icon: PixelArtName; text: string };
 const CHIP =
   'inline-flex min-w-0 max-w-full items-start gap-2 min-h-9 border-2 border-black bg-[var(--paper)] px-2.5 py-1.5 font-mono text-[15px] sm:text-base font-bold leading-[1.4] text-black';
 
-/** L6 chip: a static label (no shadow, not pressable); the words carry the meaning, the icon is decorative */
-export function Chip({ icon, text, as: Tag = 'p', className = '' }: Fact & { as?: 'p' | 'li'; className?: string }) {
+/** L6 chip: a static label (no shadow, not pressable); the words carry the meaning, the icon is decorative.
+ *  `lazy={false}` above the fold (the hero), so its icon isn't deferred */
+export function Chip({ icon, text, as: Tag = 'p', className = '', lazy = true }: Fact & { as?: 'p' | 'li'; className?: string; lazy?: boolean }) {
   return (
     <Tag className={`${CHIP} ${className}`}>
-      <PixelArt name={icon} size={16} lazy className="line-mark" />
+      <PixelArt name={icon} size={16} lazy={lazy} className="line-mark" />
       <span className="min-w-0 break-words">{text}</span>
     </Tag>
   );

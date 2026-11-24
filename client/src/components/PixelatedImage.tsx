@@ -144,8 +144,10 @@ export default function PixelatedImage({ src, alt, className }: Props) {
       ref={canvasRef}
       className={className}
       style={{ display: 'block' }}
-      role="img"
-      aria-label={alt}
+      // Empty alt: decorative (its link or caption names it), so hidden like <img alt="">
+      role={alt ? 'img' : undefined}
+      aria-label={alt || undefined}
+      aria-hidden={alt ? undefined : true}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     />

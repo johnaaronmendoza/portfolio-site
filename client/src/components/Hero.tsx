@@ -181,7 +181,7 @@ export default function Hero() {
               transition={{ duration: HERO.line, delay: HERO.body, ease: easing.out }}
             >
               <Lead text="I build AI and data tools people can trust, now building Desk Assist at LGA Telecom." prompt={false} className="particles-clear" />
-              <Chip icon="chip-school" text={'SIT × Glasgow · graduating\u00a0Apr\u00a02027'} className="particles-clear" />
+              <Chip icon="chip-school" text={'SIT × Glasgow · graduating\u00a0Apr\u00a02027'} className="particles-clear" lazy={false} />
             </motion.div>
 
             {/* CTAs: resume first; email beside the profiles so contact is above the fold */}

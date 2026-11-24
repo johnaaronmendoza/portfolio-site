@@ -1,5 +1,4 @@
 import type { CSSProperties } from 'react';
-import PixelArt from './PixelArt';
 
 type RibbonTone = 'ink' | 'blue';
 
@@ -47,16 +46,12 @@ export default function Ribbon({
         className={`ribbon-track ${reverse ? 'ribbon-track--reverse' : ''}`}
         style={{ '--ribbon-duration': `${duration}s` } as CSSProperties}
       >
-        {Array.from({ length: repeats * 2 }, (_, i) => (
-          <span key={i} className="flex items-center">
-            {items.map(item => (
-              <span key={item} className="flex items-center">
-                <span className="font-label text-sm sm:text-base whitespace-pre">{item}</span>
-                <PixelArt name="sparkle" size={16} lazy className="mx-4" />
-              </span>
-            ))}
-          </span>
-        ))}
+        {/* One span per phrase; the sparkle after it is a CSS background (.ribbon-item) */}
+        {Array.from({ length: repeats * 2 }, (_, i) =>
+          items.map(item => (
+            <span key={`${i}-${item}`} className="ribbon-item font-label text-sm sm:text-base whitespace-pre">{item}</span>
+          )),
+        )}
       </div>
     </div>
   );

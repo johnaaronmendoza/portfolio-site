@@ -24,7 +24,7 @@ const SHOTS: Shot[] = [
   {
     file: 'onboarding.png', src: onboardingImg, width: 896, height: 564,
     caption: 'Onboarding: extinguisher scans and safety alerts.',
-    alt: "Three phone screens: the app's shield-and-flame logo, an onboarding card 'Scan Extinguisher' and an onboarding card 'Stay Informed'.",
+    alt: "Three phone screens: the app’s shield-and-flame logo, an onboarding card 'Scan Extinguisher' and an onboarding card 'Stay Informed'.",
   },
   {
     file: 'dashboard.png', src: dashboardImg, width: 605, height: 520,
@@ -38,7 +38,7 @@ const SHOTS: Shot[] = [
   },
   {
     file: 'floor_plan.png', src: floorplanImg, width: 586, height: 1041,
-    caption: "Floor plan: Dijkstra's shortest route to the nearest exit.",
+    caption: "Floor plan: Dijkstra’s shortest route to the nearest exit.",
     alt: 'Floor Plan screens: a node graph of rooms, stairwells and exits, with the shortest route drawn in red from the chosen unit to an exit, for slab and point blocks.',
   },
   {
@@ -99,7 +99,7 @@ export default function FireSafetyProject() {
       >
         <PixelList
           items={[
-            "About 1.1 million HDB flats house **80%** of Singapore's population.",
+            "About 1.1 million HDB flats house **80%** of Singapore’s population.",
             'Barriers: mobility, language and **unfamiliar escape routes**.',
           ]}
         />
@@ -125,7 +125,7 @@ export default function FireSafetyProject() {
 
       <CaseSection id="part" heading="My part" icon="icon-experience" file="my_part.log">
         <div className="space-y-3 lg:space-y-4">
-          <LeadS text="I built the **algorithms and AR**: 49 of the team's 120 commits." />
+          <LeadS text="I built the **algorithms and AR**: 49 of the team’s 120 commits." />
           <PixelList
             items={[
               '**Dijkstra** routing to the nearest exit, re-planning around blocked stairwells.',

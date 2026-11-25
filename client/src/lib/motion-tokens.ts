@@ -13,7 +13,7 @@ export const motionTokens = {
     sharp: [0.4, 0, 0.2, 1] as const,
     out: [0.23, 1, 0.32, 1] as const, // matches CSS --ease-out
   },
-  // The hero load-in, the page's one orchestrated moment (MASTER 1.6): window
+  // The hero load-in, the page's one orchestrated moment (DESIGN.md): window
   // scales in, name lines reveal 180ms apart from 200ms, the rest follows.
   hero: {
     window: 0.4,

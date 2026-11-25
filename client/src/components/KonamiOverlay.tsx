@@ -13,7 +13,7 @@ export default function KonamiOverlay() {
     return () => clearTimeout(id);
   }, []);
 
-  // Easter egg: a terminal-variant window for 1.8s (MASTER 2.10); no flash,
+  // Easter egg: a terminal-variant window for 1.8s (DESIGN.md); no flash,
   // only opacity + translate, and it never takes pointer or focus
   return (
     <AnimatePresence>
@@ -30,10 +30,10 @@ export default function KonamiOverlay() {
           <div className="window w-full max-w-sm">
             <WindowBar title="cheat_code.exe" />
             <div className="bg-black px-6 py-6 text-center text-[color:var(--paper)]">
-              <p className="font-label text-xs text-[color:var(--paper)] mb-3">
+              <p className="font-label text-label text-[color:var(--paper)] mb-3">
                 <span aria-hidden="true">🎮 </span>Cheat code activated
               </p>
-              <p className="font-label text-xs leading-loose">
+              <p className="font-label text-label leading-loose">
                 ↑↑↓↓←→←→BA
               </p>
               <p className="font-sans text-body-sm mt-3">

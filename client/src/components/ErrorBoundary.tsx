@@ -32,10 +32,10 @@ class ErrorBoundary extends Component<Props, State> {
       <main className="flex min-h-screen items-center justify-center px-4 py-8 text-[color:var(--text)]">
         <Window title="error.exe" className="w-full max-w-lg" bodyClassName="space-y-4 p-6 sm:p-8">
           <h1 className="font-display text-card-title sm:text-card-lead">Something went wrong</h1>
-          <p className="font-sans text-base leading-relaxed">
+          <p className="font-sans text-body leading-relaxed">
             This page stopped working. Reload to try again, or go to the home page.
           </p>
-          <p className="font-sans text-base leading-relaxed">
+          <p className="font-sans text-body leading-relaxed">
             Still stuck? Email me at{" "}
             <a
               href="mailto:johnaaronmb@gmail.com"

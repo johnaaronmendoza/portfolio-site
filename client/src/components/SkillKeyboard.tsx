@@ -6,6 +6,7 @@ import {
 import { Link } from 'wouter';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useModalFocus } from '@/hooks/useModalFocus';
+import { useQueryParam } from '@/hooks/useQueryParam';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { play } from '@/hooks/useSound';
 import { motionTokens } from '@/lib/motion-tokens';
@@ -91,7 +92,7 @@ function FlatKeys(handlers: KeyHandlers) {
     if (e.pointerType !== 'touch') onHover(i);
   };
   return (
-    <div role="group" aria-label={GROUP_LABEL} className="grid grid-cols-4 sm:grid-cols-7 gap-2.5 sm:gap-3 pr-1 pb-1">
+    <div role="group" aria-label={GROUP_LABEL} className="grid grid-cols-4 sm:grid-cols-7 gap-2 sm:gap-3 pr-1 pb-1">
       {KEYS.map((k, i) => {
         // Outside the filter: pressed flush without its shadow, in the same dark
         // muted skin as the 3D caps (AA contrast kept), so it reads without colour
@@ -112,13 +113,13 @@ function FlatKeys(handlers: KeyHandlers) {
             }`}
             style={{ backgroundColor: cap.face, color: cap.ink }}
           >
-            <span aria-hidden="true" className="absolute left-1.5 top-1 font-mono text-xs font-bold leading-none">{cap.no}</span>
+            <span aria-hidden="true" className="absolute left-1.5 top-1 font-mono text-label font-bold leading-none">{cap.no}</span>
             <span className="flex min-h-0 flex-1 items-center justify-center pt-3">
               <FlatIcon src={iconUrl(k)} />
             </span>
             <span
               aria-hidden="true"
-              className="block border-t-2 border-black/35 py-1 sm:py-1.5 font-mono text-xs sm:text-sm lg:text-base font-bold leading-none tracking-wide transition-[background-color] duration-150 ease-out"
+              className="block border-t-2 border-black/35 py-1 sm:py-1.5 font-mono text-label lg:text-body font-bold leading-none lg:tracking-wide transition-[background-color] duration-150 ease-out"
               style={{ backgroundColor: cap.bar }}
             >
               {cap.text}
@@ -169,7 +170,7 @@ function KeyTip({ index, tipRef, reduced }: { index: number; tipRef: RefObject<H
         <WindowBar title={fileName(CAPS[index])} />
         <div className="px-3 py-2.5 font-sans">
           <p className="text-body-sm font-bold leading-snug text-balance">{k.name}</p>
-          <p className="mt-1 text-sm leading-snug text-pretty">{k.blurb}</p>
+          <p className="mt-1 text-body-sm leading-snug text-pretty">{k.blurb}</p>
         </div>
       </motion.div>
     </div>
@@ -241,7 +242,7 @@ function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps)
       >
         <WindowBar title={fileName(CAPS[index])} onClose={onClose} closeLabel={`Close ${k.name}`} />
         <div className="window-body p-4 sm:p-5 font-sans">
-          <p className="text-sm font-bold">{GROUP_NAME[k.group]}</p>
+          <p className="text-body-sm font-bold">{GROUP_NAME[k.group]}</p>
           <h3 id={titleId} className="font-display text-lead sm:text-card-title mt-2 mb-3 text-balance">{k.name}</h3>
           <p className="text-body-sm leading-relaxed text-pretty">{k.blurb}</p>
           <p className="text-body-sm leading-relaxed mt-3"><span className="font-bold">Used in:</span> {k.usedIn}</p>
@@ -276,7 +277,9 @@ export default function SkillKeyboard({ listId, legend }: { listId: string; lege
   const locatorRef = useRef<KeyLocator | null>(null);
   const tipRef = useRef<HTMLDivElement>(null);
   const [stage, setStage] = useState<'wait' | '3d' | '2d'>('wait');
-  const [filter, setFilter] = useState<Filter>('all');
+  // The filter lives in the URL (?skills=data), beside Projects' ?filter; no param means All
+  const [skillsParam, setSkillsParam] = useQueryParam('skills');
+  const filter: Filter = FILTERS.find(f => f.id === skillsParam)?.id ?? 'all';
   const [announce, setAnnounce] = useState('');
   const [hover, setHover] = useState<number | null>(null); // mouse or pen only
   const [focus, setFocus] = useState<{ i: number; visible: boolean } | null>(null);
@@ -357,7 +360,7 @@ export default function SkillKeyboard({ listId, legend }: { listId: string; lege
   const closeWindow = useCallback(() => setOpen(null), []);
 
   const chooseFilter = (f: Filter) => {
-    setFilter(f);
+    setSkillsParam(f === 'all' ? null : f);
     const n = KEYS.filter(k => inFilter(k, f)).length;
     const label = FILTERS.find(x => x.id === f)?.label;
     setAnnounce(f === 'all' ? `All ${KEYS.length} skills shown` : `${n} of ${KEYS.length} skills highlighted: ${label}`);

@@ -7,7 +7,7 @@
  */
 
 import FramerReveal from './FramerReveal';
-import { KeyText, Lead, type Fact } from './Hierarchy';
+import { KeyText, type Fact } from './Hierarchy';
 import PixelArt from './PixelArt';
 import PixelatedImage from './PixelatedImage';
 import Section from './Section';
@@ -33,12 +33,16 @@ const BIO = [
 export default function About() {
   return (
     <Section>
-      <SectionHeading text="ABOUT ME" icon="icon-about" className="mb-4 lg:mb-5" />
-      <Lead text="From Electrical Engineering at Nanyang Polytechnic to Computing Science at SIT × Glasgow." className="mb-6 lg:mb-8" />
+      <SectionHeading
+        text="ABOUT ME"
+        icon="icon-about"
+        lead="From Electrical Engineering at Nanyang Polytechnic to Computing Science at SIT × Glasgow."
+      />
 
       <FramerReveal delay={0.1}>
-        {/* Fills the content width: photo, then the bio at 60ch with the two
-            facts right under it at every width */}
+        {/* Fills the content width: photo, then the bio (64ch, under 80
+            characters a line) with the two facts and their rule across the
+            full column under it at every width */}
         <Window title="about_me.txt" bodyClassName="grid gap-6 md:grid-cols-[auto_minmax(0,1fr)] md:gap-x-10 items-start p-6 sm:p-8 lg:p-10">
           <div className="md:row-span-2 border-[3px] border-black shadow-8bit size-48 sm:size-52 lg:size-64 overflow-hidden">
             <PixelatedImage
@@ -49,14 +53,14 @@ export default function About() {
             />
           </div>
 
-          <div className="space-y-4 max-w-[62ch]">
+          <div className="space-y-4 max-w-[64ch]">
             {BIO.map(text => (
               <p key={text} className="font-sans text-body-sm sm:text-body lg:text-lead-sm leading-relaxed text-pretty">
                 <KeyText text={text} max={2} />
               </p>
             ))}
           </div>
-          <ul aria-label="Quick facts" className="flex flex-wrap gap-x-6 gap-y-2 max-w-[62ch] border-t-2 border-black pt-4 font-sans text-body-sm sm:text-body text-[color:var(--text)]">
+          <ul aria-label="Quick facts" className="flex flex-wrap gap-x-6 gap-y-2 border-t-2 border-black pt-4 font-sans text-body-sm sm:text-body text-[color:var(--text)]">
             {FACTS.map(({ icon, text }) => (
               <li key={text} className="flex items-center gap-2">
                 <PixelArt name={icon} size={16} lazy />

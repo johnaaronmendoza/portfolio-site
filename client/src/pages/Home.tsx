@@ -21,7 +21,7 @@ import { useHomeAchievements } from '@/hooks/useAchievements';
 import { saveHomeScroll } from '@/lib/scroll-memory';
 
 // Section wrappers take focus (without a ring) when a link lands on them
-const SECTION_CLASS = 'relative section-transition focus:outline-none';
+const SECTION_CLASS = 'relative focus:outline-none';
 
 /** Arriving at "/#projects" (e.g. a case study's Back link): jump there and focus it */
 function useScrollToHash() {

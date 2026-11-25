@@ -4,7 +4,7 @@ import type { PixelArtName } from '@/components/PixelArt';
 import SectionHeading from '@/components/SectionHeading';
 import Window from '@/components/Window';
 
-// Body step (MASTER 1.3): 15px on phones, 16px from sm
+// Body step (DESIGN.md): 15px on phones, 16px from sm
 const BODY = 'font-sans text-body-sm sm:text-body leading-[1.65]';
 
 type CaseSectionProps = {
@@ -65,7 +65,7 @@ export function TagList({ tags }: { tags: string[] }) {
   return (
     <ul className="flex flex-wrap gap-2">
       {tags.map(tag => (
-        <li key={tag} translate="no" className="border-2 border-black px-2 py-0.5 font-mono text-sm font-bold text-black">
+        <li key={tag} translate="no" className="border-2 border-black px-2 py-0.5 font-mono text-label font-bold text-black">
           {tag}
         </li>
       ))}

@@ -33,8 +33,8 @@ export const FILTERS: { id: Filter; label: string }[] = [
 // Keycap colourways in the Paper & Ink palette, with meaning (John, Nov 2026):
 // AI yellow, Data blue, build (Frontend, Backend, Infrastructure) paper white,
 // Workflow ink. WCAG contrast of the legend ink on face / bar:
-// yellow 14.6 / 12.6; blue (white legend) 4.64 / 5.9; paper 18.9 / 13.9;
-// ink (white legend) 14.4 / 18.9. Muted keys use MUTED below.
+// yellow 14.54 / 11.34; blue (white legend) 4.64 / 6.01; paper 18.88 / 13.15;
+// ink (white legend) 14.35 / 18.88. Muted keys use MUTED below.
 export const WAYS = {
   yellow: { face: '#FFD23F', bar: '#E6B92A', side: '#B8901A', ink: '#000000' },
   blue:   { face: '#3A66FF', bar: '#2E55E0', side: '#2241B0', ink: '#FFFFFF' },

@@ -121,7 +121,7 @@ export default function Experience() {
   return (
     <FramerReveal>
       <Section>
-        <SectionHeading text="EXPERIENCE" icon="icon-experience" className="mb-16" />
+        <SectionHeading text="EXPERIENCE" icon="icon-experience" />
 
         {/* LGA leads; Sembcorp and the degree sit side by side from lg */}
         <div className="space-y-10 lg:space-y-14">

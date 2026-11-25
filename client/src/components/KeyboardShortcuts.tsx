@@ -67,7 +67,7 @@ export default function KeyboardShortcuts({ defaultOpen = false }: { defaultOpen
                     <dt className="font-sans text-body-sm">{desc}</dt>
                     <dd className="flex flex-shrink-0 items-center gap-1">
                       {keys.map((k) => (
-                        <kbd key={k} className="font-mono text-sm font-bold text-black bg-[var(--paper)] border-2 border-[color:var(--paper)] px-1.5 py-0.5 leading-none">
+                        <kbd key={k} className="font-mono text-label font-bold text-black bg-[var(--paper)] border-2 border-[color:var(--paper)] px-1.5 py-0.5 leading-none">
                           {k}
                         </kbd>
                       ))}
@@ -76,7 +76,7 @@ export default function KeyboardShortcuts({ defaultOpen = false }: { defaultOpen
                 ))}
               </dl>
 
-              <p className="border-t-2 border-[color:var(--paper)] px-4 py-2 font-mono text-sm text-center">
+              <p className="border-t-2 border-[color:var(--paper)] px-4 py-2 font-mono text-label text-center">
                 Press <kbd className="font-bold text-[color:var(--paper)]">{MOD_KEY}&nbsp;/</kbd> to toggle
               </p>
             </div>

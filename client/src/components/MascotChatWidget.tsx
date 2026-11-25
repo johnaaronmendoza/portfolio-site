@@ -335,7 +335,7 @@ export default function MascotChatWidget() {
             className="w-8 h-8 min-[1440px]:w-10 min-[1440px]:h-10 object-contain"
             style={{ imageRendering: 'pixelated' }}
           />
-          <span className="hidden min-[1440px]:inline font-label text-xs">
+          <span className="hidden min-[1440px]:inline font-label text-label">
             {isOpen ? 'Close' : 'Chat'}
           </span>
         </div>
@@ -416,7 +416,7 @@ export default function MascotChatWidget() {
                       </a>
                     )}
                     {msg.timestamp && (
-                      <p className={`font-sans text-sm text-[color:var(--text)] mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+                      <p className={`font-sans text-body-sm text-[color:var(--text)] mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
                         {TIME.format(msg.timestamp)}
                       </p>
                     )}
@@ -451,7 +451,7 @@ export default function MascotChatWidget() {
               className="chat-input flex-shrink-0 p-3 flex gap-3"
             >
               <div className="flex-1 min-w-0 flex items-center border-[3px] border-black bg-[var(--paper)] px-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--ink)] focus-within:outline-offset-2">
-                <span aria-hidden="true" className="font-mono text-base font-bold mr-1">&gt;_</span>
+                <span aria-hidden="true" className="font-mono text-body font-bold mr-1">&gt;_</span>
                 <input
                   ref={inputRef}
                   type="text"
@@ -462,7 +462,7 @@ export default function MascotChatWidget() {
                   onChange={e => setInput(e.target.value)}
                   placeholder="Ask about my work…"
                   aria-label="Ask about a project or skill"
-                  className="flex-1 min-w-0 bg-transparent text-[color:var(--text)] placeholder:text-[color:var(--text)] placeholder:italic font-sans text-base outline-none"
+                  className="flex-1 min-w-0 bg-transparent text-[color:var(--text)] placeholder:text-[color:var(--text)] placeholder:italic font-sans text-body outline-none"
                 />
               </div>
               <button type="submit" aria-disabled={isTyping} className="btn btn-primary px-4">

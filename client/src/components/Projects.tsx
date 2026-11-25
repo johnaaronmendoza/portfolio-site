@@ -1,11 +1,11 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import type { ReactNode, Ref } from 'react';
-import { Link, useLocation, useSearch } from 'wouter';
+import { Link } from 'wouter';
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
 import PixelArt from './PixelArt';
-import { Lead } from './Hierarchy';
 import Burst from './comic/Burst';
+import { useQueryParam } from '@/hooks/useQueryParam';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
 import { noteProjectOpen } from '@/hooks/useAchievements';
 import { motionTokens } from '@/lib/motion-tokens';
@@ -109,11 +109,12 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
 
       {/* Project Info */}
       <div className="flex flex-1 flex-col gap-4 p-5">
-        {/* Featured badge, the still's file name, then year and team context,
-            from projects.ts. Each part wraps whole, never mid-phrase. The badge
-            sits here, not on the image, so it never covers a screenshot */}
-        <p className={`flex flex-wrap items-center gap-x-3 gap-y-1 font-label text-sm text-[color:var(--text)] -mb-2 ${project.sfx ? 'pr-16' : ''}`}>
-          {project.featured && <span className="badge badge--ink">Featured</span>}
+        {/* One meta pattern on every tile: the Featured badge (here, not on the
+            image, so it never covers a screenshot), then the still's file name
+            on its own line, then year and team context from projects.ts. Each
+            line stays whole, never wrapping mid-name */}
+        <p className={`flex flex-col items-start gap-1 font-label text-label text-[color:var(--text)] -mb-2 ${project.sfx ? 'pr-16' : ''}`}>
+          {project.featured && <span className="badge badge--ink mb-1">Featured</span>}
           <span translate="no" className="whitespace-nowrap">{file}</span>
           <span className="whitespace-nowrap">
             {project.year}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{project.caption}
@@ -135,15 +136,14 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
         </ul>
         <div className="flex flex-wrap gap-1.5">
           {project.tags.map(tag => (
-            <span key={tag} translate="no" className="border-2 border-black px-2 py-0.5 font-mono text-sm font-bold text-black">
+            <span key={tag} translate="no" className="border-2 border-black px-2 py-0.5 font-mono text-label font-bold text-black">
               {tag}
             </span>
           ))}
         </div>
-        {/* Featured: right under the tags (mt-auto left a dead band beside
-            the taller neighbours); regular tiles keep it on the bottom edge */}
+        {/* On the bottom edge, so the links line up across a row */}
         {!isComingSoon && (
-          <div className={`${project.featured ? 'mt-5' : 'mt-auto'} pt-2 font-sans text-body-sm text-black font-bold underline underline-offset-4 decoration-2`}>
+          <div className="mt-auto pt-2 font-sans text-body-sm text-black font-bold underline underline-offset-4 decoration-2">
             {isExternal ? 'Visit site' : 'Read case study'}
           </div>
         )}
@@ -209,18 +209,9 @@ export function chipClass(active: boolean) {
 
 // ── Projects section ──────────────────────────────────────────────────────
 export default function Projects() {
-  // The filter lives in the URL (?filter=ai), so a filtered view can be shared;
-  // no param means All. Replace, not push: chips don't add history entries
-  const [location, navigate] = useLocation();
-  const search = useSearch();
-  const active = FILTERS.find(f => f.id === new URLSearchParams(search).get('filter')) ?? null;
-  const setFilter = (id: string | null) => {
-    const params = new URLSearchParams(search);
-    if (id) params.set('filter', id);
-    else params.delete('filter');
-    const query = params.toString();
-    navigate(`${location}${query ? `?${query}` : ''}${window.location.hash}`, { replace: true });
-  };
+  // The filter lives in the URL (?filter=ai); no param means All
+  const [filterId, setFilter] = useQueryParam('filter');
+  const active = FILTERS.find(f => f.id === filterId) ?? null;
 
   const visible = PROJECTS.filter(p => matchesFilter(p, active?.match ?? null));
   // Visible status; a live region, so a change is announced but the first render is not
@@ -230,8 +221,12 @@ export default function Projects() {
     <FramerReveal>
       {/* Full-width blue band; all text on it is black or sits on paper */}
       <Section className="bg-[var(--blue)] text-black border-y-[3px] border-black">
-        <SectionHeading text="PROJECTS" tone="ink" icon="icon-projects" className="mb-4 lg:mb-5" />
-        <Lead text="Start with **SilverLink SG**, the SCS Awareness Platform and UWB Indoor Localization." tone="blue" className="mb-6 lg:mb-8" />
+        <SectionHeading
+          text="PROJECTS"
+          tone="ink"
+          icon="icon-projects"
+          lead="Start with **SilverLink SG**, the SCS Awareness Platform and UWB Indoor Localization."
+        />
 
         <Window title="projects/" bodyClassName="p-4 sm:p-6 lg:p-8">
           {/* Filter chips */}
@@ -256,7 +251,7 @@ export default function Projects() {
               </button>
             ))}
           </div>
-          <p aria-live="polite" className="mt-4 mb-6 sm:mb-8 font-label text-sm text-black tabular-nums">{status}</p>
+          <p aria-live="polite" className="mt-4 mb-6 sm:mb-8 font-label text-label text-black tabular-nums">{status}</p>
 
           {/* Tile grid: the three featured tiles in one row from lg, then the
               rest two to a row (lg) or four (xl); UWB spans both columns at sm

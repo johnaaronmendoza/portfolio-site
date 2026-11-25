@@ -123,7 +123,7 @@
 
   --radius: 0;
 
-  /* shadcn aliases: always palette tokens, never their own hex (MASTER 2.10) */
+  /* shadcn aliases: always palette tokens, never their own hex (DESIGN.md) */
   --background: var(--page);
   --foreground: var(--text);
   --card: var(--paper);
@@ -147,7 +147,7 @@
 
 /* Dark mode is not exposed; it uses the same aliases */
 .dark {
-  /* shadcn aliases: always palette tokens, never their own hex (MASTER 2.10) */
+  /* shadcn aliases: always palette tokens, never their own hex (DESIGN.md) */
   --background: var(--page);
   --foreground: var(--text);
   --card: var(--paper);
@@ -209,6 +209,15 @@
     scroll-padding-bottom: 88px;
     /* The page doesn't shift sideways when a modal locks scrolling (useModalFocus) */
     scrollbar-gutter: stable;
+    /* No double-tap zoom delay; buttons, tiles and keys show their own :active press */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* No rubber-band bounce with a mouse or trackpad; touch keeps its pull */
+  @media (pointer: fine) {
+    html {
+      overscroll-behavior: none;
+    }
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
@@ -263,8 +272,8 @@
     line-height: 1.15;
   }
 
-  /* Comic lettering (Bangers): section titles and the two featured tiles'
-     sound effects only, never paragraphs. Bangers is caps-only. */
+  /* Comic lettering (Bangers): section titles and the one featured tile sound
+     effect (SilverLink) only, never paragraphs. Bangers is caps-only. */
   .font-comic {
     font-family: 'Bangers', 'IBM Plex Sans', ui-sans-serif, sans-serif;
     font-weight: 400;
@@ -371,11 +380,6 @@
     font-weight: 600;
     letter-spacing: 0;
     line-height: 1.3;
-  }
-  
-  /* Section Transition Animation */
-  .section-transition {
-    /* intentionally static: one load-in moment lives in the hero */
   }
 
   /* Focus-visible: 3px ring for keyboard nav, invisible for mouse/touch.
@@ -508,7 +512,7 @@
     }
   }
 
-  /* Screenshot window on case studies (MASTER 2.11): smaller raised shadow,
+  /* Screenshot window on case studies (DESIGN.md): smaller raised shadow,
      image flush to the frame. Declared after .window so it wins at every width. */
   .window--figure {
     box-shadow: 4px 4px 0 0 var(--ink);
@@ -560,7 +564,7 @@
   }
 
   /* Unavailable (e.g. Send while the bot replies): paper fill, ink text, no
-     shadow. Contrast stays 21:1; never lowered opacity (MASTER 2.2). */
+     shadow. Contrast stays 21:1; never lowered opacity (DESIGN.md). */
   .btn[aria-disabled="true"] {
     background-color: var(--paper);
     color: var(--ink);
@@ -643,39 +647,9 @@
     animation-play-state: paused;
   }
 
-
-  /* Body text line-length cap (~65ch) for readability */
-  .prose-8bit {
-    max-width: 65ch;
-  }
-  
-  /* Container utility */
-  .container {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
   .flex {
     min-height: 0;
     min-width: 0;
-  }
-
-  @media (min-width: 640px) {
-    .container {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .container {
-      padding-left: 2rem;
-      padding-right: 2rem;
-      max-width: 1280px;
-    }
   }
 }
 

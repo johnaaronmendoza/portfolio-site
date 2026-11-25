@@ -105,7 +105,7 @@ export default function Footer() {
       {/* Clock + terminal Easter egg hint */}
       <div className="space-y-4">
         {sgtTime && (
-          <p className="flex items-center gap-3 font-label text-sm leading-snug tabular-nums">
+          <p className="flex items-center gap-3 font-label text-label leading-snug tabular-nums">
             <PixelArt name="globe" size={24} lazy />
             <span>SGT {sgtTime}<span className="sr-only"> Singapore time</span></span>
           </p>
@@ -122,7 +122,7 @@ export default function Footer() {
           </button>
         </p>
         <ShortcutHint className="[@media(pointer:coarse)]:hidden" />
-        <p className="font-sans text-sm">
+        <p className="font-sans text-body-sm">
           © {currentYear} John Aaron Mendoza Branzuela
         </p>
         {/* Back to the top of the page; focus moves to <main> so Tab starts there */}

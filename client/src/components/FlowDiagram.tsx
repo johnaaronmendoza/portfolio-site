@@ -69,14 +69,14 @@ export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols
               <div className="flex flex-wrap items-start gap-2">
                 {numbered && (
                   <span
-                    className="flex-shrink-0 border-2 border-black bg-[var(--paper)] px-1.5 py-0.5 font-label text-xs text-black tabular-nums"
+                    className="flex-shrink-0 border-2 border-black bg-[var(--paper)] px-1.5 py-0.5 font-label text-label text-black tabular-nums"
                   >
                     {i + 1}
                   </span>
                 )}
                 <span className={`min-w-0 flex-1 ${LABEL}`}>{label}</span>
                 {actor && (
-                  <span className={`flex-shrink-0 border-2 border-black px-1.5 py-0.5 font-label text-xs text-black ${ACTOR_FILL[actor]}`}>
+                  <span className={`flex-shrink-0 border-2 border-black px-1.5 py-0.5 font-label text-label text-black ${ACTOR_FILL[actor]}`}>
                     {actor}
                   </span>
                 )}

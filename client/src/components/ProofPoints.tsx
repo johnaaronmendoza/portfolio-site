@@ -63,7 +63,7 @@ export default function ProofPoints() {
           <li key={p.value} className="border-t-[3px] border-black first:border-t-0">
             <Row p={p}>
               <span
-                className={`flex-none min-w-[7.5rem] text-center font-label font-bold tabular-nums tracking-[-0.02em] text-xl sm:text-2xl border-[3px] border-black px-2 py-1 ${
+                className={`flex-none min-w-[7.5rem] text-center font-label font-bold tabular-nums tracking-[-0.02em] text-lead sm:text-card-title border-[3px] border-black px-2 py-1 ${
                   p.tone === 'data' ? 'bg-[var(--blue)] text-white' : 'bg-[var(--bar)] text-[color:var(--paper)]'
                 }`}
               >
@@ -73,7 +73,7 @@ export default function ProofPoints() {
                 <strong className="font-bold">{p.lead}</strong>
                 {p.rest}
               </span>
-              <span className="flex-none font-label text-sm text-[color:var(--blue-text)] underline underline-offset-4 decoration-2 group-hover:no-underline">
+              <span className="flex-none font-label text-label text-[color:var(--blue-text)] underline underline-offset-4 decoration-2 group-hover:no-underline">
                 {p.go} <span aria-hidden="true">→</span>
               </span>
             </Row>

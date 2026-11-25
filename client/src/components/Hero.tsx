@@ -77,7 +77,7 @@ function ScrambleLine({
   return (
     <motion.span
       className={`block whitespace-nowrap ${color}`}
-      // Reduced motion: the name renders final, with no clip reveal (MASTER 3.6)
+      // Reduced motion: the name renders final, with no clip reveal (DESIGN.md)
       initial={reduced ? false : { opacity: 0, y: 32, clipPath: 'inset(100% 0 0 0)' }}
       animate={{ opacity: 1, y: 0, clipPath: 'inset(0% 0 0 0)' }}
       transition={{ duration: HERO.line, delay, ease: easing.out }}

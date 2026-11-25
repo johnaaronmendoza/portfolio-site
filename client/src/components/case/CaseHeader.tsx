@@ -61,7 +61,9 @@ export default function CaseHeader({ slug, file, facts, note, links, stats, hero
                 {note}
               </p>
             )}
-            <div className="mt-6 flex flex-wrap gap-4">
+            {/* Right padding on phones keeps the full-width buttons out of the
+                chat launcher's lane (fixed bottom-right) */}
+            <div className="mt-6 flex flex-wrap gap-4 pr-16 sm:pr-0">
               {links.map(({ label, href, kind }) => (
                 <a
                   key={href}

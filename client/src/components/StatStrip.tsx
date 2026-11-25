@@ -1,16 +1,14 @@
 import { useId } from 'react';
-import Burst from './comic/Burst';
 
-/** burst: a blue comic POW star behind the value (band only, one at most);
- *  source: where the figure comes from, read as part of the label */
-export type Stat = { value: string; label: string; source?: string; burst?: boolean };
+/** source: where the figure comes from, read as part of the label */
+export type Stat = { value: string; label: string; source?: string };
 
-type Variant = 'band' | 'status' | 'inline';
+type Variant = 'status' | 'inline';
 
 interface StatStripProps {
   stats: Stat[];
-  /** band: Home's strip under the hero; status: a case-study header window's
-   *  last row; inline: big-number callouts inside a window body (no shadow) */
+  /** status: a case-study header window's last row; inline: big-number
+   *  callouts inside a window body (no shadow) */
   variant: Variant;
   className?: string;
 }
@@ -18,21 +16,16 @@ interface StatStripProps {
 // Cells are size containers, so the cqi caps keep a 6-glyph value ("89.61%")
 // inside its cell at every width from 320px; inline allows "1.757 m".
 const CELL: Record<Variant, string> = {
-  band: 'px-4 py-6 sm:px-6 sm:py-8 [container-type:inline-size]',
   status: 'p-4 [container-type:inline-size]',
   inline: 'p-3 sm:p-4 [container-type:inline-size]',
 };
 
 const VALUE: Record<Variant, string> = {
-  // Plex Mono is about 0.6em per glyph, so values can run larger than the
-  // old pixel face and still fit "89.61%" from 320px up
-  band: 'text-[length:min(36px,22cqi)] sm:text-[length:min(52px,22cqi)] lg:text-[length:min(44px,22cqi)] xl:text-[length:min(56px,22cqi)]',
   status: 'text-[length:min(36px,22cqi)] lg:text-[length:min(42px,22cqi)]',
   inline: 'text-[length:min(40px,20cqi)]',
 };
 
 const FRAME: Record<Variant, string> = {
-  band: '',
   status: 'border-t-[3px] border-black',
   inline: 'border-[3px] border-black',
 };
@@ -41,8 +34,9 @@ const FRAME: Record<Variant, string> = {
 const INLINE_LG_COLS = ['', 'lg:grid-cols-1', 'lg:grid-cols-2', 'lg:grid-cols-3', 'lg:grid-cols-4'];
 
 /**
- * Paper figure cells on black: 3px gaps draw the dividers. Label first in the
- * DOM for screen readers, number shown on top. Values render final (no count-up).
+ * Paper figure cells on black: 3px gaps draw the dividers. The figure is the
+ * term and its clause the description, so screen readers hear them in the
+ * order they show. Values render final (no count-up).
  */
 export default function StatStrip({ stats, variant, className = '' }: StatStripProps) {
   const headingId = useId();
@@ -53,42 +47,28 @@ export default function StatStrip({ stats, variant, className = '' }: StatStripP
   const cols = variant === 'status' ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-2';
   const list = (
     <dl className={`grid ${cols} ${lgCols} gap-[3px] bg-black text-black ${FRAME[variant]} ${className}`}>
-      {stats.map(({ value, label, source, burst }, i) => {
-        // Bursts only in Home's band: its cell padding holds the star's overhang
-        const pow = burst && variant === 'band';
-        return (
+      {stats.map(({ value, label, source }, i) => (
         <div
           key={label}
-          className={`flex flex-col-reverse justify-end gap-3 bg-[var(--paper)] ${CELL[variant]} ${
+          className={`flex flex-col gap-3 bg-[var(--paper)] ${CELL[variant]} ${
             // An odd last cell spans the 2-column row below lg
             inline && stats.length % 2 === 1 && i === stats.length - 1 ? 'col-span-2 lg:col-span-1' : ''
           }`}
         >
-          <dt className="font-mono text-body-sm sm:text-body leading-snug max-w-[18ch]">
+          <dt className={`self-start font-label font-bold tracking-[-0.02em] leading-none tabular-nums ${VALUE[variant]}`}>
+            {value}
+          </dt>
+          <dd className="font-sans text-body-sm sm:text-body leading-snug max-w-[18ch] lg:max-w-[24ch]">
             {label}
             {source && <span className="mt-2 block w-fit border-2 border-black px-2 py-0.5 font-label text-body-sm leading-[1.35]">{source}</span>}
-          </dt>
-          <dd className={`relative isolate self-start font-label font-bold tracking-[-0.02em] leading-none tabular-nums ${pow ? 'px-[0.8em] pt-[0.5em] pb-[0.45em] -mt-[0.5em]' : ''} ${VALUE[variant]}`}>
-            {/* POW star behind the number only. The padding gives the digits room
-                inside the star's inner points; the negative top margin stays inside
-                the cell's padding, and no side margin keeps the star 14px+ from the edge */}
-            {pow && (
-              <Burst
-                fill="var(--blue)"
-                rotate={-4}
-                className="absolute inset-0 -z-10 pointer-events-none"
-              />
-            )}
-            {value}
           </dd>
         </div>
-        );
-      })}
+      ))}
     </dl>
   );
 
-  // Home's band is already a labelled section and inline strips sit in one; the
-  // case header's strip gets its own (hidden) h2, after the page h1
+  // Inline strips sit in a labelled section already; the case header's strip
+  // gets its own (hidden) h2, after the page h1
   if (variant !== 'status') return list;
   return (
     <section aria-labelledby={headingId}>

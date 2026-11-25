@@ -15,7 +15,7 @@ const STEPS: Step[] = [
   { label: 'Sent' },
 ];
 
-const NUM = 'flex-shrink-0 min-w-[22px] text-center border-2 border-black bg-[var(--paper)] px-1 py-px font-label text-xs text-black tabular-nums';
+const NUM = 'flex-shrink-0 min-w-[22px] text-center border-2 border-black bg-[var(--paper)] px-1 py-px font-label text-label text-black tabular-nums';
 const LABEL = 'flex-1 min-w-0 font-sans font-bold text-body-sm sm:text-body leading-[1.35]';
 const ROW = 'flex items-center gap-2 min-h-11 px-3 py-2 border-2 border-black bg-[var(--paper)]';
 

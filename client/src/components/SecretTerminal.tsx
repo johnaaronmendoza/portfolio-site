@@ -327,7 +327,7 @@ export default function SecretTerminal({ defaultOpen = false }: { defaultOpen?: 
             onClick={close}
           />
 
-          {/* terminal.sh: terminal-variant window (MASTER 2.10) */}
+          {/* terminal.sh: terminal-variant window (DESIGN.md) */}
           <motion.div
             key="terminal"
             ref={dialogRef}
@@ -369,20 +369,21 @@ export default function SecretTerminal({ defaultOpen = false }: { defaultOpen?: 
 
               {/* Input row: the ring sits on the row; the input itself has no outline */}
               <div className="border-t-2 border-[color:var(--paper)] px-4 py-3 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--paper)] focus-within:outline-offset-[-6px]">
-                <span aria-hidden="true" className="font-mono text-base font-bold text-[color:var(--paper)] flex-shrink-0">$</span>
+                <span aria-hidden="true" className="font-mono text-body font-bold text-[color:var(--paper)] flex-shrink-0">$</span>
                 <input
                   ref={inputRef}
                   type="text"
+                  name="command"
                   value={input}
                   onChange={e => { setInput(e.target.value); play('type'); }}
                   onKeyDown={handleKey}
                   aria-label="Terminal command"
-                  className="flex-1 min-w-0 bg-transparent text-[color:var(--paper)] placeholder:text-[color:var(--paper)] placeholder:italic font-mono text-base outline-none caret-[var(--paper)]"
+                  className="flex-1 min-w-0 bg-transparent text-[color:var(--paper)] placeholder:text-[color:var(--paper)] placeholder:italic font-mono text-body outline-none caret-[var(--paper)]"
                   placeholder="type a command…"
                   spellCheck={false}
                   autoComplete="off"
                 />
-                <span className="hidden sm:inline font-mono text-sm text-[color:var(--paper)] flex-shrink-0">Esc to close</span>
+                <span className="hidden sm:inline font-mono text-label text-[color:var(--paper)] flex-shrink-0">Esc to close</span>
               </div>
             </div>
           </motion.div>

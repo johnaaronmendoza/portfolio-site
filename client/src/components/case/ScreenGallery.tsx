@@ -18,7 +18,8 @@ export type Shot = {
   /** What the screen shows (not a repeat of the caption) */
   alt: string;
   caption: string;
-  /** Art for phones (below 640px), with its own intrinsic size */
+  /** Art for phones (below 640px), with its own intrinsic size. A .webp is
+   *  served with its same-name .png as the fallback */
   srcMobile?: string;
   mobileWidth?: number;
   mobileHeight?: number;
@@ -87,9 +88,13 @@ export function ScreenFigure({
       style={portrait || hero ? undefined : { maxWidth: width }}
     />
   );
+  const mobilePng = srcMobile?.replace(/\.webp$/, '.png');
+  const mobile = { media: '(max-width: 639px)', width: mobileWidth, height: mobileHeight };
   const img = srcMobile || webp ? (
     <picture>
-      {srcMobile && <source media="(max-width: 639px)" srcSet={srcMobile} width={mobileWidth} height={mobileHeight} />}
+      {/* WebP phone art, its PNG, the WebP set, then the img */}
+      {srcMobile && mobilePng !== srcMobile && <source {...mobile} type="image/webp" srcSet={srcMobile} />}
+      {mobilePng && <source {...mobile} srcSet={mobilePng} />}
       {webp && <source type="image/webp" srcSet={toSrcSet(webp)} sizes={sizes} />}
       {image}
     </picture>

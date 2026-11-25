@@ -89,7 +89,7 @@ function SectionMenu({ active }: { active: string }) {
                     type="button"
                     onClick={() => go(id)}
                     aria-current={active === id ? 'location' : undefined}
-                    className={`flex w-full min-h-[44px] items-center gap-3 px-3 font-sans text-base font-bold text-left transition-colors duration-150 hover:bg-[var(--blue)] hover:text-black ${
+                    className={`flex w-full min-h-[44px] items-center gap-3 px-3 font-sans text-body font-bold text-left transition-colors duration-150 hover:bg-[var(--blue)] hover:text-black ${
                       active === id ? 'bg-[var(--bar)] text-[color:var(--paper)]' : 'text-[color:var(--text)]'
                     }`}
                   >
@@ -221,7 +221,7 @@ export default function SectionNav() {
               {/* Visible name on hover or keyboard focus; the aria-label carries it for screen readers */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute right-full mr-1 flex items-center gap-2 whitespace-nowrap border-[3px] border-black bg-[var(--bar)] px-2 py-1 font-label text-xs text-[color:var(--paper)] opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+                className="pointer-events-none absolute right-full mr-1 flex items-center gap-2 whitespace-nowrap border-[3px] border-black bg-[var(--bar)] px-2 py-1 font-label text-label text-[color:var(--paper)] opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
               >
                 {id === 'hero' && <PixelArt name="icon-home" size={16} />}
                 {label}

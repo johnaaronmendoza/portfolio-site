@@ -60,7 +60,7 @@ export default function Skills() {
   return (
     <FramerReveal>
       <Section className="text-[color:var(--text)]">
-        <SectionHeading text="SKILLS" icon="icon-skills" className="mb-10" />
+        <SectionHeading text="SKILLS" icon="icon-skills" />
 
         {/* keyboard.exe: the board in a window like every other section, with
             the plain list in its status bar (John, 17 Nov) */}
@@ -102,7 +102,7 @@ export default function Skills() {
                   </dt>
                   <dd className="font-sans text-body-sm sm:text-body leading-relaxed">
                     {group.skills.join(', ')}
-                    <span className="block text-sm text-[color:var(--text)] mt-1">Used in: {group.usedIn}</span>
+                    <span className="block text-body-sm text-[color:var(--text)] mt-1">Used in: {group.usedIn}</span>
                   </dd>
                 </div>
               ))}

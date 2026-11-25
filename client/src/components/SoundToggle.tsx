@@ -21,7 +21,7 @@ const PRESSED = 'translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_tra
  * bottom edge so it covers as little of the page as it can.
  */
 export function dockButton(pressed: boolean): string {
-  return `btn focus-ring-float min-w-[44px] flex-col gap-1 px-2 py-1 font-label text-xs leading-none ${
+  return `btn focus-ring-float min-w-[44px] flex-col gap-1 px-2 py-1 font-label text-label leading-none ${
     pressed ? `${PRESSED} bg-[var(--bar)] text-[color:var(--paper)]` : 'bg-[var(--paper)] text-black'
   }`;
 }

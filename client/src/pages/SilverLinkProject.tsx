@@ -1,6 +1,6 @@
 import CaseLayout from '@/components/case/CaseLayout';
 import CaseHeader, { GITHUB_PROFILE } from '@/components/case/CaseHeader';
-import { CaseSection, TechStack } from '@/components/case/CaseBlocks';
+import { CasePair, CaseSection, TechStack } from '@/components/case/CaseBlocks';
 import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
 import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
 import { PixelList } from '@/components/Hierarchy';
@@ -70,36 +70,38 @@ export default function SilverLinkProject() {
         heroShot={HERO_SHOT}
       />
 
-      <CaseSection
-        id="problem"
-        heading="The problem"
-        icon="icon-about"
-        lead="By 2030, **1 in 4** Singaporeans will be over 65."
-        file="problem.txt"
-      >
-        <PixelList
-          items={[
-            'Many seniors face **isolation** and are left out of digital life.',
-            'Young people miss what **older generations** can teach.',
-          ]}
-        />
-      </CaseSection>
+      <CasePair>
+        <CaseSection
+          id="problem"
+          heading="The problem"
+          icon="icon-about"
+          lead="By 2030, **1 in 4** Singaporeans will be over 65."
+          file="problem.txt"
+        >
+          <PixelList
+            items={[
+              'Many seniors face **isolation** and are left out of digital life.',
+              'Young people miss what **older generations** can teach.',
+            ]}
+          />
+        </CaseSection>
 
-      <CaseSection
-        id="what"
-        heading="What it does"
-        icon="icon-projects"
-        lead="A web platform where seniors and youth **swap skills** and meet at events."
-        file="what_it_does.md"
-      >
-        <PixelList
-          items={[
-            '**Book seats** at workshops, mentoring sessions and community events.',
-            'Host or watch **livestreams** with live chat.',
-            'Pick up **volunteering tasks** and earn badges.',
-          ]}
-        />
-      </CaseSection>
+        <CaseSection
+          id="what"
+          heading="What it does"
+          icon="icon-projects"
+          lead="A web platform where seniors and youth **swap skills** and meet at events."
+          file="what_it_does.md"
+        >
+          <PixelList
+            items={[
+              '**Book seats** at workshops, mentoring sessions and community events.',
+              'Host or watch **livestreams** with live chat.',
+              'Pick up **volunteering tasks** and earn badges.',
+            ]}
+          />
+        </CaseSection>
+      </CasePair>
 
       <ScreenGallery shots={SHOTS} />
 

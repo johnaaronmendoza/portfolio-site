@@ -31,7 +31,7 @@ export default function DeskAssistWindow() {
     <Window title="desk_assist.exe" bodyClassName="p-4 sm:p-5">
       <div className="grid gap-2">
         <span className="badge badge--status justify-self-start">In progress</span>
-        <h2 id="desk-assist-flow" className="font-display text-lead lg:text-card-title text-black text-balance">
+        <h2 id="desk-assist-flow" className="font-display text-lead lg:text-card-lead text-black text-balance">
           How Desk Assist will draft a reply
         </h2>
         <p className="hidden lg:block font-sans text-body-sm leading-normal text-pretty">

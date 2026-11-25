@@ -1,6 +1,6 @@
 import CaseLayout from '@/components/case/CaseLayout';
 import CaseHeader, { GITHUB_PROFILE } from '@/components/case/CaseHeader';
-import { CaseSection, TechStack } from '@/components/case/CaseBlocks';
+import { CasePair, CaseSection, TechStack } from '@/components/case/CaseBlocks';
 import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
 import { PixelList } from '@/components/Hierarchy';
 
@@ -54,28 +54,30 @@ export default function AIFinanceProject() {
         </div>
       </CaseSection>
 
-      <CaseSection
-        id="problem"
-        heading="The problem"
-        icon="icon-about"
-        lead="Shipping and logistics analysts juggle **5 scattered sources**, with no single view."
-      />
-
-      <CaseSection
-        id="what"
-        heading="What it does"
-        icon="icon-projects"
-        lead="Turns market data and news into a **Power BI**-ready warehouse and daily brief."
-        file="what_it_does.md"
-      >
-        <PixelList
-          items={[
-            'Pulls S&P 500, Brent crude, USD/SGD, **Maersk** shares and geopolitical news.',
-            'Computes **volatility**, moving averages and cross-asset correlations.',
-            'Sorts headlines into **9 sectors**, scores sentiment and flags supply-chain risk.',
-          ]}
+      <CasePair>
+        <CaseSection
+          id="problem"
+          heading="The problem"
+          icon="icon-about"
+          lead="Shipping and logistics analysts juggle **5 scattered sources**, with no single view."
         />
-      </CaseSection>
+
+        <CaseSection
+          id="what"
+          heading="What it does"
+          icon="icon-projects"
+          lead="Turns market data and news into a **Power BI**-ready warehouse and daily brief."
+          file="what_it_does.md"
+        >
+          <PixelList
+            items={[
+              'Pulls S&P 500, Brent crude, USD/SGD, **Maersk** shares and geopolitical news.',
+              'Computes **volatility**, moving averages and cross-asset correlations.',
+              'Sorts headlines into **9 sectors**, scores sentiment and flags supply-chain risk.',
+            ]}
+          />
+        </CaseSection>
+      </CasePair>
 
       <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">
         <TechStack tags={['Python', 'Pandas', 'NumPy', 'SQLite', 'Pytest', 'Power BI']} />

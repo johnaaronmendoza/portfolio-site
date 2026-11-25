@@ -51,7 +51,8 @@ export default function CaseHeader({ slug, file, facts, note, links, stats, hero
             <span className="badge badge--paper col-start-1 row-start-1 self-start justify-self-start">
               {project.year}
             </span>
-            <h1 className="mt-4 font-display text-black break-words text-balance text-card-lead sm:text-h1">
+            {/* Phones: about 42px, 1.3x over the 32px case h2 */}
+            <h1 className="mt-4 font-display text-black break-words text-balance text-[length:clamp(36px,11.2vw,42px)] sm:text-h1">
               {project.name}
             </h1>
             <Lead text={project.description} tone="paper" className="mt-4" />

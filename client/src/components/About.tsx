@@ -1,7 +1,7 @@
 /**
  * About Section: the lead on the page, then one "about_me.txt" window that
  * fills the content width: the framed photo top-left, the two-paragraph bio
- * beside it at 62ch, and the two facts not stated elsewhere on Home as plain
+ * beside it at 64ch at most, and the two facts not stated elsewhere on Home as plain
  * labels (study, graduation and the LGA role are in the hero, Experience and
  * footer), in a third column from xl.
  */
@@ -40,11 +40,11 @@ export default function About() {
       />
 
       <FramerReveal delay={0.1}>
-        {/* Fills the content width: photo, then the bio (64ch, under 80
-            characters a line) with the two facts and their rule across the
-            full column under it at every width */}
-        <Window title="about_me.txt" bodyClassName="grid gap-6 md:grid-cols-[auto_minmax(0,1fr)] md:gap-x-10 items-start p-6 sm:p-8 lg:p-10">
-          <div className="md:row-span-2 border-[3px] border-black shadow-8bit size-48 sm:size-52 lg:size-64 overflow-hidden">
+        {/* Fills the content width: photo, then the bio (64ch at most, under
+            80 characters a line) with the two facts and their rule under it;
+            from xl the facts take a third column beside the bio */}
+        <Window title="about_me.txt" bodyClassName="grid gap-6 md:grid-cols-[auto_minmax(0,1fr)] xl:grid-cols-[auto_minmax(0,1fr)_minmax(0,18rem)] md:gap-x-10 items-start p-6 sm:p-8 lg:p-10">
+          <div className="md:row-span-2 xl:row-span-1 border-[3px] border-black shadow-8bit size-48 sm:size-52 lg:size-64 overflow-hidden">
             <PixelatedImage
               src={PORTRAIT[0].src}
               srcSet={PORTRAIT}
@@ -60,7 +60,7 @@ export default function About() {
               </p>
             ))}
           </div>
-          <ul aria-label="Quick facts" className="flex flex-wrap gap-x-6 gap-y-2 border-t-2 border-black pt-4 font-sans text-body-sm sm:text-body text-[color:var(--text)]">
+          <ul aria-label="Quick facts" className="flex flex-wrap xl:flex-col gap-x-6 gap-y-2 xl:gap-y-3 border-t-2 xl:border-t-0 xl:border-l-2 border-black pt-4 xl:pt-0 xl:pl-6 font-sans text-body-sm sm:text-body text-[color:var(--text)]">
             {FACTS.map(({ icon, text }) => (
               <li key={text} className="flex items-center gap-2">
                 <PixelArt name={icon} size={16} lazy />

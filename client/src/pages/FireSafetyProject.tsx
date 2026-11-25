@@ -1,6 +1,6 @@
 import CaseLayout from '@/components/case/CaseLayout';
 import CaseHeader, { GITHUB_PROFILE } from '@/components/case/CaseHeader';
-import { CaseSection, LeadS, TechStack } from '@/components/case/CaseBlocks';
+import { CasePair, CaseSection, LeadS, TechStack } from '@/components/case/CaseBlocks';
 import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
 import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
 import { PixelList } from '@/components/Hierarchy';
@@ -91,40 +91,42 @@ export default function FireSafetyProject() {
         heroShot={HERO_SHOT}
       />
 
-      <CaseSection
-        id="problem"
-        heading="The problem"
-        icon="icon-about"
-        lead="SCDF fire drills draw **low turnout**, especially among elderly HDB residents."
-        file="problem.txt"
-      >
-        <PixelList
-          items={[
-            "About 1.1 million HDB flats house **80%** of Singapore’s population.",
-            'Barriers: mobility, language and **unfamiliar escape routes**.',
-          ]}
-        />
-      </CaseSection>
+      <CasePair>
+        <CaseSection
+          id="problem"
+          heading="The problem"
+          icon="icon-about"
+          lead="SCDF fire drills draw **low turnout**, especially among elderly HDB residents."
+          file="problem.txt"
+        >
+          <PixelList
+            items={[
+              "About 1.1 million HDB flats house **80%** of Singapore’s population.",
+              'Barriers: mobility, language and **unfamiliar escape routes**.',
+            ]}
+          />
+        </CaseSection>
 
-      <CaseSection
-        id="what"
-        heading="What it does"
-        icon="icon-projects"
-        lead="Residents rehearse **on demand** in their own block, no group drill needed."
-        file="what_it_does.md"
-      >
-        <PixelList
-          items={[
-            'Follow **AR arrows** from your unit to the nearest exit.',
-            'Mark a stairwell **smoke-filled** and the route re-plans.',
-            '**Scan an extinguisher** to identify its type.',
-          ]}
-        />
-      </CaseSection>
+        <CaseSection
+          id="what"
+          heading="What it does"
+          icon="icon-projects"
+          lead="Residents rehearse **on demand** in their own block, no group drill needed."
+          file="what_it_does.md"
+        >
+          <PixelList
+            items={[
+              'Follow **AR arrows** from your unit to the nearest exit.',
+              'Mark a stairwell **smoke-filled** and the route re-plans.',
+              '**Scan an extinguisher** to identify its type.',
+            ]}
+          />
+        </CaseSection>
+      </CasePair>
 
       <ScreenGallery shots={SHOTS} />
 
-      <CaseSection id="part" heading="My part" icon="icon-experience" file="my_part.log">
+      <CaseSection id="part" heading="My part" icon="icon-experience" file="my_part.log" narrow>
         <div className="space-y-3 lg:space-y-4">
           <LeadS text="I built the **algorithms and AR**: 49 of the team’s 120 commits." />
           <PixelList

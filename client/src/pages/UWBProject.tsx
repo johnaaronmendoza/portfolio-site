@@ -1,6 +1,6 @@
 import CaseLayout from '@/components/case/CaseLayout';
 import CaseHeader, { GITHUB_PROFILE } from '@/components/case/CaseHeader';
-import { CaseSection, LeadS, TechStack } from '@/components/case/CaseBlocks';
+import { CasePair, CaseSection, LeadS, TechStack } from '@/components/case/CaseBlocks';
 import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
 import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
 import { PixelList } from '@/components/Hierarchy';
@@ -92,29 +92,31 @@ export default function UWBProject() {
         heroShot={HERO_SHOT}
       />
 
-      <CaseSection
-        id="problem"
-        heading="The problem"
-        icon="icon-about"
-        lead="UWB positions to centimetres at best; blocked (NLOS) signals **cut accuracy sharply**."
-        file="problem.txt"
-      >
-        <PixelList items={['Spotting them is a step toward reliable positioning for **robots and drones**.']} />
-      </CaseSection>
+      <CasePair>
+        <CaseSection
+          id="problem"
+          heading="The problem"
+          icon="icon-about"
+          lead="UWB positions to centimetres at best; blocked (NLOS) signals **cut accuracy sharply**."
+          file="problem.txt"
+        >
+          <PixelList items={['Spotting them is a step toward reliable positioning for **robots and drones**.']} />
+        </CaseSection>
 
-      <CaseSection
-        id="what"
-        heading="What it does"
-        icon="icon-projects"
-        lead="Classifies the two shortest **dominant paths** as clear or blocked."
-        file="what_it_does.md"
-      >
-        <PixelList items={['**Linear regression** estimates range on both paths.']} />
-      </CaseSection>
+        <CaseSection
+          id="what"
+          heading="What it does"
+          icon="icon-projects"
+          lead="Classifies the two shortest **dominant paths** as clear or blocked."
+          file="what_it_does.md"
+        >
+          <PixelList items={['**Linear regression** estimates range on both paths.']} />
+        </CaseSection>
+      </CasePair>
 
       <ScreenGallery heading="Charts" shots={SHOTS} />
 
-      <CaseSection id="part" heading="My part" icon="icon-experience" file="my_part.log">
+      <CaseSection id="part" heading="My part" icon="icon-experience" file="my_part.log" narrow>
         <div className="space-y-3 lg:space-y-4">
           <LeadS text="I worked on the **data mining methodology**." />
           <PixelList

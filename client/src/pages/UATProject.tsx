@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import CaseLayout from '@/components/case/CaseLayout';
 import CaseHeader from '@/components/case/CaseHeader';
-import { CaseSection, SubHeading, TechStack } from '@/components/case/CaseBlocks';
+import { CasePair, CaseSection, SubHeading, TechStack } from '@/components/case/CaseBlocks';
 import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
 import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
 import { PixelList } from '@/components/Hierarchy';
@@ -201,28 +201,30 @@ export default function UATProject() {
         heroShot={HERO_SHOT}
       />
 
-      <CaseSection
-        id="problem"
-        heading="The problem"
-        icon="icon-about"
-        lead="UAT teams need one view of what **blocks go-live**; spreadsheets break down fast."
-      />
-
-      <CaseSection
-        id="what"
-        heading="What it does"
-        icon="icon-projects"
-        lead="Logs defects and test runs, and links every **failed test** to its defect."
-        file="what_it_does.md"
-      >
-        <PixelList
-          items={[
-            'Defects carry **severity**, priority, expected vs actual and steps to reproduce.',
-            'Charts defects by severity, module and status, plus a **monthly trend**.',
-            '**One-click CSV** export; separate access for each of the 4 roles.',
-          ]}
+      <CasePair>
+        <CaseSection
+          id="problem"
+          heading="The problem"
+          icon="icon-about"
+          lead="UAT teams need one view of what **blocks go-live**; spreadsheets break down fast."
         />
-      </CaseSection>
+
+        <CaseSection
+          id="what"
+          heading="What it does"
+          icon="icon-projects"
+          lead="Logs defects and test runs, and links every **failed test** to its defect."
+          file="what_it_does.md"
+        >
+          <PixelList
+            items={[
+              'Defects carry **severity**, priority, expected vs actual and steps to reproduce.',
+              'Charts defects by severity, module and status, plus a **monthly trend**.',
+              '**One-click CSV** export; separate access for each of the 4 roles.',
+            ]}
+          />
+        </CaseSection>
+      </CasePair>
 
       <ScreenGallery shots={SHOTS} />
 

@@ -102,7 +102,9 @@ function ExperienceWindow({ entry, lead = false }: { entry: Entry; lead?: boolea
             </span>
           ))}
         </div>
-        <h3 className={`font-display text-black mb-2 text-balance ${lead ? 'text-card-lead leading-[1.1]' : 'text-card-title'}`}>
+        {/* 24 for every role, so the hero's desk_assist.exe h2 stays above
+            it; the lead keeps its weight through its full-width window */}
+        <h3 className="font-display text-card-title text-black mb-2 text-balance">
           {entry.org}
         </h3>
         <p className="font-sans text-body-sm sm:text-body font-bold text-pretty">

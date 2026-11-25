@@ -1,7 +1,7 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
-import { motionTokens } from '@/lib/motion-tokens';
-import { WindowBar } from './Window';
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motionTokens } from "@/lib/motion-tokens";
+import { WindowBar } from "./Window";
 
 /** Shown for 1.8s each time it mounts: App.tsx listens for the code, plays the
  *  sound, unlocks the achievement and remounts this (keyed) per entry */
@@ -25,7 +25,10 @@ export default function KonamiOverlay() {
           initial={{ opacity: 0, y: motionTokens.distance.sm }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
+          transition={{
+            duration: motionTokens.duration.fast,
+            ease: motionTokens.easing.out,
+          }}
         >
           <div className="window w-full max-w-sm">
             <WindowBar title="cheat_code.exe" />
@@ -33,9 +36,7 @@ export default function KonamiOverlay() {
               <p className="font-label text-label text-[color:var(--paper)] mb-3">
                 <span aria-hidden="true">🎮 </span>Cheat code activated
               </p>
-              <p className="font-label text-label leading-loose">
-                ↑↑↓↓←→←→BA
-              </p>
+              <p className="font-label text-label leading-loose">↑↑↓↓←→←→BA</p>
               <p className="font-sans text-body-sm mt-3">
                 +30 lives. Enjoy the portfolio.
               </p>

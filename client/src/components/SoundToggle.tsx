@@ -1,4 +1,4 @@
-import { play, setSoundOn, useSoundOn } from '@/hooks/useSound';
+import { play, setSoundOn, useSoundOn } from "@/hooks/useSound";
 
 /**
  * Floating controls (menu, Pause motion, Sound). Below lg a full-width band
@@ -9,9 +9,10 @@ import { play, setSoundOn, useSoundOn } from '@/hooks/useSound';
  * Sound sits in their header.
  */
 export const FLOAT_DOCK =
-  'fixed z-40 flex items-center gap-2 max-lg:inset-x-0 max-lg:bottom-0 max-lg:px-4 max-lg:py-2 max-lg:bg-[var(--page)] max-lg:border-t-[3px] max-lg:border-black lg:bottom-6 lg:left-4 lg:flex-col lg:items-stretch [@media(max-height:500px)]:py-1 lg:[@media(max-height:500px)]:bottom-1';
+  "fixed z-40 flex items-center gap-2 max-lg:inset-x-0 max-lg:bottom-0 max-lg:px-4 max-lg:py-2 max-lg:bg-[var(--page)] max-lg:border-t-[3px] max-lg:border-black lg:bottom-6 lg:left-4 lg:flex-col lg:items-stretch [@media(max-height:500px)]:py-1 lg:[@media(max-height:500px)]:bottom-1";
 
-const PRESSED = 'translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]';
+const PRESSED =
+  "translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]";
 
 /**
  * A dock button: glyph over a short word, so the state reads without hover.
@@ -22,24 +23,34 @@ const PRESSED = 'translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_tra
  */
 export function dockButton(pressed: boolean): string {
   return `btn focus-ring-float min-w-[44px] flex-col gap-1 px-2 py-1 font-label text-label leading-none ${
-    pressed ? `${PRESSED} bg-[var(--bar)] text-[color:var(--paper)]` : 'bg-[var(--paper)] text-black'
+    pressed
+      ? `${PRESSED} bg-[var(--bar)] text-[color:var(--paper)]`
+      : "bg-[var(--paper)] text-black"
   }`;
 }
-export const DOCK_WORD = 'whitespace-nowrap lg:max-[1439px]:hidden [@media(max-height:500px)]:hidden';
+export const DOCK_WORD =
+  "whitespace-nowrap lg:max-[1439px]:hidden [@media(max-height:500px)]:hidden";
 
 /** 8x7 pixel glyphs in currentColor, so they invert with the button fill */
-const SPEAKER = 'M0 2h2v3H0zM2 1h1v5H2zM3 0h1v7H3z';
+const SPEAKER = "M0 2h2v3H0zM2 1h1v5H2zM3 0h1v7H3z";
 const GLYPHS = {
-  menu: 'M0 1h8v1H0zM0 3h8v1H0zM0 5h8v1H0z',
-  pause: 'M1 1h2v5H1zM5 1h2v5H5z',
-  play: 'M2 0h1v7H2zM3 1h1v5H3zM4 2h1v3H4zM5 3h1v1H5z',
+  menu: "M0 1h8v1H0zM0 3h8v1H0zM0 5h8v1H0z",
+  pause: "M1 1h2v5H1zM5 1h2v5H5z",
+  play: "M2 0h1v7H2zM3 1h1v5H3zM4 2h1v3H4zM5 3h1v1H5z",
   sound: `${SPEAKER}M5 2h1v3H5zM7 1h1v5H7z`,
   mute: `${SPEAKER}M5 2h1v1H5zM7 2h1v1H7zM6 3h1v1H6zM5 4h1v1H5zM7 4h1v1H7z`,
 };
 
 export function DockGlyph({ name }: { name: keyof typeof GLYPHS }) {
   return (
-    <svg aria-hidden="true" viewBox="0 0 8 7" width="16" height="14" shapeRendering="crispEdges" className="flex-shrink-0">
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 8 7"
+      width="16"
+      height="14"
+      shapeRendering="crispEdges"
+      className="flex-shrink-0"
+    >
       <path d={GLYPHS[name]} fill="currentColor" />
     </svg>
   );
@@ -51,13 +62,17 @@ export function DockGlyph({ name }: { name: keyof typeof GLYPHS }) {
  * show the state; aria-pressed carries it for screen readers, whose name for
  * the button stays "Sound". `bar`: the case-page header (ghost on black).
  */
-export default function SoundToggle({ variant = 'dock' }: { variant?: 'dock' | 'bar' }) {
+export default function SoundToggle({
+  variant = "dock",
+}: {
+  variant?: "dock" | "bar";
+}) {
   const on = useSoundOn();
-  const bar = variant === 'bar';
+  const bar = variant === "bar";
 
   const toggle = () => {
     setSoundOn(!on);
-    if (!on) play('click'); // confirms the switch, only after the visitor asked for sound
+    if (!on) play("click"); // confirms the switch, only after the visitor asked for sound
   };
 
   return (
@@ -68,17 +83,24 @@ export default function SoundToggle({ variant = 'dock' }: { variant?: 'dock' | '
       title="Sound"
       className={
         bar
-          ? `btn px-3 ${on ? 'bg-[var(--paper)] text-black border-[color:var(--paper)] shadow-none' : 'btn-ghost bg-transparent text-[color:var(--paper)] border-[color:var(--paper)] hover:bg-[var(--paper)] hover:text-[color:var(--text)]'}`
+          ? `btn px-3 ${on ? "bg-[var(--paper)] text-black border-[color:var(--paper)] shadow-none" : "btn-ghost bg-transparent text-[color:var(--paper)] border-[color:var(--paper)] hover:bg-[var(--paper)] hover:text-[color:var(--text)]"}`
           : dockButton(on)
       }
     >
-      <DockGlyph name={on ? 'sound' : 'mute'} />
+      <DockGlyph name={on ? "sound" : "mute"} />
       <span className="sr-only">Sound</span>
       {/* Dock: "Off" / "On" where space is short, "Sound off" where it fits;
           the case-page header always says "Sound off" */}
-      <span aria-hidden="true" className={bar ? 'whitespace-nowrap' : DOCK_WORD}>
-        <span className={bar ? undefined : 'hidden min-[1440px]:inline'}>Sound </span>
-        <span className={bar ? undefined : 'max-[1439px]:capitalize'}>{on ? 'on' : 'off'}</span>
+      <span
+        aria-hidden="true"
+        className={bar ? "whitespace-nowrap" : DOCK_WORD}
+      >
+        <span className={bar ? undefined : "hidden min-[1440px]:inline"}>
+          Sound{" "}
+        </span>
+        <span className={bar ? undefined : "max-[1439px]:capitalize"}>
+          {on ? "on" : "off"}
+        </span>
       </span>
     </button>
   );

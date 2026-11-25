@@ -1,17 +1,36 @@
-import CaseLayout from '@/components/case/CaseLayout';
-import CaseHeader, { GITHUB_PROFILE } from '@/components/case/CaseHeader';
-import { CasePair, CaseSection, TechStack } from '@/components/case/CaseBlocks';
-import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
-import { PixelList } from '@/components/Hierarchy';
+import CaseLayout from "@/components/case/CaseLayout";
+import CaseHeader, { GITHUB_PROFILE } from "@/components/case/CaseHeader";
+import { CasePair, CaseSection, TechStack } from "@/components/case/CaseBlocks";
+import FlowDiagram, { type FlowStep } from "@/components/FlowDiagram";
+import { PixelList } from "@/components/Hierarchy";
 
 // A real sequence: five stages with two gates, then the NLP step on the loaded news
 const PIPELINE: FlowStep[] = [
-  { label: 'Extract', detail: 'S&P 500, Brent crude, USD/SGD, Maersk (logistics stand-in), news' },
-  { label: 'Validate (raw gate)', detail: 'Schema, row counts, missing values' },
-  { label: 'Transform', detail: 'Volatility, moving averages, correlations, standard deviations' },
-  { label: 'Validate (clean gate)', detail: 'Schema and row parity before load' },
-  { label: 'Load', detail: 'SQLite warehouse with a pipeline_runs audit table' },
-  { label: 'NLP engine', actor: 'AI', detail: '9 sectors, sentiment, supply-chain risk, daily executive brief' },
+  {
+    label: "Extract",
+    detail: "S&P 500, Brent crude, USD/SGD, Maersk (logistics stand-in), news",
+  },
+  {
+    label: "Validate (raw gate)",
+    detail: "Schema, row counts, missing values",
+  },
+  {
+    label: "Transform",
+    detail: "Volatility, moving averages, correlations, standard deviations",
+  },
+  {
+    label: "Validate (clean gate)",
+    detail: "Schema and row parity before load",
+  },
+  {
+    label: "Load",
+    detail: "SQLite warehouse with a pipeline_runs audit table",
+  },
+  {
+    label: "NLP engine",
+    actor: "AI",
+    detail: "9 sectors, sentiment, supply-chain risk, daily executive brief",
+  },
 ];
 
 export default function AIFinanceProject() {
@@ -23,15 +42,15 @@ export default function AIFinanceProject() {
         slug="ai-finance"
         file="ai_finance_insights.py"
         facts={[
-          { icon: 'icon-projects', text: 'Data pipeline with NLP' },
-          { icon: 'globe', text: 'Shipping and logistics' },
+          { icon: "icon-projects", text: "Data pipeline with NLP" },
+          { icon: "globe", text: "Shipping and logistics" },
         ]}
         links={[GITHUB_PROFILE]}
         stats={[
-          { value: '5', label: 'sources: S&P\u00a0500, oil, FX, Maersk, news' },
-          { value: '9', label: 'sectors the NLP sorts headlines into' },
-          { value: '2', label: 'quality gates that stop bad data' },
-          { value: '100%', label: 'Pytest coverage on extract and transform' },
+          { value: "5", label: "sources: S&P\u00a0500, oil, FX, Maersk, news" },
+          { value: "9", label: "sectors the NLP sorts headlines into" },
+          { value: "2", label: "quality gates that stop bad data" },
+          { value: "100%", label: "Pytest coverage on extract and transform" },
         ]}
       />
 
@@ -46,9 +65,9 @@ export default function AIFinanceProject() {
           <FlowDiagram steps={PIPELINE} labelledBy="how-heading" lgCols={3} />
           <PixelList
             items={[
-              '**Star schema** with a Dim_Date table, ready for Power BI.',
-              '**100% Pytest coverage** on extraction and transformation.',
-              'Every run logged; all settings in one **config.py**.',
+              "**Star schema** with a Dim_Date table, ready for Power BI.",
+              "**100% Pytest coverage** on extraction and transformation.",
+              "Every run logged; all settings in one **config.py**.",
             ]}
           />
         </div>
@@ -71,16 +90,23 @@ export default function AIFinanceProject() {
         >
           <PixelList
             items={[
-              'Pulls S&P 500, Brent crude, USD/SGD, **Maersk** shares and geopolitical news.',
-              'Computes **volatility**, moving averages and cross-asset correlations.',
-              'Sorts headlines into **9 sectors**, scores sentiment and flags supply-chain risk.',
+              "Pulls S&P 500, Brent crude, USD/SGD, **Maersk** shares and geopolitical news.",
+              "Computes **volatility**, moving averages and cross-asset correlations.",
+              "Sorts headlines into **9 sectors**, scores sentiment and flags supply-chain risk.",
             ]}
           />
         </CaseSection>
       </CasePair>
 
-      <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">
-        <TechStack tags={['Python', 'Pandas', 'NumPy', 'SQLite', 'Pytest', 'Power BI']} />
+      <CaseSection
+        id="stack"
+        heading="Tech stack"
+        icon="floppy"
+        file="stack.txt"
+      >
+        <TechStack
+          tags={["Python", "Pandas", "NumPy", "SQLite", "Pytest", "Power BI"]}
+        />
       </CaseSection>
     </CaseLayout>
   );

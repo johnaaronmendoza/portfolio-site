@@ -30,10 +30,17 @@ class ErrorBoundary extends Component<Props, State> {
 
     return (
       <main className="flex min-h-screen items-center justify-center px-4 py-8 text-[color:var(--text)]">
-        <Window title="error.exe" className="w-full max-w-lg" bodyClassName="space-y-4 p-6 sm:p-8">
-          <h1 className="font-display text-card-title sm:text-card-lead">Something went wrong</h1>
+        <Window
+          title="error.exe"
+          className="w-full max-w-lg"
+          bodyClassName="space-y-4 p-6 sm:p-8"
+        >
+          <h1 className="font-display text-card-title sm:text-card-lead">
+            Something went wrong
+          </h1>
           <p className="font-sans text-body leading-relaxed">
-            This page stopped working. Reload to try again, or go to the home page.
+            This page stopped working. Reload to try again, or go to the home
+            page.
           </p>
           <p className="font-sans text-body leading-relaxed">
             Still stuck? Email me at{" "}
@@ -45,7 +52,11 @@ class ErrorBoundary extends Component<Props, State> {
             </a>
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
-            <button type="button" onClick={() => window.location.reload()} className="btn btn-primary">
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="btn btn-primary"
+            >
               Reload
             </button>
             {/* A full page load, so a broken app state doesn't come along */}

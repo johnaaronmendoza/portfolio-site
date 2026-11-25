@@ -1,71 +1,114 @@
-import CaseLayout from '@/components/case/CaseLayout';
-import CaseHeader, { GITHUB_PROFILE } from '@/components/case/CaseHeader';
-import { CasePair, CaseSection, LeadS, TechStack } from '@/components/case/CaseBlocks';
-import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
-import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
-import { PixelList } from '@/components/Hierarchy';
-import StatStrip from '@/components/StatStrip';
-import { caseWebp } from '@/lib/images';
-import onboardingImg from '@assets/firesafety_p29_img1.png';
-import dashboardImg from '@assets/firesafety_p29_img2.png';
-import drillSetupImg from '@assets/firesafety_p29_img3.png';
-import floorplanImg from '@assets/firesafety_p29_img4.png';
-import arImg from '@assets/firesafety_p29_img5.png';
-import extinguisherImg from '@assets/firesafety_p30_img0.png';
-import quizImg from '@assets/firesafety_p30_img1.png';
-import analyticsImg from '@assets/firesafety_p30_img3.png';
+import CaseLayout from "@/components/case/CaseLayout";
+import CaseHeader, { GITHUB_PROFILE } from "@/components/case/CaseHeader";
+import {
+  CasePair,
+  CaseSection,
+  LeadS,
+  TechStack,
+} from "@/components/case/CaseBlocks";
+import ScreenGallery, { type Shot } from "@/components/case/ScreenGallery";
+import FlowDiagram, { type FlowStep } from "@/components/FlowDiagram";
+import { PixelList } from "@/components/Hierarchy";
+import StatStrip from "@/components/StatStrip";
+import { caseWebp } from "@/lib/images";
+import onboardingImg from "@assets/firesafety_p29_img1.png";
+import dashboardImg from "@assets/firesafety_p29_img2.png";
+import drillSetupImg from "@assets/firesafety_p29_img3.png";
+import floorplanImg from "@assets/firesafety_p29_img4.png";
+import arImg from "@assets/firesafety_p29_img5.png";
+import extinguisherImg from "@assets/firesafety_p30_img0.png";
+import quizImg from "@assets/firesafety_p30_img1.png";
+import analyticsImg from "@assets/firesafety_p30_img3.png";
 
 const HERO_SHOT: Shot = {
-  file: 'ar_navigation.png', src: arImg, webp: caseWebp('firesafety/firesafety_p29_img5', 331, ['@full', 436]), width: 436, height: 737,
-  caption: 'AR drill: arrows on the camera view.',
+  file: "ar_navigation.png",
+  src: arImg,
+  webp: caseWebp("firesafety/firesafety_p29_img5", 331, ["@full", 436]),
+  width: 436,
+  height: 737,
+  caption: "AR drill: arrows on the camera view.",
   alt: "AR Drill screens: red chevron arrows over a live corridor view, a display of steps, distance and time, a 'Path lost' warning and tips for fixing tracking.",
 };
 
 const SHOTS: Shot[] = [
   {
-    file: 'onboarding.png', src: onboardingImg, webp: caseWebp('firesafety/firesafety_p29_img1', 896), width: 896, height: 564, span: true,
-    caption: 'Onboarding: extinguisher scans and safety alerts.',
+    file: "onboarding.png",
+    src: onboardingImg,
+    webp: caseWebp("firesafety/firesafety_p29_img1", 896),
+    width: 896,
+    height: 564,
+    span: true,
+    caption: "Onboarding: extinguisher scans and safety alerts.",
     alt: "Three phone screens: the app’s shield-and-flame logo, an onboarding card 'Scan Extinguisher' and an onboarding card 'Stay Informed'.",
   },
   {
-    file: 'dashboard.png', src: dashboardImg, webp: caseWebp('firesafety/firesafety_p29_img2', 605), width: 605, height: 520,
-    caption: 'Home: start a drill or open a tool.',
-    alt: 'Fire Safety Drill home screen with a Start drill button and menu items for floor plan, extinguisher ID, safety quiz, history and settings.',
+    file: "dashboard.png",
+    src: dashboardImg,
+    webp: caseWebp("firesafety/firesafety_p29_img2", 605),
+    width: 605,
+    height: 520,
+    caption: "Home: start a drill or open a tool.",
+    alt: "Fire Safety Drill home screen with a Start drill button and menu items for floor plan, extinguisher ID, safety quiz, history and settings.",
   },
   {
-    file: 'drill_setup.png', src: drillSetupImg, webp: caseWebp('firesafety/firesafety_p29_img3', 697), width: 790, height: 487,
-    caption: 'Drill setup: block type, then unit.',
-    alt: 'Drill Setup screens: a unit dropdown and a summary for Block 123 Ang Mo Kio Ave 4, floor 12, unit 12-01, with a Start drill button.',
+    file: "drill_setup.png",
+    src: drillSetupImg,
+    webp: caseWebp("firesafety/firesafety_p29_img3", 697),
+    width: 790,
+    height: 487,
+    caption: "Drill setup: block type, then unit.",
+    alt: "Drill Setup screens: a unit dropdown and a summary for Block 123 Ang Mo Kio Ave 4, floor 12, unit 12-01, with a Start drill button.",
   },
   {
-    file: 'floor_plan.png', src: floorplanImg, webp: caseWebp('firesafety/firesafety_p29_img4', 315, ['@full', 586]), width: 586, height: 1041,
+    file: "floor_plan.png",
+    src: floorplanImg,
+    webp: caseWebp("firesafety/firesafety_p29_img4", 315, ["@full", 586]),
+    width: 586,
+    height: 1041,
     caption: "Floor plan: Dijkstra’s shortest route to the nearest exit.",
-    alt: 'Floor Plan screens: a node graph of rooms, stairwells and exits, with the shortest route drawn in red from the chosen unit to an exit, for slab and point blocks.',
+    alt: "Floor Plan screens: a node graph of rooms, stairwells and exits, with the shortest route drawn in red from the chosen unit to an exit, for slab and point blocks.",
   },
   {
-    file: 'extinguisher_id.png', src: extinguisherImg, webp: caseWebp('firesafety/firesafety_p30_img0', 697, ['@full', 911]), width: 911, height: 744,
-    caption: 'Extinguisher ID: type and suitable fires, on-device.',
+    file: "extinguisher_id.png",
+    src: extinguisherImg,
+    webp: caseWebp("firesafety/firesafety_p30_img0", 697, ["@full", 911]),
+    width: 911,
+    height: 744,
+    caption: "Extinguisher ID: type and suitable fires, on-device.",
     alt: "Extinguisher ID screen framing a red extinguisher, labelled CO2 at 78% confidence with suitable fire types, next to a 'How to scan' help dialog.",
   },
   {
-    file: 'safety_quiz.png', src: quizImg, webp: caseWebp('firesafety/firesafety_p30_img1', 947), width: 947, height: 642, span: true,
-    caption: 'Picture quiz with SCDF-based explanations.',
-    alt: 'Safety Quiz screens: a question on using the lift in a fire, a question on what to do when the alarm sounds, and a result of 4 out of 8 correct.',
+    file: "safety_quiz.png",
+    src: quizImg,
+    webp: caseWebp("firesafety/firesafety_p30_img1", 947),
+    width: 947,
+    height: 642,
+    span: true,
+    caption: "Picture quiz with SCDF-based explanations.",
+    alt: "Safety Quiz screens: a question on using the lift in a fire, a question on what to do when the alarm sounds, and a result of 4 out of 8 correct.",
   },
   {
-    file: 'analytics.png', src: analyticsImg, webp: caseWebp('firesafety/firesafety_p30_img3', 484, ['@full', 754]), width: 754, height: 872,
-    caption: 'History: drill times, quiz scores and a shareable certificate.',
-    alt: 'Analytics Dashboard screens: drill count, average time and quiz average, trend charts, a printable certificate of completion, and a note that the certificate leaves out name, unit and location.',
+    file: "analytics.png",
+    src: analyticsImg,
+    webp: caseWebp("firesafety/firesafety_p30_img3", 484, ["@full", 754]),
+    width: 754,
+    height: 872,
+    caption: "History: drill times, quiz scores and a shareable certificate.",
+    alt: "Analytics Dashboard screens: drill count, average time and quiz average, trend charts, a printable certificate of completion, and a note that the certificate leaves out name, unit and location.",
   },
 ];
 
 // One drill, start to exit; routing re-plans when a stairwell is marked blocked
 const DRILL: FlowStep[] = [
-  { label: 'Choose block and unit' },
-  { label: 'Dijkstra: nearest exit', detail: 'Floor-plan graph', loop: 'Re-plans if a stairwell is blocked' },
-  { label: 'Route to AR waypoints' },
-  { label: 'AR arrows + step tracking', detail: 'ARCore + PDR' },
-  { label: 'Nearest exit' },
+  { label: "Choose block and unit" },
+  {
+    label: "Dijkstra: nearest exit",
+    detail: "Floor-plan graph",
+    loop: "Re-plans if a stairwell is blocked",
+  },
+  { label: "Route to AR waypoints" },
+  { label: "AR arrows + step tracking", detail: "ARCore + PDR" },
+  { label: "Nearest exit" },
 ];
 
 export default function FireSafetyProject() {
@@ -75,18 +118,18 @@ export default function FireSafetyProject() {
         slug="firesafety"
         file="fire_safety_drill.apk"
         facts={[
-          { icon: 'chip-school', text: 'INF2007 Mobile App Development, SIT' },
-          { icon: 'chip-team', text: 'Team: Group 16' },
-          { icon: 'icon-experience', text: 'Role: algorithms and AR' },
-          { icon: 'chip-calendar', text: '3 Agile sprints' },
-          { icon: 'chip-phone', text: 'Android, Pixel 6a' },
+          { icon: "chip-school", text: "INF2007 Mobile App Development, SIT" },
+          { icon: "chip-team", text: "Team: Group 16" },
+          { icon: "icon-experience", text: "Role: algorithms and AR" },
+          { icon: "chip-calendar", text: "3 Agile sprints" },
+          { icon: "chip-phone", text: "Android, Pixel 6a" },
         ]}
         links={[GITHUB_PROFILE]}
         stats={[
-          { value: '79/100', label: 'on the System Usability Scale' },
-          { value: '~80%', label: 'test coverage' },
-          { value: '4', label: 'languages' },
-          { value: '9/9', label: 'backlog items done, plus 6 extra' },
+          { value: "79/100", label: "on the System Usability Scale" },
+          { value: "~80%", label: "test coverage" },
+          { value: "4", label: "languages" },
+          { value: "9/9", label: "backlog items done, plus 6 extra" },
         ]}
         heroShot={HERO_SHOT}
       />
@@ -102,7 +145,7 @@ export default function FireSafetyProject() {
           <PixelList
             items={[
               "About 1.1 million HDB flats house **80%** of Singapore’s population.",
-              'Barriers: mobility, language and **unfamiliar escape routes**.',
+              "Barriers: mobility, language and **unfamiliar escape routes**.",
             ]}
           />
         </CaseSection>
@@ -116,9 +159,9 @@ export default function FireSafetyProject() {
         >
           <PixelList
             items={[
-              'Follow **AR arrows** from your unit to the nearest exit.',
-              'Mark a stairwell **smoke-filled** and the route re-plans.',
-              '**Scan an extinguisher** to identify its type.',
+              "Follow **AR arrows** from your unit to the nearest exit.",
+              "Mark a stairwell **smoke-filled** and the route re-plans.",
+              "**Scan an extinguisher** to identify its type.",
             ]}
           />
         </CaseSection>
@@ -126,14 +169,20 @@ export default function FireSafetyProject() {
 
       <ScreenGallery shots={SHOTS} />
 
-      <CaseSection id="part" heading="My part" icon="icon-experience" file="my_part.log" narrow>
+      <CaseSection
+        id="part"
+        heading="My part"
+        icon="icon-experience"
+        file="my_part.log"
+        narrow
+      >
         <div className="space-y-3 lg:space-y-4">
           <LeadS text="I built the **algorithms and AR**: 49 of the team’s 120 commits." />
           <PixelList
             items={[
-              '**Dijkstra** routing to the nearest exit, re-planning around blocked stairwells.',
-              '**ARCore** corridor rendering, waypoints and 3D-to-2D floor-plan projection.',
-              'Tuned step-based positioning (**PDR**) from accelerometer and gyroscope.',
+              "**Dijkstra** routing to the nearest exit, re-planning around blocked stairwells.",
+              "**ARCore** corridor rendering, waypoints and 3D-to-2D floor-plan projection.",
+              "Tuned step-based positioning (**PDR**) from accelerometer and gyroscope.",
             ]}
           />
         </div>
@@ -150,9 +199,9 @@ export default function FireSafetyProject() {
           <FlowDiagram steps={DRILL} labelledBy="how-heading" />
           <PixelList
             items={[
-              '**TFLite** with YOLO classifies extinguishers: powder, water or CO₂.',
-              '**Weinberg stride estimation** positions without GPS or Wi-Fi.',
-              'A **Room** database keeps drill history, quiz and SUS scores.',
+              "**TFLite** with YOLO classifies extinguishers: powder, water or CO₂.",
+              "**Weinberg stride estimation** positions without GPS or Wi-Fi.",
+              "A **Room** database keeps drill history, quiz and SUS scores.",
             ]}
           />
         </div>
@@ -168,18 +217,34 @@ export default function FireSafetyProject() {
         <StatStrip
           variant="inline"
           stats={[
-            { value: '10,984', label: 'lines of Kotlin' },
-            { value: '5,458', label: 'lines of tests' },
-            { value: '26', label: 'test files' },
-            { value: '120', label: 'team commits, 49 of them mine' },
+            { value: "10,984", label: "lines of Kotlin" },
+            { value: "5,458", label: "lines of tests" },
+            { value: "26", label: "test files" },
+            { value: "120", label: "team commits, 49 of them mine" },
           ]}
         />
       </CaseSection>
 
-      <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">
+      <CaseSection
+        id="stack"
+        heading="Tech stack"
+        icon="floppy"
+        file="stack.txt"
+      >
         <TechStack
-          tags={['Kotlin', 'Jetpack Compose', 'MVVM', 'Hilt', 'ARCore', 'TensorFlow Lite', 'YOLO', 'CameraX', 'Room', 'Firebase Cloud Messaging']}
-          more={{ label: 'Methods', tags: ['Dijkstra', 'Weinberg PDR'] }}
+          tags={[
+            "Kotlin",
+            "Jetpack Compose",
+            "MVVM",
+            "Hilt",
+            "ARCore",
+            "TensorFlow Lite",
+            "YOLO",
+            "CameraX",
+            "Room",
+            "Firebase Cloud Messaging",
+          ]}
+          more={{ label: "Methods", tags: ["Dijkstra", "Weinberg PDR"] }}
         />
       </CaseSection>
     </CaseLayout>

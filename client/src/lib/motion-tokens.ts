@@ -34,12 +34,12 @@ export const motionTokens = {
   // three depth steps. Pairs are [far, near] and the middle step sits halfway.
   // CSS px and seconds.
   particles: {
-    rise: [3, 10],   // px per second, each pixel within ±20%
-    sway: [2, 6],    // side-to-side drift either way
+    rise: [3, 10], // px per second, each pixel within ±20%
+    sway: [2, 6], // side-to-side drift either way
     swayPeriod: 9,
-    shift: [1, 6],   // most a pixel moves away from the pointer
-    follow: 0.6,     // time constant of the pointer smoothing
-    fade: 72,        // fades in and out over this distance at the top and bottom
+    shift: [1, 6], // most a pixel moves away from the pointer
+    follow: 0.6, // time constant of the pointer smoothing
+    fade: 72, // fades in and out over this distance at the top and bottom
   },
   distance: {
     xs: 4,
@@ -50,22 +50,22 @@ export const motionTokens = {
   // pointer tilt, scroll-linked perspective, key lift/press.
   // Distances in CSS px, angles in degrees.
   keyboard: {
-    enter: 0.7,       // board fades in, rises and rotates into its resting angle
+    enter: 0.7, // board fades in, rises and rotates into its resting angle
     enterDelay: 0.05, // first row starts settling
     rowStagger: 0.07, // at most; shortened so the 7-row phone layout ends by `enterEnd`
-    settle: 0.4,      // each row's drop into place
+    settle: 0.4, // each row's drop into place
     enterEnd: 0.85,
     rise: 24,
     enterTilt: 6,
-    tilt: 3,          // pointer tilt cap
+    tilt: 3, // pointer tilt cap
     tiltFollow: 0.12, // time constant of the tilt's smoothing, seconds
-    scrollTilt: 5,    // extra top-down rotation across the section
-    lift: 5,          // hover
+    scrollTilt: 5, // extra top-down rotation across the section
+    lift: 5, // hover
     press: 3.5,
   },
 };
 
 export const springs = {
-  snappy: { type: 'spring' as const, stiffness: 300, damping: 30 },
-  instant: { type: 'spring' as const, stiffness: 600, damping: 35 },
+  snappy: { type: "spring" as const, stiffness: 300, damping: 30 },
+  instant: { type: "spring" as const, stiffness: 600, damping: 35 },
 };

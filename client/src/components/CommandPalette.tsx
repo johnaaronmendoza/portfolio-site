@@ -6,26 +6,26 @@
  * (aria-activedescendant), which scrolls into view.
  */
 
-import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useLocation } from 'wouter';
-import { MOD_KEY, scrollToSection } from '@/lib/utils';
-import { motionTokens } from '@/lib/motion-tokens';
-import { useModalFocus } from '@/hooks/useModalFocus';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import PixelArt from './PixelArt';
-import { WindowBar } from './Window';
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useLocation } from "wouter";
+import { MOD_KEY, scrollToSection } from "@/lib/utils";
+import { motionTokens } from "@/lib/motion-tokens";
+import { useModalFocus } from "@/hooks/useModalFocus";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import PixelArt from "./PixelArt";
+import { WindowBar } from "./Window";
 
 const SECTIONS = [
-  { id: 'hero', name: 'top' },
-  { id: 'about', name: 'About' },
-  { id: 'experience', name: 'Experience' },
-  { id: 'projects', name: 'Projects' },
-  { id: 'skills', name: 'Skills' },
-  { id: 'footer', name: 'Contact' },
+  { id: "hero", name: "top" },
+  { id: "about", name: "About" },
+  { id: "experience", name: "Experience" },
+  { id: "projects", name: "Projects" },
+  { id: "skills", name: "Skills" },
+  { id: "footer", name: "Contact" },
 ];
 
-const LIST_ID = 'command-list';
+const LIST_ID = "command-list";
 const optionId = (id: string) => `command-${id}`;
 
 interface Command {
@@ -33,18 +33,22 @@ interface Command {
   label: string;
   description: string;
   action: () => void;
-  category: 'navigation' | 'chat' | 'action';
+  category: "navigation" | "chat" | "action";
 }
 
 // Opens the chat and asks it a question (MascotChatWidget listens for this)
 function askChat(query?: string) {
-  window.dispatchEvent(new CustomEvent('open-chat', { detail: { query } }));
+  window.dispatchEvent(new CustomEvent("open-chat", { detail: { query } }));
 }
 
 /** Loaded on first use (App.tsx): `defaultOpen` honours the press that loaded it */
-export default function CommandPalette({ defaultOpen = false }: { defaultOpen?: boolean }) {
+export default function CommandPalette({
+  defaultOpen = false,
+}: {
+  defaultOpen?: boolean;
+}) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [location, setLocation] = useLocation();
   const reduced = useReducedMotion();
@@ -56,7 +60,7 @@ export default function CommandPalette({ defaultOpen = false }: { defaultOpen?: 
 
   // On Home, scroll to the section and focus it; elsewhere, go Home and let it scroll to the hash
   const goToSection = (id: string) => {
-    if (location === '/' && document.getElementById(id)) {
+    if (location === "/" && document.getElementById(id)) {
       keepFocus();
       // Next frame: the palette has closed and released the scroll lock
       requestAnimationFrame(() => scrollToSection(id, reduced));
@@ -74,123 +78,150 @@ export default function CommandPalette({ defaultOpen = false }: { defaultOpen?: 
 
   const commands: Command[] = [
     // Navigation — sections (from a case study, go to the Home section instead)
-    ...SECTIONS.map(({ id, name }): Command => ({
-      id: `nav-${id}`,
-      label: `Go to ${name}`,
-      description: id === 'hero' ? 'Jump to the top of the home page' : `Jump to the ${name.toLowerCase()} section`,
-      action: () => { goToSection(id); setIsOpen(false); },
-      category: 'navigation',
-    })),
+    ...SECTIONS.map(
+      ({ id, name }): Command => ({
+        id: `nav-${id}`,
+        label: `Go to ${name}`,
+        description:
+          id === "hero"
+            ? "Jump to the top of the home page"
+            : `Jump to the ${name.toLowerCase()} section`,
+        action: () => {
+          goToSection(id);
+          setIsOpen(false);
+        },
+        category: "navigation",
+      })
+    ),
     // Actions
     {
-      id: 'action-resume',
-      label: 'Download resume (PDF)',
-      description: 'Save John’s resume as a PDF',
+      id: "action-resume",
+      label: "Download resume (PDF)",
+      description: "Save John’s resume as a PDF",
       action: () => {
-        const link = document.createElement('a');
-        link.href = '/resume.pdf';
-        link.download = 'John_Aaron_Branzuela_Resume.pdf';
+        const link = document.createElement("a");
+        link.href = "/resume.pdf";
+        link.download = "John_Aaron_Branzuela_Resume.pdf";
         link.click();
         setIsOpen(false);
       },
-      category: 'action',
+      category: "action",
     },
     {
-      id: 'action-email',
-      label: 'Email me',
-      description: 'johnaaronmb@gmail.com',
+      id: "action-email",
+      label: "Email me",
+      description: "johnaaronmb@gmail.com",
       action: () => {
-        window.location.href = 'mailto:johnaaronmb@gmail.com';
+        window.location.href = "mailto:johnaaronmb@gmail.com";
         setIsOpen(false);
       },
-      category: 'action',
+      category: "action",
     },
     // Navigation — project pages
     {
-      id: 'proj-silverlink',
-      label: 'Project: SilverLink SG',
-      description: 'Cloud-native gRPC microservices platform',
-      action: () => { setLocation('/projects/silverlink'); setIsOpen(false); },
-      category: 'navigation',
+      id: "proj-silverlink",
+      label: "Project: SilverLink SG",
+      description: "Cloud-native gRPC microservices platform",
+      action: () => {
+        setLocation("/projects/silverlink");
+        setIsOpen(false);
+      },
+      category: "navigation",
     },
     {
-      id: 'proj-scs',
-      label: 'Project: SCS Awareness Platform',
-      description: 'Visual novel engine for cancer outreach booths',
-      action: () => { setLocation('/projects/scs'); setIsOpen(false); },
-      category: 'navigation',
+      id: "proj-scs",
+      label: "Project: SCS Awareness Platform",
+      description: "Visual novel engine for cancer outreach booths",
+      action: () => {
+        setLocation("/projects/scs");
+        setIsOpen(false);
+      },
+      category: "navigation",
     },
     {
-      id: 'proj-firesafety',
-      label: 'Project: Fire Safety Drill Companion',
-      description: 'Android AR + ML + Dijkstra pathfinding app',
-      action: () => { setLocation('/projects/firesafety'); setIsOpen(false); },
-      category: 'navigation',
+      id: "proj-firesafety",
+      label: "Project: Fire Safety Drill Companion",
+      description: "Android AR + ML + Dijkstra pathfinding app",
+      action: () => {
+        setLocation("/projects/firesafety");
+        setIsOpen(false);
+      },
+      category: "navigation",
     },
     {
-      id: 'proj-uwb',
-      label: 'Project: UWB Indoor Localization',
-      description: 'SVM-RBF ML pipeline, 89.61% accuracy',
-      action: () => { setLocation('/projects/uwb'); setIsOpen(false); },
-      category: 'navigation',
+      id: "proj-uwb",
+      label: "Project: UWB Indoor Localization",
+      description: "SVM-RBF ML pipeline, 89.61% accuracy",
+      action: () => {
+        setLocation("/projects/uwb");
+        setIsOpen(false);
+      },
+      category: "navigation",
     },
     {
-      id: 'proj-uat',
-      label: 'Project: UAT Testing Dashboard',
-      description: 'Full-stack defect tracker with real-time analytics',
-      action: () => { setLocation('/projects/uat'); setIsOpen(false); },
-      category: 'navigation',
+      id: "proj-uat",
+      label: "Project: UAT Testing Dashboard",
+      description: "Full-stack defect tracker with real-time analytics",
+      action: () => {
+        setLocation("/projects/uat");
+        setIsOpen(false);
+      },
+      category: "navigation",
     },
     {
-      id: 'proj-ai-finance',
-      label: 'Project: AI Finance Insights Engine',
-      description: 'ETL pipeline + NLP engine + Power BI Star Schema',
-      action: () => { setLocation('/projects/ai-finance'); setIsOpen(false); },
-      category: 'navigation',
+      id: "proj-ai-finance",
+      label: "Project: AI Finance Insights Engine",
+      description: "ETL pipeline + NLP engine + Power BI Star Schema",
+      action: () => {
+        setLocation("/projects/ai-finance");
+        setIsOpen(false);
+      },
+      category: "navigation",
     },
     // Chat Actions
     {
-      id: 'chat-open',
-      label: 'Open chat',
-      description: 'Open the chat widget',
+      id: "chat-open",
+      label: "Open chat",
+      description: "Open the chat widget",
       action: () => chat(),
-      category: 'chat',
+      category: "chat",
     },
     {
-      id: 'chat-experience',
-      label: 'Ask about Desk Assist',
-      description: 'Chat: AI assistant for service desk agents',
-      action: () => chat('Tell me about Desk Assist'),
-      category: 'chat',
+      id: "chat-experience",
+      label: "Ask about Desk Assist",
+      description: "Chat: AI assistant for service desk agents",
+      action: () => chat("Tell me about Desk Assist"),
+      category: "chat",
     },
     {
-      id: 'chat-projects',
-      label: 'Ask about projects',
-      description: 'Chat: overview of all projects',
-      action: () => chat('What are your projects'),
-      category: 'chat',
+      id: "chat-projects",
+      label: "Ask about projects",
+      description: "Chat: overview of all projects",
+      action: () => chat("What are your projects"),
+      category: "chat",
     },
     {
-      id: 'chat-skills',
-      label: 'Ask about skills',
-      description: 'Chat: tech stack and tools',
-      action: () => chat('What are your skills'),
-      category: 'chat',
+      id: "chat-skills",
+      label: "Ask about skills",
+      description: "Chat: tech stack and tools",
+      action: () => chat("What are your skills"),
+      category: "chat",
     },
   ];
 
-  const filteredCommands = commands.filter(cmd =>
-    cmd.label.toLowerCase().includes(search.toLowerCase()) ||
-    cmd.description.toLowerCase().includes(search.toLowerCase())
+  const filteredCommands = commands.filter(
+    cmd =>
+      cmd.label.toLowerCase().includes(search.toLowerCase()) ||
+      cmd.description.toLowerCase().includes(search.toLowerCase())
   );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Ctrl+K or Cmd+K to open
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
         e.preventDefault();
         setIsOpen(!isOpen);
-        setSearch('');
+        setSearch("");
         setSelectedIndex(0);
       }
 
@@ -199,18 +230,18 @@ export default function CommandPalette({ defaultOpen = false }: { defaultOpen?: 
       const n = filteredCommands.length;
 
       switch (e.key) {
-        case 'Escape':
+        case "Escape":
           setIsOpen(false);
           break;
-        case 'ArrowDown':
+        case "ArrowDown":
           e.preventDefault();
           if (n) setSelectedIndex(prev => (prev + 1) % n);
           break;
-        case 'ArrowUp':
+        case "ArrowUp":
           e.preventDefault();
           if (n) setSelectedIndex(prev => (prev - 1 + n) % n);
           break;
-        case 'Enter':
+        case "Enter":
           // The Close button activates natively; this handles Enter in the search box
           if (e.target instanceof HTMLButtonElement) break;
           e.preventDefault();
@@ -221,14 +252,17 @@ export default function CommandPalette({ defaultOpen = false }: { defaultOpen?: 
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, filteredCommands, selectedIndex]);
 
   // Keep the active option visible as the arrows move it
-  const activeId = filteredCommands[selectedIndex] ? optionId(filteredCommands[selectedIndex].id) : undefined;
+  const activeId = filteredCommands[selectedIndex]
+    ? optionId(filteredCommands[selectedIndex].id)
+    : undefined;
   useEffect(() => {
-    if (activeId) document.getElementById(activeId)?.scrollIntoView({ block: 'nearest' });
+    if (activeId)
+      document.getElementById(activeId)?.scrollIntoView({ block: "nearest" });
   }, [activeId]);
 
   return (
@@ -252,7 +286,10 @@ export default function CommandPalette({ defaultOpen = false }: { defaultOpen?: 
             initial={{ opacity: 0, y: -motionTokens.distance.sm }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -motionTokens.distance.sm }}
-            transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
+            transition={{
+              duration: motionTokens.duration.fast,
+              ease: motionTokens.easing.out,
+            }}
             ref={dialogRef}
             tabIndex={-1}
             className="window fixed top-1/4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-2xl overflow-hidden"
@@ -260,12 +297,21 @@ export default function CommandPalette({ defaultOpen = false }: { defaultOpen?: 
             aria-modal="true"
             aria-label="Command menu"
           >
-            <WindowBar title="commands.exe" onClose={() => setIsOpen(false)} closeLabel="Close command menu" />
+            <WindowBar
+              title="commands.exe"
+              onClose={() => setIsOpen(false)}
+              closeLabel="Close command menu"
+            />
 
             <div className="bg-black text-[color:var(--paper)] [--focus:var(--paper)]">
               {/* Search: the ring sits on the row; the input itself has no outline */}
               <div className="border-b-2 border-[color:var(--paper)] p-4 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--paper)] focus-within:outline-offset-[-6px]">
-                <span aria-hidden="true" className="font-mono text-body font-bold text-[color:var(--paper)]">&gt;</span>
+                <span
+                  aria-hidden="true"
+                  className="font-mono text-body font-bold text-[color:var(--paper)]"
+                >
+                  &gt;
+                </span>
                 <input
                   ref={inputRef}
                   type="text"
@@ -290,36 +336,48 @@ export default function CommandPalette({ defaultOpen = false }: { defaultOpen?: 
 
               {/* Commands: active option paper (inverted), hover blue; the description
                   inherits the row colour. Options are clicked, not tabbed to. */}
-              <div id={LIST_ID} role="listbox" aria-label="Commands" className="max-h-96 overflow-y-auto overscroll-contain">
+              <div
+                id={LIST_ID}
+                role="listbox"
+                aria-label="Commands"
+                className="max-h-96 overflow-y-auto overscroll-contain"
+              >
                 {filteredCommands.map((cmd, idx) => (
-                    <button
-                      type="button"
-                      role="option"
-                      id={optionId(cmd.id)}
-                      aria-selected={idx === selectedIndex}
-                      tabIndex={-1}
-                      key={cmd.id}
-                      onClick={() => {
-                        cmd.action();
-                        setIsOpen(false);
-                      }}
-                      className={`block w-full min-h-[44px] text-left px-4 py-3 transition-colors duration-150 ${
-                        idx === selectedIndex
-                          ? 'bg-[var(--paper)] text-black'
-                          : 'hover:bg-[var(--blue)] hover:text-black'
-                      }`}
-                    >
-                      <span className="flex items-center gap-2 font-sans font-bold text-body-sm">
-                        {cmd.id === 'nav-hero' && <PixelArt name="icon-home" size={16} />}
-                        {cmd.label}
-                      </span>
-                      <span className="block font-sans text-body-sm mt-1">{cmd.description}</span>
-                    </button>
+                  <button
+                    type="button"
+                    role="option"
+                    id={optionId(cmd.id)}
+                    aria-selected={idx === selectedIndex}
+                    tabIndex={-1}
+                    key={cmd.id}
+                    onClick={() => {
+                      cmd.action();
+                      setIsOpen(false);
+                    }}
+                    className={`block w-full min-h-[44px] text-left px-4 py-3 transition-colors duration-150 ${
+                      idx === selectedIndex
+                        ? "bg-[var(--paper)] text-black"
+                        : "hover:bg-[var(--blue)] hover:text-black"
+                    }`}
+                  >
+                    <span className="flex items-center gap-2 font-sans font-bold text-body-sm">
+                      {cmd.id === "nav-hero" && (
+                        <PixelArt name="icon-home" size={16} />
+                      )}
+                      {cmd.label}
+                    </span>
+                    <span className="block font-sans text-body-sm mt-1">
+                      {cmd.description}
+                    </span>
+                  </button>
                 ))}
               </div>
               {/* Always mounted so screen readers hear it appear */}
-              <p role="status" className="empty:hidden p-4 text-center font-sans text-body-sm">
-                {filteredCommands.length === 0 ? 'No commands found' : ''}
+              <p
+                role="status"
+                className="empty:hidden p-4 text-center font-sans text-body-sm"
+              >
+                {filteredCommands.length === 0 ? "No commands found" : ""}
               </p>
 
               {/* Footer hints */}

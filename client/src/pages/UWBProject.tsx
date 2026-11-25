@@ -1,74 +1,100 @@
-import CaseLayout from '@/components/case/CaseLayout';
-import CaseHeader, { GITHUB_PROFILE } from '@/components/case/CaseHeader';
-import { CasePair, CaseSection, LeadS, TechStack } from '@/components/case/CaseBlocks';
-import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
-import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
-import { PixelList } from '@/components/Hierarchy';
-import StatStrip from '@/components/StatStrip';
-import { caseWebp } from '@/lib/images';
-import decisionBoundaryImg from '@assets/da_p39_img2.png';
+import CaseLayout from "@/components/case/CaseLayout";
+import CaseHeader, { GITHUB_PROFILE } from "@/components/case/CaseHeader";
+import {
+  CasePair,
+  CaseSection,
+  LeadS,
+  TechStack,
+} from "@/components/case/CaseBlocks";
+import ScreenGallery, { type Shot } from "@/components/case/ScreenGallery";
+import FlowDiagram, { type FlowStep } from "@/components/FlowDiagram";
+import { PixelList } from "@/components/Hierarchy";
+import StatStrip from "@/components/StatStrip";
+import { caseWebp } from "@/lib/images";
+import decisionBoundaryImg from "@assets/da_p39_img2.png";
 
 const HERO_SHOT: Shot = {
-  file: 'model_comparison.png',
-  src: '/assets/case/uwb/model-comparison-desktop@2x.webp', width: 1018, height: 527,
-  srcMobile: '/assets/case/uwb/model-comparison-mobile@2x.webp', mobileWidth: 360, mobileHeight: 561,
-  fullSrc: '/assets/case/uwb/model-comparison-desktop.svg',
-  caption: 'SVM-RBF wins on every metric; range RMSE 1.757 m on both paths.',
-  alt: 'Bar charts. Logistic regression vs SVM-RBF: accuracy 0.8575 vs 0.8961, precision 0.8967 vs 0.9297, recall 0.8081 vs 0.8569, F1 0.8501 vs 0.8918. Range RMSE 1.7566 m for path 1 and path 2.',
+  file: "model_comparison.png",
+  src: "/assets/case/uwb/model-comparison-desktop@2x.webp",
+  width: 1018,
+  height: 527,
+  srcMobile: "/assets/case/uwb/model-comparison-mobile@2x.webp",
+  mobileWidth: 360,
+  mobileHeight: 561,
+  fullSrc: "/assets/case/uwb/model-comparison-desktop.svg",
+  caption: "SVM-RBF wins on every metric; range RMSE 1.757 m on both paths.",
+  alt: "Bar charts. Logistic regression vs SVM-RBF: accuracy 0.8575 vs 0.8961, precision 0.8967 vs 0.9297, recall 0.8081 vs 0.8569, F1 0.8501 vs 0.8918. Range RMSE 1.7566 m for path 1 and path 2.",
 };
 
 const SHOTS: Shot[] = [
   {
-    file: 'pca_variance.png',
-    src: '/assets/case/uwb/pca-variance-desktop@2x.webp', width: 1018, height: 580,
-    srcMobile: '/assets/case/uwb/pca-variance-mobile@2x.webp', mobileWidth: 360, mobileHeight: 403,
-    fullSrc: '/assets/case/uwb/pca-variance-desktop.svg',
-    caption: 'PCA: 848 components, 95% variance.',
-    alt: 'Line chart of cumulative explained variance by number of principal components, crossing 95% at 848 components and 99% at 963.',
+    file: "pca_variance.png",
+    src: "/assets/case/uwb/pca-variance-desktop@2x.webp",
+    width: 1018,
+    height: 580,
+    srcMobile: "/assets/case/uwb/pca-variance-mobile@2x.webp",
+    mobileWidth: 360,
+    mobileHeight: 403,
+    fullSrc: "/assets/case/uwb/pca-variance-desktop.svg",
+    caption: "PCA: 848 components, 95% variance.",
+    alt: "Line chart of cumulative explained variance by number of principal components, crossing 95% at 848 components and 99% at 963.",
   },
   {
-    file: 'confusion_matrices.png',
-    src: '/assets/case/uwb/confusion-matrices-desktop@2x.webp', width: 1018, height: 509,
-    srcMobile: '/assets/case/uwb/confusion-matrices-mobile@2x.webp', mobileWidth: 360, mobileHeight: 712,
-    fullSrc: '/assets/case/uwb/confusion-matrices-desktop.svg',
-    caption: 'Correct of 8,400: SVM-RBF 7,527; baseline 7,203.',
-    alt: 'Two confusion matrices, true label by predicted label (LOS+NLOS, NLOS+NLOS). Logistic regression: 3,809 and 3,394 correct, 391 and 806 wrong. SVM-RBF: 3,928 and 3,599 correct, 272 and 601 wrong.',
+    file: "confusion_matrices.png",
+    src: "/assets/case/uwb/confusion-matrices-desktop@2x.webp",
+    width: 1018,
+    height: 509,
+    srcMobile: "/assets/case/uwb/confusion-matrices-mobile@2x.webp",
+    mobileWidth: 360,
+    mobileHeight: 712,
+    fullSrc: "/assets/case/uwb/confusion-matrices-desktop.svg",
+    caption: "Correct of 8,400: SVM-RBF 7,527; baseline 7,203.",
+    alt: "Two confusion matrices, true label by predicted label (LOS+NLOS, NLOS+NLOS). Logistic regression: 3,809 and 3,394 correct, 391 and 806 wrong. SVM-RBF: 3,928 and 3,599 correct, 272 and 601 wrong.",
   },
   {
-    file: 'tree_depth.png',
-    src: '/assets/case/uwb/tree-depth-desktop@2x.webp', width: 1018, height: 602,
-    srcMobile: '/assets/case/uwb/tree-depth-mobile@2x.webp', mobileWidth: 360, mobileHeight: 461,
-    fullSrc: '/assets/case/uwb/tree-depth-desktop.svg',
-    caption: 'Tree depth 4 chosen (test 0.867).',
-    alt: 'Line chart of decision tree training and test accuracy for depths 2 to 50. Training accuracy climbs to 1.0; test accuracy peaks near depth 10 and settles around 0.87. Depth 4 is marked.',
+    file: "tree_depth.png",
+    src: "/assets/case/uwb/tree-depth-desktop@2x.webp",
+    width: 1018,
+    height: 602,
+    srcMobile: "/assets/case/uwb/tree-depth-mobile@2x.webp",
+    mobileWidth: 360,
+    mobileHeight: 461,
+    fullSrc: "/assets/case/uwb/tree-depth-desktop.svg",
+    caption: "Tree depth 4 chosen (test 0.867).",
+    alt: "Line chart of decision tree training and test accuracy for depths 2 to 50. Training accuracy climbs to 1.0; test accuracy peaks near depth 10 and settles around 0.87. Depth 4 is marked.",
   },
   {
-    file: 'decision_boundaries.png', src: decisionBoundaryImg, webp: caseWebp('uwb/da_p39_img2', 1018), width: 1097, height: 1120, span: true,
-    caption: 'Boundaries: range vs first-path index.',
-    alt: 'Six panels of decision boundaries on scaled RANGE and FP_IDX for KNN, naive Bayes, logistic regression, linear SVM, non-linear SVM and an MLP.',
+    file: "decision_boundaries.png",
+    src: decisionBoundaryImg,
+    webp: caseWebp("uwb/da_p39_img2", 1018),
+    width: 1097,
+    height: 1120,
+    span: true,
+    caption: "Boundaries: range vs first-path index.",
+    alt: "Six panels of decision boundaries on scaled RANGE and FP_IDX for KNN, naive Bayes, logistic regression, linear SVM, non-linear SVM and an MLP.",
   },
 ];
 
 // The order of PCA and the 80/20 split isn't confirmed (NEEDS JOHN), so data
 // preparation is one step with unordered parts; the two models run in parallel.
 const PIPELINE: FlowStep[] = [
-  { label: '41,996 samples', detail: '7 indoor environments' },
+  { label: "41,996 samples", detail: "7 indoor environments" },
   {
-    label: 'Prepare data',
+    label: "Prepare data",
     items: [
-      { label: 'PCA', detail: '1,016 CIR dimensions' },
-      { label: '80/20 split', detail: 'Stratified' },
-      { label: 'RobustScaler', detail: 'Fitted on training data only' },
+      { label: "PCA", detail: "1,016 CIR dimensions" },
+      { label: "80/20 split", detail: "Stratified" },
+      { label: "RobustScaler", detail: "Fitted on training data only" },
     ],
   },
   {
-    label: 'Model',
+    label: "Model",
     items: [
-      { label: 'Classify paths', detail: 'Clear or blocked, SVM-RBF' },
-      { label: 'Estimate range', detail: 'Linear regression' },
+      { label: "Classify paths", detail: "Clear or blocked, SVM-RBF" },
+      { label: "Estimate range", detail: "Linear regression" },
     ],
   },
-  { label: 'Evaluate', detail: 'Accuracy, ROC\u2011AUC, RMSE' },
+  { label: "Evaluate", detail: "Accuracy, ROC\u2011AUC, RMSE" },
 ];
 
 export default function UWBProject() {
@@ -78,16 +104,16 @@ export default function UWBProject() {
         slug="uwb"
         file="uwb_localization.py"
         facts={[
-          { icon: 'chip-school', text: 'CSC3105 Data Analytics, SIT' },
-          { icon: 'chip-team', text: 'Team: Group CS05' },
-          { icon: 'icon-experience', text: 'Role: data mining methods' },
+          { icon: "chip-school", text: "CSC3105 Data Analytics, SIT" },
+          { icon: "chip-team", text: "Team: Group CS05" },
+          { icon: "icon-experience", text: "Role: data mining methods" },
         ]}
         links={[GITHUB_PROFILE]}
         stats={[
-          { value: '89.61%', label: 'SVM-RBF accuracy vs 85.75% baseline' },
-          { value: '0.9612', label: 'ROC\u2011AUC on clear vs blocked paths' },
-          { value: '41,996', label: 'UWB samples, half clear, half blocked' },
-          { value: '7', label: 'indoor environments in the dataset' },
+          { value: "89.61%", label: "SVM-RBF accuracy vs 85.75% baseline" },
+          { value: "0.9612", label: "ROC\u2011AUC on clear vs blocked paths" },
+          { value: "41,996", label: "UWB samples, half clear, half blocked" },
+          { value: "7", label: "indoor environments in the dataset" },
         ]}
         heroShot={HERO_SHOT}
       />
@@ -100,7 +126,11 @@ export default function UWBProject() {
           lead="UWB positions to centimetres at best; blocked (NLOS) signals **cut accuracy sharply**."
           file="problem.txt"
         >
-          <PixelList items={['Spotting them is a step toward reliable positioning for **robots and drones**.']} />
+          <PixelList
+            items={[
+              "Spotting them is a step toward reliable positioning for **robots and drones**.",
+            ]}
+          />
         </CaseSection>
 
         <CaseSection
@@ -110,20 +140,28 @@ export default function UWBProject() {
           lead="Classifies the two shortest **dominant paths** as clear or blocked."
           file="what_it_does.md"
         >
-          <PixelList items={['**Linear regression** estimates range on both paths.']} />
+          <PixelList
+            items={["**Linear regression** estimates range on both paths."]}
+          />
         </CaseSection>
       </CasePair>
 
       <ScreenGallery heading="Charts" shots={SHOTS} />
 
-      <CaseSection id="part" heading="My part" icon="icon-experience" file="my_part.log" narrow>
+      <CaseSection
+        id="part"
+        heading="My part"
+        icon="icon-experience"
+        file="my_part.log"
+        narrow
+      >
         <div className="space-y-3 lg:space-y-4">
           <LeadS text="I worked on the **data mining methodology**." />
           <PixelList
             items={[
-              'Chose and justified the models: **SVM**, logistic regression, decision tree.',
-              'Prevented **leakage**: stratified 80/20 split, scaler fitted on training data only.',
-              'Built **linear regression** for range and plotted decision boundaries.',
+              "Chose and justified the models: **SVM**, logistic regression, decision tree.",
+              "Prevented **leakage**: stratified 80/20 split, scaler fitted on training data only.",
+              "Built **linear regression** for range and plotted decision boundaries.",
             ]}
           />
         </div>
@@ -138,7 +176,11 @@ export default function UWBProject() {
       >
         <div className="space-y-8 lg:space-y-10">
           <FlowDiagram steps={PIPELINE} labelledBy="how-heading" lgCols={4} />
-          <PixelList items={['Dropped zero-variance features; engineered features for **NLOS signal loss**.']} />
+          <PixelList
+            items={[
+              "Dropped zero-variance features; engineered features for **NLOS signal loss**.",
+            ]}
+          />
         </div>
       </CaseSection>
 
@@ -152,18 +194,36 @@ export default function UWBProject() {
         <StatStrip
           variant="inline"
           stats={[
-            { value: '0.9195', label: 'baseline ROC\u2011AUC (logistic regression)' },
-            { value: '1.757 m', label: 'range error (RMSE) on both paths' },
-            { value: '0.458', label: 'range fit (R²) on path 1' },
-            { value: '0.6809', label: 'range fit (R²) on path 2' },
+            {
+              value: "0.9195",
+              label: "baseline ROC\u2011AUC (logistic regression)",
+            },
+            { value: "1.757 m", label: "range error (RMSE) on both paths" },
+            { value: "0.458", label: "range fit (R²) on path 1" },
+            { value: "0.6809", label: "range fit (R²) on path 2" },
           ]}
         />
       </CaseSection>
 
-      <CaseSection id="stack" heading="Tech stack" icon="floppy" file="stack.txt">
+      <CaseSection
+        id="stack"
+        heading="Tech stack"
+        icon="floppy"
+        file="stack.txt"
+      >
         <TechStack
-          tags={['Python', 'scikit-learn', 'Pandas', 'NumPy', 'Matplotlib']}
-          more={{ label: 'Methods', tags: ['SVM-RBF', 'Logistic regression', 'Decision tree', 'Linear regression', 'PCA', 'RobustScaler'] }}
+          tags={["Python", "scikit-learn", "Pandas", "NumPy", "Matplotlib"]}
+          more={{
+            label: "Methods",
+            tags: [
+              "SVM-RBF",
+              "Logistic regression",
+              "Decision tree",
+              "Linear regression",
+              "PCA",
+              "RobustScaler",
+            ],
+          }}
         />
       </CaseSection>
     </CaseLayout>

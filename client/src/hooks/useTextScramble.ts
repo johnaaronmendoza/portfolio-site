@@ -1,6 +1,6 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from "react";
 
-const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%<>[]{}|/\\';
+const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%<>[]{}|/\\";
 
 /**
  * Text scramble hook — letters cycle through random characters before
@@ -13,7 +13,7 @@ const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%<>[]{}|/\\';
  */
 export function useTextScramble(
   finalText: string,
-  options: { delay?: number; frames?: number; autoplay?: boolean } = {},
+  options: { delay?: number; frames?: number; autoplay?: boolean } = {}
 ) {
   const { delay = 0, frames = 18, autoplay = false } = options;
   const [displayText, setDisplayText] = useState(() => scrambleFull(finalText));
@@ -30,13 +30,13 @@ export function useTextScramble(
 
       setDisplayText(
         finalText
-          .split('')
+          .split("")
           .map((char, i) => {
-            if (char === ' ' || char === '\n') return char;
+            if (char === " " || char === "\n") return char;
             if (i < resolved) return char;
             return CHARS[Math.floor(Math.random() * CHARS.length)];
           })
-          .join(''),
+          .join("")
       );
 
       frame++;
@@ -65,7 +65,7 @@ export function useTextScramble(
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     },
-    [],
+    []
   );
 
   return { displayText, scramble };
@@ -73,7 +73,11 @@ export function useTextScramble(
 
 function scrambleFull(text: string): string {
   return text
-    .split('')
-    .map(c => (c === ' ' || c === '\n' ? c : CHARS[Math.floor(Math.random() * CHARS.length)]))
-    .join('');
+    .split("")
+    .map(c =>
+      c === " " || c === "\n"
+        ? c
+        : CHARS[Math.floor(Math.random() * CHARS.length)]
+    )
+    .join("");
 }

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 interface WindowBarProps {
   /** Filename-style label, e.g. "about_me.txt" */
@@ -15,7 +15,12 @@ interface WindowBarProps {
 export function WindowBar({ title, onClose, closeLabel }: WindowBarProps) {
   return (
     <div className="window-bar">
-      <p translate="no" className="font-label text-label leading-normal truncate min-w-0">{title}</p>
+      <p
+        translate="no"
+        className="font-label text-label leading-normal truncate min-w-0"
+      >
+        {title}
+      </p>
       {onClose ? (
         <button
           type="button"
@@ -26,7 +31,10 @@ export function WindowBar({ title, onClose, closeLabel }: WindowBarProps) {
           <span aria-hidden="true">✕</span>
         </button>
       ) : (
-        <span aria-hidden="true" className="flex-shrink-0 font-mono text-label leading-none tracking-[0.35em]">
+        <span
+          aria-hidden="true"
+          className="flex-shrink-0 font-mono text-label leading-none tracking-[0.35em]"
+        >
           ○□✕
         </span>
       )}
@@ -47,7 +55,12 @@ interface WindowProps {
  * white body. Base styles live in index.css (.window, .window-bar,
  * .window-body) so utilities passed in here override them.
  */
-export default function Window({ title, children, className = '', bodyClassName = '' }: WindowProps) {
+export default function Window({
+  title,
+  children,
+  className = "",
+  bodyClassName = "",
+}: WindowProps) {
   return (
     <div className={`window ${className}`}>
       <WindowBar title={title} />

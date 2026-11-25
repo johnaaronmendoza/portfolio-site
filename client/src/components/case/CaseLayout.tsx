@@ -1,25 +1,32 @@
-import { useEffect, type ReactNode } from 'react';
-import { Link } from 'wouter';
-import Footer from '@/components/Footer';
-import PixelArt from '@/components/PixelArt';
-import { GUTTERS } from '@/components/Section';
-import SectionHeading from '@/components/SectionHeading';
-import SkipLink from '@/components/SkipLink';
-import SoundToggle from '@/components/SoundToggle';
-import { ProjectTile } from '@/components/Projects';
-import { getCase, getNextCase, type CaseSlug } from '@/data/projects';
-import { trackProjectVisit } from '@/hooks/useAchievements';
-import { play } from '@/hooks/useSound';
+import { useEffect, type ReactNode } from "react";
+import { Link } from "wouter";
+import Footer from "@/components/Footer";
+import PixelArt from "@/components/PixelArt";
+import { GUTTERS } from "@/components/Section";
+import SectionHeading from "@/components/SectionHeading";
+import SkipLink from "@/components/SkipLink";
+import SoundToggle from "@/components/SoundToggle";
+import { ProjectTile } from "@/components/Projects";
+import { getCase, getNextCase, type CaseSlug } from "@/data/projects";
+import { trackProjectVisit } from "@/hooks/useAchievements";
+import { play } from "@/hooks/useSound";
 
-const HOME_TITLE = 'John Aaron Mendoza Branzuela | Computing Science Portfolio';
+const HOME_TITLE = "John Aaron Mendoza Branzuela | Computing Science Portfolio";
 
 /** Sticky black bar with the one way back to the Projects grid, and Sound
  *  (in the bar, so no floating button sits over the page's figures) */
 function CaseTaskbar() {
   return (
-    <header className={`sticky top-0 z-30 bg-[var(--bar)] border-b-[3px] border-black ${GUTTERS} [--focus:var(--paper)]`}>
+    <header
+      className={`sticky top-0 z-30 bg-[var(--bar)] border-b-[3px] border-black ${GUTTERS} [--focus:var(--paper)]`}
+    >
       <div className="max-w-5xl mx-auto h-14 flex items-center justify-between gap-3">
-        <Link href="/#projects" replace onClick={() => play('back')} className="btn btn-ghost max-sm:px-3 bg-transparent text-[color:var(--paper)] border-[color:var(--paper)] hover:bg-[var(--paper)] hover:text-[color:var(--text)]">
+        <Link
+          href="/#projects"
+          replace
+          onClick={() => play("back")}
+          className="btn btn-ghost max-sm:px-3 bg-transparent text-[color:var(--paper)] border-[color:var(--paper)] hover:bg-[var(--paper)] hover:text-[color:var(--text)]"
+        >
           <span aria-hidden="true">←</span>
           <PixelArt name="icon-projects" size={16} />
           All projects
@@ -31,22 +38,34 @@ function CaseTaskbar() {
 }
 
 // Links in blue-text (5.95:1 on the page); 44px tap targets, even for "Home"
-const CRUMB_LINK = 'inline-flex min-h-[44px] min-w-[44px] items-center text-[color:var(--blue-text)] underline decoration-2 underline-offset-4';
+const CRUMB_LINK =
+  "inline-flex min-h-[44px] min-w-[44px] items-center text-[color:var(--blue-text)] underline decoration-2 underline-offset-4";
 
 function Breadcrumb({ current }: { current: string }) {
   return (
     <nav aria-label="Breadcrumb" className="mt-6 mb-4">
       <ol className="flex flex-wrap items-center gap-x-2 font-sans text-body-sm sm:text-body text-[color:var(--text)]">
         <li className="flex items-center gap-x-2">
-          <Link href="/" className={CRUMB_LINK}>Home</Link>
+          <Link href="/" className={CRUMB_LINK}>
+            Home
+          </Link>
           <span aria-hidden="true">/</span>
         </li>
         <li className="flex items-center gap-x-2">
-          <Link href="/#projects" replace onClick={() => play('back')} className={CRUMB_LINK}>Projects</Link>
+          <Link
+            href="/#projects"
+            replace
+            onClick={() => play("back")}
+            className={CRUMB_LINK}
+          >
+            Projects
+          </Link>
           <span aria-hidden="true">/</span>
         </li>
         <li className="inline-flex min-h-[44px] items-center">
-          <span aria-current="page" className="font-bold">{current}</span>
+          <span aria-current="page" className="font-bold">
+            {current}
+          </span>
         </li>
       </ol>
     </nav>
@@ -62,11 +81,24 @@ function NextProject({ slug }: { slug: CaseSlug }) {
       className={`bg-[var(--blue)] text-black border-t-[3px] border-black ${GUTTERS} py-16 lg:py-20 [--focus:var(--ink)]`}
     >
       <div className="max-w-5xl mx-auto">
-        <SectionHeading text="Next project" tone="ink" size="case" className="mb-6" />
+        <SectionHeading
+          text="Next project"
+          tone="ink"
+          size="case"
+          className="mb-6"
+        />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:items-end">
-          <ProjectTile project={{ ...next, featured: false }} span="lg:col-span-8" />
+          <ProjectTile
+            project={{ ...next, featured: false }}
+            span="lg:col-span-8"
+          />
           <div className="lg:col-span-4">
-            <Link href="/#projects" replace onClick={() => play('back')} className="btn btn-primary w-full">
+            <Link
+              href="/#projects"
+              replace
+              onClick={() => play("back")}
+              className="btn btn-primary w-full"
+            >
               <span aria-hidden="true">←</span>
               All projects
             </Link>
@@ -94,10 +126,10 @@ export default function CaseLayout({ slug, children }: CaseLayoutProps) {
     document.title = `${name} | John Aaron Branzuela`;
     // Keep headings and controls scrolled into view clear of the sticky taskbar (WCAG 2.4.11)
     const root = document.documentElement;
-    root.style.scrollPaddingTop = '72px';
+    root.style.scrollPaddingTop = "72px";
     return () => {
       document.title = HOME_TITLE;
-      root.style.scrollPaddingTop = '';
+      root.style.scrollPaddingTop = "";
     };
   }, [slug, name]);
 

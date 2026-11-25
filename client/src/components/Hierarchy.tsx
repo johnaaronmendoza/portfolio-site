@@ -3,15 +3,15 @@
  * bullets, fact chips and spot plates. Copy marks key terms with **double
  * asterisks**; they are parsed here into <strong>, never injected as HTML.
  */
-import type { ReactNode } from 'react';
-import PixelArt, { type PixelArtName } from './PixelArt';
+import type { ReactNode } from "react";
+import PixelArt, { type PixelArtName } from "./PixelArt";
 
 /** The key term's fill. blue: on white windows and the page. paper: on the blue band or inside a blue/yellow block */
-export type KeySurface = 'blue' | 'paper';
+type KeySurface = "blue" | "paper";
 
 const KEY_FILL: Record<KeySurface, string> = {
-  blue: 'bg-[var(--blue)]',
-  paper: 'bg-[var(--paper)]',
+  blue: "bg-[var(--blue)]",
+  paper: "bg-[var(--paper)]",
 };
 
 interface KeyTextProps {
@@ -30,10 +30,10 @@ const FIGURE = /^\d/;
  * bold only, so the fill always means "a number". Odd runs of a split on "**"
  * are the marked words; unbalanced markers fall back to plain text.
  */
-export function KeyText({ text, max = 1, surface = 'blue' }: KeyTextProps) {
+export function KeyText({ text, max = 1, surface = "blue" }: KeyTextProps) {
   let used = 0;
-  const runs = text.split('**');
-  if (runs.length % 2 === 0) return <>{runs.join('')}</>;
+  const runs = text.split("**");
+  if (runs.length % 2 === 0) return <>{runs.join("")}</>;
   return (
     <>
       {runs.map((run, i) => {
@@ -43,7 +43,7 @@ export function KeyText({ text, max = 1, surface = 'blue' }: KeyTextProps) {
         return (
           <strong
             key={i}
-            className={`font-bold ${FIGURE.test(run) && surface === 'blue' ? 'text-white' : 'text-black'} ${FIGURE.test(run) ? `px-[0.25em] py-[0.05em] box-decoration-clone ${KEY_FILL[surface]}` : ''}`}
+            className={`font-bold ${FIGURE.test(run) && surface === "blue" ? "text-white" : "text-black"} ${FIGURE.test(run) ? `px-[0.25em] py-[0.05em] box-decoration-clone ${KEY_FILL[surface]}` : ""}`}
           >
             {run}
           </strong>
@@ -54,13 +54,13 @@ export function KeyText({ text, max = 1, surface = 'blue' }: KeyTextProps) {
 }
 
 /** The surface the lead sits on */
-type LeadTone = 'page' | 'blue' | 'paper';
+type LeadTone = "page" | "blue" | "paper";
 
 // Approved pairings: text on the page (blue-text prompt), ink on blue, ink on paper
 const LEAD_TEXT: Record<LeadTone, string> = {
-  page: 'text-[color:var(--text)]',
-  blue: 'text-black',
-  paper: 'text-black',
+  page: "text-[color:var(--text)]",
+  blue: "text-black",
+  paper: "text-black",
 };
 
 /**
@@ -69,9 +69,9 @@ const LEAD_TEXT: Record<LeadTone, string> = {
  */
 export function Lead({
   text,
-  tone = 'page',
+  tone = "page",
   prompt = true,
-  className = '',
+  className = "",
 }: {
   text: string;
   tone?: LeadTone;
@@ -81,21 +81,33 @@ export function Lead({
 }) {
   return (
     <p
-      className={`relative max-w-[42ch] font-sans font-bold text-lead-sm leading-[1.4] lg:text-lead lg:leading-[1.35] text-balance ${prompt ? 'pl-[2ch]' : ''} ${LEAD_TEXT[tone]} ${className}`}
+      className={`relative max-w-[42ch] font-sans font-bold text-lead-sm leading-[1.4] lg:text-lead lg:leading-[1.35] text-balance ${prompt ? "pl-[2ch]" : ""} ${LEAD_TEXT[tone]} ${className}`}
     >
       {prompt && (
-        <span aria-hidden="true" className={`absolute left-0 ${tone === 'page' ? 'text-[color:var(--blue-text)]' : ''}`}>
-          {'>'}
+        <span
+          aria-hidden="true"
+          className={`absolute left-0 ${tone === "page" ? "text-[color:var(--blue-text)]" : ""}`}
+        >
+          {">"}
         </span>
       )}
-      <KeyText text={text} max={1} surface={tone === 'blue' ? 'paper' : 'blue'} />
+      <KeyText
+        text={text}
+        max={1}
+        surface={tone === "blue" ? "paper" : "blue"}
+      />
     </p>
   );
 }
 
 /** Pixel-arrow bullets (bullet.svg), key term first; wrapped lines align with the text.
  *  `extras` adds content after an item's text, keyed by the item. */
-export function PixelList({ items, extras, columns = 1, className = '' }: {
+export function PixelList({
+  items,
+  extras,
+  columns = 1,
+  className = "",
+}: {
   items: string[];
   extras?: Record<string, ReactNode>;
   columns?: 1 | 2;
@@ -104,11 +116,16 @@ export function PixelList({ items, extras, columns = 1, className = '' }: {
   return (
     <ul
       className={`font-sans text-body-sm sm:text-body leading-[1.65] ${
-        columns === 2 ? 'grid gap-x-8 gap-y-3 lg:gap-y-4 sm:grid-cols-2' : 'space-y-3 lg:space-y-4 max-w-[60ch]'
+        columns === 2
+          ? "grid gap-x-8 gap-y-3 lg:gap-y-4 sm:grid-cols-2"
+          : "space-y-3 lg:space-y-4 max-w-[60ch]"
       } ${className}`}
     >
       {items.map(item => (
-        <li key={item} className="grid grid-cols-[16px_1fr] items-start gap-x-3">
+        <li
+          key={item}
+          className="grid grid-cols-[16px_1fr] items-start gap-x-3"
+        >
           <PixelArt name="bullet" size={16} lazy className="line-mark" />
           <span className="min-w-0 break-words">
             <KeyText text={item} max={1} />
@@ -123,11 +140,17 @@ export function PixelList({ items, extras, columns = 1, className = '' }: {
 export type Fact = { icon: PixelArtName; text: string };
 
 const CHIP =
-  'inline-flex min-w-0 max-w-full items-start gap-2 min-h-9 border-2 border-black bg-[var(--paper)] px-2.5 py-1.5 font-mono text-body-sm sm:text-body font-bold leading-[1.4] text-black';
+  "inline-flex min-w-0 max-w-full items-start gap-2 min-h-9 border-2 border-black bg-[var(--paper)] px-2.5 py-1.5 font-mono text-body-sm sm:text-body font-bold leading-[1.4] text-black";
 
 /** L6 chip: a static label (no shadow, not pressable); the words carry the meaning, the icon is decorative.
  *  `lazy={false}` above the fold (the hero), so its icon isn't deferred */
-export function Chip({ icon, text, as: Tag = 'p', className = '', lazy = true }: Fact & { as?: 'p' | 'li'; className?: string; lazy?: boolean }) {
+export function Chip({
+  icon,
+  text,
+  as: Tag = "p",
+  className = "",
+  lazy = true,
+}: Fact & { as?: "p" | "li"; className?: string; lazy?: boolean }) {
   return (
     <Tag className={`${CHIP} ${className}`}>
       <PixelArt name={icon} size={16} lazy={lazy} className="line-mark" />
@@ -137,7 +160,15 @@ export function Chip({ icon, text, as: Tag = 'p', className = '', lazy = true }:
 }
 
 /** A labelled list of chips that wraps */
-export function FactChips({ facts, label, className = '' }: { facts: Fact[]; label: string; className?: string }) {
+export function FactChips({
+  facts,
+  label,
+  className = "",
+}: {
+  facts: Fact[];
+  label: string;
+  className?: string;
+}) {
   return (
     <ul aria-label={label} className={`flex flex-wrap gap-2 ${className}`}>
       {facts.map(fact => (
@@ -146,4 +177,3 @@ export function FactChips({ facts, label, className = '' }: { facts: Fact[]; lab
     </ul>
   );
 }
-

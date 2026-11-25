@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useReducedMotion } from './useReducedMotion';
+import { useEffect, useState } from "react";
+import { useReducedMotion } from "./useReducedMotion";
 
 function isPaused(): boolean {
-  return typeof document !== 'undefined' && document.documentElement.dataset.motion === 'paused';
+  return (
+    typeof document !== "undefined" &&
+    document.documentElement.dataset.motion === "paused"
+  );
 }
 
 /**
@@ -19,7 +22,10 @@ export function useCalmMotion(): boolean {
     // before this one subscribes, so read it again here
     setPaused(isPaused());
     const observer = new MutationObserver(() => setPaused(isPaused()));
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-motion'] });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-motion"],
+    });
     return () => observer.disconnect();
   }, []);
 

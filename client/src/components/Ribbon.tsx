@@ -1,6 +1,6 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties } from "react";
 
-type RibbonTone = 'ink' | 'blue';
+type RibbonTone = "ink" | "blue";
 
 interface RibbonProps {
   /** Phrases on the strip; each is followed by a sparkle separator */
@@ -12,8 +12,8 @@ interface RibbonProps {
 
 // Approved pairings: paper on ink (18.9:1), black on blue
 const TONES: Record<RibbonTone, string> = {
-  ink: 'bg-[var(--bar)] text-[color:var(--paper)]',
-  blue: 'bg-[var(--blue)] text-black',
+  ink: "bg-[var(--bar)] text-[color:var(--paper)]",
+  blue: "bg-[var(--blue)] text-black",
 };
 
 // Lower-bound glyph advance: IBM Plex Mono is 0.6em wide (7.8px at
@@ -30,11 +30,11 @@ const SPEED_PX_PER_S = 60; // same scroll speed whatever the text length
  */
 export default function Ribbon({
   items,
-  tone = 'ink',
+  tone = "ink",
   reverse = false,
-  className = '',
+  className = "",
 }: RibbonProps) {
-  const groupPx = items.join('').length * CHAR_PX + items.length * SEPARATOR_PX;
+  const groupPx = items.join("").length * CHAR_PX + items.length * SEPARATOR_PX;
   const repeats = Math.max(2, Math.ceil(MIN_HALF_PX / groupPx));
   const duration = Math.round((repeats * groupPx) / SPEED_PX_PER_S);
 
@@ -44,14 +44,19 @@ export default function Ribbon({
       className={`overflow-hidden select-none border-y-[3px] border-black py-3 sm:py-4 ${TONES[tone]} ${className}`}
     >
       <div
-        className={`ribbon-track ${reverse ? 'ribbon-track--reverse' : ''}`}
-        style={{ '--ribbon-duration': `${duration}s` } as CSSProperties}
+        className={`ribbon-track ${reverse ? "ribbon-track--reverse" : ""}`}
+        style={{ "--ribbon-duration": `${duration}s` } as CSSProperties}
       >
         {/* One span per phrase; the sparkle after it is a CSS background (.ribbon-item) */}
         {Array.from({ length: repeats * 2 }, (_, i) =>
           items.map(item => (
-            <span key={`${i}-${item}`} className="ribbon-item font-label text-label sm:text-body whitespace-pre">{item}</span>
-          )),
+            <span
+              key={`${i}-${item}`}
+              className="ribbon-item font-label text-label sm:text-body whitespace-pre"
+            >
+              {item}
+            </span>
+          ))
         )}
       </div>
     </div>

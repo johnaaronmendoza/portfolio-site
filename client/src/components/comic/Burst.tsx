@@ -1,11 +1,11 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from "react";
 
 // 12-point comic "POW" star: alternating outer and inner radius on a 100×100 box
 const POINTS = Array.from({ length: 24 }, (_, i) => {
   const r = i % 2 === 0 ? 48 : 33;
   const a = (i * Math.PI) / 12;
   return `${(50 + r * Math.cos(a)).toFixed(1)},${(50 + r * Math.sin(a)).toFixed(1)}`;
-}).join(' ');
+}).join(" ");
 
 interface BurstProps {
   /** Fill colour, a palette var such as 'var(--blue)' (paper by default) */
@@ -23,7 +23,13 @@ interface BurstProps {
  * decorative: callers hide it from assistive tech when the words also exist
  * as real text, or use it as a background behind real text.
  */
-export default function Burst({ fill = 'var(--paper)', rotate = -6, className = '', style, children }: BurstProps) {
+export default function Burst({
+  fill = "var(--paper)",
+  rotate = -6,
+  className = "",
+  style,
+  children,
+}: BurstProps) {
   return (
     <span className={`grid place-items-center ${className}`} style={style}>
       {/* Absolutely filling the box the caller positions (className must make
@@ -46,7 +52,10 @@ export default function Burst({ fill = 'var(--paper)', rotate = -6, className = 
         />
       </svg>
       {children && (
-        <span className="relative font-comic text-center leading-none" style={{ transform: `rotate(${rotate}deg)` }}>
+        <span
+          className="relative font-comic text-center leading-none"
+          style={{ transform: `rotate(${rotate}deg)` }}
+        >
           {children}
         </span>
       )}

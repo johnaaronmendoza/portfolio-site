@@ -1,21 +1,21 @@
-import { FactChips, Lead, type Fact } from '@/components/Hierarchy';
-import { PixelGitHub } from '@/components/PixelIcons';
-import StatStrip, { type Stat } from '@/components/StatStrip';
-import { WindowBar } from '@/components/Window';
-import { ScreenFigure, type Shot } from '@/components/case/ScreenGallery';
-import { getCase, type CaseSlug } from '@/data/projects';
+import { FactChips, Lead, type Fact } from "@/components/Hierarchy";
+import { PixelGitHub } from "@/components/PixelIcons";
+import StatStrip, { type Stat } from "@/components/StatStrip";
+import { WindowBar } from "@/components/Window";
+import { ScreenFigure, type Shot } from "@/components/case/ScreenGallery";
+import { getCase, type CaseSlug } from "@/data/projects";
 
-export type CaseLink = {
+type CaseLink = {
   label: string;
   href: string;
   /** GitHub profile (ghost) or this project's own repository (secondary) */
-  kind: 'profile' | 'repo';
+  kind: "profile" | "repo";
 };
 
 export const GITHUB_PROFILE: CaseLink = {
-  label: 'GitHub profile',
-  href: 'https://github.com/johnaaronmendoza',
-  kind: 'profile',
+  label: "GitHub profile",
+  href: "https://github.com/johnaaronmendoza",
+  kind: "profile",
 };
 
 interface CaseHeaderProps {
@@ -39,7 +39,15 @@ interface CaseHeaderProps {
  * Name, year and summary come from data/projects.ts; the real screenshot
  * (heroShot) follows straight after.
  */
-export default function CaseHeader({ slug, file, facts, note, links, stats, heroShot }: CaseHeaderProps) {
+export default function CaseHeader({
+  slug,
+  file,
+  facts,
+  note,
+  links,
+  stats,
+  heroShot,
+}: CaseHeaderProps) {
   const project = getCase(slug);
 
   return (
@@ -71,9 +79,9 @@ export default function CaseHeader({ slug, file, facts, note, links, stats, hero
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`btn w-full sm:w-auto ${kind === 'repo' ? 'btn-secondary' : 'btn-ghost-ink'}`}
+                  className={`btn w-full sm:w-auto ${kind === "repo" ? "btn-secondary" : "btn-ghost-ink"}`}
                 >
-                  {kind === 'profile' && <PixelGitHub size={16} />}
+                  {kind === "profile" && <PixelGitHub size={16} />}
                   {label}
                   <span className="sr-only"> (opens in a new tab)</span>
                 </a>

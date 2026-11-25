@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, type RefObject } from 'react';
+import { useCallback, useEffect, useRef, type RefObject } from "react";
 
-const FOCUSABLE = 'button:not([disabled]), input:not([disabled]), [href], [tabindex]:not([tabindex="-1"])';
+const FOCUSABLE =
+  'button:not([disabled]), input:not([disabled]), [href], [tabindex]:not([tabindex="-1"])';
 
 // Open modals holding the page still; the last one to close releases it
 let scrollLocks = 0;
@@ -18,7 +19,7 @@ let scrollLocks = 0;
 export function useModalFocus(
   open: boolean,
   dialogRef: RefObject<HTMLElement | null>,
-  initialRef?: RefObject<HTMLElement | null>,
+  initialRef?: RefObject<HTMLElement | null>
 ): () => void {
   const keepRef = useRef(false);
 
@@ -26,14 +27,19 @@ export function useModalFocus(
     if (!open) return;
     keepRef.current = false;
     const root = document.documentElement;
-    if (scrollLocks++ === 0) root.style.overflow = 'hidden';
-    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    if (scrollLocks++ === 0) root.style.overflow = "hidden";
+    const opener =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
     // After the dialog has mounted
-    const frame = requestAnimationFrame(() => (initialRef?.current ?? dialogRef.current)?.focus());
+    const frame = requestAnimationFrame(() =>
+      (initialRef?.current ?? dialogRef.current)?.focus()
+    );
 
     const onKey = (e: KeyboardEvent) => {
       const dialog = dialogRef.current;
-      if (e.key !== 'Tab' || !dialog) return;
+      if (e.key !== "Tab" || !dialog) return;
       const items = dialog.querySelectorAll<HTMLElement>(FOCUSABLE);
       if (items.length === 0) return;
       const first = items[0];
@@ -48,15 +54,18 @@ export function useModalFocus(
         first.focus();
       }
     };
-    window.addEventListener('keydown', onKey);
+    window.addEventListener("keydown", onKey);
 
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener('keydown', onKey);
-      if (--scrollLocks === 0) root.style.overflow = '';
-      if (!keepRef.current && opener && document.contains(opener)) opener.focus({ preventScroll: true });
+      window.removeEventListener("keydown", onKey);
+      if (--scrollLocks === 0) root.style.overflow = "";
+      if (!keepRef.current && opener && document.contains(opener))
+        opener.focus({ preventScroll: true });
     };
   }, [open, dialogRef, initialRef]);
 
-  return useCallback(() => { keepRef.current = true; }, []);
+  return useCallback(() => {
+    keepRef.current = true;
+  }, []);
 }

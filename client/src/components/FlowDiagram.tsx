@@ -5,7 +5,7 @@
  * Vertical below lg; a row of `lgCols` from lg. No motion of any kind.
  */
 
-export type FlowActor = 'AI' | 'Agent';
+export type FlowActor = "AI" | "Agent";
 
 /** A parallel or unordered part of a step: no number, no arrows between them */
 export type FlowItem = { label: string; detail?: string };
@@ -35,64 +35,92 @@ interface FlowDiagramProps {
   className?: string;
 }
 
-const LG_COLS = { 1: '', 3: 'lg:grid-cols-3', 4: 'lg:grid-cols-4', 5: 'lg:grid-cols-5' } as const;
+const LG_COLS = {
+  1: "",
+  3: "lg:grid-cols-3",
+  4: "lg:grid-cols-4",
+  5: "lg:grid-cols-5",
+} as const;
 
 // Yellow marks AI only (site-wide); the agent is paper
 const ACTOR_FILL: Record<FlowActor, string> = {
-  AI: 'bg-[var(--yellow)]',
-  Agent: 'bg-[var(--paper)]',
+  AI: "bg-[var(--yellow)]",
+  Agent: "bg-[var(--paper)]",
 };
 
-const LABEL = 'font-sans font-bold text-body-sm sm:text-body leading-[1.4] text-balance';
+const LABEL =
+  "font-sans font-bold text-body-sm sm:text-body leading-[1.4] text-balance";
 
-export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols = 1, className = '' }: FlowDiagramProps) {
+export default function FlowDiagram({
+  steps,
+  labelledBy,
+  numbered = true,
+  lgCols = 1,
+  className = "",
+}: FlowDiagramProps) {
   const row = lgCols > 1;
   // Items sit side by side while the node is full width (one column under 360px,
   // where two would squeeze a 9-letter label), and stack inside a narrow row node
-  const itemCols = row ? 'sm:grid-cols-2 lg:grid-cols-1' : 'min-[360px]:grid-cols-2 sm:grid-cols-4';
+  const itemCols = row
+    ? "sm:grid-cols-2 lg:grid-cols-1"
+    : "min-[360px]:grid-cols-2 sm:grid-cols-4";
 
   return (
     <figure aria-labelledby={labelledBy} className={className}>
-      <ol className={`grid grid-cols-1 gap-6 ${LG_COLS[lgCols]} ${row ? 'flow--row' : ''}`}>
+      <ol
+        className={`grid grid-cols-1 gap-6 ${LG_COLS[lgCols]} ${row ? "flow--row" : ""}`}
+      >
         {steps.map(({ label, detail, actor, emphasis, items, loop }, i) => (
           <li key={label} className="relative flex flex-col">
             {i > 0 && (
-              <span aria-hidden="true" className={`flow-link ${row && i % lgCols === 0 ? 'flow-link--row-start' : ''}`} />
+              <span
+                aria-hidden="true"
+                className={`flow-link ${row && i % lgCols === 0 ? "flow-link--row-start" : ""}`}
+              />
             )}
             <div
               className={`flex-1 min-h-14 px-3.5 py-3 border-black ${
                 emphasis
-                  ? 'border-[3px] bg-[var(--bar)] text-[color:var(--paper)] shadow-8bit'
-                  : 'border-2 bg-[var(--paper)] text-black'
+                  ? "border-[3px] bg-[var(--bar)] text-[color:var(--paper)] shadow-8bit"
+                  : "border-2 bg-[var(--paper)] text-black"
               }`}
             >
               <div className="flex flex-wrap items-start gap-2">
                 {numbered && (
-                  <span
-                    className="flex-shrink-0 border-2 border-black bg-[var(--paper)] px-1.5 py-0.5 font-label text-label text-black tabular-nums"
-                  >
+                  <span className="flex-shrink-0 border-2 border-black bg-[var(--paper)] px-1.5 py-0.5 font-label text-label text-black tabular-nums">
                     {i + 1}
                   </span>
                 )}
                 <span className={`min-w-0 flex-1 ${LABEL}`}>{label}</span>
                 {actor && (
-                  <span className={`flex-shrink-0 border-2 border-black px-1.5 py-0.5 font-label text-label text-black ${ACTOR_FILL[actor]}`}>
+                  <span
+                    className={`flex-shrink-0 border-2 border-black px-1.5 py-0.5 font-label text-label text-black ${ACTOR_FILL[actor]}`}
+                  >
                     {actor}
                   </span>
                 )}
               </div>
               {detail && (
-                <p className={`mt-1 font-sans text-body-sm leading-[1.5] ${emphasis ? 'text-[color:var(--paper)]' : 'text-[color:var(--text)]'}`}>
+                <p
+                  className={`mt-1 font-sans text-body-sm leading-[1.5] ${emphasis ? "text-[color:var(--paper)]" : "text-[color:var(--text)]"}`}
+                >
                   {detail}
                 </p>
               )}
               {items && (
                 <ul className={`mt-3 grid gap-2 ${itemCols}`}>
                   {items.map(item => (
-                    <li key={item.label} className="min-w-0 border-2 border-black bg-[var(--paper)] px-2.5 py-2">
-                      <span className={`block break-words text-black ${LABEL}`}>{item.label}</span>
+                    <li
+                      key={item.label}
+                      className="min-w-0 border-2 border-black bg-[var(--paper)] px-2.5 py-2"
+                    >
+                      <span className={`block break-words text-black ${LABEL}`}>
+                        {item.label}
+                      </span>
                       {item.detail && (
-                        <span className="block mt-1 font-sans text-body-sm leading-[1.5] text-[color:var(--text)]">{item.detail}</span>
+                        <span className="block mt-1 font-sans text-body-sm leading-[1.5] text-[color:var(--text)]">
+                          {item.detail}
+                        </span>
                       )}
                     </li>
                   ))}
@@ -101,7 +129,9 @@ export default function FlowDiagram({ steps, labelledBy, numbered = true, lgCols
             </div>
             {loop && (
               <p className="mt-2 flex items-start gap-2 border-2 border-black bg-[var(--paper)] px-2.5 py-1.5 font-sans text-body-sm leading-[1.5] text-black">
-                <span aria-hidden="true" className="font-bold">↺</span>
+                <span aria-hidden="true" className="font-bold">
+                  ↺
+                </span>
                 {loop}
               </p>
             )}

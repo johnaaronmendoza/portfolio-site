@@ -18,9 +18,11 @@ export class PixelationManager {
   private offCtx: CanvasRenderingContext2D;
 
   private constructor() {
-    this.offscreen = document.createElement('canvas');
+    this.offscreen = document.createElement("canvas");
     // willReadFrequently=false — we never read back pixel data, only draw.
-    this.offCtx = this.offscreen.getContext('2d', { willReadFrequently: false })!;
+    this.offCtx = this.offscreen.getContext("2d", {
+      willReadFrequently: false,
+    })!;
   }
 
   static getInstance(): PixelationManager {
@@ -35,25 +37,32 @@ export class PixelationManager {
    * pixelSize=1 → crisp full-resolution.
    * pixelSize=20 → very blocky 8-bit look.
    */
-  draw(image: HTMLImageElement, target: HTMLCanvasElement, pixelSize: number, crop: ImageCrop = {}): void {
+  draw(
+    image: HTMLImageElement,
+    target: HTMLCanvasElement,
+    pixelSize: number,
+    crop: ImageCrop = {}
+  ): void {
     if (!image.complete || image.naturalWidth === 0) return;
     const W = target.width;
     const H = target.height;
     if (W === 0 || H === 0) return;
 
-    const ctx = target.getContext('2d');
+    const ctx = target.getContext("2d");
     if (!ctx) return;
 
     // ── Object-cover crop: fill without stretching, at the crop's focus ──
     const { x = 0.5, y = 0.5, zoom = 1 } = crop;
     const iw = image.naturalWidth;
     const ih = image.naturalHeight;
-    const imgAspect    = iw / ih;
+    const imgAspect = iw / ih;
     const canvasAspect = W / H;
 
-    let sw = iw, sh = ih;
-    if (imgAspect > canvasAspect) sw = ih * canvasAspect; // wider: crop left/right
-    else sh = iw / canvasAspect;                          // taller: crop top/bottom
+    let sw = iw,
+      sh = ih;
+    if (imgAspect > canvasAspect)
+      sw = ih * canvasAspect; // wider: crop left/right
+    else sh = iw / canvasAspect; // taller: crop top/bottom
     sw /= zoom;
     sh /= zoom;
     const sx = (iw - sw) * x;
@@ -70,7 +79,7 @@ export class PixelationManager {
     const blocksX = Math.max(1, Math.floor(W / pixelSize));
     const blocksY = Math.max(1, Math.floor(H / pixelSize));
 
-    this.offscreen.width  = blocksX;
+    this.offscreen.width = blocksX;
     this.offscreen.height = blocksY;
     this.offCtx.imageSmoothingEnabled = false;
     this.offCtx.drawImage(image, sx, sy, sw, sh, 0, 0, blocksX, blocksY);

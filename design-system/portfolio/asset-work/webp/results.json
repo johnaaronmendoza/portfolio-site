@@ -1,0 +1,792 @@
+[
+ {
+  "src": "attached_assets/silverlink_p19_img0.png",
+  "bytes": 157930,
+  "natural": [
+   873,
+   560
+  ],
+  "css": 873,
+  "fit": "width",
+  "need_1x": 873,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/silverlink/silverlink_p19_img0.webp",
+    "w": 873,
+    "h": 560,
+    "bytes": 36606,
+    "mode": "lossy q80",
+    "density": 1.0
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/silverlink_p14_img0.png",
+  "bytes": 86387,
+  "natural": [
+   1172,
+   599
+  ],
+  "css": 1018,
+  "fit": "width",
+  "need_1x": 1018,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/silverlink/silverlink_p14_img0.webp",
+    "w": 1018,
+    "h": 520,
+    "bytes": 17386,
+    "mode": "lossy q80",
+    "density": 1.0
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/silverlink_p21_img0.png",
+  "bytes": 109120,
+  "natural": [
+   640,
+   428
+  ],
+  "css": 697,
+  "fit": "width",
+  "need_1x": 697,
+  "upscaled_on_page": true,
+  "files": [
+   {
+    "path": "client/public/assets/case/silverlink/silverlink_p21_img0.webp",
+    "w": 640,
+    "h": 428,
+    "bytes": 15130,
+    "mode": "lossy q80",
+    "density": 0.92
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/silverlink_p22_img0.png",
+  "bytes": 115535,
+  "natural": [
+   700,
+   392
+  ],
+  "css": 697,
+  "fit": "width",
+  "need_1x": 697,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/silverlink/silverlink_p22_img0.webp",
+    "w": 697,
+    "h": 390,
+    "bytes": 11802,
+    "mode": "lossy q80",
+    "density": 1.0
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/silverlink_p23_img0.png",
+  "bytes": 57318,
+  "natural": [
+   862,
+   415
+  ],
+  "css": 1018,
+  "fit": "width",
+  "need_1x": 1018,
+  "upscaled_on_page": true,
+  "files": [
+   {
+    "path": "client/public/assets/case/silverlink/silverlink_p23_img0.webp",
+    "w": 862,
+    "h": 415,
+    "bytes": 12756,
+    "mode": "lossy q80",
+    "density": 0.85
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/scs_p65_img0.png",
+  "bytes": 51099,
+  "natural": [
+   532,
+   843
+  ],
+  "css": 353,
+  "fit": "width",
+  "need_1x": 353,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/scs/scs_p65_img0.webp",
+    "w": 353,
+    "h": 559,
+    "bytes": 9012,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/scs/scs_p65_img0@full.webp",
+    "w": 532,
+    "h": 843,
+    "bytes": 12492,
+    "mode": "lossy q80",
+    "density": 1.51
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/scs_p72_img0.png",
+  "bytes": 83739,
+  "natural": [
+   1278,
+   985
+  ],
+  "css": 697,
+  "fit": "width",
+  "need_1x": 697,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/scs/scs_p72_img0.webp",
+    "w": 697,
+    "h": 537,
+    "bytes": 9878,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/scs/scs_p72_img0@full.webp",
+    "w": 1278,
+    "h": 985,
+    "bytes": 24608,
+    "mode": "lossy q80",
+    "density": 1.83
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/scs_p71_img1.png",
+  "bytes": 156648,
+  "natural": [
+   1887,
+   1006
+  ],
+  "css": 1018,
+  "fit": "width",
+  "need_1x": 1018,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/scs/scs_p71_img1.webp",
+    "w": 1018,
+    "h": 543,
+    "bytes": 17000,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/scs/scs_p71_img1@full.webp",
+    "w": 1887,
+    "h": 1006,
+    "bytes": 36394,
+    "mode": "lossy q80",
+    "density": 1.85
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/scs_p72_img1.png",
+  "bytes": 71485,
+  "natural": [
+   1915,
+   1003
+  ],
+  "css": 1018,
+  "fit": "width",
+  "need_1x": 1018,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/scs/scs_p72_img1.webp",
+    "w": 1018,
+    "h": 533,
+    "bytes": 11488,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/scs/scs_p72_img1@full.webp",
+    "w": 1915,
+    "h": 1003,
+    "bytes": 25780,
+    "mode": "lossy q80",
+    "density": 1.88
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/scs_p73_img0.png",
+  "bytes": 107251,
+  "natural": [
+   1884,
+   1005
+  ],
+  "css": 1018,
+  "fit": "width",
+  "need_1x": 1018,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/scs/scs_p73_img0.webp",
+    "w": 1018,
+    "h": 543,
+    "bytes": 15614,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/scs/scs_p73_img0@full.webp",
+    "w": 1884,
+    "h": 1005,
+    "bytes": 33324,
+    "mode": "lossy q80",
+    "density": 1.85
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/scs_p74_img1.png",
+  "bytes": 114131,
+  "natural": [
+   1917,
+   1003
+  ],
+  "css": 1018,
+  "fit": "width",
+  "need_1x": 1018,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/scs/scs_p74_img1.webp",
+    "w": 1018,
+    "h": 533,
+    "bytes": 14152,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/scs/scs_p74_img1@full.webp",
+    "w": 1917,
+    "h": 1003,
+    "bytes": 33102,
+    "mode": "lossy q80",
+    "density": 1.88
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/firesafety_p29_img5.png",
+  "bytes": 183762,
+  "natural": [
+   436,
+   737
+  ],
+  "css": 331,
+  "fit": "width",
+  "need_1x": 331,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/firesafety/firesafety_p29_img5.webp",
+    "w": 331,
+    "h": 560,
+    "bytes": 15872,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/firesafety/firesafety_p29_img5@full.webp",
+    "w": 436,
+    "h": 737,
+    "bytes": 24350,
+    "mode": "lossy q80",
+    "density": 1.32
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/firesafety_p29_img1.png",
+  "bytes": 100442,
+  "natural": [
+   896,
+   564
+  ],
+  "css": 1018,
+  "fit": "width",
+  "need_1x": 1018,
+  "upscaled_on_page": true,
+  "files": [
+   {
+    "path": "client/public/assets/case/firesafety/firesafety_p29_img1.webp",
+    "w": 896,
+    "h": 564,
+    "bytes": 12412,
+    "mode": "lossy q80",
+    "density": 0.88
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/firesafety_p29_img2.png",
+  "bytes": 71163,
+  "natural": [
+   605,
+   520
+  ],
+  "css": 697,
+  "fit": "width",
+  "need_1x": 697,
+  "upscaled_on_page": true,
+  "files": [
+   {
+    "path": "client/public/assets/case/firesafety/firesafety_p29_img2.webp",
+    "w": 605,
+    "h": 520,
+    "bytes": 11810,
+    "mode": "lossy q80",
+    "density": 0.87
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/firesafety_p29_img3.png",
+  "bytes": 87132,
+  "natural": [
+   790,
+   487
+  ],
+  "css": 697,
+  "fit": "width",
+  "need_1x": 697,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/firesafety/firesafety_p29_img3.webp",
+    "w": 697,
+    "h": 430,
+    "bytes": 13688,
+    "mode": "lossy q80",
+    "density": 1.0
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/firesafety_p29_img4.png",
+  "bytes": 135711,
+  "natural": [
+   586,
+   1041
+  ],
+  "css": 315,
+  "fit": "width",
+  "need_1x": 315,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/firesafety/firesafety_p29_img4.webp",
+    "w": 315,
+    "h": 560,
+    "bytes": 14842,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/firesafety/firesafety_p29_img4@full.webp",
+    "w": 586,
+    "h": 1041,
+    "bytes": 34640,
+    "mode": "lossy q80",
+    "density": 1.86
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/firesafety_p30_img0.png",
+  "bytes": 354267,
+  "natural": [
+   911,
+   744
+  ],
+  "css": 697,
+  "fit": "width",
+  "need_1x": 697,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/firesafety/firesafety_p30_img0.webp",
+    "w": 697,
+    "h": 569,
+    "bytes": 21984,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/firesafety/firesafety_p30_img0@full.webp",
+    "w": 911,
+    "h": 744,
+    "bytes": 30964,
+    "mode": "lossy q80",
+    "density": 1.31
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/firesafety_p30_img1.png",
+  "bytes": 335003,
+  "natural": [
+   947,
+   642
+  ],
+  "css": 1018,
+  "fit": "width",
+  "need_1x": 1018,
+  "upscaled_on_page": true,
+  "files": [
+   {
+    "path": "client/public/assets/case/firesafety/firesafety_p30_img1.webp",
+    "w": 947,
+    "h": 642,
+    "bytes": 40828,
+    "mode": "lossy q80",
+    "density": 0.93
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/firesafety_p30_img3.png",
+  "bytes": 153362,
+  "natural": [
+   754,
+   872
+  ],
+  "css": 484,
+  "fit": "width",
+  "need_1x": 484,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/firesafety/firesafety_p30_img3.webp",
+    "w": 484,
+    "h": 560,
+    "bytes": 14770,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/firesafety/firesafety_p30_img3@full.webp",
+    "w": 754,
+    "h": 872,
+    "bytes": 27466,
+    "mode": "lossy q80",
+    "density": 1.56
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/uat_dashboard_full.png",
+  "bytes": 104457,
+  "natural": [
+   1440,
+   922
+  ],
+  "css": 1018,
+  "fit": "width",
+  "need_1x": 1018,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/uat/uat_dashboard_full.webp",
+    "w": 1018,
+    "h": 652,
+    "bytes": 21530,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/uat/uat_dashboard_full@full.webp",
+    "w": 1440,
+    "h": 922,
+    "bytes": 33736,
+    "mode": "lossy q80",
+    "density": 1.41
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/uat_defects.png",
+  "bytes": 137588,
+  "natural": [
+   1440,
+   900
+  ],
+  "css": 1018,
+  "fit": "width",
+  "need_1x": 1018,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/uat/uat_defects.webp",
+    "w": 1018,
+    "h": 636,
+    "bytes": 31470,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/uat/uat_defects@full.webp",
+    "w": 1440,
+    "h": 900,
+    "bytes": 40306,
+    "mode": "lossless",
+    "density": 1.41
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/uat_defect_detail.png",
+  "bytes": 165104,
+  "natural": [
+   1440,
+   900
+  ],
+  "css": 1018,
+  "fit": "width",
+  "need_1x": 1018,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/uat/uat_defect_detail.webp",
+    "w": 1018,
+    "h": 636,
+    "bytes": 23960,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/uat/uat_defect_detail@full.webp",
+    "w": 1440,
+    "h": 900,
+    "bytes": 36428,
+    "mode": "lossy q80",
+    "density": 1.41
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/uat_testcases.png",
+  "bytes": 145936,
+  "natural": [
+   1440,
+   900
+  ],
+  "css": 1018,
+  "fit": "width",
+  "need_1x": 1018,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/uat/uat_testcases.webp",
+    "w": 1018,
+    "h": 636,
+    "bytes": 33646,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/uat/uat_testcases@full.webp",
+    "w": 1440,
+    "h": 900,
+    "bytes": 40786,
+    "mode": "lossless",
+    "density": 1.41
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/uat_reports_full.png",
+  "bytes": 130684,
+  "natural": [
+   1440,
+   1146
+  ],
+  "css": 697,
+  "fit": "width",
+  "need_1x": 697,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/uat/uat_reports_full.webp",
+    "w": 697,
+    "h": 555,
+    "bytes": 17066,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/case/uat/uat_reports_full@2x.webp",
+    "w": 1394,
+    "h": 1109,
+    "bytes": 43836,
+    "mode": "lossy q80",
+    "density": 2.0
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/da_p39_img2.png",
+  "bytes": 203372,
+  "natural": [
+   1097,
+   1120
+  ],
+  "css": 1018,
+  "fit": "width",
+  "need_1x": 1018,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/case/uwb/da_p39_img2.webp",
+    "w": 1018,
+    "h": 1039,
+    "bytes": 49318,
+    "mode": "lossy q80",
+    "density": 1.0
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/greenloop_hero.jpg",
+  "bytes": 92341,
+  "natural": [
+   1200,
+   800
+  ],
+  "css": 525,
+  "fit": "cover-2x1",
+  "need_1x": 525,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/tiles/greenloop_hero.webp",
+    "w": 525,
+    "h": 350,
+    "bytes": 12590,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/tiles/greenloop_hero@2x.webp",
+    "w": 1050,
+    "h": 700,
+    "bytes": 28400,
+    "mode": "lossy q80",
+    "density": 2.0
+   }
+  ]
+ },
+ {
+  "src": "attached_assets/john_profile.png",
+  "bytes": 1885402,
+  "natural": [
+   1200,
+   1280
+  ],
+  "css": 202,
+  "fit": "cover-1x1",
+  "need_1x": 202,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/about/john_profile.webp",
+    "w": 202,
+    "h": 215,
+    "bytes": 7102,
+    "mode": "lossy q80",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/about/john_profile@2x.webp",
+    "w": 404,
+    "h": 431,
+    "bytes": 21484,
+    "mode": "lossy q80",
+    "density": 2.0
+   }
+  ]
+ },
+ {
+  "src": "client/public/assets/stickers/retro-computer.png",
+  "bytes": 13537,
+  "natural": [
+   159,
+   160
+  ],
+  "css": 80,
+  "fit": "width-h",
+  "need_1x": 80,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/stickers/retro-computer.webp",
+    "w": 80,
+    "h": 81,
+    "bytes": 4168,
+    "mode": "lossless",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/stickers/retro-computer@2x.webp",
+    "w": 159,
+    "h": 160,
+    "bytes": 9686,
+    "mode": "lossless",
+    "density": 1.99
+   }
+  ]
+ },
+ {
+  "src": "client/public/assets/stickers/cursor-arrow.png",
+  "bytes": 11207,
+  "natural": [
+   92,
+   160
+  ],
+  "css": 80,
+  "fit": "width-h",
+  "need_1x": 46,
+  "upscaled_on_page": false,
+  "files": [
+   {
+    "path": "client/public/assets/stickers/cursor-arrow.webp",
+    "w": 46,
+    "h": 80,
+    "bytes": 3220,
+    "mode": "lossless",
+    "density": 1.0
+   },
+   {
+    "path": "client/public/assets/stickers/cursor-arrow@2x.webp",
+    "w": 92,
+    "h": 160,
+    "bytes": 7622,
+    "mode": "lossless",
+    "density": 2.0
+   }
+  ]
+ }
+]

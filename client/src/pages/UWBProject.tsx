@@ -1,10 +1,11 @@
 import CaseLayout from '@/components/case/CaseLayout';
 import CaseHeader, { GITHUB_PROFILE } from '@/components/case/CaseHeader';
-import { CaseSection, LeadS, TechStack } from '@/components/case/CaseBlocks';
+import { CasePair, CaseSection, LeadS, TechStack } from '@/components/case/CaseBlocks';
 import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
 import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
 import { PixelList } from '@/components/Hierarchy';
 import StatStrip from '@/components/StatStrip';
+import { caseWebp } from '@/lib/images';
 import decisionBoundaryImg from '@assets/da_p39_img2.png';
 
 const HERO_SHOT: Shot = {
@@ -42,7 +43,7 @@ const SHOTS: Shot[] = [
     alt: 'Line chart of decision tree training and test accuracy for depths 2 to 50. Training accuracy climbs to 1.0; test accuracy peaks near depth 10 and settles around 0.87. Depth 4 is marked.',
   },
   {
-    file: 'decision_boundaries.png', src: decisionBoundaryImg, width: 1097, height: 1120, span: true,
+    file: 'decision_boundaries.png', src: decisionBoundaryImg, webp: caseWebp('uwb/da_p39_img2', 1018), width: 1097, height: 1120, span: true,
     caption: 'Boundaries: range vs first-path index.',
     alt: 'Six panels of decision boundaries on scaled RANGE and FP_IDX for KNN, naive Bayes, logistic regression, linear SVM, non-linear SVM and an MLP.',
   },
@@ -83,37 +84,39 @@ export default function UWBProject() {
         ]}
         links={[GITHUB_PROFILE]}
         stats={[
-          { value: '89.61%', label: 'SVM-RBF accuracy' },
-          { value: '0.9612', label: 'ROC\u2011AUC' },
-          { value: '41,996', label: 'samples' },
-          { value: '7', label: 'indoor environments' },
+          { value: '89.61%', label: 'SVM-RBF accuracy vs 85.75% baseline' },
+          { value: '0.9612', label: 'ROC\u2011AUC on clear vs blocked paths' },
+          { value: '41,996', label: 'UWB samples, half clear, half blocked' },
+          { value: '7', label: 'indoor environments in the dataset' },
         ]}
         heroShot={HERO_SHOT}
       />
 
-      <CaseSection
-        id="problem"
-        heading="The problem"
-        icon="icon-about"
-        lead="UWB positions to centimetres at best; blocked (NLOS) signals **cut accuracy sharply**."
-        file="problem.txt"
-      >
-        <PixelList items={['Spotting them is a step toward reliable positioning for **robots and drones**.']} />
-      </CaseSection>
+      <CasePair>
+        <CaseSection
+          id="problem"
+          heading="The problem"
+          icon="icon-about"
+          lead="UWB positions to centimetres at best; blocked (NLOS) signals **cut accuracy sharply**."
+          file="problem.txt"
+        >
+          <PixelList items={['Spotting them is a step toward reliable positioning for **robots and drones**.']} />
+        </CaseSection>
 
-      <CaseSection
-        id="what"
-        heading="What it does"
-        icon="icon-projects"
-        lead="Classifies the two shortest **dominant paths** as clear or blocked."
-        file="what_it_does.md"
-      >
-        <PixelList items={['**Linear regression** estimates range on both paths.']} />
-      </CaseSection>
+        <CaseSection
+          id="what"
+          heading="What it does"
+          icon="icon-projects"
+          lead="Classifies the two shortest **dominant paths** as clear or blocked."
+          file="what_it_does.md"
+        >
+          <PixelList items={['**Linear regression** estimates range on both paths.']} />
+        </CaseSection>
+      </CasePair>
 
       <ScreenGallery heading="Charts" shots={SHOTS} />
 
-      <CaseSection id="part" heading="My part" icon="icon-experience" file="my_part.log">
+      <CaseSection id="part" heading="My part" icon="icon-experience" file="my_part.log" narrow>
         <div className="space-y-3 lg:space-y-4">
           <LeadS text="I worked on the **data mining methodology**." />
           <PixelList
@@ -149,10 +152,10 @@ export default function UWBProject() {
         <StatStrip
           variant="inline"
           stats={[
-            { value: '0.9195', label: 'logistic regression ROC\u2011AUC' },
-            { value: '1.757 m', label: 'range RMSE' },
-            { value: '0.458', label: 'path 1 R²' },
-            { value: '0.6809', label: 'path 2 R²' },
+            { value: '0.9195', label: 'baseline ROC\u2011AUC (logistic regression)' },
+            { value: '1.757 m', label: 'range error (RMSE) on both paths' },
+            { value: '0.458', label: 'range fit (R²) on path 1' },
+            { value: '0.6809', label: 'range fit (R²) on path 2' },
           ]}
         />
       </CaseSection>

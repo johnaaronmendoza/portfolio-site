@@ -51,17 +51,20 @@ export default function CaseHeader({ slug, file, facts, note, links, stats, hero
             <span className="badge badge--paper col-start-1 row-start-1 self-start justify-self-start">
               {project.year}
             </span>
-            <h1 className="mt-4 font-display text-black break-words text-balance text-[length:clamp(30px,8.5vw,38px)] sm:text-[46px] xl:text-[56px]">
+            {/* Phones: about 42px, 1.3x over the 32px case h2 */}
+            <h1 className="mt-4 font-display text-black break-words text-balance text-[length:clamp(36px,11.2vw,42px)] sm:text-h1">
               {project.name}
             </h1>
             <Lead text={project.description} tone="paper" className="mt-4" />
             <FactChips facts={facts} label="Project facts" className="mt-6" />
             {note && (
-              <p className="mt-3 max-w-[60ch] font-sans text-[15px] sm:text-base leading-[1.5] text-[color:var(--text)]">
+              <p className="mt-3 max-w-[60ch] font-sans text-body-sm sm:text-body leading-[1.5] text-[color:var(--text)]">
                 {note}
               </p>
             )}
-            <div className="mt-6 flex flex-wrap gap-4">
+            {/* Right padding on phones keeps the full-width buttons out of the
+                chat launcher's lane (fixed bottom-right) */}
+            <div className="mt-6 flex flex-wrap gap-4 pr-16 sm:pr-0">
               {links.map(({ label, href, kind }) => (
                 <a
                   key={href}

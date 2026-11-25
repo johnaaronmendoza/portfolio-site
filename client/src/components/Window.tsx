@@ -10,23 +10,23 @@ interface WindowBarProps {
 
 /**
  * Black title bar. Without onClose the ○ □ ✕ controls are decoration;
- * with it (overlays, MASTER 2.10) the ✕ is a real button with a white ring.
+ * with it (overlays, DESIGN.md) the ✕ is a real button with a white ring.
  */
 export function WindowBar({ title, onClose, closeLabel }: WindowBarProps) {
   return (
     <div className="window-bar">
-      <p className="font-label text-xs leading-normal truncate min-w-0">{title}</p>
+      <p translate="no" className="font-label text-label leading-normal truncate min-w-0">{title}</p>
       {onClose ? (
         <button
           type="button"
           onClick={onClose}
           aria-label={closeLabel}
-          className="flex-shrink-0 inline-flex items-center justify-center w-11 h-11 -my-1.5 -mr-2 font-mono text-base leading-none text-[color:var(--paper)] outline-offset-[-4px] [--focus:var(--paper)] transition-colors duration-150 hover:bg-[var(--blue)]"
+          className="flex-shrink-0 inline-flex items-center justify-center w-11 h-11 -my-1.5 -mr-2 font-mono text-body leading-none text-[color:var(--paper)] outline-offset-[-4px] [--focus:var(--paper)] transition-colors duration-150 hover:bg-[var(--blue)]"
         >
           <span aria-hidden="true">✕</span>
         </button>
       ) : (
-        <span aria-hidden="true" className="flex-shrink-0 font-mono text-sm leading-none tracking-[0.35em]">
+        <span aria-hidden="true" className="flex-shrink-0 font-mono text-label leading-none tracking-[0.35em]">
           ○□✕
         </span>
       )}

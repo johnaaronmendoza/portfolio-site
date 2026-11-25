@@ -33,7 +33,7 @@ function saveVisited(list: string[]) {
 }
 
 // ── Fire a toast ──────────────────────────────────────────────────────────
-// A small achievement.txt window (MASTER 2.1): black bar, white body, dark
+// A small achievement.txt window (DESIGN.md): black bar, white body, dark
 // text, ink frame and hard shadow. Sonner keeps it non-blocking, pauses it on
 // hover and lets it be dismissed; reduced motion is handled by the global
 // prefers-reduced-motion rule in index.css. Position (bottom-left, above the
@@ -45,9 +45,9 @@ function showToast(id: string) {
   play('achievement');
   toast.custom(
     (toastId) => (
-      <div role="status" className="window w-72 max-w-[calc(100vw-2rem)] shadow-[4px_4px_0_0_var(--ink)]">
+      <div role="status" className="window w-72 max-w-[calc(100vw-2rem)] shadow-8bit">
         <WindowBar title="achievement.txt" onClose={() => toast.dismiss(toastId)} closeLabel="Dismiss achievement" />
-        <div className="window-body px-4 py-3 font-sans text-[15px] leading-snug">
+        <div className="window-body px-4 py-3 font-sans text-body-sm leading-snug">
           <p className="font-bold text-black">
             <span aria-hidden="true">{ach.icon} </span>Achievement unlocked: {ach.title}
           </p>

@@ -25,7 +25,7 @@ files at every size they are used, and you check them with your own eyes before 
 1. `CLAUDE.md`: the palette, approved text pairings, design rules and honesty rules are binding.
 2. The `asset-toolkit` skill: it maps design-agent's sandbox paths and tools to what exists here.
    Its rules win where a vendored skill names a tool that is not installed.
-3. `design-system/portfolio/MASTER.md` and `assets.md` for the current visual language, and the
+3. `design-system/portfolio/DESIGN.md` and `assets.md` for the current visual language, and the
    frontend-designer's brief for the job.
 
 ## What you make, and with which skill

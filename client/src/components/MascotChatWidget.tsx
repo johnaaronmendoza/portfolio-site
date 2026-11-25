@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useLocation } from 'wouter';
 import { hasFinePointer, scrollToSection } from '@/lib/utils';
-import { MASCOT, preloadMascot } from '@/lib/mascot';
+import { MASCOT, MASCOT_PX, preloadMascot } from '@/lib/mascot';
 import { motionTokens } from '@/lib/motion-tokens';
 import { WindowBar } from './Window';
 import PixelArt, { type PixelArtName } from './PixelArt';
@@ -24,7 +24,7 @@ const SECTION_LABEL = Object.fromEntries(SECTIONS.map(s => [s.id, s.label])) as 
 const PANEL_ID = 'chat-panel';
 
 const ABOUT =
-  "I'm John Aaron, a Computing Science student at SIT × University of Glasgow. I build AI and data tools for the people who have to use them. Right now I'm building Desk Assist at LGA Telecom. My first role was at Sembcorp Solar, testing a CRM before it rolled out across the company.";
+  "I’m John Aaron, a Computing Science student at SIT × University of Glasgow. I build AI and data tools for the people who have to use them. Right now I’m building Desk Assist at LGA Telecom. My first role was at Sembcorp Solar, testing a CRM before it rolled out across the company.";
 
 /**
  * Keyword → answer, checked in order; the first match wins. Keys match whole
@@ -54,14 +54,14 @@ const KNOWLEDGE_BASE: [string, string, SectionId][] = [
   ['supabase', 'In the SCS project, Supabase handles all backend needs: PostgreSQL for story/panel data, Supabase Auth for admin accounts with email verification, RLS (Row-Level Security) for role-based access, and Supabase Storage for character sprites and backgrounds.', 'projects'],
 
   // GreenLoopFarms
-  ['greenloop*', 'GreenLoopFarms is a Singapore hydroponic urban farm growing pesticide-free vegetables and microgreens. I contributed to the early idea and business strategy, and helped co-prepare the pitch deck that won a SGD 10,000 NYP JumpStart Grant. Partners include FURA (World\'s 50 Best Discovery), East Bistro, NIE, NUS, and NYP. Visit greenloopfarms.com!', 'projects'],
+  ['greenloop*', 'GreenLoopFarms is a Singapore hydroponic urban farm growing pesticide-free vegetables and microgreens. I contributed to the early idea and business strategy, and helped co-prepare the pitch deck that won a SGD 10,000 NYP JumpStart Grant. Partners include FURA (World’s 50 Best Discovery), East Bistro, NIE, NUS, and NYP. Visit greenloopfarms.com!', 'projects'],
   ['grant', 'GreenLoopFarms won a SGD 10,000 NYP JumpStart Grant, a startup grant from Nanyang Polytechnic. We pitched it to an industry investor panel.', 'projects'],
 
   // Fire Safety
   ['fire*', 'The Fire Safety Drill Companion is a native Android app our team built for HDB residents to rehearse fire evacuation on demand. I built the algorithms and AR: Dijkstra routing to the nearest exit, re-planning around blocked stairwells; ARCore corridor rendering and waypoints; and tuned step-based positioning (PDR) from accelerometer and gyroscope. Tech: Kotlin, Jetpack Compose, MVVM+Hilt, ARCore, TFLite, Firebase FCM. Stats: 10,984 lines of Kotlin, ~80% test coverage, SUS score 79/100.', 'projects'],
   ['android', 'The Fire Safety Drill Companion is a native Android app with AR navigation (ARCore), on-device ML (TFLite extinguisher classification), sensor-fusion PDR (Weinberg stride estimation), and Firebase push notifications. Routing, ML and data all run on the phone, so drills work offline.', 'projects'],
   ['arcore', 'In the Fire Safety project, I integrated ARCore for real-time corridor navigation. Breadcrumb arrows are overlaid on the live camera feed, guiding residents along the Dijkstra-computed evacuation route. I wrote ArCoreSessionManager, ArCoreRenderer, and ArWaypointConverter.', 'projects'],
-  ['dijkstra', 'I implemented Dijkstra\'s shortest-path algorithm for the Fire Safety app, applied to a weighted floor plan graph with a blockedNodes param for dynamic stairwell exclusion. findPathToNearestExit() runs against all exit nodes and picks the minimum-cost route. Thread-safe with @Synchronized.', 'projects'],
+  ['dijkstra', 'I implemented Dijkstra’s shortest-path algorithm for the Fire Safety app, applied to a weighted floor plan graph with a blockedNodes param for dynamic stairwell exclusion. findPathToNearestExit() runs against all exit nodes and picks the minimum-cost route. Thread-safe with @Synchronized.', 'projects'],
 
   // UAT Testing Dashboard
   ['uat', 'The UAT Testing Dashboard is a full-stack defect tracker and UAT management tool, a course project built around a hospital appointment system UAT scenario. It tracks defects end-to-end (Open → In Progress → Resolved → Closed), links failed test cases directly to open defects, and charts defects by severity, module and status, plus a monthly trend. Role-based access for PM, QA Lead, Tester, and Developer. CSV export for defect registers and test logs. Tech: React 18, Node.js, Express, SQLite, Recharts.', 'projects'],
@@ -85,13 +85,13 @@ const KNOWLEDGE_BASE: [string, string, SectionId][] = [
   ['skill', 'AI & LLMs: prompt engineering, RAG, LLM-assisted workflows, AI guardrails and data-leakage prevention, human-in-the-loop design. Data & ML: Python, Pandas, NumPy, scikit-learn, SQL, ETL pipelines, Power BI, TFLite. Backend & cloud: Node.js, Express, gRPC, PostgreSQL, Supabase, Prisma ORM, Docker, Kubernetes, Git. Frontend & mobile: TypeScript, JavaScript, React, Next.js, Tailwind CSS, Kotlin, Jetpack Compose, ARCore. I also work with GitHub Actions, Cloudflare Tunnel, JIRA and Confluence.', 'skills'],
   ['tech', 'My stack: React and TypeScript on the frontend; Node.js, Express, gRPC and Prisma ORM on the backend; Docker and Kubernetes for containers; PostgreSQL and Supabase for data; Python, Pandas and scikit-learn for data and ML. I also use GitHub Actions and Cloudflare Tunnel.', 'skills'],
   ['frontend', 'Frontend: React, Next.js, TypeScript and Tailwind CSS. I built the core engine and media systems of the SCS Awareness Platform in React and TypeScript. SilverLink SG, a six-person team project, also has a React and Next.js front end.', 'skills'],
-  ['backend', 'Backend: Node.js, Express, gRPC microservices, Prisma ORM and Supabase. SilverLink SG\'s 4 gRPC services use optimistic concurrency control and idempotency keys to prevent double-bookings.', 'skills'],
+  ['backend', 'Backend: Node.js, Express, gRPC microservices, Prisma ORM and Supabase. SilverLink SG’s 4 gRPC services use optimistic concurrency control and idempotency keys to prevent double-bookings.', 'skills'],
   ['docker', 'SilverLink SG, a six-person team project, uses Docker Compose for local development and Kubernetes for orchestration. Every SilverLink microservice runs in its own isolated container.', 'projects'],
   ['kubernetes', 'In SilverLink SG, Kubernetes handles container orchestration on an 8-node cluster. An EMA load forecast recommends replicas per service.', 'projects'],
 
   // Background
   ['graduat*', 'I graduate in April 2027 from Singapore Institute of Technology × University of Glasgow, with a BSc (Hons) in Computing Science.', 'about'],
-  ['background', 'I\'m a Computing Science student at Singapore Institute of Technology (SIT) × University of Glasgow, with a foundation in Electrical Engineering from Nanyang Polytechnic. At Sembcorp Solar I led the Momens CRM rollout for a 240MWp+ portfolio; now I build AI and data tools.', 'about'],
+  ['background', 'I’m a Computing Science student at Singapore Institute of Technology (SIT) × University of Glasgow, with a foundation in Electrical Engineering from Nanyang Polytechnic. At Sembcorp Solar I led the Momens CRM rollout for a 240MWp+ portfolio; now I build AI and data tools.', 'about'],
   ['education', 'BSc (Hons) Computing Science at Singapore Institute of Technology (SIT) × University of Glasgow, graduating April 2027. Before that: Diploma in Electrical Engineering with Eco-Design from Nanyang Polytechnic.', 'about'],
   ['about', ABOUT, 'about'],
   ['yourself', ABOUT, 'about'],
@@ -113,7 +113,7 @@ const ANSWERS = KNOWLEDGE_BASE.map(([key, answer, section]) => ({ pattern: keywo
 // Unknown questions get the topics inside the reply, shown only where the
 // topic keys are hidden (very short screens, e.g. 400% zoom; index.css)
 const FALLBACK =
-  "I don't have an answer for that yet. Try one of these topics, or email johnaaronmb@gmail.com.";
+  "I don’t have an answer for that yet. Try one of these topics, or email johnaaronmb@gmail.com.";
 
 function findResponse(query: string): { answer: string; section?: SectionId } {
   return ANSWERS.find(({ pattern }) => pattern.test(query)) ?? { answer: FALLBACK };
@@ -127,6 +127,9 @@ const QUICK_ACTIONS: { label: string; query: string; icon: PixelArtName }[] = [
   { label: 'Education', query: 'Tell me about your education', icon: 'chip-school' },
   { label: 'Contact', query: 'How can I contact you', icon: 'icon-contact' },
 ];
+
+// Message times in the visitor's own locale and clock (12- or 24-hour)
+const TIME = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' });
 
 const MASCOT_HAPPY = MASCOT.happy;
 const MASCOT_WORRY = MASCOT.worry;
@@ -162,7 +165,7 @@ function TypingMessage({ content, role }: { content: string; role: 'user' | 'sys
   const visibleText = instant ? content : displayedText;
 
   return (
-    <div className={`p-2.5 border-2 border-black font-sans text-[15px] leading-relaxed ${BUBBLE[role]}`}>
+    <div className={`p-2.5 border-2 border-black font-sans text-body-sm leading-relaxed break-words [overflow-wrap:anywhere] ${BUBBLE[role]}`}>
       <span className="sr-only">{content}</span>
       <span aria-hidden="true">
         {visibleText}
@@ -197,7 +200,7 @@ export default function MascotChatWidget() {
     {
       id: '1',
       role: 'system',
-      content: "Hi! I'm a small bot that knows John's projects, experience and skills. Pick a topic below or type a question.",
+      content: "Hi! I’m a small bot that knows John’s projects, experience and skills. Pick a topic below or type a question.",
     },
   ]);
   const [input, setInput] = useState('');
@@ -327,10 +330,12 @@ export default function MascotChatWidget() {
           <img
             src={isTyping ? MASCOT_WORRY : MASCOT_HAPPY}
             alt=""
+            width={MASCOT_PX.w}
+            height={MASCOT_PX.h}
             className="w-8 h-8 min-[1440px]:w-10 min-[1440px]:h-10 object-contain"
             style={{ imageRendering: 'pixelated' }}
           />
-          <span className="hidden min-[1440px]:inline font-label text-xs">
+          <span className="hidden min-[1440px]:inline font-label text-label">
             {isOpen ? 'Close' : 'Chat'}
           </span>
         </div>
@@ -347,7 +352,6 @@ export default function MascotChatWidget() {
             role="dialog"
             aria-label="Chat"
             tabIndex={-1}
-            data-lenis-prevent
             initial={{ opacity: 0, y: motionTokens.distance.sm }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: motionTokens.distance.sm }}
@@ -359,7 +363,7 @@ export default function MascotChatWidget() {
             {/* Prompt line, with Lil Johnny standing whole on the log's top edge
                 (he worries while the bot types) */}
             <div className="chat-prompt relative flex-shrink-0 flex items-end justify-between gap-3 px-4 pt-3">
-              <p className="font-sans text-[15px] font-bold text-[color:var(--text)] pb-2">
+              <p className="font-sans text-body-sm font-bold text-[color:var(--text)] pb-2">
                 Pick a topic or type a question
               </p>
               <img
@@ -376,8 +380,7 @@ export default function MascotChatWidget() {
             <div className="chat-log-box flex-1 min-h-0 flex flex-col border-t-[3px] border-black">
             <div
               ref={logRef}
-              className="retro-scroll flex-1 min-h-0 overflow-y-auto p-3 space-y-3"
-              data-lenis-prevent
+              className="retro-scroll flex-1 min-h-0 overflow-y-auto overscroll-contain p-3 space-y-3"
               role="log"
               aria-live="polite"
               aria-label="Chat messages"
@@ -407,21 +410,21 @@ export default function MascotChatWidget() {
                       <a
                         href={`/#${msg.section}`}
                         onClick={(e) => { e.preventDefault(); goToSection(msg.section!); }}
-                        className="inline-flex min-h-[44px] items-center gap-1 font-sans text-[15px] font-bold text-[color:var(--blue-text)] underline decoration-2 underline-offset-4"
+                        className="inline-flex min-h-[44px] items-center gap-1 font-sans text-body-sm font-bold text-[color:var(--blue-text)] underline decoration-2 underline-offset-4"
                       >
                         Go to {SECTION_LABEL[msg.section]} <span aria-hidden="true">↓</span>
                       </a>
                     )}
                     {msg.timestamp && (
-                      <p className={`font-sans text-sm text-[color:var(--text)] mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-                        {msg.timestamp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
+                      <p className={`font-sans text-body-sm text-[color:var(--text)] mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+                        {TIME.format(msg.timestamp)}
                       </p>
                     )}
                   </div>
                 </motion.div>
               ))}
               {isTyping && (
-                <p className="font-sans text-[15px] italic text-[color:var(--text)]">Johnny is typing…</p>
+                <p className="font-sans text-body-sm italic text-[color:var(--text)]">Johnny is typing…</p>
               )}
             </div>
             </div>
@@ -448,15 +451,18 @@ export default function MascotChatWidget() {
               className="chat-input flex-shrink-0 p-3 flex gap-3"
             >
               <div className="flex-1 min-w-0 flex items-center border-[3px] border-black bg-[var(--paper)] px-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--ink)] focus-within:outline-offset-2">
-                <span aria-hidden="true" className="font-mono text-base font-bold mr-1">&gt;_</span>
+                <span aria-hidden="true" className="font-mono text-body font-bold mr-1">&gt;_</span>
                 <input
                   ref={inputRef}
                   type="text"
+                  name="question"
+                  autoComplete="off"
+                  enterKeyHint="send"
                   value={input}
                   onChange={e => setInput(e.target.value)}
-                  placeholder="Ask about a project or skill"
+                  placeholder="Ask about my work…"
                   aria-label="Ask about a project or skill"
-                  className="flex-1 min-w-0 bg-transparent text-[color:var(--text)] placeholder:text-[color:var(--text)] placeholder:italic font-sans text-base outline-none"
+                  className="flex-1 min-w-0 bg-transparent text-[color:var(--text)] placeholder:text-[color:var(--text)] placeholder:italic font-sans text-body outline-none"
                 />
               </div>
               <button type="submit" aria-disabled={isTyping} className="btn btn-primary px-4">

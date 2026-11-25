@@ -64,7 +64,7 @@ const LEAD_TEXT: Record<LeadTone, string> = {
 };
 
 /**
- * L2 lead: the one sentence to read if you read nothing else. Bold 18/22 with
+ * L2 lead: the one sentence to read if you read nothing else. Bold 18/20 with
  * a hanging `>` prompt, so wrapped lines align with the first word.
  */
 export function Lead({
@@ -81,7 +81,7 @@ export function Lead({
 }) {
   return (
     <p
-      className={`relative max-w-[42ch] font-sans font-bold text-lg leading-[1.4] lg:text-[22px] lg:leading-[1.35] text-balance ${prompt ? 'pl-[2ch]' : ''} ${LEAD_TEXT[tone]} ${className}`}
+      className={`relative max-w-[42ch] font-sans font-bold text-lead-sm leading-[1.4] lg:text-lead lg:leading-[1.35] text-balance ${prompt ? 'pl-[2ch]' : ''} ${LEAD_TEXT[tone]} ${className}`}
     >
       {prompt && (
         <span aria-hidden="true" className={`absolute left-0 ${tone === 'page' ? 'text-[color:var(--blue-text)]' : ''}`}>
@@ -103,7 +103,7 @@ export function PixelList({ items, extras, columns = 1, className = '' }: {
 }) {
   return (
     <ul
-      className={`font-sans text-[15px] sm:text-base leading-[1.65] ${
+      className={`font-sans text-body-sm sm:text-body leading-[1.65] ${
         columns === 2 ? 'grid gap-x-8 gap-y-3 lg:gap-y-4 sm:grid-cols-2' : 'space-y-3 lg:space-y-4 max-w-[60ch]'
       } ${className}`}
     >
@@ -123,13 +123,14 @@ export function PixelList({ items, extras, columns = 1, className = '' }: {
 export type Fact = { icon: PixelArtName; text: string };
 
 const CHIP =
-  'inline-flex min-w-0 max-w-full items-start gap-2 min-h-9 border-2 border-black bg-[var(--paper)] px-2.5 py-1.5 font-mono text-[15px] sm:text-base font-bold leading-[1.4] text-black';
+  'inline-flex min-w-0 max-w-full items-start gap-2 min-h-9 border-2 border-black bg-[var(--paper)] px-2.5 py-1.5 font-mono text-body-sm sm:text-body font-bold leading-[1.4] text-black';
 
-/** L6 chip: a static label (no shadow, not pressable); the words carry the meaning, the icon is decorative */
-export function Chip({ icon, text, as: Tag = 'p', className = '' }: Fact & { as?: 'p' | 'li'; className?: string }) {
+/** L6 chip: a static label (no shadow, not pressable); the words carry the meaning, the icon is decorative.
+ *  `lazy={false}` above the fold (the hero), so its icon isn't deferred */
+export function Chip({ icon, text, as: Tag = 'p', className = '', lazy = true }: Fact & { as?: 'p' | 'li'; className?: string; lazy?: boolean }) {
   return (
     <Tag className={`${CHIP} ${className}`}>
-      <PixelArt name={icon} size={16} lazy className="line-mark" />
+      <PixelArt name={icon} size={16} lazy={lazy} className="line-mark" />
       <span className="min-w-0 break-words">{text}</span>
     </Tag>
   );

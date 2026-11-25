@@ -6,6 +6,7 @@ import {
 import { Link } from 'wouter';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useModalFocus } from '@/hooks/useModalFocus';
+import { useQueryParam } from '@/hooks/useQueryParam';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { play } from '@/hooks/useSound';
 import { motionTokens } from '@/lib/motion-tokens';
@@ -91,7 +92,7 @@ function FlatKeys(handlers: KeyHandlers) {
     if (e.pointerType !== 'touch') onHover(i);
   };
   return (
-    <div role="group" aria-label={GROUP_LABEL} className="grid grid-cols-4 sm:grid-cols-7 gap-2.5 sm:gap-3 pr-1 pb-1">
+    <div role="group" aria-label={GROUP_LABEL} className="grid grid-cols-4 sm:grid-cols-7 gap-2 sm:gap-3 pr-1 pb-1">
       {KEYS.map((k, i) => {
         // Outside the filter: pressed flush without its shadow, in the same dark
         // muted skin as the 3D caps (AA contrast kept), so it reads without colour
@@ -108,17 +109,17 @@ function FlatKeys(handlers: KeyHandlers) {
             className={`relative flex aspect-square flex-col overflow-hidden rounded-[6px] border-[3px] border-black transition-[translate,box-shadow,background-color,color] duration-150 ease-out ${
               muted
                 ? 'translate-x-[4px] translate-y-[4px] shadow-none'
-                : 'shadow-[4px_4px_0_0_#000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none aria-expanded:translate-x-[4px] aria-expanded:translate-y-[4px] aria-expanded:shadow-none'
+                : 'shadow-8bit active:translate-x-[4px] active:translate-y-[4px] active:shadow-none aria-expanded:translate-x-[4px] aria-expanded:translate-y-[4px] aria-expanded:shadow-none'
             }`}
             style={{ backgroundColor: cap.face, color: cap.ink }}
           >
-            <span aria-hidden="true" className="absolute left-1.5 top-1 font-mono text-xs font-bold leading-none">{cap.no}</span>
+            <span aria-hidden="true" className="absolute left-1.5 top-1 font-mono text-label font-bold leading-none">{cap.no}</span>
             <span className="flex min-h-0 flex-1 items-center justify-center pt-3">
               <FlatIcon src={iconUrl(k)} />
             </span>
             <span
               aria-hidden="true"
-              className="block border-t-2 border-black/35 py-1 sm:py-1.5 font-mono text-xs sm:text-sm lg:text-base font-bold leading-none tracking-wide transition-[background-color] duration-150 ease-out"
+              className="block border-t-2 border-black/35 py-1 sm:py-1.5 font-mono text-label lg:text-body font-bold leading-none lg:tracking-wide transition-[background-color] duration-150 ease-out"
               style={{ backgroundColor: cap.bar }}
             >
               {cap.text}
@@ -131,16 +132,13 @@ function FlatKeys(handlers: KeyHandlers) {
 }
 
 /** Category filters: toggle buttons in the Projects chip style (press-down,
- *  hard shadow). Below 640px one row that scrolls sideways to the screen edge,
- *  where the last visible chip fades out to show there is more (the end
- *  padding lets the last chip scroll clear of the fade); the padding keeps
- *  shadows and focus rings inside the scroller. */
+ *  hard shadow), wrapping like the Projects chips at every width. */
 function Filters({ value, onChange }: { value: Filter; onChange: (f: Filter) => void }) {
   return (
     <div
       role="group"
       aria-label="Highlight skills by category"
-      className="-mx-4 flex gap-2 overflow-x-auto pl-4 pr-12 pt-1.5 pb-2.5 [mask-image:linear-gradient(to_right,#000_calc(100%-2.5rem),transparent)] sm:mx-0 sm:flex-wrap sm:gap-3 sm:overflow-visible sm:p-0 sm:[mask-image:none]"
+      className="flex flex-wrap gap-2 sm:gap-3"
     >
       {FILTERS.map(f => (
         <button
@@ -148,7 +146,7 @@ function Filters({ value, onChange }: { value: Filter; onChange: (f: Filter) => 
           type="button"
           aria-pressed={value === f.id}
           onClick={() => onChange(f.id)}
-          className={`shrink-0 ${chipClass(value === f.id)}`}
+          className={chipClass(value === f.id)}
         >
           {f.label}
         </button>
@@ -167,12 +165,12 @@ function KeyTip({ index, tipRef, reduced }: { index: number; tipRef: RefObject<H
         initial={{ opacity: 0, y: reduced ? 0 : motionTokens.distance.xs }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: motionTokens.duration.instant, ease: motionTokens.easing.out }}
-        className="border-[3px] border-black bg-[var(--paper)] text-[color:var(--text)] shadow-[4px_4px_0_0_#000]"
+        className="border-[3px] border-black bg-[var(--paper)] text-[color:var(--text)] shadow-8bit"
       >
         <WindowBar title={fileName(CAPS[index])} />
         <div className="px-3 py-2.5 font-sans">
-          <p className="text-[15px] font-bold leading-snug text-balance">{k.name}</p>
-          <p className="mt-1 text-sm leading-snug text-pretty">{k.blurb}</p>
+          <p className="text-body-sm font-bold leading-snug text-balance">{k.name}</p>
+          <p className="mt-1 text-body-sm leading-snug text-pretty">{k.blurb}</p>
         </div>
       </motion.div>
     </div>
@@ -244,17 +242,17 @@ function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps)
       >
         <WindowBar title={fileName(CAPS[index])} onClose={onClose} closeLabel={`Close ${k.name}`} />
         <div className="window-body p-4 sm:p-5 font-sans">
-          <p className="text-sm font-bold">{GROUP_NAME[k.group]}</p>
-          <h3 id={titleId} className="font-display text-xl sm:text-2xl mt-2 mb-3 text-balance">{k.name}</h3>
-          <p className="text-[15px] leading-relaxed text-pretty">{k.blurb}</p>
-          <p className="text-[15px] leading-relaxed mt-3"><span className="font-bold">Used in:</span> {k.usedIn}</p>
+          <p className="text-body-sm font-bold">{GROUP_NAME[k.group]}</p>
+          <h3 id={titleId} className="font-display text-lead sm:text-card-title mt-2 mb-3 text-balance">{k.name}</h3>
+          <p className="text-body-sm leading-relaxed text-pretty">{k.blurb}</p>
+          <p className="text-body-sm leading-relaxed mt-3"><span className="font-bold">Used in:</span> {k.usedIn}</p>
           {links.length > 0 && (
             <>
-              <p className="text-[15px] font-bold mt-3">{links.length > 1 ? 'Case studies:' : 'Case study:'}</p>
+              <p className="text-body-sm font-bold mt-3">{links.length > 1 ? 'Case studies:' : 'Case study:'}</p>
               <ul>
                 {links.map(p => (
                   <li key={p.link}>
-                    <Link href={p.link} onClick={keepFocus} className="inline-block py-2.5 text-[15px] font-bold underline underline-offset-4 decoration-2">
+                    <Link href={p.link} onClick={keepFocus} className="inline-block py-2.5 text-body-sm font-bold underline underline-offset-4 decoration-2">
                       {p.name}<span aria-hidden="true"> →</span>
                     </Link>
                   </li>
@@ -279,7 +277,9 @@ export default function SkillKeyboard({ listId, legend }: { listId: string; lege
   const locatorRef = useRef<KeyLocator | null>(null);
   const tipRef = useRef<HTMLDivElement>(null);
   const [stage, setStage] = useState<'wait' | '3d' | '2d'>('wait');
-  const [filter, setFilter] = useState<Filter>('all');
+  // The filter lives in the URL (?skills=data), beside Projects' ?filter; no param means All
+  const [skillsParam, setSkillsParam] = useQueryParam('skills');
+  const filter: Filter = FILTERS.find(f => f.id === skillsParam)?.id ?? 'all';
   const [announce, setAnnounce] = useState('');
   const [hover, setHover] = useState<number | null>(null); // mouse or pen only
   const [focus, setFocus] = useState<{ i: number; visible: boolean } | null>(null);
@@ -360,7 +360,7 @@ export default function SkillKeyboard({ listId, legend }: { listId: string; lege
   const closeWindow = useCallback(() => setOpen(null), []);
 
   const chooseFilter = (f: Filter) => {
-    setFilter(f);
+    setSkillsParam(f === 'all' ? null : f);
     const n = KEYS.filter(k => inFilter(k, f)).length;
     const label = FILTERS.find(x => x.id === f)?.label;
     setAnnounce(f === 'all' ? `All ${KEYS.length} skills shown` : `${n} of ${KEYS.length} skills highlighted: ${label}`);

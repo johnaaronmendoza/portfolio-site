@@ -7,7 +7,6 @@ import ShortcutHint from './ShortcutHint';
 import { WindowBar } from './Window';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useModalFocus } from '@/hooks/useModalFocus';
-import { getLenis } from '@/hooks/useLenis';
 import { motionTokens } from '@/lib/motion-tokens';
 import { scrollToSection } from '@/lib/utils';
 
@@ -36,25 +35,18 @@ function SectionMenu({ active }: { active: string }) {
   const firstRef = useRef<HTMLButtonElement>(null);
   const keepFocus = useModalFocus(open, dialogRef, firstRef);
 
-  // Escape closes; the page behind holds still while the menu is open
+  // Escape closes (useModalFocus holds the page behind still while it is open)
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
     window.addEventListener('keydown', onKey);
-    const root = document.documentElement;
-    root.style.overflow = 'hidden';
-    getLenis()?.stop();
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      root.style.overflow = '';
-      getLenis()?.start();
-    };
+    return () => window.removeEventListener('keydown', onKey);
   }, [open]);
 
   const go = (id: string) => {
     keepFocus(); // the section takes focus, not the menu button
     setOpen(false);
-    // Next frame: the scroll lock above has been released
+    // Next frame: the menu has closed and released the scroll lock
     requestAnimationFrame(() => scrollToSection(id, reduced));
   };
 
@@ -89,7 +81,7 @@ function SectionMenu({ active }: { active: string }) {
             transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
           >
             <WindowBar title="menu.exe" onClose={() => setOpen(false)} closeLabel="Close menu" />
-            <ul className="window-body min-h-0 overflow-y-auto p-2" data-lenis-prevent>
+            <ul className="window-body min-h-0 overflow-y-auto overscroll-contain p-2">
               {SECTIONS.map(({ id, label, icon }, i) => (
                 <li key={id}>
                   <button
@@ -97,7 +89,7 @@ function SectionMenu({ active }: { active: string }) {
                     type="button"
                     onClick={() => go(id)}
                     aria-current={active === id ? 'location' : undefined}
-                    className={`flex w-full min-h-[44px] items-center gap-3 px-3 font-sans text-base font-bold text-left transition-colors duration-150 hover:bg-[var(--blue)] hover:text-black ${
+                    className={`flex w-full min-h-[44px] items-center gap-3 px-3 font-sans text-body font-bold text-left transition-colors duration-150 hover:bg-[var(--blue)] hover:text-black ${
                       active === id ? 'bg-[var(--bar)] text-[color:var(--paper)]' : 'text-[color:var(--text)]'
                     }`}
                   >
@@ -229,16 +221,16 @@ export default function SectionNav() {
               {/* Visible name on hover or keyboard focus; the aria-label carries it for screen readers */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute right-full mr-1 flex items-center gap-2 whitespace-nowrap border-[3px] border-black bg-[var(--bar)] px-2 py-1 font-label text-xs text-[color:var(--paper)] opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+                className="pointer-events-none absolute right-full mr-1 flex items-center gap-2 whitespace-nowrap border-[3px] border-black bg-[var(--bar)] px-2 py-1 font-label text-label text-[color:var(--paper)] opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
               >
                 {id === 'hero' && <PixelArt name="icon-home" size={16} />}
                 {label}
               </span>
               <span
                 aria-hidden="true"
-                // Ink ring, then a paper outline: the dot reads on the page,
-                // the blue band and the black footer alike
-                className={`block w-3 h-3 border-2 shadow-[0_0_0_2px_var(--ink),0_0_0_4px_var(--paper)] transition-colors duration-150 ${
+                // 4px ink frame, then a 2px paper outline: the dot reads on the
+                // page, the blue band and the black footer alike
+                className={`block w-4 h-4 border-4 outline-2 outline-solid outline-[var(--paper)] transition-colors duration-150 ${
                   active === id
                     ? 'bg-[var(--bar)] border-black'
                     : 'border-black bg-[var(--paper)] group-hover:bg-[var(--blue)]'

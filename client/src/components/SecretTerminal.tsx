@@ -131,7 +131,7 @@ function process(raw: string, navigate: (p: string) => void): Result {
       };
       if (routes[arg]) {
         navigate(routes[arg]);
-        return [`Navigating to ${arg}...`];
+        return [`Navigating to ${arg}…`];
       }
       return { error: `open: ${arg}: project not found. Try "ls projects" for names.` };
     }
@@ -139,11 +139,11 @@ function process(raw: string, navigate: (p: string) => void): Result {
     case 'ping':
       if (arg === 'github' || arg === 'github.com') {
         window.open('https://github.com/johnaaronmendoza', '_blank', 'noopener');
-        return ['PING github.com/johnaaronmendoza ...', '64 bytes: seq=0 ttl=64 time=12ms  ✓'];
+        return ['PING github.com/johnaaronmendoza …', '64 bytes: seq=0 ttl=64 time=12ms  ✓'];
       }
       if (arg === 'linkedin') {
         window.open('https://www.linkedin.com/in/john-branzuela/', '_blank', 'noopener');
-        return ['PING linkedin.com/in/john-branzuela ...', '64 bytes: seq=0 ttl=64 time=18ms  ✓'];
+        return ['PING linkedin.com/in/john-branzuela …', '64 bytes: seq=0 ttl=64 time=18ms  ✓'];
       }
       return { error: `ping: ${arg}: unknown host` };
 
@@ -176,7 +176,7 @@ function process(raw: string, navigate: (p: string) => void): Result {
           'Contact: johnaaronmb@gmail.com',
           'LinkedIn: linkedin.com/in/john-branzuela',
           '',
-          '> Best decision you\'ll make today.',
+          '> Best decision you’ll make today.',
         ];
       }
       return { error: 'sudo: command not found' };
@@ -185,7 +185,7 @@ function process(raw: string, navigate: (p: string) => void): Result {
     case 'nano':
     case 'emacs':
       return [
-        `Starting ${cmd}...`,
+        `Starting ${cmd}…`,
         '',
         '  :q!',
         '',
@@ -230,8 +230,9 @@ function process(raw: string, navigate: (p: string) => void): Result {
   }
 }
 
-export default function SecretTerminal() {
-  const [open, setOpen] = useState(false);
+/** Loaded on first use (App.tsx): `defaultOpen` honours the press that loaded it */
+export default function SecretTerminal({ defaultOpen = false }: { defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   const [lines, setLines] = useState<Line[]>(BOOT.map(t => ({ type: 'system', text: t })));
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>([]);
@@ -318,14 +319,15 @@ export default function SecretTerminal() {
           {/* Backdrop */}
           <motion.div
             key="terminal-backdrop"
-            className="fixed inset-0 bg-black/70 z-[60]"
+            aria-hidden="true"
+            className="fixed inset-0 bg-black/70 z-[60] touch-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={close}
           />
 
-          {/* terminal.sh: terminal-variant window (MASTER 2.10) */}
+          {/* terminal.sh: terminal-variant window (DESIGN.md) */}
           <motion.div
             key="terminal"
             ref={dialogRef}
@@ -348,8 +350,7 @@ export default function SecretTerminal() {
                 role="log"
                 aria-live="polite"
                 aria-label="Terminal output"
-                className="h-80 max-h-[50dvh] overflow-y-auto p-4 space-y-0.5 font-mono text-[15px] leading-relaxed whitespace-pre-wrap break-words"
-                data-lenis-prevent
+                className="h-80 max-h-[50dvh] overflow-y-auto overscroll-contain p-4 space-y-0.5 font-mono text-body-sm leading-relaxed whitespace-pre-wrap break-words"
               >
                 {lines.map((l, i) => (
                   <div key={i}>
@@ -368,20 +369,21 @@ export default function SecretTerminal() {
 
               {/* Input row: the ring sits on the row; the input itself has no outline */}
               <div className="border-t-2 border-[color:var(--paper)] px-4 py-3 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--paper)] focus-within:outline-offset-[-6px]">
-                <span aria-hidden="true" className="font-mono text-base font-bold text-[color:var(--paper)] flex-shrink-0">$</span>
+                <span aria-hidden="true" className="font-mono text-body font-bold text-[color:var(--paper)] flex-shrink-0">$</span>
                 <input
                   ref={inputRef}
                   type="text"
+                  name="command"
                   value={input}
                   onChange={e => { setInput(e.target.value); play('type'); }}
                   onKeyDown={handleKey}
                   aria-label="Terminal command"
-                  className="flex-1 min-w-0 bg-transparent text-[color:var(--paper)] placeholder:text-[color:var(--paper)] placeholder:italic font-mono text-base outline-none caret-[var(--paper)]"
-                  placeholder="type a command..."
+                  className="flex-1 min-w-0 bg-transparent text-[color:var(--paper)] placeholder:text-[color:var(--paper)] placeholder:italic font-mono text-body outline-none caret-[var(--paper)]"
+                  placeholder="type a command…"
                   spellCheck={false}
                   autoComplete="off"
                 />
-                <span className="hidden sm:inline font-mono text-sm text-[color:var(--paper)] flex-shrink-0">Esc to close</span>
+                <span className="hidden sm:inline font-mono text-label text-[color:var(--paper)] flex-shrink-0">Esc to close</span>
               </div>
             </div>
           </motion.div>

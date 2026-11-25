@@ -1,5 +1,12 @@
 import SectionHeading from '@/components/SectionHeading';
 import { WindowBar } from '@/components/Window';
+import { toSrcSet, type ImageSource } from '@/lib/images';
+
+// The case column is max-w-5xl less the window's borders; two columns from md
+const COLUMN = 1018;
+const HALF = 494;
+// Portrait shots are capped at this height
+const PORTRAIT_MAX_H = 560;
 
 export type Shot = {
   /** Window title, lower snake case, e.g. "event_detail.png" */
@@ -11,17 +18,21 @@ export type Shot = {
   /** What the screen shows (not a repeat of the caption) */
   alt: string;
   caption: string;
-  /** Art for phones (below 640px), with its own intrinsic size */
+  /** Art for phones (below 640px), with its own intrinsic size. A .webp is
+   *  served with its same-name .png as the fallback */
   srcMobile?: string;
   mobileWidth?: number;
   mobileHeight?: number;
   /** What "Open full size" opens, when not `src` (e.g. a vector original) */
   fullSrc?: string;
-  /** Take both columns from md: for a half-width shot left alone in its row */
+  /** WebP files (caseWebp), served through <picture> with `src` as the fallback */
+  webp?: ImageSource[];
+  /** Take both columns from md: a half-width shot left alone in its row, or
+   *  a wide shot narrower than the column (shown at its natural width) */
   span?: boolean;
 };
 
-const CAPTION_TEXT = 'font-sans text-[15px] sm:text-base leading-[1.5] text-[color:var(--text)]';
+const CAPTION_TEXT = 'font-sans text-body-sm sm:text-body leading-[1.5] text-[color:var(--text)]';
 
 function FullSizeLink({ src, caption }: { src: string; caption: string }) {
   return (
@@ -40,17 +51,22 @@ function FullSizeLink({ src, caption }: { src: string; caption: string }) {
  * One screenshot as a small window: black bar, image flush to the frame,
  * caption and an "Open full size" link (dashboard text is unreadable at 375).
  * Portrait shots are centred in white padding with a height cap. Wide shots
- * (aspect ≥ 1.4 and ≥ 860px, so never upscaled) span both columns from md.
+ * (aspect ≥ 1.4 and at least the 1018px column wide) span both columns from
+ * md. No shot is shown wider than its natural width: narrower ones are centred.
+ * `webp` adds a WebP <source> whose `sizes` follows the box the shot gets.
  *
  * `hero`: the first figure under the case header. Loads eagerly at high
  * priority; a portrait hero sits beside its caption from md.
  */
 export function ScreenFigure({
-  file, src, width, height, alt, caption, srcMobile, mobileWidth, mobileHeight, fullSrc, span, hero = false,
+  file, src, width, height, alt, caption, srcMobile, mobileWidth, mobileHeight, fullSrc, webp, span, hero = false,
 }: Shot & { hero?: boolean }) {
   const portrait = width / height < 0.9;
-  const full = span || (width / height >= 1.4 && width >= 860);
+  const full = span || (width / height >= 1.4 && width >= COLUMN);
   const besideCaption = hero && portrait;
+  const sizes = portrait
+    ? `${Math.round((PORTRAIT_MAX_H * width) / height)}px`
+    : `(min-width: 768px) ${Math.min(width, hero || full ? COLUMN : HALF)}px, min(${width}px, 100vw)`;
 
   const image = (
     <img
@@ -66,13 +82,20 @@ export function ScreenFigure({
           ? `block mx-auto h-auto w-auto max-w-full ${besideCaption ? 'max-h-[min(70svh,560px)] md:max-h-[560px]' : 'max-h-[min(70svh,560px)]'}`
           : hero
             ? 'block mx-auto h-auto max-w-full'
-            : 'block w-full h-auto'
+            : 'block mx-auto w-full h-auto'
       }
+      // Never upscaled: a shot narrower than its box sits centred at its natural width
+      style={portrait || hero ? undefined : { maxWidth: width }}
     />
   );
-  const img = srcMobile ? (
+  const mobilePng = srcMobile?.replace(/\.webp$/, '.png');
+  const mobile = { media: '(max-width: 639px)', width: mobileWidth, height: mobileHeight };
+  const img = srcMobile || webp ? (
     <picture>
-      <source media="(max-width: 639px)" srcSet={srcMobile} width={mobileWidth} height={mobileHeight} />
+      {/* WebP phone art, its PNG, the WebP set, then the img */}
+      {srcMobile && mobilePng !== srcMobile && <source {...mobile} type="image/webp" srcSet={srcMobile} />}
+      {mobilePng && <source {...mobile} srcSet={mobilePng} />}
+      {webp && <source type="image/webp" srcSet={toSrcSet(webp)} sizes={sizes} />}
       {image}
     </picture>
   ) : image;

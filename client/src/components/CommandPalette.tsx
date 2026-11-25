@@ -1,6 +1,6 @@
 /**
  * CommandPalette: Ctrl+K / Cmd+K command menu.
- * A `commands.exe` terminal-variant window (MASTER 2.10): section and project
+ * A `commands.exe` terminal-variant window (DESIGN.md): section and project
  * navigation, resume and email, and chat shortcuts. ARIA combobox pattern:
  * focus stays in the search box, arrows move the active option
  * (aria-activedescendant), which scrolls into view.
@@ -41,8 +41,9 @@ function askChat(query?: string) {
   window.dispatchEvent(new CustomEvent('open-chat', { detail: { query } }));
 }
 
-export default function CommandPalette() {
-  const [isOpen, setIsOpen] = useState(false);
+/** Loaded on first use (App.tsx): `defaultOpen` honours the press that loaded it */
+export default function CommandPalette({ defaultOpen = false }: { defaultOpen?: boolean }) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
   const [search, setSearch] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [location, setLocation] = useLocation();
@@ -57,7 +58,8 @@ export default function CommandPalette() {
   const goToSection = (id: string) => {
     if (location === '/' && document.getElementById(id)) {
       keepFocus();
-      scrollToSection(id, reduced);
+      // Next frame: the palette has closed and released the scroll lock
+      requestAnimationFrame(() => scrollToSection(id, reduced));
     } else {
       setLocation(`/#${id}`);
     }
@@ -83,7 +85,7 @@ export default function CommandPalette() {
     {
       id: 'action-resume',
       label: 'Download resume (PDF)',
-      description: 'Save John\'s resume as a PDF',
+      description: 'Save John’s resume as a PDF',
       action: () => {
         const link = document.createElement('a');
         link.href = '/resume.pdf';
@@ -149,7 +151,7 @@ export default function CommandPalette() {
     // Chat Actions
     {
       id: 'chat-open',
-      label: 'Open Chat',
+      label: 'Open chat',
       description: 'Open the chat widget',
       action: () => chat(),
       category: 'chat',
@@ -163,14 +165,14 @@ export default function CommandPalette() {
     },
     {
       id: 'chat-projects',
-      label: 'Ask About Projects',
+      label: 'Ask about projects',
       description: 'Chat: overview of all projects',
       action: () => chat('What are your projects'),
       category: 'chat',
     },
     {
       id: 'chat-skills',
-      label: 'Ask About Skills',
+      label: 'Ask about skills',
       description: 'Chat: tech stack and tools',
       action: () => chat('What are your skills'),
       category: 'chat',
@@ -240,7 +242,8 @@ export default function CommandPalette() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="fixed inset-0 bg-black/70 z-40"
+            aria-hidden="true"
+            className="fixed inset-0 bg-black/70 z-40 touch-none"
           />
 
           {/* commands.exe: terminal-variant window */}
@@ -262,29 +265,32 @@ export default function CommandPalette() {
             <div className="bg-black text-[color:var(--paper)] [--focus:var(--paper)]">
               {/* Search: the ring sits on the row; the input itself has no outline */}
               <div className="border-b-2 border-[color:var(--paper)] p-4 flex items-center gap-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--paper)] focus-within:outline-offset-[-6px]">
-                <span aria-hidden="true" className="font-mono text-base font-bold text-[color:var(--paper)]">&gt;</span>
+                <span aria-hidden="true" className="font-mono text-body font-bold text-[color:var(--paper)]">&gt;</span>
                 <input
                   ref={inputRef}
                   type="text"
+                  name="command"
+                  autoComplete="off"
+                  spellCheck={false}
                   value={search}
                   onChange={e => {
                     setSearch(e.target.value);
                     setSelectedIndex(0);
                   }}
-                  placeholder="Search commands..."
+                  placeholder="Search commands…"
                   aria-label="Search commands"
                   role="combobox"
                   aria-expanded="true"
                   aria-controls={LIST_ID}
                   aria-autocomplete="list"
                   aria-activedescendant={activeId}
-                  className="flex-1 min-w-0 bg-transparent text-[color:var(--paper)] placeholder:text-[color:var(--paper)] placeholder:italic font-mono text-base outline-none caret-[var(--paper)]"
+                  className="flex-1 min-w-0 bg-transparent text-[color:var(--paper)] placeholder:text-[color:var(--paper)] placeholder:italic font-mono text-body outline-none caret-[var(--paper)]"
                 />
               </div>
 
               {/* Commands: active option paper (inverted), hover blue; the description
                   inherits the row colour. Options are clicked, not tabbed to. */}
-              <div id={LIST_ID} role="listbox" aria-label="Commands" className="max-h-96 overflow-y-auto" data-lenis-prevent>
+              <div id={LIST_ID} role="listbox" aria-label="Commands" className="max-h-96 overflow-y-auto overscroll-contain">
                 {filteredCommands.map((cmd, idx) => (
                     <button
                       type="button"
@@ -303,23 +309,23 @@ export default function CommandPalette() {
                           : 'hover:bg-[var(--blue)] hover:text-black'
                       }`}
                     >
-                      <span className="flex items-center gap-2 font-sans font-bold text-[15px]">
+                      <span className="flex items-center gap-2 font-sans font-bold text-body-sm">
                         {cmd.id === 'nav-hero' && <PixelArt name="icon-home" size={16} />}
                         {cmd.label}
                       </span>
-                      <span className="block font-sans text-sm mt-1">{cmd.description}</span>
+                      <span className="block font-sans text-body-sm mt-1">{cmd.description}</span>
                     </button>
                 ))}
               </div>
               {/* Always mounted so screen readers hear it appear */}
-              <p role="status" className="empty:hidden p-4 text-center font-sans text-sm">
+              <p role="status" className="empty:hidden p-4 text-center font-sans text-body-sm">
                 {filteredCommands.length === 0 ? 'No commands found' : ''}
               </p>
 
               {/* Footer hints */}
-              <div className="border-t-2 border-[color:var(--paper)] p-3 flex flex-wrap justify-between gap-x-4 gap-y-1 text-sm font-mono">
+              <div className="border-t-2 border-[color:var(--paper)] p-3 flex flex-wrap justify-between gap-x-4 gap-y-1 text-label font-mono">
                 <span>↑↓ Navigate | Enter Select | Esc Close</span>
-                <span>{MOD_KEY} K Toggle</span>
+                <span>{MOD_KEY}&nbsp;K Toggle</span>
               </div>
             </div>
           </motion.div>

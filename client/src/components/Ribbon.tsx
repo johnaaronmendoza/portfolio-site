@@ -1,5 +1,4 @@
 import type { CSSProperties } from 'react';
-import PixelArt from './PixelArt';
 
 type RibbonTone = 'ink' | 'blue';
 
@@ -17,9 +16,10 @@ const TONES: Record<RibbonTone, string> = {
   blue: 'bg-[var(--blue)] text-black',
 };
 
-// Lower-bound glyph advance: IBM Plex Mono is 0.6em wide (8.4px at text-sm,
-// 9.6px at sm:text-base); 8px errs towards extra repeats, never a gap.
-const CHAR_PX = 8;
+// Lower-bound glyph advance: IBM Plex Mono is 0.6em wide (7.8px at
+// text-label, 9.6px at sm:text-body); the smaller errs towards extra repeats,
+// never a gap.
+const CHAR_PX = 7.8;
 const SEPARATOR_PX = 16 + 2 * 16; // sparkle plus the gap either side
 const MIN_HALF_PX = 4200; // each half of the loop must be wider than a wide screen
 const SPEED_PX_PER_S = 60; // same scroll speed whatever the text length
@@ -47,16 +47,12 @@ export default function Ribbon({
         className={`ribbon-track ${reverse ? 'ribbon-track--reverse' : ''}`}
         style={{ '--ribbon-duration': `${duration}s` } as CSSProperties}
       >
-        {Array.from({ length: repeats * 2 }, (_, i) => (
-          <span key={i} className="flex items-center">
-            {items.map(item => (
-              <span key={item} className="flex items-center">
-                <span className="font-label text-sm sm:text-base whitespace-pre">{item}</span>
-                <PixelArt name="sparkle" size={16} lazy className="mx-4" />
-              </span>
-            ))}
-          </span>
-        ))}
+        {/* One span per phrase; the sparkle after it is a CSS background (.ribbon-item) */}
+        {Array.from({ length: repeats * 2 }, (_, i) =>
+          items.map(item => (
+            <span key={`${i}-${item}`} className="ribbon-item font-label text-label sm:text-body whitespace-pre">{item}</span>
+          )),
+        )}
       </div>
     </div>
   );

@@ -1,28 +1,29 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, type ReactNode, type Ref } from 'react';
+import type { ReactNode, Ref } from 'react';
 import { Link } from 'wouter';
 import FramerReveal from './FramerReveal';
 import PixelatedImage from './PixelatedImage';
 import PixelArt from './PixelArt';
-import { Lead } from './Hierarchy';
 import Burst from './comic/Burst';
+import { useQueryParam } from '@/hooks/useQueryParam';
 import { useSmartPreload } from '@/hooks/useSmartPreload';
 import { noteProjectOpen } from '@/hooks/useAchievements';
 import { motionTokens } from '@/lib/motion-tokens';
+import Section from './Section';
 import SectionHeading from './SectionHeading';
 import Window from './Window';
 import { PROJECTS, type Project } from '@/data/projects';
 
-// Display label and the key matched against project tags (kept separate so a
-// friendlier label doesn't change which projects match)
-const FILTERS: { label: string; match: string }[] = [
-  { label: 'AI', match: 'ML/AI' }, // same name as the Skills filter
-  { label: 'Python', match: 'Python' },
-  { label: 'React', match: 'React' },
-  { label: 'TypeScript', match: 'TypeScript' },
-  { label: 'Kubernetes', match: 'K8s' },
-  { label: 'gRPC', match: 'gRPC' },
-  { label: 'Kotlin', match: 'Kotlin' },
+// URL id (?filter=ai), display label and the key matched against project tags
+// (kept separate so a friendlier label doesn't change which projects match)
+const FILTERS: { id: string; label: string; match: string }[] = [
+  { id: 'ai', label: 'AI', match: 'ML/AI' }, // same name as the Skills filter
+  { id: 'python', label: 'Python', match: 'Python' },
+  { id: 'react', label: 'React', match: 'React' },
+  { id: 'typescript', label: 'TypeScript', match: 'TypeScript' },
+  { id: 'kubernetes', label: 'Kubernetes', match: 'K8s' },
+  { id: 'grpc', label: 'gRPC', match: 'gRPC' },
+  { id: 'kotlin', label: 'Kotlin', match: 'Kotlin' },
 ];
 
 function matchesFilter(p: Project, filter: string | null): boolean {
@@ -56,21 +57,24 @@ interface ProjectTileProps {
 export function ProjectTile({ project, ref, span = project.span }: ProjectTileProps) {
   const isComingSoon = project.link === '#';
   const isExternal   = project.link === 'external';
+  const file = `${project.slug ?? project.file ?? project.name.toLowerCase()}.png`;
 
   // Smart preload: on 300 ms hover intent, fetch detail-page screenshots.
   const { handlers: preloadHandlers } = useSmartPreload(project.preloadImages);
 
   const body = (
     <>
-      {/* The real screen in a small browser window, inset on the page colour.
-          Every tile still is cut at 2:1 (asset-work/tiles/screens.py), so the
-          window shows it whole at every width (John, 17 Nov) */}
-      <div className="relative border-b-[3px] border-black bg-[var(--page)] p-4">
-        <Window title={`${project.slug ?? project.file ?? project.name.toLowerCase()}.png`} className="window--figure window--thumb" bodyClassName="relative aspect-[2/1] overflow-hidden">
+      {/* The real screen flush at the top of the tile, 2:1, over a 3px rule.
+          Each still is cut at 2:1 (asset-work/tiles/screens.py); `crop` zooms
+          into its most legible part at tile size */}
+      <div className="relative border-b-[3px] border-black">
+        <div className="relative aspect-[2/1] overflow-hidden">
           {/* alt="" because the tile's link already names the project */}
           {project.image && (
             <PixelatedImage
               src={project.image}
+              srcSet={project.imageSet}
+              crop={project.crop}
               alt=""
               className={`w-full h-full transition-[filter,scale] duration-200 ${
                 isComingSoon
@@ -89,9 +93,9 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
           {isExternal && (
             <span className="badge badge--data absolute top-2 right-2">Live site</span>
           )}
-        </Window>
+        </div>
         {/* Comic sound effect, decorative (the description says the same). It
-            hangs off the tile's edge across the rule, clear of the screen */}
+            hangs off the tile's edge across the rule */}
         {project.sfx && (
           <Burst
             fill="var(--paper)"
@@ -105,21 +109,24 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
 
       {/* Project Info */}
       <div className="flex flex-1 flex-col gap-4 p-5">
-        {/* Featured badge, then year and team context, from projects.ts. The
-            badge sits here, not on the image, so it never covers a screenshot */}
-        <p className={`flex flex-wrap items-center gap-x-3 gap-y-1 font-label text-sm text-[color:var(--text)] -mb-2 ${project.sfx ? 'pr-16' : ''}`}>
-          {project.featured && <span className="badge badge--ink">Featured</span>}
-          <span>
+        {/* One meta pattern on every tile: the Featured badge (here, not on the
+            image, so it never covers a screenshot), then the still's file name
+            on its own line, then year and team context from projects.ts. Each
+            line stays whole, never wrapping mid-name */}
+        <p className={`flex flex-col items-start gap-1 font-label text-label text-[color:var(--text)] -mb-2 ${project.sfx ? 'pr-16' : ''}`}>
+          {project.featured && <span className="badge badge--ink mb-1">Featured</span>}
+          <span translate="no" className="whitespace-nowrap">{file}</span>
+          <span className="whitespace-nowrap">
             {project.year}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{project.caption}
           </span>
         </p>
-        <h3 className={`font-display break-words min-w-0 text-[color:var(--text)] ${project.featured ? 'text-2xl lg:text-[32px]' : 'text-[22px]'}`}>
+        <h3 className={`font-display break-words min-w-0 text-[color:var(--text)] ${project.featured ? 'text-card-title lg:text-card-lead' : 'text-card-title'}`}>
           {project.name}
         </h3>
-        <p className="font-sans text-[15px] sm:text-base leading-relaxed">
+        <p className="font-sans text-body-sm sm:text-body leading-relaxed">
           {project.description}
         </p>
-        <ul className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[15px] font-bold text-black">
+        <ul className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-body-sm font-bold text-black">
           {project.facts.map(fact => (
             <li key={fact} className="flex items-start gap-2">
               <PixelArt name="bullet" size={16} lazy className="line-mark" />
@@ -129,15 +136,14 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
         </ul>
         <div className="flex flex-wrap gap-1.5">
           {project.tags.map(tag => (
-            <span key={tag} className="border-2 border-black px-2 py-0.5 font-mono text-sm font-bold text-black">
+            <span key={tag} translate="no" className="border-2 border-black px-2 py-0.5 font-mono text-label font-bold text-black">
               {tag}
             </span>
           ))}
         </div>
-        {/* Featured: right under the tags (mt-auto left a dead band beside
-            the taller neighbours); regular tiles keep it on the bottom edge */}
+        {/* On the bottom edge, so the links line up across a row */}
         {!isComingSoon && (
-          <div className={`${project.featured ? 'mt-5' : 'mt-auto'} pt-2 font-sans text-[15px] text-black font-bold underline underline-offset-4 decoration-2`}>
+          <div className="mt-auto pt-2 font-sans text-body-sm text-black font-bold underline underline-offset-4 decoration-2">
             {isExternal ? 'Visit site' : 'Read case study'}
           </div>
         )}
@@ -180,8 +186,8 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
     // on pointers that can hover (Tailwind v4 gates hover: on that media query)
     <motion.div
       ref={ref}
-      className={`group border-[3px] border-black bg-[var(--paper)] shadow-[4px_4px_0_0_var(--ink)] transition-[translate,box-shadow] duration-150 ease-[var(--ease-out)] ${
-        isComingSoon ? '' : 'hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_0_var(--ink)] active:translate-x-1 active:translate-y-1 active:shadow-none'
+      className={`group border-[3px] border-black bg-[var(--paper)] shadow-8bit transition-[translate,box-shadow] duration-150 ease-[var(--ease-out)] ${
+        isComingSoon ? '' : 'hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-8bit-hover active:translate-x-1 active:translate-y-1 active:shadow-none'
       } ${span}`}
       exit={{ opacity: 0, y: motionTokens.distance.sm, transition: { duration: motionTokens.duration.fast } }}
     >
@@ -194,18 +200,19 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
 // paper text and sits pressed into its shadow (state also in aria-pressed).
 /** Filter chip style, shared with the Skills keyboard filters */
 export function chipClass(active: boolean) {
-  return `font-label text-xs px-3 py-1.5 min-h-[44px] border-[3px] border-black transition-[translate,box-shadow,background-color,color] duration-150 ${
+  return `font-label text-label px-3 py-1.5 min-h-[44px] border-[3px] border-black transition-[translate,box-shadow,background-color,color] duration-150 ${
     active
-      ? 'bg-[var(--bar)] text-[color:var(--paper)] translate-x-[3px] translate-y-[3px] shadow-none'
-      : 'bg-[var(--paper)] text-black hover:bg-[var(--blue)] shadow-[3px_3px_0_0_var(--ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none'
+      ? 'bg-[var(--bar)] text-[color:var(--paper)] translate-x-0.5 translate-y-0.5 shadow-none'
+      : 'bg-[var(--paper)] text-black hover:bg-[var(--blue)] shadow-8bit-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-none'
   }`;
 }
 
 // ── Projects section ──────────────────────────────────────────────────────
 export default function Projects() {
-  const [activeFilter, setActiveFilter] = useState<string | null>(null); // a filter label
+  // The filter lives in the URL (?filter=ai); no param means All
+  const [filterId, setFilter] = useQueryParam('filter');
+  const active = FILTERS.find(f => f.id === filterId) ?? null;
 
-  const active = FILTERS.find(f => f.label === activeFilter) ?? null;
   const visible = PROJECTS.filter(p => matchesFilter(p, active?.match ?? null));
   // Visible status; a live region, so a change is announced but the first render is not
   const status = `Showing ${visible.length} of ${PROJECTS.length} projects${active ? `: ${active.label}` : ''}`;
@@ -213,68 +220,70 @@ export default function Projects() {
   return (
     <FramerReveal>
       {/* Full-width blue band; all text on it is black or sits on paper */}
-      <section className="bg-[var(--blue)] text-black border-y-[3px] border-black px-4 sm:px-8 lg:px-[88px] 2xl:px-16 py-20 sm:py-28">
-        <div className="max-w-6xl mx-auto">
-          <SectionHeading text="PROJECTS" tone="ink" icon="icon-projects" className="mb-4 lg:mb-5" />
-          <Lead text="Start with **SilverLink SG**, the SCS Awareness Platform and UWB Indoor Localization." tone="blue" className="mb-6 lg:mb-8" />
+      <Section className="bg-[var(--blue)] text-black border-y-[3px] border-black">
+        <SectionHeading
+          text="PROJECTS"
+          tone="ink"
+          icon="icon-projects"
+          lead="Start with **SilverLink SG**, the SCS Awareness Platform and UWB Indoor Localization."
+        />
 
-          <Window title="projects/" bodyClassName="p-4 sm:p-6 lg:p-8">
-            {/* Filter chips */}
-            <div role="group" aria-label="Filter projects by technology" className="flex flex-wrap gap-2 sm:gap-3">
+        <Window title="projects/" bodyClassName="p-4 sm:p-6 lg:p-8">
+          {/* Filter chips */}
+          <div role="group" aria-label="Filter projects by technology" className="flex flex-wrap gap-2 sm:gap-3">
+            <button
+              type="button"
+              onClick={() => setFilter(null)}
+              aria-pressed={active === null}
+              className={chipClass(active === null)}
+            >
+              All
+            </button>
+            {FILTERS.map(({ id, label }) => (
               <button
                 type="button"
-                onClick={() => setActiveFilter(null)}
-                aria-pressed={activeFilter === null}
-                className={chipClass(activeFilter === null)}
+                key={id}
+                onClick={() => setFilter(active?.id === id ? null : id)}
+                aria-pressed={active?.id === id}
+                className={chipClass(active?.id === id)}
               >
-                All
+                {label}
               </button>
-              {FILTERS.map(({ label }) => (
+            ))}
+          </div>
+          <p aria-live="polite" className="mt-4 mb-6 sm:mb-8 font-label text-label text-black tabular-nums">{status}</p>
+
+          {/* Tile grid: the three featured tiles in one row from lg, then the
+              rest two to a row (lg) or four (xl); UWB spans both columns at sm
+              so the 2-column grid has no orphan. Filtered, every tile takes a
+              third at xl so the rows close up */}
+          <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 xl:grid-cols-12 gap-6">
+            <AnimatePresence initial={false} mode="popLayout">
+              {visible.map(project => (
+                <ProjectTile key={project.num} project={project} span={active ? `${project.span} xl:col-span-4` : undefined} />
+              ))}
+            </AnimatePresence>
+
+            {/* Empty state */}
+            {active && visible.length === 0 && (
+              <motion.div
+                className="col-span-full border-[3px] border-black p-10 text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <p className="font-sans text-body-sm sm:text-body">No projects match {active.label}.</p>
                 <button
                   type="button"
-                  key={label}
-                  onClick={() => setActiveFilter(activeFilter === label ? null : label)}
-                  aria-pressed={activeFilter === label}
-                  className={chipClass(activeFilter === label)}
+                  onClick={() => setFilter(null)}
+                  className="btn btn-secondary mt-4"
                 >
-                  {label}
+                  Show all projects
                 </button>
-              ))}
-            </div>
-            <p aria-live="polite" className="mt-4 mb-6 sm:mb-8 font-label text-sm text-black tabular-nums">{status}</p>
-
-            {/* Tile grid: the three featured tiles in one row from lg, then the
-                rest two to a row (lg) or four (xl); UWB spans both columns at sm
-                so the 2-column grid has no orphan. Filtered, every tile takes a
-                third at xl so the rows close up */}
-            <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 xl:grid-cols-12 gap-6">
-              <AnimatePresence initial={false} mode="popLayout">
-                {visible.map(project => (
-                  <ProjectTile key={project.num} project={project} span={active ? `${project.span} xl:col-span-4` : undefined} />
-                ))}
-              </AnimatePresence>
-
-              {/* Empty state */}
-              {active && visible.length === 0 && (
-                <motion.div
-                  className="col-span-full border-[3px] border-black p-10 text-center"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                >
-                  <p className="font-sans text-[15px] sm:text-base">No projects match {active.label}.</p>
-                  <button
-                    type="button"
-                    onClick={() => setActiveFilter(null)}
-                    className="btn btn-secondary mt-4"
-                  >
-                    Show all projects
-                  </button>
-                </motion.div>
-              )}
-            </div>
-          </Window>
-        </div>
-      </section>
+              </motion.div>
+            )}
+          </div>
+        </Window>
+      </Section>
     </FramerReveal>
   );
 }

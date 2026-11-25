@@ -17,7 +17,7 @@ You are the UI designer on John Aaron's portfolio team. You design; the `coder` 
 
 1. `CLAUDE.md`: audience, binding design rules (palette pairings, Window motif, pixel display type + mono body, hard shadows, 44px targets, readable-first) and honesty rules. Its rules win over your taste.
 2. `HOTO.md` and the latest critique in `.impeccable/critique/` (and any newer critique the lead gives you). Your job is to resolve its findings, not to restyle for its own sake.
-3. Existing specs in `design-system/portfolio/` (`MASTER.md`, `visual-hierarchy.md`, `pages/`) and the copy deck `copy.md`. Use the deck's words; mark gaps `NEEDS JOHN:`.
+3. Existing specs in `design-system/portfolio/` (`DESIGN.md`, `visual-hierarchy.md`, `pages/`) and the copy deck `copy.md`. Use the deck's words; mark gaps `NEEDS JOHN:`.
 
 ## How you work
 

@@ -18,11 +18,10 @@ import SectionNav from '@/components/SectionNav';
 import SkipLink from '@/components/SkipLink';
 import Stickers from '@/components/comic/Stickers';
 import { useHomeAchievements } from '@/hooks/useAchievements';
-import { getLenis } from '@/hooks/useLenis';
 import { saveHomeScroll } from '@/lib/scroll-memory';
 
 // Section wrappers take focus (without a ring) when a link lands on them
-const SECTION_CLASS = 'relative section-transition focus:outline-none';
+const SECTION_CLASS = 'relative focus:outline-none';
 
 /** Arriving at "/#projects" (e.g. a case study's Back link): jump there and focus it */
 function useScrollToHash() {
@@ -31,13 +30,7 @@ function useScrollToHash() {
     const target = id ? document.getElementById(id) : null;
     if (!target) return;
     const frame = requestAnimationFrame(() => {
-      const lenis = getLenis();
-      if (lenis) {
-        lenis.resize();
-        lenis.scrollTo(target, { immediate: true });
-      } else {
-        target.scrollIntoView();
-      }
+      target.scrollIntoView();
       target.focus({ preventScroll: true });
     });
     return () => cancelAnimationFrame(frame);

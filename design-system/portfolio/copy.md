@@ -665,3 +665,150 @@ works whatever John answers to B4.
   resume today.
 - **B1, B2, B4** as above. **Q8** (UWB team size) would turn `team coursework`
   into `team of N`.
+
+---
+
+## Case-study stat strips (24 Nov 2026)
+
+Brief: the taste-skill audit (`skills-audit-2026-11-24.md`) flags bare figures
+over one-word labels as a template tell. John approved turning each label into
+a short clause that says what the figure means. **No figure changes.** Every
+clause uses only facts already on that case page, elsewhere on the site or in
+`client/public/resume.pdf` (line numbers are from `pdftotext -layout`).
+
+Coder notes:
+
+- Change only the `label` string. The `value` stays as it is.
+- Labels follow the figure, so they start lower case unless they open with a
+  proper noun or acronym (`SVM-RBF`, `UWB`). No full stop.
+- Keep `‑` (non-breaking hyphen) in `ROC‑AUC`, as today. Write
+  `S&P 500` with a non-breaking space so `500` never wraps alone.
+- `StatStrip` uses `label` as the React `key`; every label below is unique in
+  its strip.
+- Fit: a status cell is about 135px of text at 375px (2 columns), about 15
+  Plex Mono characters a line; at 1366px the `max-w-[18ch]` cap gives about 18.
+  Every clause is 3 lines or fewer at 1366px. Two run to 4 lines at 375px
+  (marked *4 lines*); cells in a row share a height, so nothing clips. No word
+  is longer than 13 characters.
+- Header strips are in each page's `<CaseHeader stats={[...]}>`. UWB and Fire
+  Safety also have an inline strip in Results; those tables are marked
+  **inline**.
+
+### SilverLink SG: `client/src/pages/SilverLinkProject.tsx` l.64–67
+
+| Figure | Current label | New label (clause) | Source |
+|---|---|---|---|
+| `4` | `gRPC microservices` | `gRPC services behind one REST gateway` | `SilverLinkProject.tsx:109` lead; resume l.52–53 |
+| `8` | `Kubernetes nodes` | `Kubernetes nodes running the services` | `skills3d/keys.ts:80` ("Running services on an 8-node cluster"); `MascotChatWidget.tsx:90`; resume l.55 |
+| `8` | `isolated database schemas` | `isolated schemas on Neon PostgreSQL` | `SilverLinkProject.tsx:47` (diagram: "8 isolated schemas, Neon PostgreSQL"); resume l.58 |
+| `7` | `Agile sprints` | `Agile sprints with planning and reviews` | `skills3d/keys.ts:90` ("Seven-sprint team projects with planning, reviews and burndown charts", used in SilverLink and SCS); resume l.53–54 |
+
+Why not "one per service" (the brief's example): the next cell says 4 services,
+so "8 schemas, one per service" reads as a contradiction. The page says "each
+with its own database schema" (l.109) and the resume says "per-service", but
+nothing says how 8 schemas map to 4 services. See NEEDS JOHN S1.
+
+### SCS Awareness Platform: `client/src/pages/SCSProject.tsx` l.85–88
+
+| Figure | Current label | New label (clause) | Source |
+|---|---|---|---|
+| `4` | `languages` | `languages: English, Chinese, Malay, Tamil` *(4 lines)* | `SCSProject.tsx:113`; resume l.62 |
+| `4` | `question types` | `question types, all validated in the editor` | `SCSProject.tsx:127` ("validating all 4 question types"); resume l.63–64 ("editor validation across 4 question types") |
+| `4` | `people on the team` | `people; I built the core engine` | `SCSProject.tsx:81` chip, `:123` ("I built the **core engine** and media systems"); resume l.63, l.66 |
+| `7` | `Agile sprints` | `Agile sprints with planning and reviews` | `skills3d/keys.ts:90`; `SCSProject.tsx:163`; resume l.66 |
+
+The sprint clause is the same on SilverLink and SCS on purpose: it is the same
+fact from the same source.
+
+### AI Finance Insights Engine: `client/src/pages/AIFinanceProject.tsx` l.31–34
+
+| Figure | Current label | New label (clause) | Source |
+|---|---|---|---|
+| `5` | `data sources` | `sources: S&P 500, oil, FX, Maersk, news` *(4 lines)* | `AIFinanceProject.tsx:9` (Extract step), `:73` |
+| `9` | `news sectors` | `sectors the NLP sorts headlines into` | `AIFinanceProject.tsx:14`, `:75` ("Sorts headlines into **9 sectors**") |
+| `2` | `data-quality gates` | `quality gates that stop bad data` | `AIFinanceProject.tsx:42` ("**two quality gates**: bad data stops before the database") |
+| `100%` | `Pytest coverage on extract and transform` | keep as is | Already a clause; `AIFinanceProject.tsx:50`; `MascotChatWidget.tsx:71` |
+
+"oil" is Brent crude and "FX" is USD/SGD, both named on the page (l.9, l.73).
+Not on the resume (the project isn't listed there).
+
+### UWB Indoor Localization: `client/src/pages/UWBProject.tsx`
+
+Header, l.86–89:
+
+| Figure | Current label | New label (clause) | Source |
+|---|---|---|---|
+| `89.61%` | `SVM-RBF accuracy` | `SVM-RBF accuracy vs 85.75% baseline` | `UWBProject.tsx:146` ("89.61% vs 85.75%"); `ProofPoints.tsx:24`; resume l.69 |
+| `0.9612` | `ROC‑AUC` | `ROC‑AUC on clear vs blocked paths` | `UWBProject.tsx:66` ("Clear or blocked, SVM-RBF"), `:108`; resume l.69 |
+| `41,996` | `samples` | `UWB samples, half clear, half blocked` | `MascotChatWidget.tsx:79` ("perfectly balanced 50/50 LOS/NLOS"); test split on `UWBProject.tsx:34` (4,200 per class); resume l.69 |
+| `7` | `indoor environments` | `indoor environments in the dataset` | `UWBProject.tsx:54`; resume l.69–70 |
+
+Keep the B4 rule: no "my model" or "I achieved" next to 89.61%.
+
+**Inline** Results strip, l.152–155:
+
+| Figure | Current label | New label (clause) | Source |
+|---|---|---|---|
+| `0.9195` | `logistic regression ROC‑AUC` | `baseline ROC‑AUC (logistic regression)` | `MascotChatWidget.tsx:77` ("Logistic Regression (85.75%, 0.9195 AUC)"); `UWBProject.tsx:146` ("baseline") |
+| `1.757 m` | `range RMSE` | `range error (RMSE) on both paths` | `UWBProject.tsx:15` caption ("range RMSE 1.757 m on both paths"), `:111` |
+| `0.458` | `path 1 R²` | `range fit (R²) on path 1` | `UWBProject.tsx:67`, `:111` (linear regression estimates range on both paths) |
+| `0.6809` | `path 2 R²` | `range fit (R²) on path 2` | as above |
+
+### UAT Testing Dashboard: `client/src/pages/UATProject.tsx` l.195–198
+
+| Figure | Current label | New label (clause) | Source |
+|---|---|---|---|
+| `8` | `modules` | `hospital system modules under test` | `UATProject.tsx:186` chip, `:253` ("Test scope: 8 modules (sample data)") |
+| `4` | `user roles` | `user roles: PM, QA lead, tester, dev` | `UATProject.tsx:187` chip |
+| `25` | `sample defects` | `sample defects, each with a severity` | `UATProject.tsx:219` ("Defects carry **severity**"), `:24` caption |
+| `35` | `sample test cases` | `sample test cases, failures linked to defects` *(4 lines)* | `UATProject.tsx:34` caption ("35 sample test cases, failures linked to defects") |
+
+"sample" stays in both defect and test-case labels: the data is seeded
+(`UATProject.tsx:242`). Not on the resume.
+
+### Fire Safety Drill Companion: `client/src/pages/FireSafetyProject.tsx`
+
+Header, l.85–88:
+
+| Figure | Current label | New label (clause) | Source |
+|---|---|---|---|
+| `79/100` | `SUS usability score` | `on the System Usability Scale` | `FireSafetyProject.tsx:85`, `:152` (SUS scores stored); SUS is the System Usability Scale. Reads "79/100 on the System Usability Scale" |
+| `~80%` | `test coverage` | **keep** `test coverage` (flag F2) | `FireSafetyProject.tsx:86`; `MascotChatWidget.tsx:61`. Nothing says what was measured or over which code |
+| `4` | `languages` | **keep** `languages` (flag F1) | Not explained anywhere on the current site or resume |
+| `9/9` | `backlog items, plus 6 extra` | `backlog items delivered, plus 6 extra` | `FireSafetyProject.tsx:88`; "delivered" is the site's earlier wording: "Delivered all 9 backlog items plus 6 extra in 3 Agile sprints" (`FireSafetyProject.tsx` at `647d879^`, l.144) |
+
+If John answers F1 the way the earlier page put it (`FireSafetyProject.tsx` at
+`647d879^`, l.100 and l.133: "Firebase Cloud Messaging push reminders, localised
+in all 4 languages", "English, Chinese, Tamil or Malay"), use
+`languages for drill reminders`. That text was trimmed from the page, so it
+waits for John rather than coming back unasked.
+
+**Inline** Results strip, l.168–171:
+
+| Figure | Current label | New label (clause) | Source |
+|---|---|---|---|
+| `10,984` | `lines of Kotlin` | keep | Already says what it counts |
+| `5,458` | `lines of tests` | keep | Already says what it counts; the lead (l.162) adds "across 26 files" |
+| `26` | `test files` | keep | as above |
+| `120` | `commits` | `team commits, 49 of them mine` | `FireSafetyProject.tsx:128` ("49 of the team's 120 commits") |
+
+### NEEDS JOHN (stat strips)
+
+- **S1. SilverLink:** the page and resume say each service has its own schema,
+  and `skills3d/keys.ts:77` says "eight isolated schemas, one per service", but
+  there are 4 services. What are the 8 schemas (for example, the 4 services
+  plus the gateway, Keycloak and others)? Until you answer, the strip says
+  `isolated schemas on Neon PostgreSQL`, and `keys.ts:77` should drop
+  "one per service" (lead: send to the coder with this deck).
+- **F1. Fire Safety:** what is in 4 languages: the drill reminders only, or
+  the whole app? An earlier version of the page said push reminders were
+  localised in English, Chinese, Tamil and Malay.
+- **F2. Fire Safety:** what does "~80% test coverage" measure (line coverage
+  from a tool, or test cases against requirements), and over which code? If
+  it is line coverage of the app, the label can become
+  `of the Kotlin code covered by tests`.
+- **Q12 (still open):** how many people gave the 79/100 SUS score? The in-app
+  analytics screenshot shows an SUS average of 52.5. If you give the count,
+  the label can become `on the System Usability Scale, N testers`.
+- **Q9 (still open):** is range RMSE really 1.757 m on both paths? The inline
+  clause repeats the page caption.

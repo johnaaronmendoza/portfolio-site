@@ -2,6 +2,7 @@ import { useEffect, type ReactNode } from 'react';
 import { Link } from 'wouter';
 import Footer from '@/components/Footer';
 import PixelArt from '@/components/PixelArt';
+import { GUTTERS } from '@/components/Section';
 import SectionHeading from '@/components/SectionHeading';
 import SkipLink from '@/components/SkipLink';
 import SoundToggle from '@/components/SoundToggle';
@@ -11,7 +12,6 @@ import { trackProjectVisit } from '@/hooks/useAchievements';
 import { play } from '@/hooks/useSound';
 
 const HOME_TITLE = 'John Aaron Mendoza Branzuela | Computing Science Portfolio';
-const GUTTERS = 'px-4 sm:px-8 lg:px-16';
 
 /** Sticky black bar with the one way back to the Projects grid, and Sound
  *  (in the bar, so no floating button sits over the page's figures) */
@@ -36,7 +36,7 @@ const CRUMB_LINK = 'inline-flex min-h-[44px] min-w-[44px] items-center text-[col
 function Breadcrumb({ current }: { current: string }) {
   return (
     <nav aria-label="Breadcrumb" className="mt-6 mb-4">
-      <ol className="flex flex-wrap items-center gap-x-2 font-sans text-[15px] sm:text-base text-[color:var(--text)]">
+      <ol className="flex flex-wrap items-center gap-x-2 font-sans text-body-sm sm:text-body text-[color:var(--text)]">
         <li className="flex items-center gap-x-2">
           <Link href="/" className={CRUMB_LINK}>Home</Link>
           <span aria-hidden="true">/</span>
@@ -108,6 +108,8 @@ export default function CaseLayout({ slug, children }: CaseLayoutProps) {
       <CaseTaskbar />
       <main id="main" tabIndex={-1}>
         <div className={`${GUTTERS} pb-16 lg:pb-20`}>
+          {/* Home's gutters, but the narrower max-w-5xl column: the screenshot
+              WebPs and their `sizes` are cut for its 1018px (webp-manifest.md) */}
           <div className="max-w-5xl mx-auto">
             <Breadcrumb current={name} />
             <div className="space-y-16 lg:space-y-20">{children}</div>

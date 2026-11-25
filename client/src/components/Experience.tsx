@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import FramerReveal from './FramerReveal';
 import { Chip, PixelList } from './Hierarchy';
+import Section from './Section';
 import SectionHeading from './SectionHeading';
 import Window from './Window';
 
@@ -47,7 +48,7 @@ const ENTRIES: Entry[] = [
       [DESK_ASSIST]: (
         <>
           {' '}<span className={`${BADGE_CLASS['In progress']} align-middle`}>In progress</span>
-          <span className="mt-2 block text-[15px]">
+          <span className="mt-2 block text-body-sm">
             Security model: least-privilege permissions, no remotely hosted code, AI calls through a company-controlled backend.
           </span>
         </>
@@ -81,12 +82,12 @@ const ENTRIES: Entry[] = [
 
 /** One role as a window. The lead (LGA, the current role) is full width and,
  *  from lg, splits into a 12-column body: who/when on the left, outcomes on
- *  the right, with a heavier shadow like the Projects window. */
+ *  the right. */
 function ExperienceWindow({ entry, lead = false }: { entry: Entry; lead?: boolean }) {
   return (
     <Window
       title={entry.file}
-      className={lead ? 'lg:shadow-[12px_12px_0_0_var(--ink)]' : 'flex h-full flex-col'}
+      className={lead ? '' : 'flex h-full flex-col'}
       bodyClassName={lead ? 'p-6 sm:p-10 lg:p-12 lg:grid lg:grid-cols-12 lg:gap-x-12' : 'flex-1 p-6 sm:p-10'}
     >
       <div
@@ -101,10 +102,12 @@ function ExperienceWindow({ entry, lead = false }: { entry: Entry; lead?: boolea
             </span>
           ))}
         </div>
-        <h3 className={`font-display text-black mb-2 text-balance ${lead ? 'text-[28px] sm:text-[32px] lg:text-[40px] leading-[1.1]' : 'text-2xl sm:text-[28px]'}`}>
+        {/* 24 for every role, so the hero's desk_assist.exe h2 stays above
+            it; the lead keeps its weight through its full-width window */}
+        <h3 className="font-display text-card-title text-black mb-2 text-balance">
           {entry.org}
         </h3>
-        <p className="font-sans text-[15px] sm:text-base font-bold text-pretty">
+        <p className="font-sans text-body-sm sm:text-body font-bold text-pretty">
           {entry.role}
         </p>
         <Chip icon="chip-calendar" text={entry.period} className="mt-4 whitespace-nowrap" />
@@ -119,21 +122,19 @@ export default function Experience() {
   const [lead, ...rest] = ENTRIES;
   return (
     <FramerReveal>
-      <section className="px-4 sm:px-8 lg:px-[88px] 2xl:px-16 py-20 sm:py-28">
-        <div className="max-w-6xl mx-auto">
-          <SectionHeading text="EXPERIENCE" icon="icon-experience" className="mb-16" />
+      <Section>
+        <SectionHeading text="EXPERIENCE" icon="icon-experience" />
 
-          {/* LGA leads; Sembcorp and the degree sit side by side from lg */}
-          <div className="space-y-10 lg:space-y-14">
-            <ExperienceWindow entry={lead} lead />
-            <div className="grid gap-10 lg:grid-cols-2 lg:gap-x-10">
-              {rest.map(entry => (
-                <ExperienceWindow key={entry.org} entry={entry} />
-              ))}
-            </div>
+        {/* LGA leads; Sembcorp and the degree sit side by side from lg */}
+        <div className="space-y-10 lg:space-y-14">
+          <ExperienceWindow entry={lead} lead />
+          <div className="grid gap-10 lg:grid-cols-2 lg:gap-x-10">
+            {rest.map(entry => (
+              <ExperienceWindow key={entry.org} entry={entry} />
+            ))}
           </div>
         </div>
-      </section>
+      </Section>
     </FramerReveal>
   );
 }

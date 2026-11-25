@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react';
 import CaseLayout from '@/components/case/CaseLayout';
 import CaseHeader from '@/components/case/CaseHeader';
-import { CaseSection, SubHeading, TechStack } from '@/components/case/CaseBlocks';
+import { CasePair, CaseSection, SubHeading, TechStack } from '@/components/case/CaseBlocks';
 import ScreenGallery, { type Shot } from '@/components/case/ScreenGallery';
 import FlowDiagram, { type FlowStep } from '@/components/FlowDiagram';
 import { PixelList } from '@/components/Hierarchy';
+import { caseWebp } from '@/lib/images';
 
 import uatDashboardImg  from '@assets/uat_dashboard_full.png';
 import uatDefectsImg    from '@assets/uat_defects.png';
@@ -13,29 +14,29 @@ import uatTestcasesImg  from '@assets/uat_testcases.png';
 import uatReportsImg    from '@assets/uat_reports_full.png';
 
 const HERO_SHOT: Shot = {
-  file: 'dashboard.png', src: uatDashboardImg, width: 1440, height: 922,
+  file: 'dashboard.png', src: uatDashboardImg, webp: caseWebp('uat/uat_dashboard_full', 1018, ['@full', 1440]), width: 1440, height: 922,
   caption: 'Dashboard: status, pass rate, severity and monthly trend.',
   alt: 'UAT Executive Dashboard with sample data: 25 defects (14 open, 5 in progress, 6 resolved), 35 test cases (11 passed, 24 failed), a defects-by-severity bar chart and a monthly trend chart.',
 };
 
 const SHOTS: Shot[] = [
   {
-    file: 'defects.png', src: uatDefectsImg, width: 1440, height: 900,
+    file: 'defects.png', src: uatDefectsImg, webp: caseWebp('uat/uat_defects', 1018, ['@full', 1440]), width: 1440, height: 900,
     caption: 'Defect register: 25 sample defects, filterable by module, severity, status.',
     alt: 'Defect Management table listing defects DEF-016 to DEF-025 with title, module, severity, status and assignee, plus search, filters and a Log defect button.',
   },
   {
-    file: 'defect_detail.png', src: uatDetailImg, width: 1440, height: 900,
+    file: 'defect_detail.png', src: uatDetailImg, webp: caseWebp('uat/uat_defect_detail', 1018, ['@full', 1440]), width: 1440, height: 900,
     caption: 'DEF-025: expected vs actual result and steps to reproduce.',
     alt: "Defect detail for DEF-025, 'Notification Service Crashes Under High Load': open, critical, P1. Expected: notifications processed without a crash. Actual: service crashes and pending notifications are lost.",
   },
   {
-    file: 'test_cases.png', src: uatTestcasesImg, width: 1440, height: 900,
+    file: 'test_cases.png', src: uatTestcasesImg, webp: caseWebp('uat/uat_testcases', 1018, ['@full', 1440]), width: 1440, height: 900,
     caption: '35 sample test cases, failures linked to defects.',
     alt: 'Test Case Management table of test cases with module, pass or fail status, linked defect code and who ran each one.',
   },
   {
-    file: 'reports.png', src: uatReportsImg, width: 1440, height: 1146,
+    file: 'reports.png', src: uatReportsImg, webp: caseWebp('uat/uat_reports_full', 697, ['@2x', 1394]), width: 1440, height: 1146,
     caption: 'Reports: breakdowns by module and status, with CSV export.',
     alt: 'Analytics and Reports page with donut charts of defects by module and by status, a stacked bar chart of passed and failed tests per module, and Export defects and Export test cases buttons.',
   },
@@ -73,7 +74,7 @@ const CELL = 'border-b-2 border-black py-3 align-middle';
 function ModuleTable() {
   return (
     <div role="region" aria-labelledby="test-scope-heading" tabIndex={0} className="overflow-x-auto max-w-[65ch]">
-      <table aria-labelledby="test-scope-heading" className="w-full border-collapse font-sans text-[15px] sm:text-base text-[color:var(--text)]">
+      <table aria-labelledby="test-scope-heading" className="w-full border-collapse font-sans text-body-sm sm:text-body text-[color:var(--text)]">
         <thead>
           <tr className="text-left text-black">
             <th scope="col" className={`${CELL} border-b-[3px] pr-4`}>
@@ -109,7 +110,7 @@ const SEVERITY: { level: Level; priority: string; desc: string }[] = [
 
 function SeverityList() {
   return (
-    <dl className="max-w-[65ch] font-sans text-[15px] sm:text-base leading-[1.65]">
+    <dl className="max-w-[65ch] font-sans text-body-sm sm:text-body leading-[1.65]">
       {SEVERITY.map(({ level, priority, desc }) => (
         <div key={level} className="flex flex-col sm:flex-row sm:items-baseline gap-x-4 gap-y-2 border-b-2 border-black py-3">
           <dt className="flex flex-shrink-0 items-center gap-3 sm:w-44 font-bold text-black">
@@ -134,7 +135,7 @@ const RECORD: { label: string; value: ReactNode }[] = [
 
 function TestCaseRecord() {
   return (
-    <div className="border-2 border-black p-4 sm:p-6 max-w-[75ch] font-sans text-[15px] sm:text-base leading-[1.65] text-[color:var(--text)] space-y-6">
+    <div className="border-2 border-black p-4 sm:p-6 max-w-[75ch] font-sans text-body-sm sm:text-body leading-[1.65] text-[color:var(--text)] space-y-6">
       <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-2">
         {RECORD.map(({ label, value }) => (
           <div key={label} className={label === 'Title' || label === 'Preconditions' ? 'sm:col-span-2' : undefined}>
@@ -192,36 +193,38 @@ export default function UATProject() {
           kind: 'repo',
         }]}
         stats={[
-          { value: '8', label: 'modules' },
-          { value: '4', label: 'user roles' },
-          { value: '25', label: 'sample defects' },
-          { value: '35', label: 'sample test cases' },
+          { value: '8', label: 'hospital system modules under test' },
+          { value: '4', label: 'user roles: PM, QA lead, tester, dev' },
+          { value: '25', label: 'sample defects, each with a severity' },
+          { value: '35', label: 'sample test cases, failures linked to defects' },
         ]}
         heroShot={HERO_SHOT}
       />
 
-      <CaseSection
-        id="problem"
-        heading="The problem"
-        icon="icon-about"
-        lead="UAT teams need one view of what **blocks go-live**; spreadsheets break down fast."
-      />
-
-      <CaseSection
-        id="what"
-        heading="What it does"
-        icon="icon-projects"
-        lead="Logs defects and test runs, and links every **failed test** to its defect."
-        file="what_it_does.md"
-      >
-        <PixelList
-          items={[
-            'Defects carry **severity**, priority, expected vs actual and steps to reproduce.',
-            'Charts defects by severity, module and status, plus a **monthly trend**.',
-            '**One-click CSV** export; separate access for each of the 4 roles.',
-          ]}
+      <CasePair>
+        <CaseSection
+          id="problem"
+          heading="The problem"
+          icon="icon-about"
+          lead="UAT teams need one view of what **blocks go-live**; spreadsheets break down fast."
         />
-      </CaseSection>
+
+        <CaseSection
+          id="what"
+          heading="What it does"
+          icon="icon-projects"
+          lead="Logs defects and test runs, and links every **failed test** to its defect."
+          file="what_it_does.md"
+        >
+          <PixelList
+            items={[
+              'Defects carry **severity**, priority, expected vs actual and steps to reproduce.',
+              'Charts defects by severity, module and status, plus a **monthly trend**.',
+              '**One-click CSV** export; separate access for each of the 4 roles.',
+            ]}
+          />
+        </CaseSection>
+      </CasePair>
 
       <ScreenGallery shots={SHOTS} />
 

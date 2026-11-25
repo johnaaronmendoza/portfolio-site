@@ -21,7 +21,7 @@ export default function HeroNarrator() {
       onClick={() => window.dispatchEvent(new CustomEvent('open-chat'))}
       className="group flex flex-col items-start gap-[22px] -mr-3 pr-3 border-b-[3px] border-black text-left outline-offset-[6px]"
     >
-      <span className="comic-bubble block font-sans text-[15px] leading-[1.4] px-4 py-3 rounded-[20px] shadow-[4px_4px_0_0_var(--ink)] [--tail-x:26px] transition-[translate,box-shadow] duration-150 group-hover:underline underline-offset-4 decoration-2 group-active:translate-x-1 group-active:translate-y-1 group-active:shadow-none">
+      <span className="comic-bubble block font-sans text-body-sm leading-[1.4] px-4 py-3 rounded-[20px] shadow-8bit [--tail-x:26px] transition-[translate,box-shadow] duration-150 group-hover:underline underline-offset-4 decoration-2 group-active:translate-x-1 group-active:translate-y-1 group-active:shadow-none">
         The AI drafts, an agent decides. Ask me how.<span className="sr-only"> Opens the chat.</span>
       </span>
       <img

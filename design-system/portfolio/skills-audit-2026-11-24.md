@@ -89,3 +89,39 @@ CLAUDE.md wins every conflict. Rules that clash with John's choices are listed i
 | Animate transform/opacity only; soft hover shadows | Press-down buttons with hard shadows only |
 | Mockup image first; no framing container per section; no filename micro-labels | The Window motif with `*.exe`/`*.txt` title bars is the identity |
 | Autoplay motion limits; custom cursor | Hero particles, scramble and Lil Johnny's bob (with Pause); the pixel cursor |
+
+## 4. Results after the fix passes (25 Nov 2026)
+
+John approved every fix-now item and asked the lead to pick the best option for the five decisions: analytics loads only when configured, project tiles show the still flush (option a), the hero has two buttons plus text links (option a), Lenis is removed, and stat-strip labels became factual clauses. Commits on `design-skills-audit`: 230370b (pass 1), dea5abd (pass 2), d6c43db (pass 3), cdf14e4 (pass 4), e6ccd73 (WebP assets), 8b564e1 (copy), eb08b72 / 7557526 (DESIGN.md).
+
+| Lens | Baseline | After | Re-scored at |
+|---|---|---|---|
+| Web Interface Guidelines | ~77% (68.5/89) | **~94% (83.5/89)** | dea5abd; pass 3 then fixed most of the remaining points (forms, touch, `?skills=`) |
+| Taste | 62 | **90** (19/21) | 7557526; pass 4 then fixed T11 (heading inversions); T19 (section template) partly addressed by case-page pairs |
+| Image-to-code | 63 | **79** (9.5/12) | 7557526; pass 4 addresses §31/§32 (case pairs, narrow windows, About column) |
+| DESIGN.md comparison | 64 | **93** (13/14) | 7557526 |
+
+Measured changes:
+- Main JS 546 → 483 kB (gzip 175 → 155 kB).
+- Home DOM 1,862 → about 1,224 nodes.
+- Images 3.6 MB → 0.5 MB (WebP, never upscaled).
+- CLS 0.000.
+- No text under 13px except the 3D compact legends.
+- No horizontal scroll at 390–1440.
+
+### Still open
+- **Needs John (facts):**
+  - S1: what the 8 SilverLink schemas are.
+  - F1: what the Fire Safety app offers in 4 languages.
+  - F2: what the ~80% coverage measures.
+  - Q12: how many people gave the SUS score.
+  - Q9: is the range RMSE on both paths?
+  - Larger exports of `system_metrics`, Fire Safety onboarding and quiz, and the SilverLink tile.
+- **Needs John (design):**
+  - Hero balance: make `desk_assist.exe` visibly secondary? (+~4 image-to-code)
+  - Tile meta: drop the filename line? (+~4 image-to-code)
+  - proof.txt: show all three rows on the first screen, or none at every laptop size?
+  - Link DESIGN.md from CLAUDE.md, and fix the CLAUDE.md lines that no longer match the code: section-heading second word, AI Finance tile yellow, stats burst, yellow cursor.
+- **Fix later:**
+  - The chat widget preloads 12 mascot poses on every visit (biggest request saving).
+  - StatStrip stays one column on phones (a 2×2 grid puts labels under the chat launcher).

@@ -157,17 +157,17 @@ text (Bangers is caps-only and never sets more than a title or a sound effect).
 | Token | px | Face | Used for |
 |---|---|---|---|
 | `text-section` | 72 | Bangers | Home h2 from sm (below sm: `clamp(40px,12vw,52px)` so a 10-letter word fits at 320px) |
-| `text-h1` | 56 | display | Case-study h1 from sm (`text-card-lead` below) |
-| `text-card-lead` | 32 | display / Bangers | Case h2 from sm, Experience lead role, featured tile title from lg, footer h2 |
-| `text-card-title` | 24 | display | Card and window h3, tile titles, case h3 from sm, case h2 below sm; proof.txt figure from sm (Mono) |
+| `text-h1` | 56 | display | Case-study h1 from sm (below sm: `clamp(36px,11.2vw,42px)`) |
+| `text-card-lead` | 32 | display / Bangers | Case h2 at every width, desk_assist.exe h2 from lg, featured tile title from lg, footer h2 |
+| `text-card-title` | 24 | display / Bangers | Card and window h3 (all Experience roles, LGA included), tile titles, case h3 at every width, paired case column h2 from lg (Bangers, 3px text shadow); proof.txt figure from sm (Mono) |
 | `text-lead` | 20 | Sans bold | `Lead` from lg, desk_assist.exe h2 (below lg), footer h3; proof.txt figure on phones (Mono) |
-| `text-lead-sm` | 18 | Sans bold | `Lead` on phones, case h3 below sm |
+| `text-lead-sm` | 18 | Sans bold | `Lead` on phones |
 | `text-body` | 16 | Sans | Reading text from sm; marquee from sm and keycap labels from lg (Mono) |
 | `text-body-sm` | 15 | Sans | Reading text on phones; `.btn` label (15px literal) |
 | `text-label` | 13 | Mono 600 | Window titles, badges, chips, tags, tile meta, status lines, keycap labels, step numbers, dock words, marquee on phones |
 
-Headings step at least 1.3x down the ladder on a page (72 > 32 > 24; case 56 >
-32 > 24). Line heights: headings 1.15, Bangers 1, labels 1.3, `Lead` 1.4 / 1.35
+Headings step at least 1.3x down the ladder on a page (Home 72 > 32 > 24; case
+56 > 32 > 24 from sm, 42 > 32 > 24 on phones). Line heights: headings 1.15, Bangers 1, labels 1.3, `Lead` 1.4 / 1.35
 at lg, lists 1.65, tile copy `leading-relaxed`. Headings get `text-wrap:
 balance`, `p, li` get `pretty`; figures use `tabular-nums`.
 
@@ -194,6 +194,11 @@ remain. `.btn` (15px) and `.chat-key` (13px) set ladder sizes as literals.
 - **Internal gaps:** tile body `p-5 gap-4`; tile grid `gap-6` (1 / 2 / 6 / 12
   columns); chip rows `gap-2 sm:gap-3`; bullet lists `space-y-3 lg:space-y-4`;
   hero contact links `gap-x-6 sm:gap-x-8`.
+- **Case pages:** from lg, "The problem" and "What it does" share one window
+  (`CasePair`: joined filenames in the bar, two columns split by a 3px ink
+  rule); sparse reading windows take `narrow` (`max-w-3xl`, left-aligned).
+- **About:** from xl the fact chips become a third column (`minmax(0,18rem)`,
+  2px rule on its left) beside the photo and bio.
 - **Measure:** bullet lists 60ch, the About bio 64ch, `Lead` 42ch, StatStrip
   clauses 18ch (24ch from lg).
 - **Page rules on `html`:** `scroll-padding-bottom: 88px` keeps focused
@@ -215,7 +220,8 @@ remain. `.btn` (15px) and `.chat-key` (13px) set ladder sizes as literals.
 **Press-down:** the element translates by its shadow offset and the shadow goes
 to none (buttons `translate: 4px 4px`; tiles and keycaps 4px; chips 2px).
 Selected chips, muted keycaps and pressed dock buttons stay sunk. Stickers use
-`drop-shadow(4px 4px 0 ink)`, zero blur. No other shadow exists.
+`drop-shadow(4px 4px 0 ink)`, zero blur. No other shadow exists (section-nav dots use a 4px ink border plus a 2px paper
+`outline`, not a shadow).
 
 ## Components
 

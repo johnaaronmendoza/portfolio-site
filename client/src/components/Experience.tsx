@@ -1,9 +1,9 @@
-import type { ReactNode } from 'react';
-import FramerReveal from './FramerReveal';
-import { Chip, PixelList } from './Hierarchy';
-import Section from './Section';
-import SectionHeading from './SectionHeading';
-import Window from './Window';
+import type { ReactNode } from "react";
+import FramerReveal from "./FramerReveal";
+import { Chip, PixelList } from "./Hierarchy";
+import Section from "./Section";
+import SectionHeading from "./SectionHeading";
+import Window from "./Window";
 
 type Entry = {
   org: string;
@@ -20,15 +20,16 @@ type Entry = {
 
 // Status badges (index.css .badge): ink with paper text, dashed paper for
 // unfinished work, plain paper; never yellow (yellow marks AI). Sentence case.
-type Badge = 'Internship' | 'In progress' | 'Education';
+type Badge = "Internship" | "In progress" | "Education";
 
 const BADGE_CLASS: Record<Badge, string> = {
-  Internship: 'badge badge--ink',
-  'In progress': 'badge badge--status',
-  Education: 'badge badge--paper',
+  Internship: "badge badge--ink",
+  "In progress": "badge badge--status",
+  Education: "badge badge--paper",
 };
 
-const DESK_ASSIST = "Building Desk Assist: an AI Chrome extension that drafts ticket replies for agent review.";
+const DESK_ASSIST =
+  "Building Desk Assist: an AI Chrome extension that drafts ticket replies for agent review.";
 
 const ENTRIES: Entry[] = [
   {
@@ -47,9 +48,13 @@ const ENTRIES: Entry[] = [
     extras: {
       [DESK_ASSIST]: (
         <>
-          {' '}<span className={`${BADGE_CLASS['In progress']} align-middle`}>In progress</span>
+          {" "}
+          <span className={`${BADGE_CLASS["In progress"]} align-middle`}>
+            In progress
+          </span>
           <span className="mt-2 block text-body-sm">
-            Security model: least-privilege permissions, no remotely hosted code, AI calls through a company-controlled backend.
+            Security model: least-privilege permissions, no remotely hosted
+            code, AI calls through a company-controlled backend.
           </span>
         </>
       ),
@@ -83,16 +88,28 @@ const ENTRIES: Entry[] = [
 /** One role as a window. The lead (LGA, the current role) is full width and,
  *  from lg, splits into a 12-column body: who/when on the left, outcomes on
  *  the right. */
-function ExperienceWindow({ entry, lead = false }: { entry: Entry; lead?: boolean }) {
+function ExperienceWindow({
+  entry,
+  lead = false,
+}: {
+  entry: Entry;
+  lead?: boolean;
+}) {
   return (
     <Window
       title={entry.file}
-      className={lead ? '' : 'flex h-full flex-col'}
-      bodyClassName={lead ? 'p-6 sm:p-10 lg:p-12 lg:grid lg:grid-cols-12 lg:gap-x-12' : 'flex-1 p-6 sm:p-10'}
+      className={lead ? "" : "flex h-full flex-col"}
+      bodyClassName={
+        lead
+          ? "p-6 sm:p-10 lg:p-12 lg:grid lg:grid-cols-12 lg:gap-x-12"
+          : "flex-1 p-6 sm:p-10"
+      }
     >
       <div
         className={`mb-8 pb-6 border-b-[3px] border-black ${
-          lead ? 'lg:col-span-4 lg:mb-0 lg:pb-0 lg:border-b-0 lg:border-r-[3px] lg:pr-10' : ''
+          lead
+            ? "lg:col-span-4 lg:mb-0 lg:pb-0 lg:border-b-0 lg:border-r-[3px] lg:pr-10"
+            : ""
         }`}
       >
         <div className="flex flex-wrap items-center gap-2 mb-4">
@@ -110,10 +127,18 @@ function ExperienceWindow({ entry, lead = false }: { entry: Entry; lead?: boolea
         <p className="font-sans text-body-sm sm:text-body font-bold text-pretty">
           {entry.role}
         </p>
-        <Chip icon="chip-calendar" text={entry.period} className="mt-4 whitespace-nowrap" />
+        <Chip
+          icon="chip-calendar"
+          text={entry.period}
+          className="mt-4 whitespace-nowrap"
+        />
       </div>
 
-      <PixelList items={entry.highlights} extras={entry.extras} className={lead ? 'lg:col-span-8 lg:self-center' : ''} />
+      <PixelList
+        items={entry.highlights}
+        extras={entry.extras}
+        className={lead ? "lg:col-span-8 lg:self-center" : ""}
+      />
     </Window>
   );
 }

@@ -1,12 +1,12 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 /** Home's side gutters; the hero and the case-study pages use them too */
-export const GUTTERS = 'px-4 sm:px-8 lg:px-[88px] 2xl:px-16';
+export const GUTTERS = "px-4 sm:px-8 lg:px-[88px] 2xl:px-16";
 
 interface SectionProps {
   children: ReactNode;
   /** footer for the site footer band */
-  as?: 'section' | 'footer';
+  as?: "section" | "footer";
   /** Band colours and borders on the full-width element */
   className?: string;
   /** Vertical padding; the footer passes its own */
@@ -22,10 +22,10 @@ interface SectionProps {
  */
 export default function Section({
   children,
-  as: Tag = 'section',
-  className = '',
-  spacing = 'py-20 sm:py-28',
-  innerClassName = '',
+  as: Tag = "section",
+  className = "",
+  spacing = "py-20 sm:py-28",
+  innerClassName = "",
 }: SectionProps) {
   return (
     <Tag className={`${GUTTERS} ${spacing} ${className}`}>

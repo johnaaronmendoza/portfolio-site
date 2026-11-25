@@ -1,23 +1,26 @@
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { scrollToSection } from '@/lib/utils';
-import Window from './Window';
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { scrollToSection } from "@/lib/utils";
+import Window from "./Window";
 
 // Word for word from copy.md (2026-11-13, item 8). "will" stays until John
 // confirms Desk Assist is deployed (honesty rule).
 type Step = { label: string; ai?: boolean; detail?: string };
 
 const STEPS: Step[] = [
-  { label: 'Ticket' },
-  { label: 'Reads the thread', ai: true },
-  { label: 'Finds knowledge\u2011base guidance', ai: true }, // U+2011: never splits
-  { label: 'Drafts a reply', ai: true },
-  { label: 'Agent reviews', detail: "Every draft, before it’s sent." }, // the human step
-  { label: 'Sent' },
+  { label: "Ticket" },
+  { label: "Reads the thread", ai: true },
+  { label: "Finds knowledge\u2011base guidance", ai: true }, // U+2011: never splits
+  { label: "Drafts a reply", ai: true },
+  { label: "Agent reviews", detail: "Every draft, before it’s sent." }, // the human step
+  { label: "Sent" },
 ];
 
-const NUM = 'flex-shrink-0 min-w-[22px] text-center border-2 border-black bg-[var(--paper)] px-1 py-px font-label text-label text-black tabular-nums';
-const LABEL = 'flex-1 min-w-0 font-sans font-bold text-body-sm sm:text-body leading-[1.35]';
-const ROW = 'flex items-center gap-2 min-h-11 px-3 py-2 border-2 border-black bg-[var(--paper)]';
+const NUM =
+  "flex-shrink-0 min-w-[22px] text-center border-2 border-black bg-[var(--paper)] px-1 py-px font-label text-label text-black tabular-nums";
+const LABEL =
+  "flex-1 min-w-0 font-sans font-bold text-body-sm sm:text-body leading-[1.35]";
+const ROW =
+  "flex items-center gap-2 min-h-11 px-3 py-2 border-2 border-black bg-[var(--paper)]";
 
 /**
  * The hero's AI proof: how Desk Assist will draft a reply. Static (no motion).
@@ -30,8 +33,13 @@ export default function DeskAssistWindow() {
   return (
     <Window title="desk_assist.exe" bodyClassName="p-4 sm:p-5">
       <div className="grid gap-2">
-        <span className="badge badge--status justify-self-start">In progress</span>
-        <h2 id="desk-assist-flow" className="font-display text-lead lg:text-card-lead text-black text-balance">
+        <span className="badge badge--status justify-self-start">
+          In progress
+        </span>
+        <h2
+          id="desk-assist-flow"
+          className="font-display text-lead lg:text-card-lead text-black text-balance"
+        >
           How Desk Assist will draft a reply
         </h2>
         <p className="hidden lg:block font-sans text-body-sm leading-normal text-pretty">
@@ -48,27 +56,40 @@ export default function DeskAssistWindow() {
               >
                 <span className={NUM}>{i + 1}</span>
                 <span className={LABEL}>{label}</span>
-                <span className="col-start-2 font-sans text-body-sm leading-[1.4]">{detail}</span>
-                <span className="badge badge--paper col-start-2 justify-self-start">Agent</span>
+                <span className="col-start-2 font-sans text-body-sm leading-[1.4]">
+                  {detail}
+                </span>
+                <span className="badge badge--paper col-start-2 justify-self-start">
+                  Agent
+                </span>
               </li>
             ) : (
-              <li key={label} className={`${ROW} ${i === STEPS.length - 1 ? 'col-start-3 self-center' : 'col-span-full'}`}>
+              <li
+                key={label}
+                className={`${ROW} ${i === STEPS.length - 1 ? "col-start-3 self-center" : "col-span-full"}`}
+              >
                 <span className={NUM}>{i + 1}</span>
                 <span className={LABEL}>{label}</span>
                 {ai && <span className="badge badge--ai">AI</span>}
               </li>
-            ),
+            )
           )}
         </ol>
       </figure>
       {/* After the flow, so the steps are read before the way out */}
       <a
         href="#experience"
-        onClick={e => { e.preventDefault(); scrollToSection('experience', reduced); }}
+        onClick={e => {
+          e.preventDefault();
+          scrollToSection("experience", reduced);
+        }}
         className="mt-3 inline-flex min-h-11 items-center gap-2 font-sans text-body-sm font-bold underline underline-offset-4 decoration-2"
       >
         See experience
-        <span aria-hidden="true" className="block size-[9px] border-r-[3px] border-b-[3px] border-current rotate-45 -translate-y-0.5" />
+        <span
+          aria-hidden="true"
+          className="block size-[9px] border-r-[3px] border-b-[3px] border-current rotate-45 -translate-y-0.5"
+        />
       </a>
     </Window>
   );

@@ -4,26 +4,28 @@
  * keyboard hints. White text on black only.
  */
 
-import { useState, useEffect } from 'react';
-import { PixelGitHub, PixelLinkedIn } from '@/components/PixelIcons';
-import PixelArt from '@/components/PixelArt';
-import Section from '@/components/Section';
-import ShortcutHint from '@/components/ShortcutHint';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { scrollToSection } from '@/lib/utils';
+import { useState, useEffect } from "react";
+import { PixelGitHub, PixelLinkedIn } from "@/components/PixelIcons";
+import PixelArt from "@/components/PixelArt";
+import Section from "@/components/Section";
+import ShortcutHint from "@/components/ShortcutHint";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { scrollToSection } from "@/lib/utils";
 
 const LINK_CLASS =
-  'min-h-[44px] inline-flex items-center gap-3 font-sans text-body-sm sm:text-body font-bold underline-offset-4 decoration-2 hover:underline';
+  "min-h-[44px] inline-flex items-center gap-3 font-sans text-body-sm sm:text-body font-bold underline-offset-4 decoration-2 hover:underline";
 
 const NEW_TAB = <span className="sr-only"> (opens in a new tab)</span>;
 
-const SGT = new Intl.DateTimeFormat('en-SG', {
-  timeZone: 'Asia/Singapore',
-  hour: '2-digit', minute: '2-digit', hour12: false,
+const SGT = new Intl.DateTimeFormat("en-SG", {
+  timeZone: "Asia/Singapore",
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: false,
 });
 
 function useSGTClock() {
-  const [time, setTime] = useState('');
+  const [time, setTime] = useState("");
   useEffect(() => {
     let id: ReturnType<typeof setTimeout>;
     // Update once a minute, aligned to the minute boundary
@@ -94,7 +96,10 @@ export default function Footer() {
             </a>
           </li>
           <li>
-            <a href="mailto:johnaaronmb@gmail.com" className={`${LINK_CLASS} break-all`}>
+            <a
+              href="mailto:johnaaronmb@gmail.com"
+              className={`${LINK_CLASS} break-all`}
+            >
               <PixelArt name="icon-contact" size={16} lazy />
               johnaaronmb@gmail.com
             </a>
@@ -107,18 +112,21 @@ export default function Footer() {
         {sgtTime && (
           <p className="flex items-center gap-3 font-label text-label leading-snug tabular-nums">
             <PixelArt name="globe" size={24} lazy />
-            <span>SGT {sgtTime}<span className="sr-only"> Singapore time</span></span>
+            <span>
+              SGT {sgtTime}
+              <span className="sr-only"> Singapore time</span>
+            </span>
           </p>
         )}
         <p className="font-sans text-body-sm sm:text-body leading-relaxed">
-          Open the terminal and try{' '}
+          Open the terminal and try{" "}
           <button
             type="button"
             translate="no"
             className="min-h-[44px] inline-flex items-center px-1 font-bold underline underline-offset-4 decoration-2 transition-[background-color,color] duration-150 hover:bg-[var(--paper)] hover:text-[color:var(--bar)]"
-            onClick={() => window.dispatchEvent(new Event('toggle-terminal'))}
+            onClick={() => window.dispatchEvent(new Event("toggle-terminal"))}
           >
-            {'>'} sudo hire-me
+            {">"} sudo hire-me
           </button>
         </p>
         <ShortcutHint className="[@media(pointer:coarse)]:hidden" />
@@ -128,7 +136,10 @@ export default function Footer() {
         {/* Back to the top of the page; focus moves to <main> so Tab starts there */}
         <a
           href="#main"
-          onClick={(e) => { e.preventDefault(); scrollToSection('main', reduced); }}
+          onClick={e => {
+            e.preventDefault();
+            scrollToSection("main", reduced);
+          }}
           className={LINK_CLASS}
         >
           <span aria-hidden="true">↑</span>

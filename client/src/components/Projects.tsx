@@ -1,48 +1,48 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import type { ReactNode, Ref } from 'react';
-import { Link } from 'wouter';
-import FramerReveal from './FramerReveal';
-import PixelatedImage from './PixelatedImage';
-import PixelArt from './PixelArt';
-import Burst from './comic/Burst';
-import { useQueryParam } from '@/hooks/useQueryParam';
-import { useSmartPreload } from '@/hooks/useSmartPreload';
-import { noteProjectOpen } from '@/hooks/useAchievements';
-import { motionTokens } from '@/lib/motion-tokens';
-import Section from './Section';
-import SectionHeading from './SectionHeading';
-import Window from './Window';
-import { PROJECTS, type Project } from '@/data/projects';
+import { motion, AnimatePresence } from "framer-motion";
+import type { ReactNode, Ref } from "react";
+import { Link } from "wouter";
+import FramerReveal from "./FramerReveal";
+import PixelatedImage from "./PixelatedImage";
+import PixelArt from "./PixelArt";
+import Burst from "./comic/Burst";
+import { useQueryParam } from "@/hooks/useQueryParam";
+import { useSmartPreload } from "@/hooks/useSmartPreload";
+import { noteProjectOpen } from "@/hooks/useAchievements";
+import { motionTokens } from "@/lib/motion-tokens";
+import Section from "./Section";
+import SectionHeading from "./SectionHeading";
+import Window from "./Window";
+import { PROJECTS, type Project } from "@/data/projects";
 
 // URL id (?filter=ai), display label and the key matched against project tags
 // (kept separate so a friendlier label doesn't change which projects match)
 const FILTERS: { id: string; label: string; match: string }[] = [
-  { id: 'ai', label: 'AI', match: 'ML/AI' }, // same name as the Skills filter
-  { id: 'python', label: 'Python', match: 'Python' },
-  { id: 'react', label: 'React', match: 'React' },
-  { id: 'typescript', label: 'TypeScript', match: 'TypeScript' },
-  { id: 'kubernetes', label: 'Kubernetes', match: 'K8s' },
-  { id: 'grpc', label: 'gRPC', match: 'gRPC' },
-  { id: 'kotlin', label: 'Kotlin', match: 'Kotlin' },
+  { id: "ai", label: "AI", match: "ML/AI" }, // same name as the Skills filter
+  { id: "python", label: "Python", match: "Python" },
+  { id: "react", label: "React", match: "React" },
+  { id: "typescript", label: "TypeScript", match: "TypeScript" },
+  { id: "kubernetes", label: "Kubernetes", match: "K8s" },
+  { id: "grpc", label: "gRPC", match: "gRPC" },
+  { id: "kotlin", label: "Kotlin", match: "Kotlin" },
 ];
 
 function matchesFilter(p: Project, filter: string | null): boolean {
   if (filter === null) return true;
-  return p.tags.some(t =>
-    t.toLowerCase().includes(filter.toLowerCase()) ||
-    filter.toLowerCase().includes(t.toLowerCase()) ||
-    (filter === 'ML/AI' && (
-      t.toLowerCase().includes('python') ||
-      t.toLowerCase().includes('nlp') ||
-      t.toLowerCase().includes('svm') ||
-      t.toLowerCase().includes('tflite')
-    ))
+  return p.tags.some(
+    t =>
+      t.toLowerCase().includes(filter.toLowerCase()) ||
+      filter.toLowerCase().includes(t.toLowerCase()) ||
+      (filter === "ML/AI" &&
+        (t.toLowerCase().includes("python") ||
+          t.toLowerCase().includes("nlp") ||
+          t.toLowerCase().includes("svm") ||
+          t.toLowerCase().includes("tflite")))
   );
 }
 
 // ── ProjectTile — own component so hooks are called once per card ─────────
 // Wide outline offset leaves a gap outside the tile's border and shadow
-const CARD_LINK_CLASS = 'flex h-full flex-col outline-offset-[10px]';
+const CARD_LINK_CLASS = "flex h-full flex-col outline-offset-[10px]";
 
 interface ProjectTileProps {
   project: Project;
@@ -54,9 +54,13 @@ interface ProjectTileProps {
 // `ref` is a plain prop in React 19; AnimatePresence popLayout needs it on the
 // motion element to measure the exiting tile. Also used by the case-study
 // "Next project" band.
-export function ProjectTile({ project, ref, span = project.span }: ProjectTileProps) {
-  const isComingSoon = project.link === '#';
-  const isExternal   = project.link === 'external';
+export function ProjectTile({
+  project,
+  ref,
+  span = project.span,
+}: ProjectTileProps) {
+  const isComingSoon = project.link === "#";
+  const isExternal = project.link === "external";
   const file = `${project.slug ?? project.file ?? project.name.toLowerCase()}.png`;
 
   // Smart preload: on 300 ms hover intent, fetch detail-page screenshots.
@@ -78,10 +82,10 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
               alt=""
               className={`w-full h-full transition-[filter,scale] duration-200 ${
                 isComingSoon
-                  ? 'opacity-50 grayscale'
-                  // Every tile in colour: greyscale made the non-featured
-                  // projects (AI Finance, UWB, UAT) look disabled
-                  : '[@media(hover:hover)]:group-hover:scale-[1.03]'
+                  ? "opacity-50 grayscale"
+                  : // Every tile in colour: greyscale made the non-featured
+                    // projects (AI Finance, UWB, UAT) look disabled
+                    "[@media(hover:hover)]:group-hover:scale-[1.03]"
               }`}
             />
           )}
@@ -91,7 +95,9 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
             </div>
           )}
           {isExternal && (
-            <span className="badge badge--data absolute top-2 right-2">Live site</span>
+            <span className="badge badge--data absolute top-2 right-2">
+              Live site
+            </span>
           )}
         </div>
         {/* Comic sound effect, decorative (the description says the same). It
@@ -102,7 +108,9 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
             rotate={project.num % 2 ? 8 : -8}
             className="absolute -right-3 bottom-0 translate-y-[72%] z-10 size-20 pointer-events-none text-black"
           >
-            <span aria-hidden="true" className="block px-1 text-[17px]">{project.sfx}</span>
+            <span aria-hidden="true" className="block px-1 text-[17px]">
+              {project.sfx}
+            </span>
           </Burst>
         )}
       </div>
@@ -113,14 +121,25 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
             image, so it never covers a screenshot), then the still's file name
             on its own line, then year and team context from projects.ts. Each
             line stays whole, never wrapping mid-name */}
-        <p className={`flex flex-col items-start gap-1 font-label text-label text-[color:var(--text)] -mb-2 ${project.sfx ? 'pr-16' : ''}`}>
-          {project.featured && <span className="badge badge--ink mb-1">Featured</span>}
-          <span translate="no" className="whitespace-nowrap">{file}</span>
+        <p
+          className={`flex flex-col items-start gap-1 font-label text-label text-[color:var(--text)] -mb-2 ${project.sfx ? "pr-16" : ""}`}
+        >
+          {project.featured && (
+            <span className="badge badge--ink mb-1">Featured</span>
+          )}
+          <span translate="no" className="whitespace-nowrap">
+            {file}
+          </span>
           <span className="whitespace-nowrap">
-            {project.year}<span aria-hidden="true"> · </span><span className="sr-only">, </span>{project.caption}
+            {project.year}
+            <span aria-hidden="true"> · </span>
+            <span className="sr-only">, </span>
+            {project.caption}
           </span>
         </p>
-        <h3 className={`font-display break-words min-w-0 text-[color:var(--text)] ${project.featured ? 'text-card-title lg:text-card-lead' : 'text-card-title'}`}>
+        <h3
+          className={`font-display break-words min-w-0 text-[color:var(--text)] ${project.featured ? "text-card-title lg:text-card-lead" : "text-card-title"}`}
+        >
           {project.name}
         </h3>
         <p className="font-sans text-body-sm sm:text-body leading-relaxed">
@@ -136,7 +155,11 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
         </ul>
         <div className="flex flex-wrap gap-1.5">
           {project.tags.map(tag => (
-            <span key={tag} translate="no" className="border-2 border-black px-2 py-0.5 font-mono text-label font-bold text-black">
+            <span
+              key={tag}
+              translate="no"
+              className="border-2 border-black px-2 py-0.5 font-mono text-label font-bold text-black"
+            >
               {tag}
             </span>
           ))}
@@ -144,7 +167,7 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
         {/* On the bottom edge, so the links line up across a row */}
         {!isComingSoon && (
           <div className="mt-auto pt-2 font-sans text-body-sm text-black font-bold underline underline-offset-4 decoration-2">
-            {isExternal ? 'Visit site' : 'Read case study'}
+            {isExternal ? "Visit site" : "Read case study"}
           </div>
         )}
       </div>
@@ -174,7 +197,9 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
         className={CARD_LINK_CLASS}
         aria-label={`${project.name}: view case study`}
         {...preloadHandlers}
-        onClick={() => { if (project.slug) noteProjectOpen(project.slug); }}
+        onClick={() => {
+          if (project.slug) noteProjectOpen(project.slug);
+        }}
       >
         {body}
       </Link>
@@ -187,9 +212,15 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
     <motion.div
       ref={ref}
       className={`group border-[3px] border-black bg-[var(--paper)] shadow-8bit transition-[translate,box-shadow] duration-150 ease-[var(--ease-out)] ${
-        isComingSoon ? '' : 'hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-8bit-hover active:translate-x-1 active:translate-y-1 active:shadow-none'
+        isComingSoon
+          ? ""
+          : "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-8bit-hover active:translate-x-1 active:translate-y-1 active:shadow-none"
       } ${span}`}
-      exit={{ opacity: 0, y: motionTokens.distance.sm, transition: { duration: motionTokens.duration.fast } }}
+      exit={{
+        opacity: 0,
+        y: motionTokens.distance.sm,
+        transition: { duration: motionTokens.duration.fast },
+      }}
     >
       {card}
     </motion.div>
@@ -202,20 +233,20 @@ export function ProjectTile({ project, ref, span = project.span }: ProjectTilePr
 export function chipClass(active: boolean) {
   return `font-label text-label px-3 py-1.5 min-h-[44px] border-[3px] border-black transition-[translate,box-shadow,background-color,color] duration-150 ${
     active
-      ? 'bg-[var(--bar)] text-[color:var(--paper)] translate-x-0.5 translate-y-0.5 shadow-none'
-      : 'bg-[var(--paper)] text-black hover:bg-[var(--blue)] shadow-8bit-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-none'
+      ? "bg-[var(--bar)] text-[color:var(--paper)] translate-x-0.5 translate-y-0.5 shadow-none"
+      : "bg-[var(--paper)] text-black hover:bg-[var(--blue)] shadow-8bit-sm active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
   }`;
 }
 
 // ── Projects section ──────────────────────────────────────────────────────
 export default function Projects() {
   // The filter lives in the URL (?filter=ai); no param means All
-  const [filterId, setFilter] = useQueryParam('filter');
+  const [filterId, setFilter] = useQueryParam("filter");
   const active = FILTERS.find(f => f.id === filterId) ?? null;
 
   const visible = PROJECTS.filter(p => matchesFilter(p, active?.match ?? null));
   // Visible status; a live region, so a change is announced but the first render is not
-  const status = `Showing ${visible.length} of ${PROJECTS.length} projects${active ? `: ${active.label}` : ''}`;
+  const status = `Showing ${visible.length} of ${PROJECTS.length} projects${active ? `: ${active.label}` : ""}`;
 
   return (
     <FramerReveal>
@@ -230,7 +261,11 @@ export default function Projects() {
 
         <Window title="projects/" bodyClassName="p-4 sm:p-6 lg:p-8">
           {/* Filter chips */}
-          <div role="group" aria-label="Filter projects by technology" className="flex flex-wrap gap-2 sm:gap-3">
+          <div
+            role="group"
+            aria-label="Filter projects by technology"
+            className="flex flex-wrap gap-2 sm:gap-3"
+          >
             <button
               type="button"
               onClick={() => setFilter(null)}
@@ -251,7 +286,12 @@ export default function Projects() {
               </button>
             ))}
           </div>
-          <p aria-live="polite" className="mt-4 mb-6 sm:mb-8 font-label text-label text-black tabular-nums">{status}</p>
+          <p
+            aria-live="polite"
+            className="mt-4 mb-6 sm:mb-8 font-label text-label text-black tabular-nums"
+          >
+            {status}
+          </p>
 
           {/* Tile grid: the three featured tiles in one row from lg, then the
               rest two to a row (lg) or four (xl); UWB spans both columns at sm
@@ -260,7 +300,11 @@ export default function Projects() {
           <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 xl:grid-cols-12 gap-6">
             <AnimatePresence initial={false} mode="popLayout">
               {visible.map(project => (
-                <ProjectTile key={project.num} project={project} span={active ? `${project.span} xl:col-span-4` : undefined} />
+                <ProjectTile
+                  key={project.num}
+                  project={project}
+                  span={active ? `${project.span} xl:col-span-4` : undefined}
+                />
               ))}
             </AnimatePresence>
 
@@ -271,7 +315,9 @@ export default function Projects() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
-                <p className="font-sans text-body-sm sm:text-body">No projects match {active.label}.</p>
+                <p className="font-sans text-body-sm sm:text-body">
+                  No projects match {active.label}.
+                </p>
                 <button
                   type="button"
                   onClick={() => setFilter(null)}

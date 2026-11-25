@@ -1,6 +1,6 @@
 /** First focusable element on every page: jumps keyboard users to <main id="main">.
  *  className can set --focus where the link sits over a dark bar. */
-export default function SkipLink({ className = '' }: { className?: string }) {
+export default function SkipLink({ className = "" }: { className?: string }) {
   return (
     <a
       href="#main"

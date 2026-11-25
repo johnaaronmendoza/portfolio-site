@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
-import { Renderer, Geometry, Program } from 'ogl';
-import { motionTokens } from '@/lib/motion-tokens';
-import './Particles.css';
+import { useEffect, useRef } from "react";
+import { Renderer, Geometry, Program } from "ogl";
+import { motionTokens } from "@/lib/motion-tokens";
+import "./Particles.css";
 
 const P = motionTokens.particles;
 
@@ -22,7 +22,8 @@ const MAX_DPR = 2;
 const MAX_STEP = 0.05; // seconds; a stalled frame never jumps the field
 
 const num = (n: number) => n.toFixed(3);
-const range = ([far, near]: number[]) => `mix(${num(far)}, ${num(near)}, depth)`;
+const range = ([far, near]: number[]) =>
+  `mix(${num(far)}, ${num(near)}, depth)`;
 
 const vertex = /* glsl */ `
   attribute vec4 seed; // home x, home y, phase, variation (all 0-1)
@@ -80,12 +81,19 @@ const fragment = /* glsl */ `
 `;
 
 const hexToRgb = (hex: string): [number, number, number] => {
-  hex = hex.trim().replace(/^#/, '');
+  hex = hex.trim().replace(/^#/, "");
   if (hex.length === 3) {
-    hex = hex.split('').map(c => c + c).join('');
+    hex = hex
+      .split("")
+      .map(c => c + c)
+      .join("");
   }
   const int = parseInt(hex, 16);
-  return [((int >> 16) & 255) / 255, ((int >> 8) & 255) / 255, (int & 255) / 255];
+  return [
+    ((int >> 16) & 255) / 255,
+    ((int >> 8) & 255) / 255,
+    (int & 255) / 255,
+  ];
 };
 
 /** Small seeded generator: the field is composed the same way on every visit */
@@ -121,7 +129,7 @@ const Particles = ({
   followPointer = false,
   clearSelector,
   paused = false,
-  className = '',
+  className = "",
 }: ParticlesProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   // Set by the scene below; `paused` starts and stops it without a rebuild
@@ -135,27 +143,41 @@ const Particles = ({
 
     let renderer: Renderer;
     try {
-      renderer = new Renderer({ dpr: 1, depth: false, alpha: true, premultipliedAlpha: true });
+      renderer = new Renderer({
+        dpr: 1,
+        depth: false,
+        alpha: true,
+        premultipliedAlpha: true,
+      });
     } catch {
       return; // no WebGL: the page goes without particles
     }
     const gl = renderer.gl;
     const canvas = gl.canvas as HTMLCanvasElement;
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
     container.appendChild(canvas);
 
     // Even spread (R2 sequence), so any first `n` particles cover the field
     const random = seeded(7);
     const styles = getComputedStyle(container);
-    const toRgb = (names: string[]) => names.map(name => hexToRgb(styles.getPropertyValue(name)));
+    const toRgb = (names: string[]) =>
+      names.map(name => hexToRgb(styles.getPropertyValue(name)));
     const palette = toRgb(colors);
     const nearPalette = toRgb(nearColors);
     const seeds = new Float32Array(maxCount * 4);
     const tints = new Float32Array(maxCount * 4);
     for (let i = 0; i < maxCount; i++) {
       const layer = random();
-      seeds.set([(0.5 + i * 0.7548776662) % 1, (0.5 + i * 0.569840291) % 1, random(), random()], i * 4);
+      seeds.set(
+        [
+          (0.5 + i * 0.7548776662) % 1,
+          (0.5 + i * 0.569840291) % 1,
+          random(),
+          random(),
+        ],
+        i * 4
+      );
       const near = layer < NEAR_SHARE;
       const tones = near ? nearPalette : palette;
       tints.set(tones[Math.floor(random() * tones.length)], i * 4);
@@ -173,7 +195,13 @@ const Particles = ({
       uPointer: { value: [0, 0] },
       uClear: { value: new Array<number>(CLEAR_MAX * 4).fill(CLEAR_NONE) },
     };
-    const program = new Program(gl, { vertex, fragment, uniforms, transparent: true, depthTest: false });
+    const program = new Program(gl, {
+      vertex,
+      fragment,
+      uniforms,
+      transparent: true,
+      depthTest: false,
+    });
     const drawArgs = { mode: gl.POINTS, program };
 
     const draw = () => {
@@ -206,7 +234,10 @@ const Particles = ({
       uniforms.uCanvas.value[0] = gl.drawingBufferWidth;
       uniforms.uCanvas.value[1] = gl.drawingBufferHeight;
       uniforms.uScale.value = gl.drawingBufferWidth / Math.max(width, 1);
-      geometry.setDrawRange(0, Math.min(maxCount, Math.round((width * height * density) / 1e5)));
+      geometry.setDrawRange(
+        0,
+        Math.min(maxCount, Math.round((width * height * density) / 1e5))
+      );
       measureClear();
       draw();
     };
@@ -216,11 +247,12 @@ const Particles = ({
     let pointerX = 0;
     let pointerY = 0;
     const onPointerMove = (e: PointerEvent) => {
-      if (e.pointerType !== 'mouse') return;
+      if (e.pointerType !== "mouse") return;
       pointerX = (e.clientX / window.innerWidth) * 2 - 1;
       pointerY = (e.clientY / window.innerHeight) * 2 - 1;
     };
-    if (followPointer) window.addEventListener('pointermove', onPointerMove, { passive: true });
+    if (followPointer)
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
 
     let frameId = 0;
     let last = 0;
@@ -254,7 +286,7 @@ const Particles = ({
       frameId = requestAnimationFrame(frame);
     };
     const onVisibility = () => (document.hidden ? stop() : start());
-    document.addEventListener('visibilitychange', onVisibility);
+    document.addEventListener("visibilitychange", onVisibility);
     loopRef.current = { start, stop };
     start();
 
@@ -262,12 +294,12 @@ const Particles = ({
       loopRef.current = null;
       stop();
       observer.disconnect();
-      document.removeEventListener('visibilitychange', onVisibility);
-      window.removeEventListener('pointermove', onPointerMove);
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("pointermove", onPointerMove);
       geometry.remove();
       program.remove();
       canvas.remove();
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
     // `colors` and `nearColors` are read once per scene; pass stable palettes
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -278,7 +310,13 @@ const Particles = ({
     else loopRef.current?.start();
   }, [paused]);
 
-  return <div ref={containerRef} aria-hidden="true" className={`particles-container ${className}`} />;
+  return (
+    <div
+      ref={containerRef}
+      aria-hidden="true"
+      className={`particles-container ${className}`}
+    />
+  );
 };
 
 export default Particles;

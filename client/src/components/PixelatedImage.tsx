@@ -14,16 +14,16 @@
  * The RAF loop only runs while easing and stops once it reaches the target,
  * so nothing runs while idle.
  */
-import { useRef, useEffect, useCallback } from 'react';
-import { PixelationManager, type ImageCrop } from '@/utils/PixelationManager';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { pickSource, type ImageSource } from '@/lib/images';
+import { useRef, useEffect, useCallback } from "react";
+import { PixelationManager, type ImageCrop } from "@/utils/PixelationManager";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { pickSource, type ImageSource } from "@/lib/images";
 
 const manager = PixelationManager.getInstance();
-const EASE = 0.10;          // lerp factor per frame
-const HOVER_SIZE   = 8;     // pixelate on hover
-const CRISP_SIZE   = 1;     // full-resolution target
-const DONE_THRESH  = 0.08;  // stop RAF when this close
+const EASE = 0.1; // lerp factor per frame
+const HOVER_SIZE = 8; // pixelate on hover
+const CRISP_SIZE = 1; // full-resolution target
+const DONE_THRESH = 0.08; // stop RAF when this close
 
 interface Props {
   src: string;
@@ -36,20 +36,26 @@ interface Props {
   className?: string;
 }
 
-export default function PixelatedImage({ src, srcSet, crop, alt, className }: Props) {
-  const canvasRef  = useRef<HTMLCanvasElement>(null);
-  const imgRef     = useRef<HTMLImageElement | null>(null);
-  const reduced    = useReducedMotion();
-  const sizeRef    = useRef(CRISP_SIZE);     // current (animated) block size
-  const targetRef  = useRef(CRISP_SIZE);     // where we're heading
-  const rafRef     = useRef(0);
-  const cropRef    = useRef(crop);
-  cropRef.current  = crop;
+export default function PixelatedImage({
+  src,
+  srcSet,
+  crop,
+  alt,
+  className,
+}: Props) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const reduced = useReducedMotion();
+  const sizeRef = useRef(CRISP_SIZE); // current (animated) block size
+  const targetRef = useRef(CRISP_SIZE); // where we're heading
+  const rafRef = useRef(0);
+  const cropRef = useRef(crop);
+  cropRef.current = crop;
 
   // ── Animation loop ────────────────────────────────────────────────────
   const tick = useCallback(() => {
     const canvas = canvasRef.current;
-    const img    = imgRef.current;
+    const img = imgRef.current;
     if (!canvas || !img) return;
 
     // Exponential ease toward target
@@ -59,7 +65,12 @@ export default function PixelatedImage({ src, srcSet, crop, alt, className }: Pr
     // to keep the same on-screen block size on retina displays.
     const ps = Math.max(CRISP_SIZE, Math.round(sizeRef.current));
     const dpr = window.devicePixelRatio || 1;
-    manager.draw(img, canvas, ps <= CRISP_SIZE ? CRISP_SIZE : ps * dpr, cropRef.current);
+    manager.draw(
+      img,
+      canvas,
+      ps <= CRISP_SIZE ? CRISP_SIZE : ps * dpr,
+      cropRef.current
+    );
 
     if (Math.abs(sizeRef.current - targetRef.current) > DONE_THRESH) {
       rafRef.current = requestAnimationFrame(tick);
@@ -81,7 +92,7 @@ export default function PixelatedImage({ src, srcSet, crop, alt, className }: Pr
     const syncSize = () => {
       if (canvas.offsetWidth === 0) return;
       const dpr = window.devicePixelRatio || 1;
-      canvas.width  = Math.round(canvas.offsetWidth * dpr);
+      canvas.width = Math.round(canvas.offsetWidth * dpr);
       canvas.height = Math.round(canvas.offsetHeight * dpr);
     };
 
@@ -120,23 +131,25 @@ export default function PixelatedImage({ src, srcSet, crop, alt, className }: Pr
       watchDpr();
     };
     const watchDpr = () => {
-      dprQuery?.removeEventListener('change', onDprChange);
-      dprQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
-      dprQuery.addEventListener('change', onDprChange);
+      dprQuery?.removeEventListener("change", onDprChange);
+      dprQuery = window.matchMedia(
+        `(resolution: ${window.devicePixelRatio || 1}dppx)`
+      );
+      dprQuery.addEventListener("change", onDprChange);
     };
     watchDpr();
 
     return () => {
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
-      dprQuery?.removeEventListener('change', onDprChange);
+      dprQuery?.removeEventListener("change", onDprChange);
       img.onload = null;
     };
   }, [src, srcSet, startLoop]);
 
   // ── Hover handlers ────────────────────────────────────────────────────
   const handleMouseEnter = useCallback(() => {
-    if (reduced || !window.matchMedia('(hover: hover)').matches) return;
+    if (reduced || !window.matchMedia("(hover: hover)").matches) return;
     targetRef.current = HOVER_SIZE;
     startLoop();
   }, [reduced, startLoop]);
@@ -151,9 +164,9 @@ export default function PixelatedImage({ src, srcSet, crop, alt, className }: Pr
     <canvas
       ref={canvasRef}
       className={className}
-      style={{ display: 'block' }}
+      style={{ display: "block" }}
       // Empty alt: decorative (its link or caption names it), so hidden like <img alt="">
-      role={alt ? 'img' : undefined}
+      role={alt ? "img" : undefined}
       aria-label={alt || undefined}
       aria-hidden={alt ? undefined : true}
       onMouseEnter={handleMouseEnter}

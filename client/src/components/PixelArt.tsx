@@ -1,22 +1,22 @@
 export type PixelArtName =
-  | 'chip-school'
-  | 'chip-calendar'
-  | 'chip-team'
-  | 'chip-phone'
-  | 'bullet'
-  | 'starburst'
-  | 'sparkle'
-  | 'smiley'
-  | 'floppy'
-  | 'icon-home'
-  | 'icon-about'
-  | 'icon-experience'
-  | 'icon-projects'
-  | 'icon-skills'
-  | 'icon-contact'
-  | 'icon-screens'
-  | 'icon-results'
-  | 'globe';
+  | "chip-school"
+  | "chip-calendar"
+  | "chip-team"
+  | "chip-phone"
+  | "bullet"
+  | "starburst"
+  | "sparkle"
+  | "smiley"
+  | "floppy"
+  | "icon-home"
+  | "icon-about"
+  | "icon-experience"
+  | "icon-projects"
+  | "icon-skills"
+  | "icon-contact"
+  | "icon-screens"
+  | "icon-results"
+  | "globe";
 
 interface PixelArtProps {
   name: PixelArtName;
@@ -32,7 +32,12 @@ interface PixelArtProps {
  * beside text that says the same thing, so it is hidden from assistive tech.
  * Explicit width/height reserve the space and avoid layout shift.
  */
-export default function PixelArt({ name, size, lazy = false, className = '' }: PixelArtProps) {
+export default function PixelArt({
+  name,
+  size,
+  lazy = false,
+  className = "",
+}: PixelArtProps) {
   return (
     <img
       src={`/assets/pixel/${name}.svg`}
@@ -41,7 +46,7 @@ export default function PixelArt({ name, size, lazy = false, className = '' }: P
       alt=""
       aria-hidden="true"
       draggable={false}
-      loading={lazy ? 'lazy' : undefined}
+      loading={lazy ? "lazy" : undefined}
       decoding="async"
       className={`pixel-art ${className}`}
     />

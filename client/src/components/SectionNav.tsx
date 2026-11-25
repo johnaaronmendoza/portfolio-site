@@ -1,25 +1,30 @@
-import { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import PixelArt, { type PixelArtName } from './PixelArt';
-import SoundToggle, { DOCK_WORD, DockGlyph, FLOAT_DOCK, dockButton } from './SoundToggle';
-import ShortcutHint from './ShortcutHint';
-import { WindowBar } from './Window';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { useModalFocus } from '@/hooks/useModalFocus';
-import { motionTokens } from '@/lib/motion-tokens';
-import { scrollToSection } from '@/lib/utils';
+import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import PixelArt, { type PixelArtName } from "./PixelArt";
+import SoundToggle, {
+  DOCK_WORD,
+  DockGlyph,
+  FLOAT_DOCK,
+  dockButton,
+} from "./SoundToggle";
+import ShortcutHint from "./ShortcutHint";
+import { WindowBar } from "./Window";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useModalFocus } from "@/hooks/useModalFocus";
+import { motionTokens } from "@/lib/motion-tokens";
+import { scrollToSection } from "@/lib/utils";
 
 export const SECTIONS: { id: string; label: string; icon: PixelArtName }[] = [
-  { id: 'hero',       label: 'Top',        icon: 'icon-home' },
-  { id: 'about',      label: 'About',      icon: 'icon-about' },
-  { id: 'experience', label: 'Experience', icon: 'icon-experience' },
-  { id: 'projects',   label: 'Projects',   icon: 'icon-projects' },
-  { id: 'skills',     label: 'Skills',     icon: 'icon-skills' },
-  { id: 'footer',     label: 'Contact',    icon: 'icon-contact' },
+  { id: "hero", label: "Top", icon: "icon-home" },
+  { id: "about", label: "About", icon: "icon-about" },
+  { id: "experience", label: "Experience", icon: "icon-experience" },
+  { id: "projects", label: "Projects", icon: "icon-projects" },
+  { id: "skills", label: "Skills", icon: "icon-skills" },
+  { id: "footer", label: "Contact", icon: "icon-contact" },
 ];
 
-const MENU_ID = 'section-menu';
+const MENU_ID = "section-menu";
 
 /**
  * Section menu below lg (the dots take over on large screens): a menu.exe
@@ -38,9 +43,11 @@ function SectionMenu({ active }: { active: string }) {
   // Escape closes (useModalFocus holds the page behind still while it is open)
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
   const go = (id: string) => {
@@ -61,7 +68,10 @@ function SectionMenu({ active }: { active: string }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
+            transition={{
+              duration: motionTokens.duration.fast,
+              ease: motionTokens.easing.out,
+            }}
             onClick={() => setOpen(false)}
           />
           <motion.div
@@ -78,9 +88,16 @@ function SectionMenu({ active }: { active: string }) {
             initial={{ opacity: 0, y: motionTokens.distance.sm }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: motionTokens.distance.sm }}
-            transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
+            transition={{
+              duration: motionTokens.duration.fast,
+              ease: motionTokens.easing.out,
+            }}
           >
-            <WindowBar title="menu.exe" onClose={() => setOpen(false)} closeLabel="Close menu" />
+            <WindowBar
+              title="menu.exe"
+              onClose={() => setOpen(false)}
+              closeLabel="Close menu"
+            />
             <ul className="window-body min-h-0 overflow-y-auto overscroll-contain p-2">
               {SECTIONS.map(({ id, label, icon }, i) => (
                 <li key={id}>
@@ -88,9 +105,11 @@ function SectionMenu({ active }: { active: string }) {
                     ref={i === 0 ? firstRef : undefined}
                     type="button"
                     onClick={() => go(id)}
-                    aria-current={active === id ? 'location' : undefined}
+                    aria-current={active === id ? "location" : undefined}
                     className={`flex w-full min-h-[44px] items-center gap-3 px-3 font-sans text-body font-bold text-left transition-colors duration-150 hover:bg-[var(--blue)] hover:text-black ${
-                      active === id ? 'bg-[var(--bar)] text-[color:var(--paper)]' : 'text-[color:var(--text)]'
+                      active === id
+                        ? "bg-[var(--bar)] text-[color:var(--paper)]"
+                        : "text-[color:var(--text)]"
                     }`}
                   >
                     <PixelArt name={icon} size={16} />
@@ -122,7 +141,14 @@ function SectionMenu({ active }: { active: string }) {
         {/* Says where the visitor is: "Menu" at the top, then the current section.
             Glyph only when the screen is very short (400% zoom) */}
         <span className="whitespace-nowrap [@media(max-height:500px)]:sr-only">
-          {active === 'hero' ? 'Menu' : <><span className="sr-only">Menu: </span>{label}</>}
+          {active === "hero" ? (
+            "Menu"
+          ) : (
+            <>
+              <span className="sr-only">Menu: </span>
+              {label}
+            </>
+          )}
         </span>
       </button>
       {/* Portalled out of the floating row so it stacks above the chat launcher */}
@@ -133,28 +159,36 @@ function SectionMenu({ active }: { active: string }) {
 
 // Viewer's choice to stop the marquee strips (WCAG 2.2.2). index.css reads
 // data-motion="paused" on <html>; the choice persists across visits.
-const MOTION_KEY = 'ja_motion_paused';
+const MOTION_KEY = "ja_motion_paused";
 
 function readMotionPaused(): boolean {
-  try { return localStorage.getItem(MOTION_KEY) === 'true'; } catch { return false; }
+  try {
+    return localStorage.getItem(MOTION_KEY) === "true";
+  } catch {
+    return false;
+  }
 }
 
 export default function SectionNav() {
-  const [active, setActive] = useState('hero');
+  const [active, setActive] = useState("hero");
   const [motionPaused, setMotionPaused] = useState(readMotionPaused);
   const reduced = useReducedMotion();
 
   useEffect(() => {
     const root = document.documentElement;
-    if (motionPaused) root.setAttribute('data-motion', 'paused');
-    else root.removeAttribute('data-motion');
-    return () => root.removeAttribute('data-motion');
+    if (motionPaused) root.setAttribute("data-motion", "paused");
+    else root.removeAttribute("data-motion");
+    return () => root.removeAttribute("data-motion");
   }, [motionPaused]);
 
   const toggleMotion = () => {
     const next = !motionPaused;
     setMotionPaused(next);
-    try { localStorage.setItem(MOTION_KEY, String(next)); } catch { /* storage blocked: still works this visit */ }
+    try {
+      localStorage.setItem(MOTION_KEY, String(next));
+    } catch {
+      /* storage blocked: still works this visit */
+    }
   };
 
   // Current section: the last one whose top has passed the viewport's middle
@@ -167,80 +201,92 @@ export default function SectionNav() {
       let current = SECTIONS[0].id;
       for (const { id } of SECTIONS) {
         const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top <= innerHeight / 2) current = id;
+        if (el && el.getBoundingClientRect().top <= innerHeight / 2)
+          current = id;
       }
-      if (innerHeight + doc.scrollTop >= doc.scrollHeight - 2) current = 'footer';
+      if (innerHeight + doc.scrollTop >= doc.scrollHeight - 2)
+        current = "footer";
       setActive(current);
     };
-    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
     update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
   }, []);
 
   return (
     <>
-    {/* Bottom-left at every width; the chat launcher owns bottom-right. The
+      {/* Bottom-left at every width; the chat launcher owns bottom-right. The
         focus ring is ink with a white halo so it reads over every band it
         floats above. Paused = ▶ "Paused", ink and pressed into its shadow.
         Always visible (WCAG 2.2.2): glyph only on very short screens */}
-    <div className={FLOAT_DOCK}>
-      <SectionMenu active={active} />
-      <button
-        type="button"
-        onClick={toggleMotion}
-        aria-pressed={motionPaused}
-        title="Pause motion"
-        className={`${dockButton(motionPaused)} motion-reduce:hidden`}
-      >
-        <DockGlyph name={motionPaused ? 'play' : 'pause'} />
-        <span className="sr-only">Pause motion</span>
-        {/* As wide as "Paused", so the dock doesn't shift on toggle */}
-        <span aria-hidden="true" className={`${DOCK_WORD} min-w-[6ch] text-center`}>{motionPaused ? 'Paused' : 'Pause'}</span>
-      </button>
-      <SoundToggle />
-    </div>
-    {/* Section dots (large screens): 44px targets around 12px dots. Inactive
+      <div className={FLOAT_DOCK}>
+        <SectionMenu active={active} />
+        <button
+          type="button"
+          onClick={toggleMotion}
+          aria-pressed={motionPaused}
+          title="Pause motion"
+          className={`${dockButton(motionPaused)} motion-reduce:hidden`}
+        >
+          <DockGlyph name={motionPaused ? "play" : "pause"} />
+          <span className="sr-only">Pause motion</span>
+          {/* As wide as "Paused", so the dock doesn't shift on toggle */}
+          <span
+            aria-hidden="true"
+            className={`${DOCK_WORD} min-w-[6ch] text-center`}
+          >
+            {motionPaused ? "Paused" : "Pause"}
+          </span>
+        </button>
+        <SoundToggle />
+      </div>
+      {/* Section dots (large screens): 44px targets around 12px dots. Inactive
         dots are white, the current section is filled ink. */}
-    <nav aria-label="Sections" className="fixed right-2 top-1/2 -translate-y-1/2 z-40 hidden lg:block">
-      <ul className="flex flex-col">
-        {SECTIONS.map(({ id, label }) => (
-          <li key={id}>
-            <button
-              type="button"
-              onClick={() => scrollToSection(id, reduced)}
-              aria-label={`Go to ${label}`}
-              aria-current={active === id ? 'location' : undefined}
-              className="group relative flex items-center justify-center w-11 h-11"
-            >
-              {/* Visible name on hover or keyboard focus; the aria-label carries it for screen readers */}
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute right-full mr-1 flex items-center gap-2 whitespace-nowrap border-[3px] border-black bg-[var(--bar)] px-2 py-1 font-label text-label text-[color:var(--paper)] opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+      <nav
+        aria-label="Sections"
+        className="fixed right-2 top-1/2 -translate-y-1/2 z-40 hidden lg:block"
+      >
+        <ul className="flex flex-col">
+          {SECTIONS.map(({ id, label }) => (
+            <li key={id}>
+              <button
+                type="button"
+                onClick={() => scrollToSection(id, reduced)}
+                aria-label={`Go to ${label}`}
+                aria-current={active === id ? "location" : undefined}
+                className="group relative flex items-center justify-center w-11 h-11"
               >
-                {id === 'hero' && <PixelArt name="icon-home" size={16} />}
-                {label}
-              </span>
-              <span
-                aria-hidden="true"
-                // 4px ink frame, then a 2px paper outline: the dot reads on the
-                // page, the blue band and the black footer alike
-                className={`block w-4 h-4 border-4 outline-2 outline-solid outline-[var(--paper)] transition-colors duration-150 ${
-                  active === id
-                    ? 'bg-[var(--bar)] border-black'
-                    : 'border-black bg-[var(--paper)] group-hover:bg-[var(--blue)]'
-                }`}
-              />
-            </button>
-          </li>
-        ))}
-      </ul>
-    </nav>
+                {/* Visible name on hover or keyboard focus; the aria-label carries it for screen readers */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute right-full mr-1 flex items-center gap-2 whitespace-nowrap border-[3px] border-black bg-[var(--bar)] px-2 py-1 font-label text-label text-[color:var(--paper)] opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+                >
+                  {id === "hero" && <PixelArt name="icon-home" size={16} />}
+                  {label}
+                </span>
+                <span
+                  aria-hidden="true"
+                  // 4px ink frame, then a 2px paper outline: the dot reads on the
+                  // page, the blue band and the black footer alike
+                  className={`block w-4 h-4 border-4 outline-2 outline-solid outline-[var(--paper)] transition-colors duration-150 ${
+                    active === id
+                      ? "bg-[var(--bar)] border-black"
+                      : "border-black bg-[var(--paper)] group-hover:bg-[var(--blue)]"
+                  }`}
+                />
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </>
   );
 }

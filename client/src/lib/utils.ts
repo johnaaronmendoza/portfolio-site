@@ -7,7 +7,10 @@ export function cn(...inputs: ClassValue[]) {
 
 // True on mouse/trackpad devices, where focusing an input won't pop an on-screen keyboard
 export function hasFinePointer(): boolean {
-  return typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches
+  );
 }
 
 /**
@@ -17,10 +20,13 @@ export function hasFinePointer(): boolean {
 export function scrollToSection(id: string, reduced: boolean): void {
   const el = document.getElementById(id);
   if (!el) return;
-  el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
-  if (!el.hasAttribute('tabindex')) el.tabIndex = -1;
+  el.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+  if (!el.hasAttribute("tabindex")) el.tabIndex = -1;
   el.focus({ preventScroll: true });
 }
 
 /** The shortcut modifier as the visitor's keyboard labels it (both work everywhere) */
-export const MOD_KEY = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘' : 'Ctrl';
+export const MOD_KEY =
+  typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform)
+    ? "⌘"
+    : "Ctrl";

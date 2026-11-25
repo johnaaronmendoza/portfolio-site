@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { useInView } from 'framer-motion';
+import { useRef } from "react";
+import { useInView } from "framer-motion";
 
 /**
  * Lil Johnny as the hero's narrator (Hero mounts it from 1280px only). He
@@ -18,11 +18,12 @@ export default function HeroNarrator() {
     <button
       ref={ref}
       type="button"
-      onClick={() => window.dispatchEvent(new CustomEvent('open-chat'))}
+      onClick={() => window.dispatchEvent(new CustomEvent("open-chat"))}
       className="group flex flex-col items-start gap-[22px] -mr-3 pr-3 border-b-[3px] border-black text-left outline-offset-[6px]"
     >
       <span className="comic-bubble block font-sans text-body-sm leading-[1.4] px-4 py-3 rounded-[20px] shadow-8bit [--tail-x:26px] transition-[translate,box-shadow] duration-150 group-hover:underline underline-offset-4 decoration-2 group-active:translate-x-1 group-active:translate-y-1 group-active:shadow-none">
-        The AI drafts, an agent decides. Ask me how.<span className="sr-only"> Opens the chat.</span>
+        The AI drafts, an agent decides. Ask me how.
+        <span className="sr-only"> Opens the chat.</span>
       </span>
       <img
         src="/assets/mascot/poses/point-right.png"
@@ -30,7 +31,7 @@ export default function HeroNarrator() {
         aria-hidden="true"
         width={47}
         height={72}
-        className={`${onScreen ? 'johnny-bob' : ''} ml-1 h-[144px] w-[94px] max-w-none [image-rendering:pixelated]`}
+        className={`${onScreen ? "johnny-bob" : ""} ml-1 h-[144px] w-[94px] max-w-none [image-rendering:pixelated]`}
       />
     </button>
   );

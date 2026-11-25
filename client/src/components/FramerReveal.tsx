@@ -1,18 +1,10 @@
-import { ReactNode } from 'react';
-
-export type RevealVariant = 'fade-up' | 'fade-left' | 'scale' | 'fade';
-
-interface FramerRevealProps {
-  children: ReactNode;
-  delay?: number;
-  variant?: RevealVariant;
-}
+import { ReactNode } from "react";
 
 /**
  * Previously faded every section up on scroll. Content now renders immediately:
  * the page keeps a single orchestrated load-in moment in the hero, and recruiters
- * scrolling fast never see empty sections. Props are kept so call sites still compile.
+ * scrolling fast never see empty sections.
  */
-export default function FramerReveal({ children }: FramerRevealProps) {
+export default function FramerReveal({ children }: { children: ReactNode }) {
   return <div>{children}</div>;
 }

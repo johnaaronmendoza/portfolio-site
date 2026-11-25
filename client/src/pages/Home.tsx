@@ -6,22 +6,21 @@
  * stickers sit in the side gutters on wide screens (comic/Stickers).
  */
 
-import { useEffect, useLayoutEffect } from 'react';
-import Hero from '@/components/Hero';
-import About from '@/components/About';
-import Experience from '@/components/Experience';
-import Projects from '@/components/Projects';
-import Skills from '@/components/Skills';
-import Footer from '@/components/Footer';
-import Ribbon from '@/components/Ribbon';
-import SectionNav from '@/components/SectionNav';
-import SkipLink from '@/components/SkipLink';
-import Stickers from '@/components/comic/Stickers';
-import { useHomeAchievements } from '@/hooks/useAchievements';
-import { saveHomeScroll } from '@/lib/scroll-memory';
+import { useEffect, useLayoutEffect } from "react";
+import Hero from "@/components/Hero";
+import About from "@/components/About";
+import Experience from "@/components/Experience";
+import Projects from "@/components/Projects";
+import Skills from "@/components/Skills";
+import Footer from "@/components/Footer";
+import Ribbon from "@/components/Ribbon";
+import SectionNav from "@/components/SectionNav";
+import SkipLink from "@/components/SkipLink";
+import Stickers from "@/components/comic/Stickers";
+import { saveHomeScroll } from "@/lib/scroll-memory";
 
 // Section wrappers take focus (without a ring) when a link lands on them
-const SECTION_CLASS = 'relative focus:outline-none';
+const SECTION_CLASS = "relative focus:outline-none";
 
 /** Arriving at "/#projects" (e.g. a case study's Back link): jump there and focus it */
 function useScrollToHash() {
@@ -38,7 +37,6 @@ function useScrollToHash() {
 }
 
 export default function Home() {
-  useHomeAchievements();
   useScrollToHash();
   // Remember where the visitor was, so browser Back from a case study returns here.
   // Layout-effect cleanup runs before the page is swapped out, while scrollY is still Home's.
@@ -52,23 +50,46 @@ export default function Home() {
           <Hero />
         </div>
         {/* Negative margins elsewhere overlap touching 3px borders so bands share one rule */}
-        <Ribbon tone="blue" items={['ABOUT ME', 'AI', 'DATA', 'FULL-STACK']} />
+        <Ribbon tone="blue" items={["ABOUT ME", "AI", "DATA", "FULL-STACK"]} />
         <div id="about" tabIndex={-1} className={SECTION_CLASS}>
           <Stickers set="about" />
           <About />
         </div>
-        <Ribbon tone="blue" reverse items={['EXPERIENCE', 'BUILDING DESK ASSIST', 'LGA TELECOM', 'SEMBCORP SOLAR']} />
+        <Ribbon
+          tone="blue"
+          reverse
+          items={[
+            "EXPERIENCE",
+            "BUILDING DESK ASSIST",
+            "LGA TELECOM",
+            "SEMBCORP SOLAR",
+          ]}
+        />
         <div id="experience" tabIndex={-1} className={SECTION_CLASS}>
           <Stickers set="experience" />
           <Experience />
         </div>
         {/* Ink either side of the blue Projects band so strips never merge into it */}
-        <Ribbon tone="ink" className="-mb-[3px]" items={['PROJECTS', 'SILVERLINK SG', 'SCS AWARENESS PLATFORM', 'UWB INDOOR LOCALIZATION']} />
+        <Ribbon
+          tone="ink"
+          className="-mb-[3px]"
+          items={[
+            "PROJECTS",
+            "SILVERLINK SG",
+            "SCS AWARENESS PLATFORM",
+            "UWB INDOOR LOCALIZATION",
+          ]}
+        />
         <div id="projects" tabIndex={-1} className={SECTION_CLASS}>
           <Stickers set="projects" />
           <Projects />
         </div>
-        <Ribbon tone="ink" reverse className="-mt-[3px]" items={['SKILLS', 'PRESS A KEY']} />
+        <Ribbon
+          tone="ink"
+          reverse
+          className="-mt-[3px]"
+          items={["SKILLS", "PRESS A KEY"]}
+        />
         <div id="skills" tabIndex={-1} className={SECTION_CLASS}>
           <Stickers set="skills" />
           <Skills />

@@ -1,6 +1,6 @@
-import SectionHeading from '@/components/SectionHeading';
-import { WindowBar } from '@/components/Window';
-import { toSrcSet, type ImageSource } from '@/lib/images';
+import SectionHeading from "@/components/SectionHeading";
+import { WindowBar } from "@/components/Window";
+import { toSrcSet, type ImageSource } from "@/lib/images";
 
 // The case column is max-w-5xl less the window's borders; two columns from md
 const COLUMN = 1018;
@@ -32,7 +32,8 @@ export type Shot = {
   span?: boolean;
 };
 
-const CAPTION_TEXT = 'font-sans text-body-sm sm:text-body leading-[1.5] text-[color:var(--text)]';
+const CAPTION_TEXT =
+  "font-sans text-body-sm sm:text-body leading-[1.5] text-[color:var(--text)]";
 
 function FullSizeLink({ src, caption }: { src: string; caption: string }) {
   return (
@@ -42,7 +43,8 @@ function FullSizeLink({ src, caption }: { src: string; caption: string }) {
       rel="noopener"
       className="inline-flex min-h-[44px] flex-shrink-0 items-center self-start sm:self-auto font-bold text-black underline decoration-2 underline-offset-4"
     >
-      Open full size<span className="sr-only">: {caption} (opens in a new tab)</span>
+      Open full size
+      <span className="sr-only">: {caption} (opens in a new tab)</span>
     </a>
   );
 }
@@ -59,7 +61,19 @@ function FullSizeLink({ src, caption }: { src: string; caption: string }) {
  * priority; a portrait hero sits beside its caption from md.
  */
 export function ScreenFigure({
-  file, src, width, height, alt, caption, srcMobile, mobileWidth, mobileHeight, fullSrc, webp, span, hero = false,
+  file,
+  src,
+  width,
+  height,
+  alt,
+  caption,
+  srcMobile,
+  mobileWidth,
+  mobileHeight,
+  fullSrc,
+  webp,
+  span,
+  hero = false,
 }: Shot & { hero?: boolean }) {
   const portrait = width / height < 0.9;
   const full = span || (width / height >= 1.4 && width >= COLUMN);
@@ -74,31 +88,42 @@ export function ScreenFigure({
       width={width}
       height={height}
       alt={alt}
-      loading={hero ? 'eager' : 'lazy'}
-      fetchPriority={hero ? 'high' : undefined}
+      loading={hero ? "eager" : "lazy"}
+      fetchPriority={hero ? "high" : undefined}
       decoding="async"
       className={
         portrait
-          ? `block mx-auto h-auto w-auto max-w-full ${besideCaption ? 'max-h-[min(70svh,560px)] md:max-h-[560px]' : 'max-h-[min(70svh,560px)]'}`
+          ? `block mx-auto h-auto w-auto max-w-full ${besideCaption ? "max-h-[min(70svh,560px)] md:max-h-[560px]" : "max-h-[min(70svh,560px)]"}`
           : hero
-            ? 'block mx-auto h-auto max-w-full'
-            : 'block mx-auto w-full h-auto'
+            ? "block mx-auto h-auto max-w-full"
+            : "block mx-auto w-full h-auto"
       }
       // Never upscaled: a shot narrower than its box sits centred at its natural width
       style={portrait || hero ? undefined : { maxWidth: width }}
     />
   );
-  const mobilePng = srcMobile?.replace(/\.webp$/, '.png');
-  const mobile = { media: '(max-width: 639px)', width: mobileWidth, height: mobileHeight };
-  const img = srcMobile || webp ? (
-    <picture>
-      {/* WebP phone art, its PNG, the WebP set, then the img */}
-      {srcMobile && mobilePng !== srcMobile && <source {...mobile} type="image/webp" srcSet={srcMobile} />}
-      {mobilePng && <source {...mobile} srcSet={mobilePng} />}
-      {webp && <source type="image/webp" srcSet={toSrcSet(webp)} sizes={sizes} />}
-      {image}
-    </picture>
-  ) : image;
+  const mobilePng = srcMobile?.replace(/\.webp$/, ".png");
+  const mobile = {
+    media: "(max-width: 639px)",
+    width: mobileWidth,
+    height: mobileHeight,
+  };
+  const img =
+    srcMobile || webp ? (
+      <picture>
+        {/* WebP phone art, its PNG, the WebP set, then the img */}
+        {srcMobile && mobilePng !== srcMobile && (
+          <source {...mobile} type="image/webp" srcSet={srcMobile} />
+        )}
+        {mobilePng && <source {...mobile} srcSet={mobilePng} />}
+        {webp && (
+          <source type="image/webp" srcSet={toSrcSet(webp)} sizes={sizes} />
+        )}
+        {image}
+      </picture>
+    ) : (
+      image
+    );
   const fullLink = <FullSizeLink src={fullSrc ?? src} caption={caption} />;
 
   if (besideCaption) {
@@ -119,9 +144,9 @@ export function ScreenFigure({
   }
 
   return (
-    <figure className={`window window--figure ${full ? 'md:col-span-2' : ''}`}>
+    <figure className={`window window--figure ${full ? "md:col-span-2" : ""}`}>
       <WindowBar title={file} />
-      <div className={portrait ? 'p-4' : undefined}>{img}</div>
+      <div className={portrait ? "p-4" : undefined}>{img}</div>
       <figcaption
         className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-x-6 gap-y-1 border-t-[3px] border-black px-4 pt-3 pb-1 sm:py-1 ${CAPTION_TEXT}`}
       >
@@ -133,15 +158,24 @@ export function ScreenFigure({
 }
 
 interface ScreenGalleryProps {
-  heading?: 'Screens' | 'Charts';
+  heading?: "Screens" | "Charts";
   shots: Shot[];
 }
 
 /** Screenshot windows on the page (not inside a section window) */
-export default function ScreenGallery({ heading = 'Screens', shots }: ScreenGalleryProps) {
+export default function ScreenGallery({
+  heading = "Screens",
+  shots,
+}: ScreenGalleryProps) {
   return (
     <section aria-labelledby="screens-heading">
-      <SectionHeading id="screens-heading" text={heading} icon="icon-screens" size="case" className="mb-6" />
+      <SectionHeading
+        id="screens-heading"
+        text={heading}
+        icon="icon-screens"
+        size="case"
+        className="mb-6"
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-6">
         {shots.map(shot => (
           <ScreenFigure key={shot.file} {...shot} />

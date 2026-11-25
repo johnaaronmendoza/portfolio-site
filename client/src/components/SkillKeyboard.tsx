@@ -1,41 +1,62 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  Component, lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState,
-  type FocusEvent, type PointerEvent, type ReactNode, type RefObject,
-} from 'react';
-import { Link } from 'wouter';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { useModalFocus } from '@/hooks/useModalFocus';
-import { useQueryParam } from '@/hooks/useQueryParam';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { play } from '@/hooks/useSound';
-import { motionTokens } from '@/lib/motion-tokens';
-import { chipClass } from './Projects';
-import { WindowBar } from './Window';
+  Component,
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type FocusEvent,
+  type PointerEvent,
+  type ReactNode,
+  type RefObject,
+} from "react";
+import { Link } from "wouter";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useModalFocus } from "@/hooks/useModalFocus";
+import { useQueryParam } from "@/hooks/useQueryParam";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { play } from "@/hooks/useSound";
+import { motionTokens } from "@/lib/motion-tokens";
+import { chipClass } from "./Projects";
+import { WindowBar } from "./Window";
 import {
-  FILTERS, GROUP_NAME, KEYS, capFor, fileName, iconUrl, inFilter, keyName, mutedCap, projectsFor,
-  type Cap, type Filter,
-} from './skills3d/keys';
-import type { KeyLocator, KeyRect } from './skills3d/Keyboard3D';
+  FILTERS,
+  GROUP_NAME,
+  KEYS,
+  capFor,
+  fileName,
+  iconUrl,
+  inFilter,
+  keyName,
+  mutedCap,
+  projectsFor,
+  type Cap,
+  type Filter,
+} from "./skills3d/keys";
+import type { KeyLocator, KeyRect } from "./skills3d/Keyboard3D";
 
 // three.js lives in this chunk; it loads only when the Skills section nears the viewport
-const Keyboard3D = lazy(() => import('./skills3d/Keyboard3D'));
+const Keyboard3D = lazy(() => import("./skills3d/Keyboard3D"));
 
-const GROUP_LABEL = 'Skills keyboard. Press a key to open what the skill is and where I used it.';
+const GROUP_LABEL =
+  "Skills keyboard. Press a key to open what the skill is and where I used it.";
 const CAPS: Cap[] = KEYS.map(capFor);
 const NAMES = KEYS.map((k, i) => keyName(k, CAPS[i]));
 const GAP = 10; // px between a key and its tooltip or window
 const EDGE = 8; // px kept clear of the viewport edge
 const DOCK = 88; // px kept clear at the bottom for the fixed buttons (html scroll-padding-bottom)
-const TIP_ID = 'skill-tip';
+const TIP_ID = "skill-tip";
 
 // The entrance plays once per page load, not on every return to Home
 let enteredThisLoad = false;
 
 function hasWebGL() {
   try {
-    const gl = document.createElement('canvas').getContext('webgl2');
-    gl?.getExtension('WEBGL_lose_context')?.loseContext();
+    const gl = document.createElement("canvas").getContext("webgl2");
+    gl?.getExtension("WEBGL_lose_context")?.loseContext();
     return !!gl;
   } catch {
     return false;
@@ -43,7 +64,10 @@ function hasWebGL() {
 }
 
 /** Falls back to the flat keyboard if the 3D chunk fails to load or WebGL errors. */
-class Boundary extends Component<{ onError: () => void; children: ReactNode }, { failed: boolean }> {
+class Boundary extends Component<
+  { onError: () => void; children: ReactNode },
+  { failed: boolean }
+> {
   state = { failed: false };
   static getDerivedStateFromError() {
     return { failed: true };
@@ -68,31 +92,47 @@ type KeyHandlers = {
 
 /** Props shared by the hidden 3D controls and the flat keys: a dialog opener
  *  that reports focus (and whether it is keyboard focus) for the tooltip. */
-const keyButton = (i: number, { open, tip, btnRefs, onOpen, onFocusKey }: KeyHandlers) => ({
-  type: 'button' as const,
-  ref: (el: HTMLButtonElement | null) => { btnRefs.current[i] = el; },
-  'aria-haspopup': 'dialog' as const,
-  'aria-expanded': open === i,
-  'aria-describedby': tip === i ? TIP_ID : undefined,
+const keyButton = (
+  i: number,
+  { open, tip, btnRefs, onOpen, onFocusKey }: KeyHandlers
+) => ({
+  type: "button" as const,
+  ref: (el: HTMLButtonElement | null) => {
+    btnRefs.current[i] = el;
+  },
+  "aria-haspopup": "dialog" as const,
+  "aria-expanded": open === i,
+  "aria-describedby": tip === i ? TIP_ID : undefined,
   onClick: () => onOpen(i),
-  onFocus: (e: FocusEvent<HTMLButtonElement>) => onFocusKey(i, e.currentTarget.matches(':focus-visible')),
+  onFocus: (e: FocusEvent<HTMLButtonElement>) =>
+    onFocusKey(i, e.currentTarget.matches(":focus-visible")),
   onBlur: () => onFocusKey(null, false),
 });
 
 /** The single-colour icon as a mask filled with the cap's ink (black, or
  *  white on black); a missing file leaves the cap without an icon. */
 function FlatIcon({ src }: { src: string }) {
-  return <span aria-hidden="true" className="w-[44%] aspect-square bg-current" style={{ mask: `url(${src}) center / contain no-repeat` }} />;
+  return (
+    <span
+      aria-hidden="true"
+      className="w-[44%] aspect-square bg-current"
+      style={{ mask: `url(${src}) center / contain no-repeat` }}
+    />
+  );
 }
 
 /** Flat 2D keyboard: phones and touch screens, no WebGL, reduced motion, or the 3D chunk failed. */
 function FlatKeys(handlers: KeyHandlers) {
   const { filter, onHover } = handlers;
   const hoverOn = (i: number | null) => (e: PointerEvent) => {
-    if (e.pointerType !== 'touch') onHover(i);
+    if (e.pointerType !== "touch") onHover(i);
   };
   return (
-    <div role="group" aria-label={GROUP_LABEL} className="grid grid-cols-4 sm:grid-cols-7 gap-2 sm:gap-3 pr-1 pb-1">
+    <div
+      role="group"
+      aria-label={GROUP_LABEL}
+      className="grid grid-cols-4 sm:grid-cols-7 gap-2 sm:gap-3 pr-1 pb-1"
+    >
       {KEYS.map((k, i) => {
         // Outside the filter: pressed flush without its shadow, in the same dark
         // muted skin as the 3D caps (AA contrast kept), so it reads without colour
@@ -108,12 +148,17 @@ function FlatKeys(handlers: KeyHandlers) {
             // Keycap from John's sheet: number, icon, caps label on a darker strip
             className={`relative flex aspect-square flex-col overflow-hidden rounded-[6px] border-[3px] border-black transition-[translate,box-shadow,background-color,color] duration-150 ease-out ${
               muted
-                ? 'translate-x-[4px] translate-y-[4px] shadow-none'
-                : 'shadow-8bit active:translate-x-[4px] active:translate-y-[4px] active:shadow-none aria-expanded:translate-x-[4px] aria-expanded:translate-y-[4px] aria-expanded:shadow-none'
+                ? "translate-x-[4px] translate-y-[4px] shadow-none"
+                : "shadow-8bit active:translate-x-[4px] active:translate-y-[4px] active:shadow-none aria-expanded:translate-x-[4px] aria-expanded:translate-y-[4px] aria-expanded:shadow-none"
             }`}
             style={{ backgroundColor: cap.face, color: cap.ink }}
           >
-            <span aria-hidden="true" className="absolute left-1.5 top-1 font-mono text-label font-bold leading-none">{cap.no}</span>
+            <span
+              aria-hidden="true"
+              className="absolute left-1.5 top-1 font-mono text-label font-bold leading-none"
+            >
+              {cap.no}
+            </span>
             <span className="flex min-h-0 flex-1 items-center justify-center pt-3">
               <FlatIcon src={iconUrl(k)} />
             </span>
@@ -133,7 +178,13 @@ function FlatKeys(handlers: KeyHandlers) {
 
 /** Category filters: toggle buttons in the Projects chip style (press-down,
  *  hard shadow), wrapping like the Projects chips at every width. */
-function Filters({ value, onChange }: { value: Filter; onChange: (f: Filter) => void }) {
+function Filters({
+  value,
+  onChange,
+}: {
+  value: Filter;
+  onChange: (f: Filter) => void;
+}) {
   return (
     <div
       role="group"
@@ -157,20 +208,41 @@ function Filters({ value, onChange }: { value: Filter; onChange: (f: Filter) => 
 
 /** Hover / keyboard-focus preview: a small python.info window. Positioned by
  *  the parent (it follows the 3D board frame by frame). */
-function KeyTip({ index, tipRef, reduced }: { index: number; tipRef: RefObject<HTMLDivElement | null>; reduced: boolean }) {
+function KeyTip({
+  index,
+  tipRef,
+  reduced,
+}: {
+  index: number;
+  tipRef: RefObject<HTMLDivElement | null>;
+  reduced: boolean;
+}) {
   const k = KEYS[index];
   return (
-    <div ref={tipRef} id={TIP_ID} role="tooltip" className="pointer-events-none absolute left-0 top-0 z-30 w-64" style={{ visibility: 'hidden' }}>
+    <div
+      ref={tipRef}
+      id={TIP_ID}
+      role="tooltip"
+      className="pointer-events-none absolute left-0 top-0 z-30 w-64"
+      style={{ visibility: "hidden" }}
+    >
       <motion.div
         initial={{ opacity: 0, y: reduced ? 0 : motionTokens.distance.xs }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: motionTokens.duration.instant, ease: motionTokens.easing.out }}
+        transition={{
+          duration: motionTokens.duration.instant,
+          ease: motionTokens.easing.out,
+        }}
         className="border-[3px] border-black bg-[var(--paper)] text-[color:var(--text)] shadow-8bit"
       >
         <WindowBar title={fileName(CAPS[index])} />
         <div className="px-3 py-2.5 font-sans">
-          <p className="text-body-sm font-bold leading-snug text-balance">{k.name}</p>
-          <p className="mt-1 text-body-sm leading-snug text-pretty">{k.blurb}</p>
+          <p className="text-body-sm font-bold leading-snug text-balance">
+            {k.name}
+          </p>
+          <p className="mt-1 text-body-sm leading-snug text-pretty">
+            {k.blurb}
+          </p>
         </div>
       </motion.div>
     </div>
@@ -186,7 +258,13 @@ type WindowProps = {
 };
 
 /** Detail window for one skill: modal, placed beside its key and kept on screen. */
-function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps) {
+function SkillWindow({
+  index,
+  reduced,
+  boardRef,
+  locate,
+  onClose,
+}: WindowProps) {
   const ref = useRef<HTMLDivElement>(null);
   const k = KEYS[index];
   const links = projectsFor(k);
@@ -206,9 +284,16 @@ function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps)
     const b = box.getBoundingClientRect();
     const vw = document.documentElement.clientWidth;
     const vh = window.innerHeight;
-    const r = locate(index) ?? { x: b.left + b.width / 2, top: b.top, bottom: b.top };
+    const r = locate(index) ?? {
+      x: b.left + b.width / 2,
+      top: b.top,
+      bottom: b.top,
+    };
     const [w, hgt] = [el.offsetWidth, el.offsetHeight];
-    const left = Math.max(Math.max(EDGE, b.left), Math.min(Math.min(vw - EDGE, b.right) - w, r.x - w / 2));
+    const left = Math.max(
+      Math.max(EDGE, b.left),
+      Math.min(Math.min(vw - EDGE, b.right) - w, r.x - w / 2)
+    );
     const floor = Math.max(EDGE, b.top);
     let top = r.bottom + GAP;
     if (top + hgt > vh - EDGE) top = r.top - GAP - hgt;
@@ -221,7 +306,15 @@ function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps)
   return (
     <>
       {/* Click outside to close; transparent so the pressed key stays in view */}
-      <motion.div key="scrim" aria-hidden="true" className="fixed inset-0 z-[64]" onClick={onClose} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
+      <motion.div
+        key="scrim"
+        aria-hidden="true"
+        className="fixed inset-0 z-[64]"
+        onClick={onClose}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      />
       <motion.div
         key="window"
         ref={ref}
@@ -230,7 +323,7 @@ function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps)
         aria-labelledby={titleId}
         tabIndex={-1}
         onKeyDown={e => {
-          if (e.key !== 'Escape') return;
+          if (e.key !== "Escape") return;
           e.stopPropagation();
           onClose();
         }}
@@ -238,22 +331,43 @@ function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps)
         initial={fade}
         animate={{ opacity: 1, y: 0 }}
         exit={fade}
-        transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
+        transition={{
+          duration: motionTokens.duration.fast,
+          ease: motionTokens.easing.out,
+        }}
       >
-        <WindowBar title={fileName(CAPS[index])} onClose={onClose} closeLabel={`Close ${k.name}`} />
+        <WindowBar
+          title={fileName(CAPS[index])}
+          onClose={onClose}
+          closeLabel={`Close ${k.name}`}
+        />
         <div className="window-body p-4 sm:p-5 font-sans">
           <p className="text-body-sm font-bold">{GROUP_NAME[k.group]}</p>
-          <h3 id={titleId} className="font-display text-lead sm:text-card-title mt-2 mb-3 text-balance">{k.name}</h3>
+          <h3
+            id={titleId}
+            className="font-display text-lead sm:text-card-title mt-2 mb-3 text-balance"
+          >
+            {k.name}
+          </h3>
           <p className="text-body-sm leading-relaxed text-pretty">{k.blurb}</p>
-          <p className="text-body-sm leading-relaxed mt-3"><span className="font-bold">Used in:</span> {k.usedIn}</p>
+          <p className="text-body-sm leading-relaxed mt-3">
+            <span className="font-bold">Used in:</span> {k.usedIn}
+          </p>
           {links.length > 0 && (
             <>
-              <p className="text-body-sm font-bold mt-3">{links.length > 1 ? 'Case studies:' : 'Case study:'}</p>
+              <p className="text-body-sm font-bold mt-3">
+                {links.length > 1 ? "Case studies:" : "Case study:"}
+              </p>
               <ul>
                 {links.map(p => (
                   <li key={p.link}>
-                    <Link href={p.link} onClick={keepFocus} className="inline-block py-2.5 text-body-sm font-bold underline underline-offset-4 decoration-2">
-                      {p.name}<span aria-hidden="true"> →</span>
+                    <Link
+                      href={p.link}
+                      onClick={keepFocus}
+                      className="inline-block py-2.5 text-body-sm font-bold underline underline-offset-4 decoration-2"
+                    >
+                      {p.name}
+                      <span aria-hidden="true"> →</span>
                     </Link>
                   </li>
                 ))}
@@ -268,54 +382,77 @@ function SkillWindow({ index, reduced, boardRef, locate, onClose }: WindowProps)
 
 /** listId: the plain skills list the skip link jumps to (its <summary> takes focus) */
 /** `legend` (what the key colours mean) renders right under the filters */
-export default function SkillKeyboard({ listId, legend }: { listId: string; legend?: ReactNode }) {
+export default function SkillKeyboard({
+  listId,
+  legend,
+}: {
+  listId: string;
+  legend?: ReactNode;
+}) {
   const reduced = useReducedMotion();
-  const wide = useMediaQuery('(min-width: 640px)');
+  const wide = useMediaQuery("(min-width: 640px)");
   const cols = wide ? 7 : 4;
   const boardRef = useRef<HTMLDivElement>(null);
   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const locatorRef = useRef<KeyLocator | null>(null);
   const tipRef = useRef<HTMLDivElement>(null);
-  const [stage, setStage] = useState<'wait' | '3d' | '2d'>('wait');
+  const [stage, setStage] = useState<"wait" | "3d" | "2d">("wait");
   // The filter lives in the URL (?skills=data), beside Projects' ?filter; no param means All
-  const [skillsParam, setSkillsParam] = useQueryParam('skills');
-  const filter: Filter = FILTERS.find(f => f.id === skillsParam)?.id ?? 'all';
-  const [announce, setAnnounce] = useState('');
+  const [skillsParam, setSkillsParam] = useQueryParam("skills");
+  const filter: Filter = FILTERS.find(f => f.id === skillsParam)?.id ?? "all";
+  const [announce, setAnnounce] = useState("");
   const [hover, setHover] = useState<number | null>(null); // mouse or pen only
-  const [focus, setFocus] = useState<{ i: number; visible: boolean } | null>(null);
+  const [focus, setFocus] = useState<{ i: number; visible: boolean } | null>(
+    null
+  );
   const [open, setOpen] = useState<number | null>(null);
   const [pulse, setPulse] = useState<{ i: number; n: number } | null>(null);
   const [entrance] = useState(() => !enteredThisLoad);
   // Phones and touch screens get the flat board: the 3D chunk (three.js) is
   // never requested there, since Keyboard3D only renders when !flat
-  const handheld = useMediaQuery('(max-width: 639.98px), (pointer: coarse)');
-  const flat = reduced || handheld || stage === '2d';
+  const handheld = useMediaQuery("(max-width: 639.98px), (pointer: coarse)");
+  const flat = reduced || handheld || stage === "2d";
   // Tooltip: the hovered or keyboard-focused key, unless Escape dismissed it
   // (WCAG 1.4.13); it comes back when hover or focus moves to another key
   const [dismissed, setDismissed] = useState<number | null>(null);
-  const shown = open === null ? hover ?? (focus?.visible ? focus.i : null) : null;
+  const shown =
+    open === null ? (hover ?? (focus?.visible ? focus.i : null)) : null;
   const tip = shown === dismissed ? null : shown;
 
   // Load the 3D board when the section nears the viewport (loading, not a scroll effect)
   useEffect(() => {
-    if (flat || stage !== 'wait') return;
+    if (flat || stage !== "wait") return;
     const el = boardRef.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting) return;
-      io.disconnect();
-      setStage(hasWebGL() ? '3d' : '2d');
-    }, { rootMargin: '600px 0px' });
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        io.disconnect();
+        setStage(hasWebGL() ? "3d" : "2d");
+      },
+      { rootMargin: "600px 0px" }
+    );
     io.observe(el);
     return () => io.disconnect();
   }, [flat, stage]);
 
   // Where a key is on screen: projected from the 3D board, or the flat button's box
-  const locate = useCallback((i: number): KeyRect | null => {
-    if (!flat) return locatorRef.current?.(i) ?? null;
-    const r = btnRefs.current[i]?.getBoundingClientRect();
-    return r ? { x: r.left + r.width / 2, top: r.top, face: r.top + r.height / 2, bottom: r.bottom, w: r.width } : null;
-  }, [flat]);
+  const locate = useCallback(
+    (i: number): KeyRect | null => {
+      if (!flat) return locatorRef.current?.(i) ?? null;
+      const r = btnRefs.current[i]?.getBoundingClientRect();
+      return r
+        ? {
+            x: r.left + r.width / 2,
+            top: r.top,
+            face: r.top + r.height / 2,
+            bottom: r.bottom,
+            w: r.width,
+          }
+        : null;
+    },
+    [flat]
+  );
 
   // Latest values for the per-frame callbacks below
   const live = useRef({ tip, locate });
@@ -335,35 +472,48 @@ export default function SkillKeyboard({ listId, legend }: { listId: string; lege
     const vh = window.innerHeight;
     const [w, hgt] = [el.offsetWidth, el.offsetHeight];
     const left = Math.max(EDGE, Math.min(vw - EDGE - w, r.x - w / 2));
-    const [above, below, floor] = [r.top - GAP - hgt, r.bottom + GAP, Math.max(EDGE, b.top)];
-    const top = above >= floor ? above : below + hgt <= vh - DOCK ? below : Math.max(floor, vh - DOCK - hgt);
+    const [above, below, floor] = [
+      r.top - GAP - hgt,
+      r.bottom + GAP,
+      Math.max(EDGE, b.top),
+    ];
+    const top =
+      above >= floor
+        ? above
+        : below + hgt <= vh - DOCK
+          ? below
+          : Math.max(floor, vh - DOCK - hgt);
     el.style.transform = `translate(${Math.round(left - b.left)}px, ${Math.round(top - b.top)}px)`;
-    el.style.visibility = 'visible';
+    el.style.visibility = "visible";
   }, []);
   useLayoutEffect(placeTip, [tip, placeTip]);
   useEffect(() => setDismissed(null), [shown]);
   useEffect(() => {
     if (tip === null) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setDismissed(tip);
+      if (e.key === "Escape") setDismissed(tip);
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [tip]);
 
   const openKey = (i: number) => {
     // Focus the key's control first, so the window hands focus back to it on close
     btnRefs.current[i]?.focus({ preventScroll: true });
     setOpen(i);
-    play('click');
+    play("click");
   };
   const closeWindow = useCallback(() => setOpen(null), []);
 
   const chooseFilter = (f: Filter) => {
-    setSkillsParam(f === 'all' ? null : f);
+    setSkillsParam(f === "all" ? null : f);
     const n = KEYS.filter(k => inFilter(k, f)).length;
     const label = FILTERS.find(x => x.id === f)?.label;
-    setAnnounce(f === 'all' ? `All ${KEYS.length} skills shown` : `${n} of ${KEYS.length} skills highlighted: ${label}`);
+    setAnnounce(
+      f === "all"
+        ? `All ${KEYS.length} skills shown`
+        : `${n} of ${KEYS.length} skills highlighted: ${label}`
+    );
   };
 
   const handlers: KeyHandlers = {
@@ -383,7 +533,7 @@ export default function SkillKeyboard({ listId, legend }: { listId: string; lege
         href={`#${listId}`}
         onClick={e => {
           e.preventDefault();
-          document.getElementById(listId)?.querySelector('summary')?.focus();
+          document.getElementById(listId)?.querySelector("summary")?.focus();
         }}
         className="btn btn-primary sr-only focus:not-sr-only focus:absolute focus:left-0 focus:top-0 focus:z-40"
       >
@@ -391,7 +541,9 @@ export default function SkillKeyboard({ listId, legend }: { listId: string; lege
       </a>
       <Filters value={filter} onChange={chooseFilter} />
       {legend}
-      <p className="sr-only" aria-live="polite">{announce}</p>
+      <p className="sr-only" aria-live="polite">
+        {announce}
+      </p>
 
       <div ref={boardRef} className="relative pt-2">
         {flat ? (
@@ -419,10 +571,10 @@ export default function SkillKeyboard({ listId, legend }: { listId: string; lege
                 under the legend by that much (the legend stays on top), and
                 lets the window's status bar come up by 3% below it */}
             <div
-              className={`relative aspect-[2/3] sm:aspect-[2/1] sm:-mt-[5.2%] sm:-mb-[3%] rounded-[10px] outline-offset-4 outline-[color:var(--ink)] ${focus?.visible ? 'outline-3' : ''}`}
+              className={`relative aspect-[2/3] sm:aspect-[2/1] sm:-mt-[5.2%] sm:-mb-[3%] rounded-[10px] outline-offset-4 outline-[color:var(--ink)] ${focus?.visible ? "outline-3" : ""}`}
             >
-              {stage === '3d' && (
-                <Boundary onError={() => setStage('2d')}>
+              {stage === "3d" && (
+                <Boundary onError={() => setStage("2d")}>
                   <Suspense fallback={null}>
                     <Keyboard3D
                       cols={cols}
@@ -446,10 +598,19 @@ export default function SkillKeyboard({ listId, legend }: { listId: string; lege
           </>
         )}
 
-        {tip !== null && <KeyTip key={tip} index={tip} tipRef={tipRef} reduced={flat} />}
+        {tip !== null && (
+          <KeyTip key={tip} index={tip} tipRef={tipRef} reduced={flat} />
+        )}
         <AnimatePresence>
           {open !== null && (
-            <SkillWindow key={open} index={open} reduced={flat} boardRef={boardRef} locate={locate} onClose={closeWindow} />
+            <SkillWindow
+              key={open}
+              index={open}
+              reduced={flat}
+              boardRef={boardRef}
+              locate={locate}
+              onClose={closeWindow}
+            />
           )}
         </AnimatePresence>
       </div>

@@ -3,28 +3,33 @@
 // Order = Home tile order; the case-study "Next project" chain follows it.
 
 // ── Card images (shown in grid) ───────────────────────────────────────────
-import silverLinkImg    from '@assets/tile_silverlink.webp';
-import scsImg           from '@assets/tile_scs.webp';
-import fireSafetyImg    from '@assets/tile_firesafety.webp';
-import uwbImg           from '@assets/tile_uwb.webp';
-import uatImg           from '@assets/tile_uat.webp';
-import aiFinanceImg     from '@assets/tile_ai_finance.webp';
+import silverLinkImg from "@assets/tile_silverlink.webp";
+import scsImg from "@assets/tile_scs.webp";
+import fireSafetyImg from "@assets/tile_firesafety.webp";
+import uwbImg from "@assets/tile_uwb.webp";
+import uatImg from "@assets/tile_uat.webp";
+import aiFinanceImg from "@assets/tile_ai_finance.webp";
 
-import type { ImageSource } from '@/lib/images';
-import type { ImageCrop } from '@/utils/PixelationManager';
+import type { ImageSource } from "@/lib/images";
+import type { ImageCrop } from "@/utils/PixelationManager";
 
 // GreenLoop's tile as WebP 1x/2x (asset-work/webp-manifest.md); the canvas picks one
 const GREENLOOP_SET: ImageSource[] = [
-  { src: '/assets/tiles/greenloop_hero.webp', w: 525 },
-  { src: '/assets/tiles/greenloop_hero@2x.webp', w: 1050 },
+  { src: "/assets/tiles/greenloop_hero.webp", w: 525 },
+  { src: "/assets/tiles/greenloop_hero@2x.webp", w: 1050 },
 ];
 
 // Secondary images to preload on hover: the case pages' 1x WebP screenshots
 const caseShot = (path: string) => `/assets/case/${path}.webp`;
 
-
 /** Route segment of a case-study page: /projects/{slug} */
-export type CaseSlug = 'silverlink' | 'scs' | 'ai-finance' | 'uwb' | 'uat' | 'firesafety';
+export type CaseSlug =
+  | "silverlink"
+  | "scs"
+  | "ai-finance"
+  | "uwb"
+  | "uat"
+  | "firesafety";
 
 export type Project = {
   num: number;
@@ -63,13 +68,13 @@ export type Project = {
 
 // The three featured tiles share a row from lg (3 x 2 of 6, then 3 x 4 of 12);
 // the other four sit two to a row at lg and four to a row from xl
-const FEATURED_SPAN = 'lg:col-span-2 xl:col-span-4';
+const FEATURED_SPAN = "lg:col-span-2 xl:col-span-4";
 
 export const PROJECTS: Project[] = [
   {
     num: 1,
     name: "SilverLink SG",
-    slug: 'silverlink',
+    slug: "silverlink",
     description:
       "Connects seniors and youth through skill-sharing and live events, built to block double-bookings.",
     facts: ["8-node cluster", "4 services"],
@@ -81,14 +86,17 @@ export const PROJECTS: Project[] = [
     tags: ["React", "gRPC", "K8s", "PostgreSQL"],
     link: "/projects/silverlink",
     span: FEATURED_SPAN,
-    preloadImages: [caseShot('silverlink/silverlink_p21_img0'), caseShot('silverlink/silverlink_p22_img0')],
+    preloadImages: [
+      caseShot("silverlink/silverlink_p21_img0"),
+      caseShot("silverlink/silverlink_p22_img0"),
+    ],
     featured: true,
-    sfx: 'Booked!',
+    sfx: "Booked!",
   },
   {
     num: 2,
     name: "SCS Awareness Platform",
-    slug: 'scs',
+    slug: "scs",
     description:
       "Teaches cancer awareness through a branching story at Singapore Cancer Society booths.",
     facts: ["4 languages", "4 question types"],
@@ -100,13 +108,13 @@ export const PROJECTS: Project[] = [
     tags: ["React 19", "TypeScript", "Supabase", "Vercel"],
     link: "/projects/scs",
     span: FEATURED_SPAN,
-    preloadImages: [caseShot('scs/scs_p71_img1'), caseShot('scs/scs_p72_img0')],
+    preloadImages: [caseShot("scs/scs_p71_img1"), caseShot("scs/scs_p72_img0")],
     featured: true,
   },
   {
     num: 4,
     name: "UWB Indoor Localization",
-    slug: 'uwb',
+    slug: "uwb",
     description:
       "Tells clear UWB signals from blocked (NLOS) ones with an SVM-RBF model.",
     facts: ["89.61% accuracy", "0.9612 AUC", "41,996 samples"],
@@ -117,13 +125,16 @@ export const PROJECTS: Project[] = [
     link: "/projects/uwb",
     // Wide at sm so the 2-column grid has no orphan
     span: `sm:col-span-2 ${FEATURED_SPAN}`,
-    preloadImages: [caseShot('uwb/da_p39_img2'), '/assets/case/uwb/tree-depth-desktop@2x.webp'],
+    preloadImages: [
+      caseShot("uwb/da_p39_img2"),
+      "/assets/case/uwb/tree-depth-desktop@2x.webp",
+    ],
     featured: true,
   },
   {
     num: 3,
     name: "AI Finance Insights Engine",
-    slug: 'ai-finance',
+    slug: "ai-finance",
     description:
       "Pulls market data into one Power BI-ready warehouse; NLP flags supply-chain risk.",
     facts: ["5 data sources", "star schema", "100% Pytest coverage"],
@@ -132,13 +143,13 @@ export const PROJECTS: Project[] = [
     image: aiFinanceImg,
     tags: ["Python", "Pandas", "ETL", "NLP", "Power BI"],
     link: "/projects/ai-finance",
-    span: 'lg:col-span-3',
+    span: "lg:col-span-3",
     preloadImages: [],
   },
   {
     num: 5,
     name: "UAT Testing Dashboard",
-    slug: 'uat',
+    slug: "uat",
     description:
       "Links each failed test to its defect to show what blocks go-live.",
     facts: ["25 sample defects", "8 modules", "4 roles"],
@@ -149,13 +160,13 @@ export const PROJECTS: Project[] = [
     crop: { x: 0.65, y: 0, zoom: 1.4 },
     tags: ["React 18", "Node.js", "Express", "SQLite"],
     link: "/projects/uat",
-    span: 'lg:col-span-3',
+    span: "lg:col-span-3",
     preloadImages: [],
   },
   {
     num: 6,
     name: "Fire Safety Drill Companion",
-    slug: 'firesafety',
+    slug: "firesafety",
     description:
       "Lets HDB residents rehearse fire evacuation in their own block with AR arrows.",
     facts: ["SUS 79/100", "~80% test coverage", "drill works offline"],
@@ -166,8 +177,11 @@ export const PROJECTS: Project[] = [
     crop: { x: 0.4, y: 0, zoom: 1.25 },
     tags: ["Kotlin", "ARCore", "TFLite", "Jetpack Compose"],
     link: "/projects/firesafety",
-    span: 'lg:col-span-3',
-    preloadImages: [caseShot('firesafety/firesafety_p29_img1'), caseShot('firesafety/firesafety_p29_img3')],
+    span: "lg:col-span-3",
+    preloadImages: [
+      caseShot("firesafety/firesafety_p29_img1"),
+      caseShot("firesafety/firesafety_p29_img3"),
+    ],
   },
   {
     num: 7,
@@ -182,7 +196,7 @@ export const PROJECTS: Project[] = [
     imageSet: GREENLOOP_SET,
     tags: ["NYP JumpStart", "Urban Farming"],
     link: "external",
-    span: 'lg:col-span-3',
+    span: "lg:col-span-3",
     externalUrl: "https://greenloopfarms.com/",
     // Links out, so there is no case page to preload
     preloadImages: [],
@@ -190,7 +204,9 @@ export const PROJECTS: Project[] = [
 ];
 
 /** Projects that have a case-study page, in Home tile order */
-const CASES = PROJECTS.filter((p): p is Project & { slug: CaseSlug } => p.slug !== undefined);
+const CASES = PROJECTS.filter(
+  (p): p is Project & { slug: CaseSlug } => p.slug !== undefined
+);
 
 export function getCase(slug: CaseSlug): Project & { slug: CaseSlug } {
   const project = CASES.find(p => p.slug === slug);

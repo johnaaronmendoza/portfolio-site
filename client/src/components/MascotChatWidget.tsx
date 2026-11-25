@@ -6,22 +6,24 @@
  * Answers come from the local knowledge base below; there is no backend.
  */
 
-import { useState, useRef, useEffect, useLayoutEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { useLocation } from 'wouter';
-import { hasFinePointer, scrollToSection } from '@/lib/utils';
-import { MASCOT, MASCOT_PX, preloadMascot } from '@/lib/mascot';
-import { motionTokens } from '@/lib/motion-tokens';
-import { WindowBar } from './Window';
-import PixelArt, { type PixelArtName } from './PixelArt';
-import { chipClass } from './Projects';
-import { SECTIONS } from './SectionNav';
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useLocation } from "wouter";
+import { hasFinePointer, scrollToSection } from "@/lib/utils";
+import { MASCOT, MASCOT_PX, preloadMascot } from "@/lib/mascot";
+import { motionTokens } from "@/lib/motion-tokens";
+import { WindowBar } from "./Window";
+import PixelArt, { type PixelArtName } from "./PixelArt";
+import { chipClass } from "./Projects";
+import { SECTIONS } from "./SectionNav";
 
-type SectionId = 'about' | 'experience' | 'projects' | 'skills' | 'footer';
-const SECTION_LABEL = Object.fromEntries(SECTIONS.map(s => [s.id, s.label])) as Record<SectionId, string>;
+type SectionId = "about" | "experience" | "projects" | "skills" | "footer";
+const SECTION_LABEL = Object.fromEntries(
+  SECTIONS.map(s => [s.id, s.label])
+) as Record<SectionId, string>;
 
-const PANEL_ID = 'chat-panel';
+const PANEL_ID = "chat-panel";
 
 const ABOUT =
   "I’m John Aaron, a Computing Science student at SIT × University of Glasgow. I build AI and data tools for the people who have to use them. Right now I’m building Desk Assist at LGA Telecom. My first role was at Sembcorp Solar, testing a CRM before it rolled out across the company.";
@@ -34,81 +36,256 @@ const ABOUT =
  */
 const KNOWLEDGE_BASE: [string, string, SectionId][] = [
   // Sembcorp / Experience
-  ['sembcorp', 'I interned as a Digitization Analyst at Sembcorp Solar Singapore (Oct 2020 – Jun 2021), working across a 240MWp+ solar portfolio. I led the company-wide rollout of the Momens CRM, hosted training sessions for 10+ stakeholders at a time, gathered UX feedback to take to the vendor, and designed and ran UAT before the CRM went live, tracking 50+ defects to resolution. I was awarded an Internship Distinction and earned a contract extension.', 'experience'],
-  ['experience', 'My experience: Service Desk Operations & AI Integration Intern at LGA Telecom (Aug 2026 – Present), where I handle Freshservice tickets and am building Desk Assist (in progress), an AI assistant for service desk agents. Before that, Digitization Analyst Intern at Sembcorp Solar Singapore (Oct 2020 – Jun 2021), where I rolled out Momens CRM across Projects, C&I, and SolarNova divisions.', 'experience'],
-  ['internship', 'I am currently interning at LGA Telecom (Aug 2026 – Present) in service desk operations and AI integration. Previously I interned at Sembcorp Solar Singapore as a Digitization Analyst, owning the Momens CRM rollout and its UAT.', 'experience'],
+  [
+    "sembcorp",
+    "I interned as a Digitization Analyst at Sembcorp Solar Singapore (Oct 2020 – Jun 2021), working across a 240MWp+ solar portfolio. I led the company-wide rollout of the Momens CRM, hosted training sessions for 10+ stakeholders at a time, gathered UX feedback to take to the vendor, and designed and ran UAT before the CRM went live, tracking 50+ defects to resolution. I was awarded an Internship Distinction and earned a contract extension.",
+    "experience",
+  ],
+  [
+    "experience",
+    "My experience: Service Desk Operations & AI Integration Intern at LGA Telecom (Aug 2026 – Present), where I handle Freshservice tickets and am building Desk Assist (in progress), an AI assistant for service desk agents. Before that, Digitization Analyst Intern at Sembcorp Solar Singapore (Oct 2020 – Jun 2021), where I rolled out Momens CRM across Projects, C&I, and SolarNova divisions.",
+    "experience",
+  ],
+  [
+    "internship",
+    "I am currently interning at LGA Telecom (Aug 2026 – Present) in service desk operations and AI integration. Previously I interned at Sembcorp Solar Singapore as a Digitization Analyst, owning the Momens CRM rollout and its UAT.",
+    "experience",
+  ],
   // LGA Telecom
-  ['lga', 'I am a Service Desk Operations & AI Integration Intern at LGA Telecom (Aug 2026 – Present). I handle Level 1 tickets in Freshservice and support Microsoft 365 customers. I am building Desk Assist (in progress), a Chrome extension that reads a ticket, pulls relevant Knowledge Base guidance and drafts a reply for the agent to review. I also set up Freshservice closure and escalation automations that cut manual agent actions by 40%, Microsoft Teams escalation alerts that cut incident resolution time by 15 minutes, and an automated weekly PagerDuty incident report (Google Apps Script) that saves 4 hours of manual reporting a week.', 'experience'],
-  ['desk assist', 'Desk Assist is an AI assistant for service desk agents that I am building at LGA Telecom; it is still in progress. It is a Manifest V3 Chrome extension: the agent clicks Analyse conversation, it reads the ticket thread, retrieves Knowledge Base guidance and proposes a draft reply. The agent always reviews before anything is sent. Security is designed in: least-privilege permissions, no remotely hosted code, and AI calls routed through a company-controlled backend.', 'experience'],
-  ['momens', 'Momens is a project management CRM used at Sembcorp Solar. I led its company-wide rollout, trained stakeholders across divisions, and acted as a liaison between users and the vendor to implement UI enhancements and fix bugs.', 'experience'],
+  [
+    "lga",
+    "I am a Service Desk Operations & AI Integration Intern at LGA Telecom (Aug 2026 – Present). I handle Level 1 tickets in Freshservice and support Microsoft 365 customers. I am building Desk Assist (in progress), a Chrome extension that reads a ticket, pulls relevant Knowledge Base guidance and drafts a reply for the agent to review. I also set up Freshservice closure and escalation automations that cut manual agent actions by 40%, Microsoft Teams escalation alerts that cut incident resolution time by 15 minutes, and an automated weekly PagerDuty incident report (Google Apps Script) that saves 4 hours of manual reporting a week.",
+    "experience",
+  ],
+  [
+    "desk assist",
+    "Desk Assist is an AI assistant for service desk agents that I am building at LGA Telecom; it is still in progress. It is a Manifest V3 Chrome extension: the agent clicks Analyse conversation, it reads the ticket thread, retrieves Knowledge Base guidance and proposes a draft reply. The agent always reviews before anything is sent. Security is designed in: least-privilege permissions, no remotely hosted code, and AI calls routed through a company-controlled backend.",
+    "experience",
+  ],
+  [
+    "momens",
+    "Momens is a project management CRM used at Sembcorp Solar. I led its company-wide rollout, trained stakeholders across divisions, and acted as a liaison between users and the vendor to implement UI enhancements and fix bugs.",
+    "experience",
+  ],
 
   // SilverLink
-  ['silverlink', 'SilverLink SG is a six-person team project (Group 20, SIT × University of Glasgow): a cloud-native platform that connects seniors and youth through skill-sharing, micro-volunteering, and community events. Tech: React, Next.js, Node.js, gRPC (4 microservices), Docker, Kubernetes, Neon PostgreSQL (serverless), Cloudflare Tunnel, Keycloak JWT auth, and Prisma ORM with 8 isolated schemas. Features include real-time WebRTC livestreaming, Socket.IO chat, and an EMA load forecast that recommends replicas per service.', 'projects'],
-  ['grpc', 'SilverLink SG uses gRPC for all internal microservice communication. The API Gateway translates REST requests from the frontend to gRPC calls across 4 services: Event (50051), Booking (50052), Volunteer (50053), and User (50054).', 'projects'],
-  ['microservice', 'SilverLink uses 4 gRPC microservices: Event Service (event creation, seat availability), Booking Service (idempotent bookings, cancellations), Volunteer Service (listings, applications, assignments), and User Service (profiles, ratings, verification tiers).', 'projects'],
+  [
+    "silverlink",
+    "SilverLink SG is a six-person team project (Group 20, SIT × University of Glasgow): a cloud-native platform that connects seniors and youth through skill-sharing, micro-volunteering, and community events. Tech: React, Next.js, Node.js, gRPC (4 microservices), Docker, Kubernetes, Neon PostgreSQL (serverless), Cloudflare Tunnel, Keycloak JWT auth, and Prisma ORM with 8 isolated schemas. Features include real-time WebRTC livestreaming, Socket.IO chat, and an EMA load forecast that recommends replicas per service.",
+    "projects",
+  ],
+  [
+    "grpc",
+    "SilverLink SG uses gRPC for all internal microservice communication. The API Gateway translates REST requests from the frontend to gRPC calls across 4 services: Event (50051), Booking (50052), Volunteer (50053), and User (50054).",
+    "projects",
+  ],
+  [
+    "microservice",
+    "SilverLink uses 4 gRPC microservices: Event Service (event creation, seat availability), Booking Service (idempotent bookings, cancellations), Volunteer Service (listings, applications, assignments), and User Service (profiles, ratings, verification tiers).",
+    "projects",
+  ],
 
   // Singapore Cancer Society App
-  ['cancer', 'The Singapore Cancer Society Awareness Platform is an interactive visual novel engine I co-built for SCS outreach booths (SIT + UofG, Group D2, 7 Agile sprints). My contributions: Visual Novel PanelRenderer, multi-sprite character rendering, text animation, button sound effects, haptic feedback, and the Question Bank service. Tech: React 19, TypeScript, Vite, TailwindCSS, Supabase (PostgreSQL + Auth + Storage), deployed on Vercel.', 'projects'],
-  ['scs', 'The SCS platform is a browser-based visual novel that runs on tablets at community booths. It has 4 question types, multilingual support (EN/CN/Malay/Tamil), a leaderboard, PDPA consent, and a full no-code Admin Panel for SCS staff to create and manage stories without technical expertise.', 'projects'],
-  ['visual novel', 'I built the core PanelRenderer (visual novel engine) for the SCS project. It handles sequential and branching panel navigation, character sprites with multiple expressions, animated text, and configurable correct/incorrect feedback modals.', 'projects'],
-  ['supabase', 'In the SCS project, Supabase handles all backend needs: PostgreSQL for story/panel data, Supabase Auth for admin accounts with email verification, RLS (Row-Level Security) for role-based access, and Supabase Storage for character sprites and backgrounds.', 'projects'],
+  [
+    "cancer",
+    "The Singapore Cancer Society Awareness Platform is an interactive visual novel engine I co-built for SCS outreach booths (SIT + UofG, Group D2, 7 Agile sprints). My contributions: Visual Novel PanelRenderer, multi-sprite character rendering, text animation, button sound effects, haptic feedback, and the Question Bank service. Tech: React 19, TypeScript, Vite, TailwindCSS, Supabase (PostgreSQL + Auth + Storage), deployed on Vercel.",
+    "projects",
+  ],
+  [
+    "scs",
+    "The SCS platform is a browser-based visual novel that runs on tablets at community booths. It has 4 question types, multilingual support (EN/CN/Malay/Tamil), a leaderboard, PDPA consent, and a full no-code Admin Panel for SCS staff to create and manage stories without technical expertise.",
+    "projects",
+  ],
+  [
+    "visual novel",
+    "I built the core PanelRenderer (visual novel engine) for the SCS project. It handles sequential and branching panel navigation, character sprites with multiple expressions, animated text, and configurable correct/incorrect feedback modals.",
+    "projects",
+  ],
+  [
+    "supabase",
+    "In the SCS project, Supabase handles all backend needs: PostgreSQL for story/panel data, Supabase Auth for admin accounts with email verification, RLS (Row-Level Security) for role-based access, and Supabase Storage for character sprites and backgrounds.",
+    "projects",
+  ],
 
   // GreenLoopFarms
-  ['greenloop*', 'GreenLoopFarms is a Singapore hydroponic urban farm growing pesticide-free vegetables and microgreens. I contributed to the early idea and business strategy, and helped co-prepare the pitch deck that won a SGD 10,000 NYP JumpStart Grant. Partners include FURA (World’s 50 Best Discovery), East Bistro, NIE, NUS, and NYP. Visit greenloopfarms.com!', 'projects'],
-  ['grant', 'GreenLoopFarms won a SGD 10,000 NYP JumpStart Grant, a startup grant from Nanyang Polytechnic. We pitched it to an industry investor panel.', 'projects'],
+  [
+    "greenloop*",
+    "GreenLoopFarms is a Singapore hydroponic urban farm growing pesticide-free vegetables and microgreens. I contributed to the early idea and business strategy, and helped co-prepare the pitch deck that won a SGD 10,000 NYP JumpStart Grant. Partners include FURA (World’s 50 Best Discovery), East Bistro, NIE, NUS, and NYP. Visit greenloopfarms.com!",
+    "projects",
+  ],
+  [
+    "grant",
+    "GreenLoopFarms won a SGD 10,000 NYP JumpStart Grant, a startup grant from Nanyang Polytechnic. We pitched it to an industry investor panel.",
+    "projects",
+  ],
 
   // Fire Safety
-  ['fire*', 'The Fire Safety Drill Companion is a native Android app our team built for HDB residents to rehearse fire evacuation on demand. I built the algorithms and AR: Dijkstra routing to the nearest exit, re-planning around blocked stairwells; ARCore corridor rendering and waypoints; and tuned step-based positioning (PDR) from accelerometer and gyroscope. Tech: Kotlin, Jetpack Compose, MVVM+Hilt, ARCore, TFLite, Firebase FCM. Stats: 10,984 lines of Kotlin, ~80% test coverage, SUS score 79/100.', 'projects'],
-  ['android', 'The Fire Safety Drill Companion is a native Android app with AR navigation (ARCore), on-device ML (TFLite extinguisher classification), sensor-fusion PDR (Weinberg stride estimation), and Firebase push notifications. Routing, ML and data all run on the phone, so drills work offline.', 'projects'],
-  ['arcore', 'In the Fire Safety project, I integrated ARCore for real-time corridor navigation. Breadcrumb arrows are overlaid on the live camera feed, guiding residents along the Dijkstra-computed evacuation route. I wrote ArCoreSessionManager, ArCoreRenderer, and ArWaypointConverter.', 'projects'],
-  ['dijkstra', 'I implemented Dijkstra’s shortest-path algorithm for the Fire Safety app, applied to a weighted floor plan graph with a blockedNodes param for dynamic stairwell exclusion. findPathToNearestExit() runs against all exit nodes and picks the minimum-cost route. Thread-safe with @Synchronized.', 'projects'],
+  [
+    "fire*",
+    "The Fire Safety Drill Companion is a native Android app our team built for HDB residents to rehearse fire evacuation on demand. I built the algorithms and AR: Dijkstra routing to the nearest exit, re-planning around blocked stairwells; ARCore corridor rendering and waypoints; and tuned step-based positioning (PDR) from accelerometer and gyroscope. Tech: Kotlin, Jetpack Compose, MVVM+Hilt, ARCore, TFLite, Firebase FCM. Stats: 10,984 lines of Kotlin, ~80% test coverage, SUS score 79/100.",
+    "projects",
+  ],
+  [
+    "android",
+    "The Fire Safety Drill Companion is a native Android app with AR navigation (ARCore), on-device ML (TFLite extinguisher classification), sensor-fusion PDR (Weinberg stride estimation), and Firebase push notifications. Routing, ML and data all run on the phone, so drills work offline.",
+    "projects",
+  ],
+  [
+    "arcore",
+    "In the Fire Safety project, I integrated ARCore for real-time corridor navigation. Breadcrumb arrows are overlaid on the live camera feed, guiding residents along the Dijkstra-computed evacuation route. I wrote ArCoreSessionManager, ArCoreRenderer, and ArWaypointConverter.",
+    "projects",
+  ],
+  [
+    "dijkstra",
+    "I implemented Dijkstra’s shortest-path algorithm for the Fire Safety app, applied to a weighted floor plan graph with a blockedNodes param for dynamic stairwell exclusion. findPathToNearestExit() runs against all exit nodes and picks the minimum-cost route. Thread-safe with @Synchronized.",
+    "projects",
+  ],
 
   // UAT Testing Dashboard
-  ['uat', 'The UAT Testing Dashboard is a full-stack defect tracker and UAT management tool, a course project built around a hospital appointment system UAT scenario. It tracks defects end-to-end (Open → In Progress → Resolved → Closed), links failed test cases directly to open defects, and charts defects by severity, module and status, plus a monthly trend. Role-based access for PM, QA Lead, Tester, and Developer. CSV export for defect registers and test logs. Tech: React 18, Node.js, Express, SQLite, Recharts.', 'projects'],
-  ['defect', 'In the UAT Testing Dashboard, defects go through a full lifecycle: Open → In Progress → Resolved → Closed. Each defect links directly to the test cases that triggered it, creating an auditable chain from failure to fix. Severity levels (Critical, High, Medium, Low) feed into the analytics dashboard.', 'projects'],
+  [
+    "uat",
+    "The UAT Testing Dashboard is a full-stack defect tracker and UAT management tool, a course project built around a hospital appointment system UAT scenario. It tracks defects end-to-end (Open → In Progress → Resolved → Closed), links failed test cases directly to open defects, and charts defects by severity, module and status, plus a monthly trend. Role-based access for PM, QA Lead, Tester, and Developer. CSV export for defect registers and test logs. Tech: React 18, Node.js, Express, SQLite, Recharts.",
+    "projects",
+  ],
+  [
+    "defect",
+    "In the UAT Testing Dashboard, defects go through a full lifecycle: Open → In Progress → Resolved → Closed. Each defect links directly to the test cases that triggered it, creating an auditable chain from failure to fix. Severity levels (Critical, High, Medium, Low) feed into the analytics dashboard.",
+    "projects",
+  ],
 
   // AI Finance Insights Engine
-  ['finance', 'The AI Finance Insights Engine is an automated ETL pipeline that ingests 5 global market data sources: Brent crude, USD/SGD FX, S&P 500, logistics stocks, and geopolitical news. It computes rolling volatility, moving averages, and cross-asset correlations. An AI NLP engine classifies headlines across 9 sectors, scores sentiment, and flags supply chain risks. Output is a Star Schema data warehouse ready for Power BI. 100% Pytest coverage on all extraction and transformation logic.', 'projects'],
-  ['etl', 'The AI Finance Insights ETL pipeline has 5 stages: Extract → Validate (schema + row parity) → Transform (rolling metrics) → Validate again → Load to SQLite. Two validation gates prevent corrupt data from reaching the database at any stage.', 'projects'],
-  ['pipeline', 'The AI Finance pipeline ingests Brent crude, FX rates, S&P 500, logistics stocks, and geopolitical news. After transformation it produces a Star Schema data warehouse (Fact + Dim tables) consumed directly by Power BI for shipping and market analytics.', 'projects'],
-  ['nlp', 'The AI NLP engine in the Finance Insights project classifies market headlines across 9 sectors, generates sentiment scores, flags supply chain risks, and auto-generates daily executive briefs. Built with an LLM API integration path.', 'projects'],
+  [
+    "finance",
+    "The AI Finance Insights Engine is an automated ETL pipeline that ingests 5 global market data sources: Brent crude, USD/SGD FX, S&P 500, logistics stocks, and geopolitical news. It computes rolling volatility, moving averages, and cross-asset correlations. An AI NLP engine classifies headlines across 9 sectors, scores sentiment, and flags supply chain risks. Output is a Star Schema data warehouse ready for Power BI. 100% Pytest coverage on all extraction and transformation logic.",
+    "projects",
+  ],
+  [
+    "etl",
+    "The AI Finance Insights ETL pipeline has 5 stages: Extract → Validate (schema + row parity) → Transform (rolling metrics) → Validate again → Load to SQLite. Two validation gates prevent corrupt data from reaching the database at any stage.",
+    "projects",
+  ],
+  [
+    "pipeline",
+    "The AI Finance pipeline ingests Brent crude, FX rates, S&P 500, logistics stocks, and geopolitical news. After transformation it produces a Star Schema data warehouse (Fact + Dim tables) consumed directly by Power BI for shipping and market analytics.",
+    "projects",
+  ],
+  [
+    "nlp",
+    "The AI NLP engine in the Finance Insights project classifies market headlines across 9 sectors, generates sentiment scores, flags supply chain risks, and auto-generates daily executive briefs. Built with an LLM API integration path.",
+    "projects",
+  ],
 
   // UWB / Data Analytics
-  ['uwb', 'The UWB Indoor Localization project (CSC3105 Data Analytics) classifies LOS/NLOS UWB signal paths using SVM-RBF (89.61% accuracy, 0.9612 ROC-AUC) vs Logistic Regression (85.75%, 0.9195 AUC). Dataset: 41,996 samples across 7 indoor environments. I worked on the data mining methodology: choosing the models, a stratified 80/20 split with the scaler fitted on training data only, and linear regression for range.', 'projects'],
-  ['machine learning', 'ML appears in two team projects: (1) UWB classification: SVM-RBF achieving 89.61% accuracy classifying indoor signal paths (I worked on the data mining methodology); (2) Fire Safety: on-device TFLite + YOLO for real-time fire extinguisher type classification without network dependency.', 'projects'],
-  ['data', 'Data analytics: UWB Indoor Localization (CSC3105, a team project; I worked on the data mining methodology): an ML pipeline with PCA on 1,016 CIR dimensions, SVM-RBF (89.61% accuracy), logistic regression baseline (85.75%), and linear regression for dual-path range estimation (RMSE 1.757 m). 41,996 samples, 7 environments, perfectly balanced 50/50 LOS/NLOS.', 'projects'],
+  [
+    "uwb",
+    "The UWB Indoor Localization project (CSC3105 Data Analytics) classifies LOS/NLOS UWB signal paths using SVM-RBF (89.61% accuracy, 0.9612 ROC-AUC) vs Logistic Regression (85.75%, 0.9195 AUC). Dataset: 41,996 samples across 7 indoor environments. I worked on the data mining methodology: choosing the models, a stratified 80/20 split with the scaler fitted on training data only, and linear regression for range.",
+    "projects",
+  ],
+  [
+    "machine learning",
+    "ML appears in two team projects: (1) UWB classification: SVM-RBF achieving 89.61% accuracy classifying indoor signal paths (I worked on the data mining methodology); (2) Fire Safety: on-device TFLite + YOLO for real-time fire extinguisher type classification without network dependency.",
+    "projects",
+  ],
+  [
+    "data",
+    "Data analytics: UWB Indoor Localization (CSC3105, a team project; I worked on the data mining methodology): an ML pipeline with PCA on 1,016 CIR dimensions, SVM-RBF (89.61% accuracy), logistic regression baseline (85.75%), and linear regression for dual-path range estimation (RMSE 1.757 m). 41,996 samples, 7 environments, perfectly balanced 50/50 LOS/NLOS.",
+    "projects",
+  ],
 
   // Projects overview
-  ['project', 'There are 6 projects on this site: (1) SilverLink SG: cloud-native gRPC microservices platform with WebRTC; (2) SCS Awareness Platform: visual novel engine with React 19 + Supabase; (3) Fire Safety Drill Companion: Android AR + ML + Dijkstra; (4) UWB Indoor Localization: SVM-RBF ML pipeline at 89.61% accuracy; (5) UAT Testing Dashboard: defect tracker for a hospital appointment system UAT scenario (course project); (6) AI Finance Insights Engine: ETL pipeline + NLP engine + Power BI Star Schema. I also co-pitched GreenLoopFarms, which won a SGD 10,000 NYP JumpStart Grant.', 'projects'],
+  [
+    "project",
+    "There are 6 projects on this site: (1) SilverLink SG: cloud-native gRPC microservices platform with WebRTC; (2) SCS Awareness Platform: visual novel engine with React 19 + Supabase; (3) Fire Safety Drill Companion: Android AR + ML + Dijkstra; (4) UWB Indoor Localization: SVM-RBF ML pipeline at 89.61% accuracy; (5) UAT Testing Dashboard: defect tracker for a hospital appointment system UAT scenario (course project); (6) AI Finance Insights Engine: ETL pipeline + NLP engine + Power BI Star Schema. I also co-pitched GreenLoopFarms, which won a SGD 10,000 NYP JumpStart Grant.",
+    "projects",
+  ],
 
   // Skills (mirrors the Skills section)
-  ['skill', 'AI & LLMs: prompt engineering, RAG, LLM-assisted workflows, AI guardrails and data-leakage prevention, human-in-the-loop design. Data & ML: Python, Pandas, NumPy, scikit-learn, SQL, ETL pipelines, Power BI, TFLite. Backend & cloud: Node.js, Express, gRPC, PostgreSQL, Supabase, Prisma ORM, Docker, Kubernetes, Git. Frontend & mobile: TypeScript, JavaScript, React, Next.js, Tailwind CSS, Kotlin, Jetpack Compose, ARCore. I also work with GitHub Actions, Cloudflare Tunnel, JIRA and Confluence.', 'skills'],
-  ['tech', 'My stack: React and TypeScript on the frontend; Node.js, Express, gRPC and Prisma ORM on the backend; Docker and Kubernetes for containers; PostgreSQL and Supabase for data; Python, Pandas and scikit-learn for data and ML. I also use GitHub Actions and Cloudflare Tunnel.', 'skills'],
-  ['frontend', 'Frontend: React, Next.js, TypeScript and Tailwind CSS. I built the core engine and media systems of the SCS Awareness Platform in React and TypeScript. SilverLink SG, a six-person team project, also has a React and Next.js front end.', 'skills'],
-  ['backend', 'Backend: Node.js, Express, gRPC microservices, Prisma ORM and Supabase. SilverLink SG’s 4 gRPC services use optimistic concurrency control and idempotency keys to prevent double-bookings.', 'skills'],
-  ['docker', 'SilverLink SG, a six-person team project, uses Docker Compose for local development and Kubernetes for orchestration. Every SilverLink microservice runs in its own isolated container.', 'projects'],
-  ['kubernetes', 'In SilverLink SG, Kubernetes handles container orchestration on an 8-node cluster. An EMA load forecast recommends replicas per service.', 'projects'],
+  [
+    "skill",
+    "AI & LLMs: prompt engineering, RAG, LLM-assisted workflows, AI guardrails and data-leakage prevention, human-in-the-loop design. Data & ML: Python, Pandas, NumPy, scikit-learn, SQL, ETL pipelines, Power BI, TFLite. Backend & cloud: Node.js, Express, gRPC, PostgreSQL, Supabase, Prisma ORM, Docker, Kubernetes, Git. Frontend & mobile: TypeScript, JavaScript, React, Next.js, Tailwind CSS, Kotlin, Jetpack Compose, ARCore. I also work with GitHub Actions, Cloudflare Tunnel, JIRA and Confluence.",
+    "skills",
+  ],
+  [
+    "tech",
+    "My stack: React and TypeScript on the frontend; Node.js, Express, gRPC and Prisma ORM on the backend; Docker and Kubernetes for containers; PostgreSQL and Supabase for data; Python, Pandas and scikit-learn for data and ML. I also use GitHub Actions and Cloudflare Tunnel.",
+    "skills",
+  ],
+  [
+    "frontend",
+    "Frontend: React, Next.js, TypeScript and Tailwind CSS. I built the core engine and media systems of the SCS Awareness Platform in React and TypeScript. SilverLink SG, a six-person team project, also has a React and Next.js front end.",
+    "skills",
+  ],
+  [
+    "backend",
+    "Backend: Node.js, Express, gRPC microservices, Prisma ORM and Supabase. SilverLink SG’s 4 gRPC services use optimistic concurrency control and idempotency keys to prevent double-bookings.",
+    "skills",
+  ],
+  [
+    "docker",
+    "SilverLink SG, a six-person team project, uses Docker Compose for local development and Kubernetes for orchestration. Every SilverLink microservice runs in its own isolated container.",
+    "projects",
+  ],
+  [
+    "kubernetes",
+    "In SilverLink SG, Kubernetes handles container orchestration on an 8-node cluster. An EMA load forecast recommends replicas per service.",
+    "projects",
+  ],
 
   // Background
-  ['graduat*', 'I graduate in April 2027 from Singapore Institute of Technology × University of Glasgow, with a BSc (Hons) in Computing Science.', 'about'],
-  ['background', 'I’m a Computing Science student at Singapore Institute of Technology (SIT) × University of Glasgow, with a foundation in Electrical Engineering from Nanyang Polytechnic. At Sembcorp Solar I led the Momens CRM rollout for a 240MWp+ portfolio; now I build AI and data tools.', 'about'],
-  ['education', 'BSc (Hons) Computing Science at Singapore Institute of Technology (SIT) × University of Glasgow, graduating April 2027. Before that: Diploma in Electrical Engineering with Eco-Design from Nanyang Polytechnic.', 'about'],
-  ['about', ABOUT, 'about'],
-  ['yourself', ABOUT, 'about'],
-  ['sit', 'I study at Singapore Institute of Technology (SIT) in partnership with the University of Glasgow. My course is Computing Science, and I graduate in April 2027.', 'about'],
-  ['nyp', 'I completed a Diploma in Electrical Engineering with Eco-Design at Nanyang Polytechnic (NYP) before joining SIT for my degree.', 'about'],
-  ['contact', 'You can reach me at johnaaronmb@gmail.com, or connect on LinkedIn at linkedin.com/in/john-branzuela. Open to AI, data and software graduate roles.', 'footer'],
-  ['email', 'Drop me an email at johnaaronmb@gmail.com.', 'footer'],
-  ['linkedin', 'Connect with me on LinkedIn: linkedin.com/in/john-branzuela', 'footer'],
+  [
+    "graduat*",
+    "I graduate in April 2027 from Singapore Institute of Technology × University of Glasgow, with a BSc (Hons) in Computing Science.",
+    "about",
+  ],
+  [
+    "background",
+    "I’m a Computing Science student at Singapore Institute of Technology (SIT) × University of Glasgow, with a foundation in Electrical Engineering from Nanyang Polytechnic. At Sembcorp Solar I led the Momens CRM rollout for a 240MWp+ portfolio; now I build AI and data tools.",
+    "about",
+  ],
+  [
+    "education",
+    "BSc (Hons) Computing Science at Singapore Institute of Technology (SIT) × University of Glasgow, graduating April 2027. Before that: Diploma in Electrical Engineering with Eco-Design from Nanyang Polytechnic.",
+    "about",
+  ],
+  ["about", ABOUT, "about"],
+  ["yourself", ABOUT, "about"],
+  [
+    "sit",
+    "I study at Singapore Institute of Technology (SIT) in partnership with the University of Glasgow. My course is Computing Science, and I graduate in April 2027.",
+    "about",
+  ],
+  [
+    "nyp",
+    "I completed a Diploma in Electrical Engineering with Eco-Design at Nanyang Polytechnic (NYP) before joining SIT for my degree.",
+    "about",
+  ],
+  [
+    "contact",
+    "You can reach me at johnaaronmb@gmail.com, or connect on LinkedIn at linkedin.com/in/john-branzuela. Open to AI, data and software graduate roles.",
+    "footer",
+  ],
+  ["email", "Drop me an email at johnaaronmb@gmail.com.", "footer"],
+  [
+    "linkedin",
+    "Connect with me on LinkedIn: linkedin.com/in/john-branzuela",
+    "footer",
+  ],
 ];
 
 function keywordPattern(key: string): RegExp {
-  const stem = key.endsWith('*');
-  const escaped = (stem ? key.slice(0, -1) : key).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp(stem ? `\\b${escaped}\\w*` : `\\b${escaped}s?\\b`, 'i');
+  const stem = key.endsWith("*");
+  const escaped = (stem ? key.slice(0, -1) : key).replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&"
+  );
+  return new RegExp(stem ? `\\b${escaped}\\w*` : `\\b${escaped}s?\\b`, "i");
 }
 
-const ANSWERS = KNOWLEDGE_BASE.map(([key, answer, section]) => ({ pattern: keywordPattern(key), answer, section }));
+const ANSWERS = KNOWLEDGE_BASE.map(([key, answer, section]) => ({
+  pattern: keywordPattern(key),
+  answer,
+  section,
+}));
 
 // Unknown questions get the topics inside the reply, shown only where the
 // topic keys are hidden (very short screens, e.g. 400% zoom; index.css)
@@ -116,37 +293,60 @@ const FALLBACK =
   "I don’t have an answer for that yet. Try one of these topics, or email johnaaronmb@gmail.com.";
 
 function findResponse(query: string): { answer: string; section?: SectionId } {
-  return ANSWERS.find(({ pattern }) => pattern.test(query)) ?? { answer: FALLBACK };
+  return (
+    ANSWERS.find(({ pattern }) => pattern.test(query)) ?? { answer: FALLBACK }
+  );
 }
 
 const QUICK_ACTIONS: { label: string; query: string; icon: PixelArtName }[] = [
-  { label: 'About me', query: 'Tell me about yourself', icon: 'icon-about' },
-  { label: 'Projects', query: 'Tell me about your projects', icon: 'icon-projects' },
-  { label: 'Experience', query: 'Tell me about your experience', icon: 'icon-experience' },
-  { label: 'Skills', query: 'What are your skills', icon: 'icon-skills' },
-  { label: 'Education', query: 'Tell me about your education', icon: 'chip-school' },
-  { label: 'Contact', query: 'How can I contact you', icon: 'icon-contact' },
+  { label: "About me", query: "Tell me about yourself", icon: "icon-about" },
+  {
+    label: "Projects",
+    query: "Tell me about your projects",
+    icon: "icon-projects",
+  },
+  {
+    label: "Experience",
+    query: "Tell me about your experience",
+    icon: "icon-experience",
+  },
+  { label: "Skills", query: "What are your skills", icon: "icon-skills" },
+  {
+    label: "Education",
+    query: "Tell me about your education",
+    icon: "chip-school",
+  },
+  { label: "Contact", query: "How can I contact you", icon: "icon-contact" },
 ];
 
 // Message times in the visitor's own locale and clock (12- or 24-hour)
-const TIME = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' });
+const TIME = new Intl.DateTimeFormat(undefined, {
+  hour: "numeric",
+  minute: "2-digit",
+});
 
 const MASCOT_HAPPY = MASCOT.happy;
 const MASCOT_WORRY = MASCOT.worry;
 
 // User: a blue "selected row", white text (4.64). Bot: paper + text (18.9).
 const BUBBLE = {
-  user: 'bg-[var(--blue)] text-white',
-  system: 'bg-[var(--paper)] text-[color:var(--text)]',
+  user: "bg-[var(--blue)] text-white",
+  system: "bg-[var(--paper)] text-[color:var(--text)]",
 };
 
 // Typing animation: reveals the answer letter by letter (full text for screen readers)
-function TypingMessage({ content, role }: { content: string; role: 'user' | 'system' }) {
+function TypingMessage({
+  content,
+  role,
+}: {
+  content: string;
+  role: "user" | "system";
+}) {
   const reduceMotion = useReducedMotion();
-  const [displayedText, setDisplayedText] = useState('');
+  const [displayedText, setDisplayedText] = useState("");
 
   // The visitor's own message shows at once; only the bot "types"
-  const instant = reduceMotion || role === 'user';
+  const instant = reduceMotion || role === "user";
 
   useEffect(() => {
     if (instant) return;
@@ -165,12 +365,16 @@ function TypingMessage({ content, role }: { content: string; role: 'user' | 'sys
   const visibleText = instant ? content : displayedText;
 
   return (
-    <div className={`p-2.5 border-2 border-black font-sans text-body-sm leading-relaxed break-words [overflow-wrap:anywhere] ${BUBBLE[role]}`}>
+    <div
+      className={`p-2.5 border-2 border-black font-sans text-body-sm leading-relaxed break-words [overflow-wrap:anywhere] ${BUBBLE[role]}`}
+    >
       <span className="sr-only">{content}</span>
       <span aria-hidden="true">
         {visibleText}
         {/* Solid, not blinking: the hero name keeps the page's one blinking cursor */}
-        {visibleText.length < content.length && <span className="inline-block w-1 h-3 bg-current ml-1" />}
+        {visibleText.length < content.length && (
+          <span className="inline-block w-1 h-3 bg-current ml-1" />
+        )}
       </span>
     </div>
   );
@@ -178,7 +382,7 @@ function TypingMessage({ content, role }: { content: string; role: 'user' | 'sys
 
 interface Message {
   id: string;
-  role: 'user' | 'system';
+  role: "user" | "system";
   content: string;
   /** Not on the greeting, which no one sent at a time */
   timestamp?: Date;
@@ -192,18 +396,19 @@ export default function MascotChatWidget() {
   const reduced = useReducedMotion();
   const [location, navigate] = useLocation();
   // On Home below lg the launcher sits in the dock band (SoundToggle FLOAT_DOCK)
-  const onHome = location === '/';
+  const onHome = location === "/";
   const [isOpen, setIsOpen] = useState(false);
   // The launcher swaps happy/worry while the bot types: have both frames ready
   useEffect(preloadMascot, []);
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      role: 'system',
-      content: "Hi! I’m a small bot that knows John’s projects, experience and skills. Pick a topic below or type a question.",
+      id: "1",
+      role: "system",
+      content:
+        "Hi! I’m a small bot that knows John’s projects, experience and skills. Pick a topic below or type a question.",
     },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   // A question sent from outside (command palette), asked once the panel is open
   const [pendingQuery, setPendingQuery] = useState<string | null>(null);
@@ -224,7 +429,12 @@ export default function MascotChatWidget() {
   const closeChat = () => {
     setIsOpen(false);
     const opener = openerRef.current;
-    const back = opener instanceof HTMLElement && opener.isConnected && opener !== document.body ? opener : launcherRef.current;
+    const back =
+      opener instanceof HTMLElement &&
+      opener.isConnected &&
+      opener !== document.body
+        ? opener
+        : launcherRef.current;
     back?.focus();
   };
 
@@ -233,24 +443,30 @@ export default function MascotChatWidget() {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
       // Leave Escape to a modal (terminal, palette, shortcuts) open on top
-      if (e.key !== 'Escape' || document.querySelector('[aria-modal="true"]')) return;
+      if (e.key !== "Escape" || document.querySelector('[aria-modal="true"]'))
+        return;
       closeChat();
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [isOpen]);
 
   // Keep the newest message in view (scrolls the log only, never the page)
   useEffect(() => {
     const log = logRef.current;
-    const behavior = reduced ? 'auto' : 'smooth';
+    const behavior = reduced ? "auto" : "smooth";
     log?.scrollTo({ top: log.scrollHeight, behavior });
     // Short screens / zoomed in: the whole sheet scrolls, so bring the log back
     // under the title bar after a topic key below it was pressed
     const panel = panelRef.current;
     const box = log?.parentElement;
     const bar = panel?.firstElementChild;
-    if (panel && box && bar instanceof HTMLElement && panel.scrollHeight > panel.clientHeight) {
+    if (
+      panel &&
+      box &&
+      bar instanceof HTMLElement &&
+      panel.scrollHeight > panel.clientHeight
+    ) {
       panel.scrollTo({ top: box.offsetTop - bar.offsetHeight, behavior });
     }
   }, [messages, isTyping, reduced]);
@@ -261,12 +477,13 @@ export default function MascotChatWidget() {
     const open = (e: Event) => {
       setIsOpen(true);
       // If the chat was already open, the open effect won't run again
-      if (hasFinePointer()) requestAnimationFrame(() => inputRef.current?.focus());
+      if (hasFinePointer())
+        requestAnimationFrame(() => inputRef.current?.focus());
       const query = (e as CustomEvent<{ query?: string } | null>).detail?.query;
       if (query) setPendingQuery(query);
     };
-    window.addEventListener('open-chat', open);
-    return () => window.removeEventListener('open-chat', open);
+    window.addEventListener("open-chat", open);
+    return () => window.removeEventListener("open-chat", open);
   }, []);
 
   // On open, focus the input where that won't pop an on-screen keyboard;
@@ -287,7 +504,7 @@ export default function MascotChatWidget() {
   // An answer's "Go to …" link: scroll there on Home (the chat steps aside on
   // phones, where it covers the page), or open Home at that section
   const goToSection = (id: SectionId) => {
-    if (!window.matchMedia('(min-width: 640px)').matches) setIsOpen(false);
+    if (!window.matchMedia("(min-width: 640px)").matches) setIsOpen(false);
     if (onHome) scrollToSection(id, reduced);
     else navigate(`/#${id}`);
   };
@@ -297,8 +514,16 @@ export default function MascotChatWidget() {
   const sendMessage = async (text: string) => {
     if (!text.trim() || isTyping) return;
 
-    setMessages(prev => [...prev, { id: Date.now().toString(), role: 'user', content: text, timestamp: new Date() }]);
-    setInput('');
+    setMessages(prev => [
+      ...prev,
+      {
+        id: Date.now().toString(),
+        role: "user",
+        content: text,
+        timestamp: new Date(),
+      },
+    ]);
+    setInput("");
 
     // Short pause so the reply reads as a reply
     setIsTyping(true);
@@ -307,7 +532,14 @@ export default function MascotChatWidget() {
     const { answer: content, section } = findResponse(text);
     setMessages(prev => [
       ...prev,
-      { id: (Date.now() + 1).toString(), role: 'system', content, timestamp: new Date(), topics: content === FALLBACK, section },
+      {
+        id: (Date.now() + 1).toString(),
+        role: "system",
+        content,
+        timestamp: new Date(),
+        topics: content === FALLBACK,
+        section,
+      },
     ]);
     setIsTyping(false);
   };
@@ -319,10 +551,10 @@ export default function MascotChatWidget() {
         ref={launcherRef}
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        aria-label={isOpen ? 'Close chat' : "Chat about John's work"}
+        aria-label={isOpen ? "Close chat" : "Chat about John's work"}
         aria-expanded={isOpen}
         aria-controls={PANEL_ID}
-        className={`btn focus-ring-float fixed right-4 z-40 ${onHome ? 'bottom-2 lg:bottom-6' : 'bottom-4 sm:bottom-6'} p-0 text-black ${isOpen ? 'bg-[var(--page)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]' : 'bg-[var(--paper)]'}`}
+        className={`btn focus-ring-float fixed right-4 z-40 ${onHome ? "bottom-2 lg:bottom-6" : "bottom-4 sm:bottom-6"} p-0 text-black ${isOpen ? "bg-[var(--page)] translate-x-1 translate-y-1 shadow-none [--float-shadow:0_0_transparent]" : "bg-[var(--paper)]"}`}
       >
         {/* Icon only below 1440px, where a wider launcher would sit over the
             content column (proof.txt's links) */}
@@ -333,10 +565,10 @@ export default function MascotChatWidget() {
             width={MASCOT_PX.w}
             height={MASCOT_PX.h}
             className="w-8 h-8 min-[1440px]:w-10 min-[1440px]:h-10 object-contain"
-            style={{ imageRendering: 'pixelated' }}
+            style={{ imageRendering: "pixelated" }}
           />
           <span className="hidden min-[1440px]:inline font-label text-label">
-            {isOpen ? 'Close' : 'Chat'}
+            {isOpen ? "Close" : "Chat"}
           </span>
         </div>
       </button>
@@ -355,10 +587,17 @@ export default function MascotChatWidget() {
             initial={{ opacity: 0, y: motionTokens.distance.sm }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: motionTokens.distance.sm }}
-            transition={{ duration: motionTokens.duration.fast, ease: motionTokens.easing.out }}
+            transition={{
+              duration: motionTokens.duration.fast,
+              ease: motionTokens.easing.out,
+            }}
             className="chat-panel window fixed bottom-24 left-2 right-2 sm:left-auto sm:right-4 z-50 sm:w-[26rem] flex flex-col"
           >
-            <WindowBar title="ask_johnny.exe" onClose={closeChat} closeLabel="Close chat" />
+            <WindowBar
+              title="ask_johnny.exe"
+              onClose={closeChat}
+              closeLabel="Close chat"
+            />
 
             {/* Prompt line, with Lil Johnny standing whole on the log's top edge
                 (he worries while the bot types) */}
@@ -378,55 +617,75 @@ export default function MascotChatWidget() {
             {/* The log: part of the one window body, under a 3px rule; flex-1 +
                 min-h-0 lets it scroll inside */}
             <div className="chat-log-box flex-1 min-h-0 flex flex-col border-t-[3px] border-black">
-            <div
-              ref={logRef}
-              className="retro-scroll flex-1 min-h-0 overflow-y-auto overscroll-contain p-3 space-y-3"
-              role="log"
-              aria-live="polite"
-              aria-label="Chat messages"
-            >
-              {messages.map((msg) => (
-                <motion.div
-                  key={msg.id}
-                  initial={msg.role === 'user' ? false : { opacity: 0, y: motionTokens.distance.sm }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: motionTokens.duration.fast }}
-                  className={`flex ${msg.role === 'system' ? 'justify-start' : 'justify-end'}`}
-                >
-                  <div className="max-w-[88%]">
-                    <TypingMessage content={msg.content} role={msg.role} />
-                    {msg.topics && (
-                      <ul aria-label="Topics" className="chat-topics mt-2 flex flex-wrap gap-2">
-                        {QUICK_ACTIONS.map(({ label, query }) => (
-                          <li key={label}>
-                            <button type="button" onClick={() => sendMessage(query)} aria-disabled={isTyping} className={chipClass(false)}>
-                              {label}
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                    {msg.section && (
-                      <a
-                        href={`/#${msg.section}`}
-                        onClick={(e) => { e.preventDefault(); goToSection(msg.section!); }}
-                        className="inline-flex min-h-[44px] items-center gap-1 font-sans text-body-sm font-bold text-[color:var(--blue-text)] underline decoration-2 underline-offset-4"
-                      >
-                        Go to {SECTION_LABEL[msg.section]} <span aria-hidden="true">↓</span>
-                      </a>
-                    )}
-                    {msg.timestamp && (
-                      <p className={`font-sans text-body-sm text-[color:var(--text)] mt-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-                        {TIME.format(msg.timestamp)}
-                      </p>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-              {isTyping && (
-                <p className="font-sans text-body-sm italic text-[color:var(--text)]">Johnny is typing…</p>
-              )}
-            </div>
+              <div
+                ref={logRef}
+                className="retro-scroll flex-1 min-h-0 overflow-y-auto overscroll-contain p-3 space-y-3"
+                role="log"
+                aria-live="polite"
+                aria-label="Chat messages"
+              >
+                {messages.map(msg => (
+                  <motion.div
+                    key={msg.id}
+                    initial={
+                      msg.role === "user"
+                        ? false
+                        : { opacity: 0, y: motionTokens.distance.sm }
+                    }
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: motionTokens.duration.fast }}
+                    className={`flex ${msg.role === "system" ? "justify-start" : "justify-end"}`}
+                  >
+                    <div className="max-w-[88%]">
+                      <TypingMessage content={msg.content} role={msg.role} />
+                      {msg.topics && (
+                        <ul
+                          aria-label="Topics"
+                          className="chat-topics mt-2 flex flex-wrap gap-2"
+                        >
+                          {QUICK_ACTIONS.map(({ label, query }) => (
+                            <li key={label}>
+                              <button
+                                type="button"
+                                onClick={() => sendMessage(query)}
+                                aria-disabled={isTyping}
+                                className={chipClass(false)}
+                              >
+                                {label}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      {msg.section && (
+                        <a
+                          href={`/#${msg.section}`}
+                          onClick={e => {
+                            e.preventDefault();
+                            goToSection(msg.section!);
+                          }}
+                          className="inline-flex min-h-[44px] items-center gap-1 font-sans text-body-sm font-bold text-[color:var(--blue-text)] underline decoration-2 underline-offset-4"
+                        >
+                          Go to {SECTION_LABEL[msg.section]}{" "}
+                          <span aria-hidden="true">↓</span>
+                        </a>
+                      )}
+                      {msg.timestamp && (
+                        <p
+                          className={`font-sans text-body-sm text-[color:var(--text)] mt-1 ${msg.role === "user" ? "text-right" : "text-left"}`}
+                        >
+                          {TIME.format(msg.timestamp)}
+                        </p>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+                {isTyping && (
+                  <p className="font-sans text-body-sm italic text-[color:var(--text)]">
+                    Johnny is typing…
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Topic keycaps: one press asks */}
@@ -447,11 +706,19 @@ export default function MascotChatWidget() {
 
             {/* Input row: the ring sits on the row because the input itself has no outline */}
             <form
-              onSubmit={(e) => { e.preventDefault(); sendMessage(input); }}
+              onSubmit={e => {
+                e.preventDefault();
+                sendMessage(input);
+              }}
               className="chat-input flex-shrink-0 p-3 flex gap-3"
             >
               <div className="flex-1 min-w-0 flex items-center border-[3px] border-black bg-[var(--paper)] px-2 focus-within:outline focus-within:outline-[3px] focus-within:outline-[color:var(--ink)] focus-within:outline-offset-2">
-                <span aria-hidden="true" className="font-mono text-body font-bold mr-1">&gt;_</span>
+                <span
+                  aria-hidden="true"
+                  className="font-mono text-body font-bold mr-1"
+                >
+                  &gt;_
+                </span>
                 <input
                   ref={inputRef}
                   type="text"
@@ -465,7 +732,11 @@ export default function MascotChatWidget() {
                   className="flex-1 min-w-0 bg-transparent text-[color:var(--text)] placeholder:text-[color:var(--text)] placeholder:italic font-sans text-body outline-none"
                 />
               </div>
-              <button type="submit" aria-disabled={isTyping} className="btn btn-primary px-4">
+              <button
+                type="submit"
+                aria-disabled={isTyping}
+                className="btn btn-primary px-4"
+              >
                 Ask
               </button>
             </form>

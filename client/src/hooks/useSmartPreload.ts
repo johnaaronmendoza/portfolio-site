@@ -9,7 +9,7 @@
  *   const preload = useSmartPreload([img1Url, img2Url]);
  *   return <div {...preload.handlers}>...</div>;
  */
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback } from "react";
 
 const INTENT_DELAY = 300; // ms before we commit to preloading
 
@@ -21,8 +21,8 @@ interface SmartPreload {
 }
 
 export function useSmartPreload(urls: string[]): SmartPreload {
-  const timerRef  = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const abortRef  = useRef<AbortController | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
   const loadedRef = useRef<Set<string>>(new Set());
 
   const onMouseEnter = useCallback(() => {
@@ -45,7 +45,7 @@ export function useSmartPreload(urls: string[]): SmartPreload {
           img.src = url;
         } else {
           // For other resources: fetch with abort support
-          fetch(url, { signal, priority: 'low' } as RequestInit)
+          fetch(url, { signal, priority: "low" } as RequestInit)
             .then(() => loadedRef.current.add(url))
             .catch(() => {}); // AbortError is expected on mouse-leave
         }

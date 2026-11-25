@@ -1,17 +1,21 @@
 // 8-bit sound synthesis via Web Audio API — no external libraries
 // All sounds are square waves (classic Game Boy / NES waveform)
 
-import { useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from "react";
 
 let ctx: AudioContext | null = null;
 
 function getCtx(): AudioContext | null {
-  if (typeof window === 'undefined') return null;
+  if (typeof window === "undefined") return null;
   if (!ctx) {
-    try { ctx = new AudioContext(); } catch { return null; }
+    try {
+      ctx = new AudioContext();
+    } catch {
+      return null;
+    }
   }
   // Resume if suspended (browser autoplay policy)
-  if (ctx.state === 'suspended') ctx.resume();
+  if (ctx.state === "suspended") ctx.resume();
   return ctx;
 }
 
@@ -19,8 +23,8 @@ function playTone(
   freq: number,
   duration: number,
   volume = 0.08,
-  type: OscillatorType = 'square',
-  freqEnd?: number,
+  type: OscillatorType = "square",
+  freqEnd?: number
 ) {
   const c = getCtx();
   if (!c) return;
@@ -49,7 +53,7 @@ export const sounds = {
   click: () => playTone(660, 0.06, 0.08),
 
   /** Quick descending click — back/cancel */
-  back: () => playTone(440, 0.06, 0.06, 'square', 330),
+  back: () => playTone(440, 0.06, 0.06, "square", 330),
 
   /** 3-note ascending arpeggio — achievement unlock */
   achievement: () => {
@@ -70,33 +74,43 @@ export const sounds = {
   },
 
   /** Page whoosh — navigation transition */
-  whoosh: () => playTone(200, 0.15, 0.05, 'square', 800),
+  whoosh: () => playTone(200, 0.15, 0.05, "square", 800),
 };
 
 // ── Sound preference (persisted, off by default) ─────────────────────────
 // One shared switch for every play() call. Sound stays off until the visitor
 // turns it on with the Sound toggle; that choice is remembered across visits.
 
-const SOUND_KEY = 'ja_sound_on';
+const SOUND_KEY = "ja_sound_on";
 const listeners = new Set<() => void>();
 let soundOn: boolean | null = null;
 
 function isSoundOn(): boolean {
   if (soundOn === null) {
-    try { soundOn = localStorage.getItem(SOUND_KEY) === 'true'; } catch { soundOn = false; }
+    try {
+      soundOn = localStorage.getItem(SOUND_KEY) === "true";
+    } catch {
+      soundOn = false;
+    }
   }
   return soundOn;
 }
 
 export function setSoundOn(v: boolean) {
   soundOn = v;
-  try { localStorage.setItem(SOUND_KEY, String(v)); } catch { /* storage blocked: still works this visit */ }
+  try {
+    localStorage.setItem(SOUND_KEY, String(v));
+  } catch {
+    /* storage blocked: still works this visit */
+  }
   listeners.forEach(l => l());
 }
 
 function subscribe(listener: () => void) {
   listeners.add(listener);
-  return () => { listeners.delete(listener); };
+  return () => {
+    listeners.delete(listener);
+  };
 }
 
 /** Current sound preference; re-renders when any toggle changes it */

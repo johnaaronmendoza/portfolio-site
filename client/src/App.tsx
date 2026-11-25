@@ -1,6 +1,13 @@
 import { Toaster } from "@/components/ui/sonner";
 import { Route, Switch, useLocation } from "wouter";
-import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { MotionConfig } from "framer-motion";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -42,7 +49,8 @@ function ScrollToTop() {
 
   useEffect(() => {
     const onPop = () => {
-      if (window.location.pathname !== lastPathRef.current) popRef.current = true;
+      if (window.location.pathname !== lastPathRef.current)
+        popRef.current = true;
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
@@ -93,7 +101,11 @@ function Router() {
 type Overlay = "palette" | "terminal" | "shortcuts";
 
 // Ctrl/Cmd + key for each overlay (the overlays' own listeners use the same keys)
-const OVERLAY_KEYS: Record<string, Overlay> = { k: "palette", "`": "terminal", "/": "shortcuts" };
+const OVERLAY_KEYS: Record<string, Overlay> = {
+  k: "palette",
+  "`": "terminal",
+  "/": "shortcuts",
+};
 
 /**
  * The first shortcut press (or the footer's terminal button) mounts that
@@ -106,7 +118,8 @@ function LazyOverlays() {
   const [konami, setKonami] = useState(0);
 
   useEffect(() => {
-    const load = (name: Overlay) => setLoaded(l => (l[name] ? l : { ...l, [name]: true }));
+    const load = (name: Overlay) =>
+      setLoaded(l => (l[name] ? l : { ...l, [name]: true }));
     const onKey = (e: KeyboardEvent) => {
       const name = e.ctrlKey || e.metaKey ? OVERLAY_KEYS[e.key] : undefined;
       if (!name) return;
@@ -132,10 +145,18 @@ function LazyOverlays() {
 
   return (
     <>
-      <Suspense fallback={null}>{loaded.palette && <CommandPalette defaultOpen />}</Suspense>
-      <Suspense fallback={null}>{loaded.shortcuts && <KeyboardShortcuts defaultOpen />}</Suspense>
-      <Suspense fallback={null}>{loaded.terminal && <SecretTerminal defaultOpen />}</Suspense>
-      <Suspense fallback={null}>{konami > 0 && <KonamiOverlay key={konami} />}</Suspense>
+      <Suspense fallback={null}>
+        {loaded.palette && <CommandPalette defaultOpen />}
+      </Suspense>
+      <Suspense fallback={null}>
+        {loaded.shortcuts && <KeyboardShortcuts defaultOpen />}
+      </Suspense>
+      <Suspense fallback={null}>
+        {loaded.terminal && <SecretTerminal defaultOpen />}
+      </Suspense>
+      <Suspense fallback={null}>
+        {konami > 0 && <KonamiOverlay key={konami} />}
+      </Suspense>
     </>
   );
 }
@@ -148,7 +169,11 @@ function AppInner() {
           controls (a row of 44px buttons 16px from the edge on phones, a
           column of two from lg), clear of the taskbar, breadcrumb and
           section navigation */}
-      <Toaster position="bottom-left" offset={{ bottom: 132, left: 24 }} mobileOffset={{ bottom: 72, left: 16 }} />
+      <Toaster
+        position="bottom-left"
+        offset={{ bottom: 132, left: 24 }}
+        mobileOffset={{ bottom: 72, left: 16 }}
+      />
       <Router />
       <MascotChatWidget />
     </>

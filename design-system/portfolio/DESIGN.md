@@ -2,7 +2,7 @@
 version: 1.0
 name: portfolio-paper-and-ink
 updated: 2026-11-24
-source: "Derived from shipped code at dea5abd (client/src/index.css, Window.tsx, Section.tsx, Hierarchy.tsx, SectionHeading.tsx, StatStrip.tsx, lib/motion-tokens.ts). CLAUDE.md design, honesty and accessibility rules win over this file."
+source: "Derived from shipped code at d6c43db (client/src/index.css, Window.tsx, Section.tsx, Hierarchy.tsx, SectionHeading.tsx, StatStrip.tsx, lib/motion-tokens.ts). CLAUDE.md design, honesty and accessibility rules win over this file."
 description: "Neo-brutalist retro web: a warm paper page, retro OS windows with black title bars, 3px ink outlines, hard offset shadows, solid colour blocks and marquee strips. Two accents only: blue for action and data, yellow for AI. Plex Sans reads, Plex Mono labels, Bangers letters section titles, Press Start 2P sets the hero name."
 
 colors:                     # CSS vars in :root (index.css), used as bg-[var(--x)] / text-[color:var(--x)]
@@ -57,7 +57,8 @@ spacing:
   content-max: 1152px       # max-w-6xl, centred
   tile-grid-gap: 24px       # gap-6
   chip-gap: "8px, 12px from sm"
-  measure: { body: 60ch, lead: 42ch, label-in-cell: 18ch }
+  heading-gap: "mb-6 lg:mb-8"   # SectionHeading, below the title or its lead
+  measure: { lists: 60ch, bio: 64ch, lead: 42ch, stat-clause: "18ch, 24ch from lg" }
 
 shadows:                    # @utility, all 0 blur, ink
   shadow-8bit-sm:    "2px 2px 0 0 var(--ink)"   # filter chips, tags
@@ -158,12 +159,12 @@ text (Bangers is caps-only and never sets more than a title or a sound effect).
 | `text-section` | 72 | Bangers | Home h2 from sm (below sm: `clamp(40px,12vw,52px)` so a 10-letter word fits at 320px) |
 | `text-h1` | 56 | display | Case-study h1 from sm (`text-card-lead` below) |
 | `text-card-lead` | 32 | display / Bangers | Case h2 from sm, Experience lead role, featured tile title from lg, footer h2 |
-| `text-card-title` | 24 | display | Card and window h3, tile titles, case h3 from sm, case h2 below sm |
-| `text-lead` | 20 | Sans bold | `Lead` from lg, desk_assist.exe h2 (below lg), footer h3 |
+| `text-card-title` | 24 | display | Card and window h3, tile titles, case h3 from sm, case h2 below sm; proof.txt figure from sm (Mono) |
+| `text-lead` | 20 | Sans bold | `Lead` from lg, desk_assist.exe h2 (below lg), footer h3; proof.txt figure on phones (Mono) |
 | `text-lead-sm` | 18 | Sans bold | `Lead` on phones, case h3 below sm |
-| `text-body` | 16 | Sans | Reading text from sm |
+| `text-body` | 16 | Sans | Reading text from sm; marquee from sm and keycap labels from lg (Mono) |
 | `text-body-sm` | 15 | Sans | Reading text on phones; `.btn` label (15px literal) |
-| `text-label` | 13 | Mono 600 | Window titles, badges, filter chips, chat keys (literal 0.8125rem) |
+| `text-label` | 13 | Mono 600 | Window titles, badges, chips, tags, tile meta, status lines, keycap labels, step numbers, dock words, marquee on phones |
 
 Headings step at least 1.3x down the ladder on a page (72 > 32 > 24; case 56 >
 32 > 24). Line heights: headings 1.15, Bangers 1, labels 1.3, `Lead` 1.4 / 1.35
@@ -174,11 +175,8 @@ balance`, `p, li` get `pretty`; figures use `tabular-nums`.
 > 48 at sm/lg/xl), StatStrip figures (`min(Npx, 22cqi)` caps), tile sfx 17px,
 3D keyboard legends.
 
-**Off-ladder steps still in use:** Tailwind `text-sm` (14px) for tile meta
-lines, tags, the Projects status line, marquee on phones, proof.txt links and
-the footer clock; `text-base` (16px, same as `text-body`) in overlays and the
-marquee from sm; `text-xl / sm:text-2xl` for proof.txt figures. Move these onto
-tokens when next touched.
+Everything else is a ladder token; no Tailwind `text-xs/sm/base/xl` steps
+remain. `.btn` (15px) and `.chat-key` (13px) set ladder sizes as literals.
 
 ## Spacing and layout
 
@@ -186,9 +184,9 @@ tokens when next touched.
   88 / 64 at base / sm / lg / 2xl) and `py-20 sm:py-28`; content in a centred
   `max-w-6xl` (1152px) column. The hero and case pages reuse `GUTTERS`. Bands
   that change colour (Projects blue, footer bar) carry a 3px ink top/bottom rule.
-- **Heading rhythm:** with a lead, `SectionHeading mb-4 lg:mb-5`, then `Lead
-  mb-6 lg:mb-8`. Without one, Experience uses `mb-16` and Skills `mb-10`
-  (known drift; align on the next pass).
+- **Heading rhythm:** on Home `SectionHeading` owns it: its `lead` prop sets
+  the `Lead` 16/20px under the title, then one gap, `mb-6 lg:mb-8`, to the
+  content, lead or not. Case pages pass `mb-6` (`mb-4 lg:mb-5` over a `Lead`).
 - **Window body padding:** 16-32px for working windows (`projects/` `p-4 sm:p-6
   lg:p-8`, `desk_assist.exe` `p-4 sm:p-5`); 24-56px for reading and hero windows
   (`about_me.txt` `p-6 sm:p-8 lg:p-10`, `welcome.exe` `p-6 sm:p-10 xl:p-12`,
@@ -196,9 +194,13 @@ tokens when next touched.
 - **Internal gaps:** tile body `p-5 gap-4`; tile grid `gap-6` (1 / 2 / 6 / 12
   columns); chip rows `gap-2 sm:gap-3`; bullet lists `space-y-3 lg:space-y-4`;
   hero contact links `gap-x-6 sm:gap-x-8`.
-- **Measure:** body lists 60ch, `Lead` 42ch, StatStrip labels 18ch.
-- **Fixed chrome:** `html { scroll-padding-bottom: 88px }` keeps focused
-  controls clear of the dock and chat launcher; `scrollbar-gutter: stable`.
+- **Measure:** bullet lists 60ch, the About bio 64ch, `Lead` 42ch, StatStrip
+  clauses 18ch (24ch from lg).
+- **Page rules on `html`:** `scroll-padding-bottom: 88px` keeps focused
+  controls clear of the dock and chat launcher; `scrollbar-gutter: stable`;
+  `touch-action: manipulation` (no double-tap zoom delay) and a transparent
+  tap highlight, since controls show their own `:active` press;
+  `overscroll-behavior: none` on fine pointers only (touch keeps its pull).
 
 ## Elevation
 
@@ -248,7 +250,11 @@ logos.
 - **Filter chip** (`chipClass`, Projects and Skills): `text-label`, 3px frame,
   `min-h-[44px]`; idle paper + 2px shadow, hover blue; active ink with paper
   text, pressed 2px; state also in `aria-pressed`.
-- **Tag** (tiles): 2px frame, no fill, Mono 14px bold.
+- **Tag** (tiles, case pages): 2px frame, no fill, Mono 13px bold.
+- **Deep links:** filter state lives in the URL through
+  `hooks/useQueryParam.ts`: `?filter=` (Projects, e.g. `ai`) and `?skills=`
+  (Skills, e.g. `data`). Setting one replaces the history entry and keeps
+  other params and the hash; All removes the param.
 
 ### Badges (`.badge`)
 2px frame, padding 4/8, Mono 600 13px, `nowrap`, black text.
@@ -259,10 +265,13 @@ logos.
 3px frame, paper, 4px shadow; hover -2px and 6px shadow, press +4px and none
 (150ms `--ease-out`). The **still sits flush** at the top, cut 2:1, over a 3px
 rule; `alt=""` because the link names the project; scales to 1.03 on hover
-(hover-capable pointers only). Body `p-5 gap-4`: **meta line** in `font-label`
-14px reads `[Featured] file.png  year · caption`, each part wrapping whole;
-then title (`text-card-title`, featured `lg:text-card-lead`), one-line
-description, bullet facts, tags, then "Read case study". Featured: SilverLink
+(hover-capable pointers only). Body `p-5 gap-4`, one meta pattern on every
+tile, `font-label text-label`, stacked: the **badge row** (`Featured`,
+featured tiles only), the **filename on its own line** (`silverlink.png`),
+then **`{year} · {caption}`**; no line wraps mid-name. Then title
+(`text-card-title`, featured `lg:text-card-lead`), one-line description, bullet
+facts, tags, and "Read case study" at **`mt-auto`**, so links line up across a
+row. Featured: SilverLink
 SG, SCS, UWB. The only sfx burst is SilverLink's "Booked!" (paper `Burst`,
 80px, ±8°, 17px Bangers, `aria-hidden`). Focus outline offset 10px clears the
 shadow. Filter exit: opacity 0, y 8, 0.18s.
@@ -274,11 +283,11 @@ site or resume.
   in a 3px-framed block (blue + white = data, bar + paper = work), then a bold
   lead clause and the rest of the sentence, then a blue-text "Case study →" /
   "Experience →" link label.
-- **StatStrip**: paper cells on black, 3px gaps draw the dividers; label (`dt`)
-  first in the DOM, figure (`dd`, Mono bold, `tabular-nums`, final value, no
-  count-up) shown on top; optional source chip. Variants `status` (case header,
-  own sr-only h2) and `inline` (inside a window). The `band` variant and its
-  POW burst are unused since proof.txt replaced the band.
+- **StatStrip**: paper cells on black, 3px gaps draw the dividers. The figure
+  is the `dt`, first in the DOM and on top (Plex Mono bold, `tabular-nums`,
+  `min(Npx, 22cqi)`, final value, no count-up); the clause is the `dd` in Plex
+  Sans 15/16px at 18ch (24ch from lg), with an optional source chip. Variants:
+  `status` (case header, own sr-only h2) and `inline` (inside a window).
 
 ### Section heading (`SectionHeading`)
 Bangers h2 in black with a 4px hard text shadow (blue on the page, paper on the
@@ -297,15 +306,15 @@ Colour carries the category; the label and the filter state carry it too.
 | Muted (filtered out) | `#CFCAC0` / `#BDB8AE` | `#3D3A35` | 6.93 / 5.73 |
 
 2D cap: 6px radius, 3px frame, 4px shadow, number top-left, masked icon, Mono
-bold label on a darker strip (12 / 14 / 16px at base / sm / lg). Muted and open
-keys sit flush (+4px, no shadow), so the state never relies on colour. Grid 4
-columns, 7 from sm. The board sits in `keyboard.exe` with "All skills as a
+bold label on a darker strip (13 / 13 / 16px at base / sm / lg; number 13px).
+Muted and open keys sit flush (+4px, no shadow), so the state never relies on
+colour. Grid 4 columns (`gap-2`), 7 from sm (`gap-3`). The board sits in `keyboard.exe` with "All skills as a
 list" in its status bar. 3D board (from 640px, fine pointer, WebGL, motion
 allowed): legends at least 12px (compact) or 13px; tooltip is a `*.info`
 window.
 
 ### Marquee (`Ribbon`)
-Straight strip, 3px ink rules top and bottom, `py-3 sm:py-4`, Mono 14/16px,
+Straight strip, 3px ink rules top and bottom, `py-3 sm:py-4`, Mono 13/16px,
 16px sparkle separators. Tones: `ink` (bar + paper, 18.88:1) and `blue` (blue +
 black). Constant 60px/s whatever the length; transform only; pauses on hover
 and with Pause motion; still under reduced motion; `aria-hidden` (its words
@@ -355,18 +364,9 @@ the hero, a second blinking cursor, scroll hijacking or pinning,
 
 - **Contrast:** AA for every text pairing above; ink frames give 3:1+ on every
   light surface. Never yellow text on page or paper, never `#3A66FF` as text.
-- **Size:** body 15px on phones, 16px from sm; labels 13px minimum. **Known
-  12px (`text-xs`) exceptions still in code:**
-  1. `SkillKeyboard.tsx:115` keycap number (decorative, `aria-hidden`).
-  2. `SkillKeyboard.tsx:121` keycap label strip below sm (CLAUDE.md allows 12px
-     keycap labels; the button's accessible name carries the full skill name).
-  3. `skills3d/Keyboard3D.tsx:473` compact 3D legends (12px; 13px otherwise).
-  4. `DeskAssistWindow.tsx:18` step numbers.
-  5. `FlowDiagram.tsx:72` and `:79` step numbers and actor tags.
-  6. `SoundToggle.tsx:24` dock button words (`dockButton`).
-  7. `SectionNav.tsx:224` section-dot hover/focus tooltip.
-  8. `MascotChatWidget.tsx:338` launcher word (from 1440px).
-  9. `KonamiOverlay.tsx:33` and `:36` easter-egg overlay text.
+- **Size:** body 15px on phones, 16px from sm; labels 13px minimum. **One 12px
+  exception:** compact 3D keyboard legends (`skills3d/Keyboard3D.tsx:473`,
+  13px otherwise), inside CLAUDE.md's 12px keycap floor.
 - **Targets:** 44x44px for every control (`.btn`, filter chips, proof rows,
   contact links, window close, section dots, menu rows). Fact chips (36px) are
   not interactive.
